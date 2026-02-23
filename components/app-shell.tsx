@@ -20,34 +20,34 @@ import { useEffect, useRef } from "react"
 
 export function AppShell() {
   const { screen, goBack } = useApp()
+  const goBackRef = useRef(goBack)
   const screenRef = useRef(screen)
 
   useEffect(() => {
+    goBackRef.current = goBack
     screenRef.current = screen
-  }, [screen])
+  })
 
   useEffect(() => {
-    const pushState = () => {
+    const handleBackButton = () => {
       window.history.pushState({ page: "app" }, "", window.location.href)
-    }
-
-    pushState()
-
-    const handleBackButton = (event: PopStateEvent) => {
-      event.preventDefault()
-      pushState()
       const noBackScreens = ["splash", "login", "signup", "dashboard"]
       if (!noBackScreens.includes(screenRef.current)) {
-        goBack()
+        goBackRef.current()
       }
     }
 
+    window.history.pushState({ page: "app" }, "", window.location.href)
     window.addEventListener("popstate", handleBackButton)
 
     return () => {
       window.removeEventListener("popstate", handleBackButton)
     }
-  }, [goBack])
+  }, [])
+
+  useEffect(() => {
+    window.history.pushState({ page: "app" }, "", window.location.href)
+  }, [screen])
 
   const screens: Record<string, React.ReactNode> = {
     splash: <SplashScreen />,
@@ -80,4 +80,4 @@ export function AppShell() {
       {screens[screen] || <DashboardScreen />}
     </main>
   )
-                       }
+  }
