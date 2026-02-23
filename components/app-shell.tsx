@@ -16,28 +16,9 @@ import {
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
 import { SettingsScreen } from "@/components/screens/settings-screen"
-import { useEffect } from "react"
 
 export function AppShell() {
-  const { screen, goBack } = useApp()
-
-  useEffect(() => {
-    // Back button ko har screen par active rakhne ke liye
-    window.history.pushState({ screen }, "", "")
-
-    const handlePopState = (event: PopStateEvent) => {
-      const noBackScreens = ["splash", "dashboard", "login", "signup"]
-      
-      if (!noBackScreens.includes(screen)) {
-        event.preventDefault()
-        goBack() // Yeh hamare app-context wale goBack ko chalayega
-        window.history.pushState({ screen }, "", "")
-      }
-    }
-
-    window.addEventListener("popstate", handlePopState)
-    return () => window.removeEventListener("popstate", handlePopState)
-  }, [screen, goBack])
+  const { screen } = useApp()
 
   const screens: Record<string, React.ReactNode> = {
     splash: <SplashScreen />,
@@ -70,4 +51,4 @@ export function AppShell() {
       {screens[screen] || <DashboardScreen />}
     </main>
   )
-    }
+}
