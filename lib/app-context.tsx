@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Language } from "@/lib/translations"
 import type { ClassNumber } from "@/lib/data"
 
@@ -80,11 +80,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
-  const stateRef = useRef(state)
-  useEffect(() => {
-    stateRef.current = state
-  })
-
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("ncert_user")
@@ -105,26 +100,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  useEffect(() => {
-    const handlePop = () => {
-      window.history.pushState(null, "", window.location.href)
-      const noBackScreens = ["splash", "login", "signup", "dashboard"]
-      if (!noBackScreens.includes(stateRef.current.screen)) {
-        setState((prev) => {
-          const history = [...prev.screenHistory]
-          const previousScreen = history.pop() || "dashboard"
-          return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
-        })
-      }
-    }
-
-    window.history.pushState(null, "", window.location.href)
-    window.addEventListener("popstate", handlePop)
-    return () => window.removeEventListener("popstate", handlePop)
-  }, [])
-
   const setScreen = useCallback((screen: AppScreen) => {
-    window.history.pushState(null, "", window.location.href)
+    window.history.pushState(null, "", "")
     setState((prev) => ({
       ...prev,
       screen,
@@ -209,4 +186,4 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-  }
+                                             }
