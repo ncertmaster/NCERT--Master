@@ -1,6 +1,7 @@
 "use client"
 
 import { useApp } from "@/lib/app-context"
+import { useEffect } from "react"
 import { SplashScreen } from "@/components/screens/splash-screen"
 import { AuthScreen } from "@/components/screens/auth-screen"
 import { SetupScreen } from "@/components/screens/setup-screen"
@@ -18,7 +19,18 @@ import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
 import { SettingsScreen } from "@/components/screens/settings-screen"
 
 export function AppShell() {
-  const { screen } = useApp()
+  const { screen, goBack, screenHistory } = useApp()
+
+  useEffect(() => {
+    const handleBack = (e: PopStateEvent) => {
+      if (screenHistory.length > 0) {
+        e.preventDefault()
+        goBack()
+      }
+    }
+    window.addEventListener("popstate", handleBack)
+    return () => window.removeEventListener("popstate", handleBack)
+  }, [screenHistory, goBack])
 
   const screens: Record<string, React.ReactNode> = {
     splash: <SplashScreen />,
@@ -47,7 +59,7 @@ export function AppShell() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-md bg-background">
+    <main className="mx-auto min-h-screen max-w-md">
       {screens[screen] || <DashboardScreen />}
     </main>
   )
