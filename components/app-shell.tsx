@@ -22,22 +22,25 @@ export function AppShell() {
   const { screen, goBack } = useApp()
 
   useEffect(() => {
-    window.history.pushState(null, "", window.location.href)
+    // Har screen change par history mein ek entry push karo
+    window.history.pushState({ screen }, "", "")
 
-    const handleBackButton = (event: PopStateEvent) => {
-      event.preventDefault()
-      window.history.pushState(null, "", window.location.href)
+    const handlePopState = (event: PopStateEvent) => {
+      // Splash, Login ya Dashboard par back button kaam nahi karega (App exit hoga)
       const noBackScreens = ["splash", "login", "signup", "dashboard"]
+      
       if (!noBackScreens.includes(screen)) {
+        // Default back behaviour ko roko
+        event.preventDefault()
+        // App ke andar pichli screen par jao
         goBack()
+        // Dobara state push karo taaki next back bhi handle ho sake
+        window.history.pushState({ screen }, "", "")
       }
     }
 
-    window.addEventListener("popstate", handleBackButton)
-
-    return () => {
-      window.removeEventListener("popstate", handleBackButton)
-    }
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
   }, [screen, goBack])
 
   const screens: Record<string, React.ReactNode> = {
@@ -46,33 +49,28 @@ export function AppShell() {
     signup: <AuthScreen />,
     setup: <SetupScreen />,
     dashboard: <DashboardScreen />,
-
     "books-class": <ClassSelectScreen flow="books" />,
     "books-subject": <SubjectSelectScreen flow="books" />,
     "books-chapter": <ChapterSelectScreen flow="books" />,
     "books-content": <BookContentScreen />,
-
     "notes-class": <ClassSelectScreen flow="notes" />,
     "notes-subject": <SubjectSelectScreen flow="notes" />,
     "notes-chapter": <ChapterSelectScreen flow="notes" />,
     "notes-content": <NotesContentScreen />,
-
     "iq-class": <ClassSelectScreen flow="iq" />,
     "iq-subject": <SubjectSelectScreen flow="iq" />,
     "iq-chapter": <ChapterSelectScreen flow="iq" />,
     "iq-content": <IQContentScreen />,
-
     "quiz-class": <ClassSelectScreen flow="quiz" />,
     "quiz-subject": <SubjectSelectScreen flow="quiz" />,
     "quiz-mode": <QuizModeScreen />,
     "quiz-chapter": <ChapterSelectScreen flow="quiz" />,
     "quiz-play": <QuizPlayScreen />,
-
     settings: <SettingsScreen />,
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-md">
+    <main className="mx-auto min-h-screen max-w-md bg-background">
       {screens[screen] || <DashboardScreen />}
     </main>
   )
