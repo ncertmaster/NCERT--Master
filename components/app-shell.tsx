@@ -22,15 +22,17 @@ export function AppShell() {
   const { screen, goBack } = useApp()
 
   useEffect(() => {
+    window.history.pushState(null, "", window.location.href)
+
     const handleBackButton = (event: PopStateEvent) => {
       event.preventDefault()
+      window.history.pushState(null, "", window.location.href)
       const noBackScreens = ["splash", "login", "signup", "dashboard"]
       if (!noBackScreens.includes(screen)) {
         goBack()
       }
     }
 
-    window.history.pushState(null, "", window.location.href)
     window.addEventListener("popstate", handleBackButton)
 
     return () => {
@@ -74,4 +76,4 @@ export function AppShell() {
       {screens[screen] || <DashboardScreen />}
     </main>
   )
-    }
+}
