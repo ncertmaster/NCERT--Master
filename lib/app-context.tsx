@@ -1,56 +1,55 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
+import React, { createContext, useContext, useState, useCallback } from "react"
 
 export type AppScreen = string
 
-interface AppState {
-  screen: AppScreen
-  history: AppScreen[]
-}
-
 interface AppContextType {
   screen: AppScreen
+  user: any
   setScreen: (screen: AppScreen) => void
+  setUser: (user: any) => void
   goBack: () => void
+  logout: () => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<AppState>({
-    screen: "splash",
-    history: [],
-  })
+  const [screen, setScreenState] = useState<AppScreen>("splash")
+  const [history, setHistory] = useState<AppScreen[]>([])
+  const [user, setUserState] = useState<any>(null)
 
-  // जब आप किसी बटन पर क्लिक करके आगे बढ़ते हैं
-  const setScreen = useCallback((nextScreen: AppScreen) => {
-    setState((prev) => {
-      if (prev.screen === nextScreen) return prev
-      return {
-        screen: nextScreen,
-        history: [...prev.history, prev.screen], // पुराना पेज याद रखा जा रहा है
-      }
-    })
+  const setScreen = useCallback((next: AppScreen) => {
+    setHistory((prev) => [...prev, screen])
+    setScreenState(next)
+  }, [screen])
+
+  const setUser = useCallback((user: any) => {
+    setUserState(user)
+    if (user) {
+      setScreenState("dashboard")
+    }
   }, [])
 
-  // जब आप बैक बटन दबाते हैं
+  const logout = useCallback(() => {
+    setUserState(null)
+    setHistory([])
+    setScreenState("login")
+  }, [])
+
   const goBack = useCallback(() => {
-    setState((prev) => {
-      if (prev.history.length === 0) return { ...prev, screen: "dashboard" }
-      
-      const newHistory = [...prev.history]
-      const lastScreen = newHistory.pop() || "dashboard"
-      
-      return {
-        screen: lastScreen,
-        history: newHistory,
-      }
+    setHistory((prev) => {
+      if (prev.length === 0) return prev
+      const newHistory = [...prev]
+      const prevScreen = newHistory.pop()
+      if (prevScreen) setScreenState(prevScreen)
+      return newHistory
     })
   }, [])
 
   return (
-    <AppContext.Provider value={{ screen: state.screen, setScreen, goBack }}>
+    <AppContext.Provider value={{ screen, user, setScreen, setUser, goBack, logout }}>
       {children}
     </AppContext.Provider>
   )
