@@ -16,9 +16,27 @@ import {
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
 import { SettingsScreen } from "@/components/screens/settings-screen"
+import { useEffect } from "react"
 
 export function AppShell() {
-  const { screen } = useApp()
+  const { screen, goBack } = useApp()
+
+  useEffect(() => {
+    const handleBackButton = (event: PopStateEvent) => {
+      event.preventDefault()
+      const noBackScreens = ["splash", "login", "signup", "dashboard"]
+      if (!noBackScreens.includes(screen)) {
+        goBack()
+      }
+    }
+
+    window.history.pushState(null, "", window.location.href)
+    window.addEventListener("popstate", handleBackButton)
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton)
+    }
+  }, [screen, goBack])
 
   const screens: Record<string, React.ReactNode> = {
     splash: <SplashScreen />,
@@ -56,4 +74,4 @@ export function AppShell() {
       {screens[screen] || <DashboardScreen />}
     </main>
   )
-}
+    }
