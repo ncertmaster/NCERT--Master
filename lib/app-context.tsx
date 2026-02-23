@@ -1,16 +1,40 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
+import React, { createContext, useContext, useState, useEffect } from "react"
 
-export type AppScreen = string
+type AppScreen =
+  | "splash"
+  | "login"
+  | "signup"
+  | "setup"
+  | "dashboard"
+  | "books-class"
+  | "books-subject"
+  | "books-chapter"
+  | "books-content"
+  | "notes-class"
+  | "notes-subject"
+  | "notes-chapter"
+  | "notes-content"
+  | "iq-class"
+  | "iq-subject"
+  | "iq-chapter"
+  | "iq-content"
+  | "quiz-class"
+  | "quiz-subject"
+  | "quiz-mode"
+  | "quiz-chapter"
+  | "quiz-play"
+  | "settings"
 
 interface AppContextType {
   screen: AppScreen
-  user: any
   setScreen: (screen: AppScreen) => void
+  user: any
   setUser: (user: any) => void
+  language: string
+  setLanguage: (lang: string) => void
   goBack: () => void
-  logout: () => void
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -18,45 +42,59 @@ const AppContext = createContext<AppContextType | undefined>(undefined)
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [screen, setScreen] = useState<AppScreen>("splash")
   const [user, setUser] = useState<any>(null)
-
-  const handleSetScreen = useCallback((nextScreen: AppScreen) => {
-    setScreen(nextScreen)
-    // Only update history if window is available
-    if (typeof window !== "undefined") {
-      window.history.pushState({ screen: nextScreen }, "")
-    }
-  }, [])
-
-  const goBack = useCallback(() => {
-    if (typeof window !== "undefined") {
-      window.history.back()
-    }
-  }, [])
-
-  const logout = useCallback(() => {
-    setUser(null)
-    setScreen("login")
-  }, [])
+  const [language, setLanguage] = useState("Hindi")
+  const [history, setHistory] = useState<AppScreen[]>([])
 
   useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      if (event.state && event.state.screen) {
-        setScreen(event.state.screen)
-      }
+    const savedUser = localStorage.getItem("ncert_user")
+    const savedLang = localStorage.getItem("ncert_lang")
+    
+    if (savedUser) {
+      setUser(JSON.parse(savedUser))
+      setScreen("dashboard")
     }
-    window.addEventListener("popstate", handlePopState)
-    return () => window.removeEventListener("popstate", handlePopState)
+    if (savedLang) {
+      setLanguage(savedLang)
+    }
   }, [])
+
+  const handleSetUser = (userData: any) => {
+    setUser(userData)
+    if (userData) {
+      localStorage.setItem("ncert_user", JSON.stringify(userData))
+    } else {
+      localStorage.removeItem("ncert_user")
+    }
+  }
+
+  const handleSetLanguage = (lang: string) => {
+    setLanguage(lang)
+    localStorage.setItem("ncert_lang", lang)
+  }
+
+  const handleSetScreen = (newScreen: AppScreen) => {
+    setHistory((prev) => [...prev, screen])
+    setScreen(newScreen)
+  }
+
+  const goBack = () => {
+    if (history.length > 0) {
+      const lastScreen = history[history.length - 1]
+      setHistory((prev) => prev.slice(0, -1))
+      setScreen(lastScreen)
+    }
+  }
 
   return (
     <AppContext.Provider 
       value={{ 
         screen, 
-        user, 
         setScreen: handleSetScreen, 
-        setUser, 
-        goBack, 
-        logout 
+        user, 
+        setUser: handleSetUser, 
+        language, 
+        setLanguage: handleSetLanguage,
+        goBack 
       }}
     >
       {children}
@@ -66,6 +104,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
 export function useApp() {
   const context = useContext(AppContext)
-  if (!context) throw new Error("useApp must be used within an AppProvider")
+  if (context === undefined) {
+    throw new Error("useApp must be used within an AppProvider")
+  }
   return context
 }
