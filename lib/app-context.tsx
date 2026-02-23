@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback } from "react"
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Language } from "@/lib/translations"
 import type { ClassNumber } from "@/lib/data"
 
@@ -80,6 +80,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem("ncert_user")
+      const savedLanguage = localStorage.getItem("ncert_language") as Language | null
+      if (savedUser) {
+        const user = JSON.parse(savedUser)
+        setState((prev) => ({
+          ...prev,
+          user,
+          screen: "dashboard",
+          language: savedLanguage || "en",
+        }))
+      } else {
+        setState((prev) => ({ ...prev, screen: "login" }))
+      }
+    } catch {
+      setState((prev) => ({ ...prev, screen: "login" }))
+    }
+  }, [])
+
   const setScreen = useCallback((screen: AppScreen) => {
     setState((prev) => ({
       ...prev,
@@ -97,10 +117,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const setUser = useCallback((user: UserProfile) => {
+    try {
+      localStorage.setItem("ncert_user", JSON.stringify(user))
+    } catch {}
     setState((prev) => ({ ...prev, user }))
   }, [])
 
   const setLanguage = useCallback((language: Language) => {
+    try {
+      localStorage.setItem("ncert_language", language)
+    } catch {}
     setState((prev) => ({ ...prev, language }))
   }, [])
 
@@ -125,10 +151,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const logout = useCallback(() => {
-    setState({
+    try {
+      localStorage.removeItem("ncert_user")
+    } catch {}
+    setState((prev) => ({
       screen: "login",
       user: null,
-      language: state.language,
+      language: prev.language,
       selectedClass: null,
       selectedSubject: null,
       selectedChapter: null,
@@ -136,8 +165,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       quizScore: 0,
       quizTotal: 0,
       screenHistory: [],
-    })
-  }, [state.language])
+    }))
+  }, [])
 
   return (
     <AppContext.Provider
@@ -164,4 +193,4 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-}
+  }
