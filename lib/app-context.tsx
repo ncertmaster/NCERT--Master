@@ -23,17 +23,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     history: [],
   })
 
+  // जब आप किसी बटन पर क्लिक करके आगे बढ़ते हैं
   const setScreen = useCallback((nextScreen: AppScreen) => {
     setState((prev) => {
-      // अगर हम उसी स्क्रीन पर जा रहे हैं तो हिस्ट्री न बढ़ाएं
       if (prev.screen === nextScreen) return prev
       return {
         screen: nextScreen,
-        history: [...prev.history, prev.screen],
+        history: [...prev.history, prev.screen], // पुराना पेज याद रखा जा रहा है
       }
     })
   }, [])
 
+  // जब आप बैक बटन दबाते हैं
   const goBack = useCallback(() => {
     setState((prev) => {
       if (prev.history.length === 0) return { ...prev, screen: "dashboard" }
@@ -59,4 +60,4 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within an AppProvider")
   return context
-        }
+}
