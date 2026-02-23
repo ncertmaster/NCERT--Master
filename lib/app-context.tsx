@@ -1,8 +1,10 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from "react"
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
+import type { Language } from "@/lib/translations"
+import type { ClassNumber } from "@/lib/data"
 
-type AppScreen =
+export type AppScreen =
   | "splash"
   | "login"
   | "signup"
@@ -25,78 +27,179 @@ type AppScreen =
   | "quiz-mode"
   | "quiz-chapter"
   | "quiz-play"
+  | "quiz-result"
   | "settings"
 
-interface AppContextType {
-  screen: AppScreen
-  setScreen: (screen: AppScreen) => void
-  user: any
-  setUser: (user: any) => void
-  language: string
-  setLanguage: (lang: string) => void
-  goBack: () => void
+export interface UserProfile {
+  name: string
+  email: string
+  classNumber: ClassNumber
+  aim: string
+  photo: string | null
 }
 
-const AppContext = createContext<AppContextType | undefined>(undefined)
+interface AppState {
+  screen: AppScreen
+  user: UserProfile | null
+  language: Language
+  selectedClass: ClassNumber | null
+  selectedSubject: string | null
+  selectedChapter: string | null
+  quizMode: "chapter" | "full" | null
+  quizScore: number
+  quizTotal: number
+  screenHistory: AppScreen[]
+}
+
+interface AppContextType extends AppState {
+  setScreen: (screen: AppScreen) => void
+  goBack: () => void
+  setUser: (user: UserProfile) => void
+  setLanguage: (lang: Language) => void
+  setSelectedClass: (c: ClassNumber) => void
+  setSelectedSubject: (s: string) => void
+  setSelectedChapter: (ch: string) => void
+  setQuizMode: (m: "chapter" | "full") => void
+  setQuizScore: (score: number, total: number) => void
+  logout: () => void
+}
+
+const AppContext = createContext<AppContextType | null>(null)
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [screen, setScreen] = useState<AppScreen>("splash")
-  const [user, setUser] = useState<any>(null)
-  const [language, setLanguage] = useState("Hindi")
-  const [history, setHistory] = useState<AppScreen[]>([])
+  const [state, setState] = useState<AppState>({
+    screen: "splash",
+    user: null,
+    language: "en",
+    selectedClass: null,
+    selectedSubject: null,
+    selectedChapter: null,
+    quizMode: null,
+    quizScore: 0,
+    quizTotal: 0,
+    screenHistory: [],
+  })
+
+  const stateRef = useRef(state)
+  useEffect(() => {
+    stateRef.current = state
+  })
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("ncert_user")
-    const savedLang = localStorage.getItem("ncert_lang")
-    
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-      setScreen("dashboard")
-    }
-    if (savedLang) {
-      setLanguage(savedLang)
+    try {
+      const savedUser = localStorage.getItem("ncert_user")
+      const savedLanguage = localStorage.getItem("ncert_language") as Language | null
+      if (savedUser) {
+        const user = JSON.parse(savedUser)
+        setState((prev) => ({
+          ...prev,
+          user,
+          screen: "dashboard",
+          language: savedLanguage || "en",
+        }))
+      } else {
+        setState((prev) => ({ ...prev, screen: "login" }))
+      }
+    } catch {
+      setState((prev) => ({ ...prev, screen: "login" }))
     }
   }, [])
 
-  const handleSetUser = (userData: any) => {
-    setUser(userData)
-    if (userData) {
-      localStorage.setItem("ncert_user", JSON.stringify(userData))
-    } else {
-      localStorage.removeItem("ncert_user")
+  useEffect(() => {
+    const handlePop = () => {
+      window.history.pushState(null, "", window.location.href)
+      const noBackScreens = ["splash", "login", "signup", "dashboard"]
+      if (!noBackScreens.includes(stateRef.current.screen)) {
+        setState((prev) => {
+          const history = [...prev.screenHistory]
+          const previousScreen = history.pop() || "dashboard"
+          return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
+        })
+      }
     }
-  }
 
-  const handleSetLanguage = (lang: string) => {
-    setLanguage(lang)
-    localStorage.setItem("ncert_lang", lang)
-  }
+    window.history.pushState(null, "", window.location.href)
+    window.addEventListener("popstate", handlePop)
+    return () => window.removeEventListener("popstate", handlePop)
+  }, [])
 
-  const handleSetScreen = (newScreen: AppScreen) => {
-    setHistory((prev) => [...prev, screen])
-    setScreen(newScreen)
-  }
+  const setScreen = useCallback((screen: AppScreen) => {
+    window.history.pushState(null, "", window.location.href)
+    setState((prev) => ({
+      ...prev,
+      screen,
+      screenHistory: [...prev.screenHistory, prev.screen],
+    }))
+  }, [])
 
-  const goBack = () => {
-    if (history.length > 0) {
-      const lastScreen = history[history.length - 1]
-      setHistory((prev) => prev.slice(0, -1))
-      setScreen(lastScreen)
-    }
-  }
+  const goBack = useCallback(() => {
+    setState((prev) => {
+      const history = [...prev.screenHistory]
+      const previousScreen = history.pop() || "dashboard"
+      return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
+    })
+  }, [])
+
+  const setUser = useCallback((user: UserProfile) => {
+    try { localStorage.setItem("ncert_user", JSON.stringify(user)) } catch {}
+    setState((prev) => ({ ...prev, user }))
+  }, [])
+
+  const setLanguage = useCallback((language: Language) => {
+    try { localStorage.setItem("ncert_language", language) } catch {}
+    setState((prev) => ({ ...prev, language }))
+  }, [])
+
+  const setSelectedClass = useCallback((selectedClass: ClassNumber) => {
+    setState((prev) => ({ ...prev, selectedClass }))
+  }, [])
+
+  const setSelectedSubject = useCallback((selectedSubject: string) => {
+    setState((prev) => ({ ...prev, selectedSubject }))
+  }, [])
+
+  const setSelectedChapter = useCallback((selectedChapter: string) => {
+    setState((prev) => ({ ...prev, selectedChapter }))
+  }, [])
+
+  const setQuizMode = useCallback((quizMode: "chapter" | "full") => {
+    setState((prev) => ({ ...prev, quizMode }))
+  }, [])
+
+  const setQuizScore = useCallback((quizScore: number, quizTotal: number) => {
+    setState((prev) => ({ ...prev, quizScore, quizTotal }))
+  }, [])
+
+  const logout = useCallback(() => {
+    try { localStorage.removeItem("ncert_user") } catch {}
+    setState((prev) => ({
+      screen: "login",
+      user: null,
+      language: prev.language,
+      selectedClass: null,
+      selectedSubject: null,
+      selectedChapter: null,
+      quizMode: null,
+      quizScore: 0,
+      quizTotal: 0,
+      screenHistory: [],
+    }))
+  }, [])
 
   return (
-    <AppContext.Provider 
-      value={{ 
-        screen, 
-        setScreen: handleSetScreen, 
-        user, 
-        setUser: handleSetUser, 
-        language, 
-        setLanguage: handleSetLanguage,
-        goBack 
-      }}
-    >
+    <AppContext.Provider value={{
+      ...state,
+      setScreen,
+      goBack,
+      setUser,
+      setLanguage,
+      setSelectedClass,
+      setSelectedSubject,
+      setSelectedChapter,
+      setQuizMode,
+      setQuizScore,
+      logout,
+    }}>
       {children}
     </AppContext.Provider>
   )
@@ -104,8 +207,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
 export function useApp() {
   const context = useContext(AppContext)
-  if (context === undefined) {
-    throw new Error("useApp must be used within an AppProvider")
-  }
+  if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-}
+  }
