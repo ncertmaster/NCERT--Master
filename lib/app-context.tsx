@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback } from "react"
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 
 export type AppScreen = string
 
@@ -16,40 +16,49 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [screen, setScreenState] = useState<AppScreen>("splash")
-  const [history, setHistory] = useState<AppScreen[]>([])
-  const [user, setUserState] = useState<any>(null)
+  const [screen, setScreen] = useState<AppScreen>("splash")
+  const [user, setUser] = useState<any>(null)
 
-  const setScreen = useCallback((next: AppScreen) => {
-    setHistory((prev) => [...prev, screen])
-    setScreenState(next)
-  }, [screen])
+  const handleSetScreen = useCallback((nextScreen: AppScreen) => {
+    setScreen(nextScreen)
+    // Only update history if window is available
+    if (typeof window !== "undefined") {
+      window.history.pushState({ screen: nextScreen }, "")
+    }
+  }, [])
 
-  const setUser = useCallback((user: any) => {
-    setUserState(user)
-    if (user) {
-      setScreenState("dashboard")
+  const goBack = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.history.back()
     }
   }, [])
 
   const logout = useCallback(() => {
-    setUserState(null)
-    setHistory([])
-    setScreenState("login")
+    setUser(null)
+    setScreen("login")
   }, [])
 
-  const goBack = useCallback(() => {
-    setHistory((prev) => {
-      if (prev.length === 0) return prev
-      const newHistory = [...prev]
-      const prevScreen = newHistory.pop()
-      if (prevScreen) setScreenState(prevScreen)
-      return newHistory
-    })
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.screen) {
+        setScreen(event.state.screen)
+      }
+    }
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
   return (
-    <AppContext.Provider value={{ screen, user, setScreen, setUser, goBack, logout }}>
+    <AppContext.Provider 
+      value={{ 
+        screen, 
+        user, 
+        setScreen: handleSetScreen, 
+        setUser, 
+        goBack, 
+        logout 
+      }}
+    >
       {children}
     </AppContext.Provider>
   )
