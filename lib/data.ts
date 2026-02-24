@@ -221,7 +221,6 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
   11: [],
   12: [],
 }
-
 export const streamsByClass: Record<ClassNumber, Stream[]> = {
   6: [], 7: [], 8: [], 9: [], 10: [],
   11: [
@@ -490,4 +489,58 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         {
           id: "political-science", name: "Political Science", nameHi: "राजनीति विज्ञान", icon: "landmark",
           books: [
-            { id: "polsci-12-1", name: "Contemporary World Pol
+            { id: "polsci-12-1", name: "Contemporary World Politics", nameHi: "समकालीन विश्व राजनीति", chapters: [] },
+            { id: "polsci-12-2", name: "Politics in India Since Independence", nameHi: "स्वतंत्रता के बाद भारत की राजनीति", chapters: [] },
+          ],
+        },
+        {
+          id: "sociology", name: "Sociology", nameHi: "समाजशास्त्र", icon: "users",
+          books: [
+            { id: "soc-12-1", name: "Indian Society", nameHi: "भारतीय समाज", chapters: [] },
+            { id: "soc-12-2", name: "Social Change and Development in India", nameHi: "भारत में सामाजिक परिवर्तन और विकास", chapters: [] },
+          ],
+        },
+        {
+          id: "economics", name: "Economics", nameHi: "अर्थशास्त्र", icon: "trending-up",
+          books: [
+            { id: "eco-12-arts-1", name: "Introductory Macroeconomics", nameHi: "प्रारंभिक व्यापक अर्थशास्त्र", chapters: [] },
+            { id: "eco-12-arts-2", name: "Indian Economic Development", nameHi: "भारतीय आर्थिक विकास", chapters: [] },
+          ],
+        },
+        {
+          id: "psychology", name: "Psychology", nameHi: "मनोविज्ञान", icon: "brain",
+          books: [
+            { id: "psych-12", name: "Psychology", nameHi: "मनोविज्ञान", chapters: [] },
+          ],
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            { id: "flamingo-12-arts", name: "Flamingo", nameHi: "Flamingo", chapters: [] },
+            { id: "vistas-12-arts", name: "Vistas", nameHi: "Vistas", chapters: [] },
+          ],
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            { id: "aroh-12-arts", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2", chapters: [] },
+            { id: "vitan-12-arts", name: "Vitan Bhag 2", nameHi: "वितान भाग 2", chapters: [] },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
+export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
+  return []
+}
+
+export function getNotesContent(chapterName: string): string {
+  return `"${chapterName}" ke notes coming soon...`
+}
+
+export function getImportantQuestions(chapterName: string): string[] {
+  return []
+             }
+         
