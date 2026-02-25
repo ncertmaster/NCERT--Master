@@ -386,8 +386,7 @@ id: "math-8",
         },
       ]
     },
-  ],
-  [
+    ],
     {
       id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
       books: [{
