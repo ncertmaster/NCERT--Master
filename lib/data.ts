@@ -997,7 +997,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
           ]
         },
       ]
-                 }
+                 },
     {
       id: "arts", name: "Arts", nameHi: "कला",
       subjects: [
