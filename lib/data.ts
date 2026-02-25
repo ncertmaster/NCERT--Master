@@ -1366,3 +1366,395 @@ id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
         },
       ]
     },
+{
+      id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
+      subjects: [
+        {
+          id: "accountancy", name: "Accountancy", nameHi: "लेखाशास्त्र", icon: "book",
+          books: [
+            {
+              id: "accountancy-12-1", name: "Accountancy Part 1", nameHi: "लेखाशास्त्र भाग 1",
+              chapters: [
+                { id: "ac12-ch1", name: "Labhdayak Sansthaon Ke Liye Lekhankan", nameHi: "लाभकारी संस्थाओं के लिए लेखांकन" },
+                { id: "ac12-ch2", name: "Sajhedari Lekhankan Aadharabhoot Avdharnaen", nameHi: "साझेदारी लेखांकन: आधारभूत अवधारणाएँ" },
+                { id: "ac12-ch3", name: "Sajhedari Firm Ka Punargathan Sajhedar Ka Pravesh", nameHi: "साझेदारी फर्म का पुनर्गठन: साझेदार का प्रवेश" },
+                { id: "ac12-ch4", name: "Sajhedar Ka Avkash Grahan Aur Mrityu", nameHi: "साझेदार का अवकाश ग्रहण/मृत्यु" },
+                { id: "ac12-ch5", name: "Sajhedari Firm Ka Vighatan", nameHi: "साझेदारी फर्म का विघटन" },
+              ]
+            },
+            {
+              id: "accountancy-12-2", name: "Accountancy Part 2", nameHi: "लेखाशास्त्र भाग 2",
+              chapters: [
+                { id: "ac12-ch6", name: "Ansh Punji Ke Liye Lekhankan", nameHi: "अंश पूँजी के लिए लेखांकन" },
+                { id: "ac12-ch7", name: "Rinapatr Ka Nirgam Evam Mochan", nameHi: "ऋणपत्रों का निर्गमन एवं मोचन" },
+                { id: "ac12-ch8", name: "Company Ke Vittiy Vivaran", nameHi: "कंपनी के वित्तीय विवरण" },
+                { id: "ac12-ch9", name: "Vittiy Vivaranon Ka Vishleshan", nameHi: "वित्तीय विवरणों का विश्लेषण" },
+                { id: "ac12-ch10", name: "Lekhankan Anupat", nameHi: "लेखांकन अनुपात" },
+                { id: "ac12-ch11", name: "Rokad Pravah Vivaran", nameHi: "रोकड़ प्रवाह विवरण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "business-studies", name: "Business Studies", nameHi: "व्यवसाय अध्ययन", icon: "briefcase",
+          books: [
+            {
+              id: "business-12-1", name: "Business Studies Part 1", nameHi: "व्यवसाय अध्ययन भाग 1",
+              chapters: [
+                { id: "bs12-ch1", name: "Prabandh Ki Prakriti Evam Mahatv", nameHi: "प्रबंध की प्रकृति एवं महत्व" },
+                { id: "bs12-ch2", name: "Prabandh Ke Siddhant", nameHi: "प्रबंध के सिद्धांत" },
+                { id: "bs12-ch3", name: "Vyavsayik Vatavaran", nameHi: "व्यावसायिक पर्यावरण" },
+                { id: "bs12-ch4", name: "Niyojan", nameHi: "नियोजन" },
+                { id: "bs12-ch5", name: "Sangathan", nameHi: "संगठन" },
+                { id: "bs12-ch6", name: "Niyuktikaran", nameHi: "नियुक्तिकरण" },
+                { id: "bs12-ch7", name: "Nirdeshan", nameHi: "निर्देशन" },
+                { id: "bs12-ch8", name: "Niyantran", nameHi: "नियंत्रण" },
+              ]
+            },
+            {
+              id: "business-12-2", name: "Business Studies Part 2", nameHi: "व्यवसाय अध्ययन भाग 2",
+              chapters: [
+                { id: "bs12-ch9", name: "Vittiy Prabandhan", nameHi: "वित्तीय प्रबंध" },
+                { id: "bs12-ch10", name: "Vittiy Bajar", nameHi: "वित्तीय बाज़ार" },
+                { id: "bs12-ch11", name: "Vipan Prabandhan", nameHi: "विपणन प्रबंधन" },
+                { id: "bs12-ch12", name: "Upbhokta Sanrakshan", nameHi: "उपभोक्ता संरक्षण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics", name: "Economics", nameHi: "अर्थशास्त्र", icon: "trending-up",
+          books: [
+            {
+              id: "micro-eco-12", name: "Vyashti Arthshastra", nameHi: "व्यष्टि अर्थशास्त्र (Microeconomics)",
+              chapters: [
+                { id: "me12-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "me12-ch2", name: "Upbhokta Ke Vyavhar Ka Siddhant", nameHi: "उपभोक्ता के व्यवहार का सिद्धांत" },
+                { id: "me12-ch3", name: "Utpadan Tatha Lagat", nameHi: "उत्पादन तथा लागत" },
+                { id: "me12-ch4", name: "Poorn Pratisparddha Ki Sthiti Mein Firm Ka Siddhant", nameHi: "पूर्ण प्रतिस्पर्धा की स्थिति में फर्म का सिद्धांत" },
+                { id: "me12-ch5", name: "Bajar Santulan", nameHi: "बाज़ार संतुलन" },
+                { id: "me12-ch6", name: "Pratispardhaarahit Bajar", nameHi: "प्रतिस्पर्धारहित बाज़ार" },
+              ]
+            },
+            {
+              id: "macro-eco-12", name: "Samashti Arthshastra", nameHi: "समष्टि अर्थशास्त्र (Macroeconomics)",
+              chapters: [
+                { id: "mae12-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "mae12-ch2", name: "Rashtriy Aay Ka Lekhankan", nameHi: "राष्ट्रीय आय का लेखांकन" },
+                { id: "mae12-ch3", name: "Mudra Aur Banking", nameHi: "मुद्रा और बैंकिंग" },
+                { id: "mae12-ch4", name: "Aay Aur Rojgar Ka Nirdharan", nameHi: "आय और रोजगार का निर्धारण" },
+                { id: "mae12-ch5", name: "Sarkariy Budget Evam Arthvyavastha", nameHi: "सरकारी बजट एवं अर्थव्यवस्था" },
+                { id: "mae12-ch6", name: "Khuli Arthvyavastha Samashti Arthshastra", nameHi: "खुली अर्थव्यवस्था - समष्टि अर्थशास्त्र" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
+          books: [
+            {
+              id: "math-12-com-1", name: "Mathematics Part 1", nameHi: "गणित भाग 1",
+              chapters: [
+                { id: "ma12c-ch1", name: "Sambandh Evam Phaln", nameHi: "संबंध एवं फलन" },
+                { id: "ma12c-ch2", name: "Pratilom Trikonmitiy Phaln", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
+                { id: "ma12c-ch3", name: "Aavyuh", nameHi: "आव्यूह (Matrices)" },
+                { id: "ma12c-ch4", name: "Saranik", nameHi: "सारणिक (Determinants)" },
+                { id: "ma12c-ch5", name: "Santatya Tatha Avkalniyta", nameHi: "सांतत्य तथा अवकलनीयता" },
+                { id: "ma12c-ch6", name: "Avkalaj Ke Anuprayog", nameHi: "अवकलज के अनुप्रयोग" },
+              ]
+            },
+            {
+              id: "math-12-com-2", name: "Mathematics Part 2", nameHi: "गणित भाग 2",
+              chapters: [
+                { id: "ma12c-ch7", name: "Samakal", nameHi: "समाकलन (Integrals)" },
+                { id: "ma12c-ch8", name: "Samakalon Ke Anuprayog", nameHi: "समाकलनों के अनुप्रयोग" },
+                { id: "ma12c-ch9", name: "Avkal Samikaran", nameHi: "अवकल समीकरण" },
+                { id: "ma12c-ch10", name: "Sadir Beejganit", nameHi: "सदिश बीजगणित" },
+                { id: "ma12c-ch11", name: "Tri-Vimiy Jyamiti", nameHi: "त्रि-विमीय ज्यामिति" },
+                { id: "ma12c-ch12", name: "Raikhik Programan", nameHi: "रैखिक प्रोग्रामन" },
+                { id: "ma12c-ch13", name: "Prayikta", nameHi: "प्रायिकता" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12-com", name: "Flamingo", nameHi: "Flamingo",
+              chapters: [
+                { id: "fl12c-ch1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "fl12c-ch2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "fl12c-ch3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "fl12c-ch4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "fl12c-ch5", name: "Indigo", nameHi: "Indigo" },
+                { id: "fl12c-ch6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "fl12c-ch7", name: "The Interview", nameHi: "The Interview" },
+                { id: "fl12c-ch8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12-com", name: "Vistas (Supplementary)", nameHi: "Vistas (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12c-ch1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vi12c-ch2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vi12c-ch3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vi12c-ch4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vi12c-ch5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy?" },
+                { id: "vi12c-ch6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vi12c-ch7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vi12c-ch8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            {
+              id: "aroh-12-com", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "ar12c-ch1", name: "Aatmaparichay", nameHi: "आत्मपरिचय" },
+                { id: "ar12c-ch2", name: "Patang", nameHi: "पतंग" },
+                { id: "ar12c-ch3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "ar12c-ch4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "ar12c-ch5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "ar12c-ch6", name: "Usha", nameHi: "उषा" },
+                { id: "ar12c-ch7", name: "Badal Raag", nameHi: "बादल राग" },
+                { id: "ar12c-ch8", name: "Laharon Ke Rajhans", nameHi: "लहरों के राजहंस" },
+                { id: "ar12c-ch9", name: "Namak", nameHi: "नमक" },
+                { id: "ar12c-ch10", name: "Shirish Ke Phool", nameHi: "शिरीष के फूल" },
+              ]
+            },
+            {
+              id: "vitan-12-com", name: "Vitan Bhag 2 (Supplementary)", nameHi: "वितान भाग 2 (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12hc-ch1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vi12hc-ch2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vi12hc-ch3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vi12hc-ch4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+                { id: "vi12hc-ch5", name: "Apne Apne Ajnabi", nameHi: "अपने-अपने अजनबी" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+    {
+      id: "arts", name: "Arts", nameHi: "कला",
+      subjects: [
+        {
+          id: "history", name: "History", nameHi: "इतिहास", icon: "book",
+          books: [
+            {
+              id: "history-12-1", name: "Bhartiya Itihas Ke Kuch Vishay Bhag 1", nameHi: "भारतीय इतिहास के कुछ विषय – भाग 1",
+              chapters: [
+                { id: "hi12-ch1", name: "Eenten Manke Tatha Asthiyan", nameHi: "ईंटें, मनके तथा अस्थियाँ (हड़प्पा सभ्यता)" },
+                { id: "hi12-ch2", name: "Raja Kisan Aur Nagar", nameHi: "राजा, किसान और नगर (आरंभिक राज्य और अर्थव्यवस्थाएँ)" },
+                { id: "hi12-ch3", name: "Bandhuty Jati Tatha Varg", nameHi: "बंधुत्व, जाति तथा वर्ग (आरंभिक समाज)" },
+                { id: "hi12-ch4", name: "Vicharak Vishvas Aur Imaraten", nameHi: "विचारक, विश्वास और इमारतें (सांस्कृतिक विकास)" },
+              ]
+            },
+            {
+              id: "history-12-2", name: "Bhartiya Itihas Ke Kuch Vishay Bhag 2", nameHi: "भारतीय इतिहास के कुछ विषय – भाग 2",
+              chapters: [
+                { id: "hi12-ch5", name: "Yatrion Ke Nazariye", nameHi: "यात्रियों के नजरिए (समाज के बारे में उनकी समझ)" },
+                { id: "hi12-ch6", name: "Bhakti Sufi Paramparaen", nameHi: "भक्ति-सूफी परंपराएँ (धार्मिक विश्वासों में बदलाव)" },
+                { id: "hi12-ch7", name: "Ek Samrajya Ki Rajdhani Vijayanagar", nameHi: "एक साम्राज्य की राजधानी: विजयनगर" },
+                { id: "hi12-ch8", name: "Kisan Zamindar Aur Rajya", nameHi: "किसान, जमींदार और राज्य (कृषि समाज और मुगल साम्राज्य)" },
+                { id: "hi12-ch9", name: "Shasak Aur Itivratt Mugal Darbar", nameHi: "शासक और विभिन्न इतिवृत्त (मुगल दरबार)" },
+              ]
+            },
+            {
+              id: "history-12-3", name: "Bhartiya Itihas Ke Kuch Vishay Bhag 3", nameHi: "भारतीय इतिहास के कुछ विषय – भाग 3",
+              chapters: [
+                { id: "hi12-ch10", name: "Upniveshvad Aur Dehat", nameHi: "उपनिवेशवाद और देहात (सरकारी अभिलेखों का अध्ययन)" },
+                { id: "hi12-ch11", name: "Vidrohhi Aur Raj 1857", nameHi: "विद्रोही और राज (1857 का आंदोलन और उसके व्याख्यान)" },
+                { id: "hi12-ch12", name: "Aupniveshik Shahar", nameHi: "औपनिवेशिक शहर (नगर-योजना, स्थापत्य)" },
+                { id: "hi12-ch13", name: "Mahatma Gandhi Aur Rashtriy Andolan", nameHi: "महात्मा गांधी और राष्ट्रीय आंदोलन (सविनय अवज्ञा और उससे आगे)" },
+                { id: "hi12-ch14", name: "Vibhajan Ko Samajhna", nameHi: "विभाजन को समझना (राजनीति, स्मृति, अनुभव)" },
+                { id: "hi12-ch15", name: "Samvidhan Ka Nirman", nameHi: "संविधान का निर्माण (एक नए युग की शुरुआत)" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "political-science", name: "Political Science", nameHi: "राजनीति विज्ञान", icon: "landmark",
+          books: [
+            {
+              id: "polsci-12-1", name: "Samkalin Vishwa Rajniti", nameHi: "समकालीन विश्व राजनीति",
+              chapters: [
+                { id: "ps12-ch1", name: "Sheet Yuddh Ka Daur", nameHi: "शीतयुद्ध का दौर" },
+                { id: "ps12-ch2", name: "Do Dhruveeyata Ka Ant", nameHi: "दो ध्रुवीयता का अंत" },
+                { id: "ps12-ch3", name: "Samkalin Vishwa Mein US Adhipatya", nameHi: "समकालीन विश्व में अमेरिकी वर्चस्व" },
+                { id: "ps12-ch4", name: "Satta Ke Vaikalpik Kendra", nameHi: "सत्ता के वैकल्पिक केंद्र" },
+                { id: "ps12-ch5", name: "Samkalin Dakshin Asia", nameHi: "समकालीन दक्षिण एशिया" },
+                { id: "ps12-ch6", name: "Antarrashtriy Sangathan", nameHi: "अंतर्राष्ट्रीय संगठन" },
+                { id: "ps12-ch7", name: "Samkalin Vishwa Mein Suraksha", nameHi: "समकालीन विश्व में सुरक्षा" },
+                { id: "ps12-ch8", name: "Paryavaran Aur Prakritik Sansadhan", nameHi: "पर्यावरण और प्राकृतिक संसाधन" },
+                { id: "ps12-ch9", name: "Vaishvikaran", nameHi: "वैश्वीकरण" },
+              ]
+            },
+            {
+              id: "polsci-12-2", name: "Swatantra Bharat Mein Rajniti", nameHi: "स्वतंत्र भारत में राजनीति",
+              chapters: [
+                { id: "ps12-ch10", name: "Rashtra Nirman Ki Chunautiyan", nameHi: "राष्ट्र-निर्माण की चुनौतियाँ" },
+                { id: "ps12-ch11", name: "Ek Dal Ke Prabhutv Ka Daur", nameHi: "एक दल के प्रभुत्व का दौर" },
+                { id: "ps12-ch12", name: "Niyojit Vikas Ki Rajniti", nameHi: "नियोजित विकास की राजनीति" },
+                { id: "ps12-ch13", name: "Bharat Ke Videsh Sambandh", nameHi: "भारत के विदेश संबंध" },
+                { id: "ps12-ch14", name: "Congress Pranali Chunautiyan Aur Punasthapna", nameHi: "कांग्रेस प्रणाली: चुनौतियाँ और पुनस्थापना" },
+                { id: "ps12-ch15", name: "Loktantrik Vyavastha Ka Sankat", nameHi: "लोकतांत्रिक व्यवस्था का संकट" },
+                { id: "ps12-ch16", name: "Jan Aandolnon Ka Uday", nameHi: "जन आंदोलनों का उदय" },
+                { id: "ps12-ch17", name: "Kshetriy Aakankshae", nameHi: "क्षेत्रीय आकांक्षाएँ" },
+                { id: "ps12-ch18", name: "Bhartiy Rajniti Naye Badlav", nameHi: "भारतीय राजनीति: नए बदलाव" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "geography", name: "Geography", nameHi: "भूगोल", icon: "map",
+          books: [
+            {
+              id: "geo-12-1", name: "Manav Bhugol Ke Mool Siddhant", nameHi: "मानव भूगोल के मूल सिद्धांत",
+              chapters: [
+                { id: "ge12-ch1", name: "Manav Bhugol Prakriti Evam Vishay Kshetra", nameHi: "मानव भूगोल: प्रकृति एवं विषय क्षेत्र" },
+                { id: "ge12-ch2", name: "Vishwa Janasankhya Vitaran Ghantv Aur Vriddhi", nameHi: "विश्व जनसंख्या: वितरण, घनत्व और वृद्धि" },
+                { id: "ge12-ch3", name: "Janasankhya Sanghathn", nameHi: "जनसंख्या संघटन" },
+                { id: "ge12-ch4", name: "Manav Vikas", nameHi: "मानव विकास" },
+                { id: "ge12-ch5", name: "Prathamik Kriyaen", nameHi: "प्राथमिक क्रियाएँ" },
+                { id: "ge12-ch6", name: "Dvitiyak Kriyaen", nameHi: "द्वितीयक क्रियाएँ" },
+                { id: "ge12-ch7", name: "Tritiyak Aur Chaturth Kriyakalap", nameHi: "तृतीयक और चतुर्थ क्रियाकलाप" },
+                { id: "ge12-ch8", name: "Parivahan Evam Sanchar", nameHi: "परिवहन एवं संचार" },
+                { id: "ge12-ch9", name: "Antarrashtriy Vyapar", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+                { id: "ge12-ch10", name: "Manav Bastiyan", nameHi: "मानव बस्ती" },
+              ]
+            },
+            {
+              id: "geo-12-2", name: "Bharat Log Aur Arthvyavastha", nameHi: "भारत: लोग और अर्थव्यवस्था",
+              chapters: [
+                { id: "ge12-ch11", name: "Janasankhya Vitaran Ghantv Vriddhi Aur Sangathan", nameHi: "जनसंख्या: वितरण, घनत्व, वृद्धि और संघटन" },
+                { id: "ge12-ch12", name: "Pravas Prakar Karan Aur Parinam", nameHi: "प्रवास: प्रकार, कारण और परिणाम" },
+                { id: "ge12-ch13", name: "Manav Vikas Bharat", nameHi: "मानव विकास" },
+                { id: "ge12-ch14", name: "Manav Bastiyan Bharat", nameHi: "मानव बस्तियाँ" },
+                { id: "ge12-ch15", name: "Bhusansadhan Tatha Krishi", nameHi: "भूसंसाधन तथा कृषि" },
+                { id: "ge12-ch16", name: "Jal Sansadhan Bharat", nameHi: "जल-संसाधन" },
+                { id: "ge12-ch17", name: "Khanij Tatha Urja Sansadhan Bharat", nameHi: "खनिज तथा ऊर्जा संसाधन" },
+                { id: "ge12-ch18", name: "Nirman Udyog", nameHi: "निर्माण उद्योग" },
+                { id: "ge12-ch19", name: "Niyojan Aur Satatposhiy Vikas", nameHi: "भारत के संदर्भ में नियोजन और सततपोषणीय विकास" },
+                { id: "ge12-ch20", name: "Parivahan Tatha Sanchar Bharat", nameHi: "परिवहन तथा संचार" },
+                { id: "ge12-ch21", name: "Antarrashtriy Vyapar Bharat", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+                { id: "ge12-ch22", name: "Bhaugolik Pariprekshya Mein Mudde", nameHi: "भौगोलिक परिप्रेक्ष्य में चयनित कुछ मुद्दे एवं समस्याएँ" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics", name: "Economics", nameHi: "अर्थशास्त्र", icon: "trending-up",
+          books: [
+            {
+              id: "micro-eco-12-arts", name: "Vyashti Arthshastra", nameHi: "व्यष्टि अर्थशास्त्र (Microeconomics)",
+              chapters: [
+                { id: "mea12-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "mea12-ch2", name: "Upbhokta Ke Vyavhar Ka Siddhant", nameHi: "उपभोक्ता के व्यवहार का सिद्धांत" },
+                { id: "mea12-ch3", name: "Utpadan Tatha Lagat", nameHi: "उत्पादन तथा लागत" },
+                { id: "mea12-ch4", name: "Poorn Pratisparddha Ki Sthiti Mein Firm Ka Siddhant", nameHi: "पूर्ण प्रतिस्पर्धा की स्थिति में फर्म का सिद्धांत" },
+                { id: "mea12-ch5", name: "Bajar Santulan", nameHi: "बाज़ार संतुलन" },
+                { id: "mea12-ch6", name: "Pratispardhaarahit Bajar", nameHi: "प्रतिस्पर्धारहित बाज़ार" },
+              ]
+            },
+            {
+              id: "macro-eco-12-arts", name: "Samashti Arthshastra", nameHi: "समष्टि अर्थशास्त्र (Macroeconomics)",
+              chapters: [
+                { id: "maea12-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "maea12-ch2", name: "Rashtriy Aay Ka Lekhankan", nameHi: "राष्ट्रीय आय का लेखांकन" },
+                { id: "maea12-ch3", name: "Mudra Aur Banking", nameHi: "मुद्रा और बैंकिंग" },
+                { id: "maea12-ch4", name: "Aay Aur Rojgar Ka Nirdharan", nameHi: "आय और रोजगार का निर्धारण" },
+                { id: "maea12-ch5", name: "Sarkariy Budget Evam Arthvyavastha", nameHi: "सरकारी बजट एवं अर्थव्यवस्था" },
+                { id: "maea12-ch6", name: "Khuli Arthvyavastha Samashti Arthshastra", nameHi: "खुली अर्थव्यवस्था - समष्टि अर्थशास्त्र" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12-arts", name: "Flamingo", nameHi: "Flamingo",
+              chapters: [
+                { id: "fl12a-ch1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "fl12a-ch2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "fl12a-ch3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "fl12a-ch4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "fl12a-ch5", name: "Indigo", nameHi: "Indigo" },
+                { id: "fl12a-ch6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "fl12a-ch7", name: "The Interview", nameHi: "The Interview" },
+                { id: "fl12a-ch8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12-arts", name: "Vistas (Supplementary)", nameHi: "Vistas (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12a-ch1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vi12a-ch2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vi12a-ch3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vi12a-ch4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vi12a-ch5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy?" },
+                { id: "vi12a-ch6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vi12a-ch7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vi12a-ch8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            {
+              id: "aroh-12-arts", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "ar12a-ch1", name: "Aatmaparichay", nameHi: "आत्मपरिचय" },
+                { id: "ar12a-ch2", name: "Patang", nameHi: "पतंग" },
+                { id: "ar12a-ch3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "ar12a-ch4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "ar12a-ch5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "ar12a-ch6", name: "Usha", nameHi: "उषा" },
+                { id: "ar12a-ch7", name: "Badal Raag", nameHi: "बादल राग" },
+                { id: "ar12a-ch8", name: "Laharon Ke Rajhans", nameHi: "लहरों के राजहंस" },
+                { id: "ar12a-ch9", name: "Namak", nameHi: "नमक" },
+                { id: "ar12a-ch10", name: "Shirish Ke Phool", nameHi: "शिरीष के फूल" },
+              ]
+            },
+            {
+              id: "vitan-12-arts", name: "Vitan Bhag 2 (Supplementary)", nameHi: "वितान भाग 2 (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12ha-ch1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vi12ha-ch2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vi12ha-ch3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vi12ha-ch4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+                { id: "vi12ha-ch5", name: "Apne Apne Ajnabi", nameHi: "अपने-अपने अजनबी" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+  ],
+}
+
+export const streamsByClass: Record<ClassNumber, Stream[]> = {
+  6: [], 7: [], 8: [], 9: [], 10: [],
+  11: [],
+  12: [],
+}
+
+export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
+  return []
+}
+
+export function getNotesContent(chapterName: string): string {
+  return `# ${chapterName}\n\nNotes coming soon...`
+}
+
+export function getImportantQuestions(chapterName: string): string[] {
+  return []
+              }
