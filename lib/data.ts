@@ -1,4 +1,4 @@
-export type ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12
+ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12
 
 export interface Chapter {
   id: string
@@ -115,8 +115,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         },
       ]
     },
-            {
-               id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
+    {
+      id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
       books: [
         {
           id: "math-6", name: "Mathematics", nameHi: "गणित",
@@ -236,8 +236,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
             { id: "v2-ch18", name: "Sangharsh Ke Karan", nameHi: "संघर्ष के कारण मैं तुनुकमिजाज हो गया" },
           ]
         },
-             {
-              id: "bal-mahabharat", name: "Bal Mahabharat Katha", nameHi: "बाल महाभारत कथा",
+        {
+          id: "bal-mahabharat", name: "Bal Mahabharat Katha", nameHi: "बाल महाभारत कथा",
           chapters: [
             { id: "bm-ch1", name: "Devvrat", nameHi: "देवव्रत" },
             { id: "bm-ch2", name: "Bhishma Pratigya", nameHi: "भीष्म प्रतिज्ञा" },
@@ -369,8 +369,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
             { id: "ha2-ch10", name: "Atharahvin Sadi Mein Rajnitik Gathan", nameHi: "अठारहवीं सदी में राजनीतिक गठन" },
           ]
         },
-      {
-             id: "hamara-paryavaran", name: "Hamara Paryavaran", nameHi: "हमारा पर्यावरण",
+        {
+          id: "hamara-paryavaran", name: "Hamara Paryavaran", nameHi: "हमारा पर्यावरण",
           chapters: [
             { id: "hp-ch1", name: "Paryavaran", nameHi: "पर्यावरण" },
             { id: "hp-ch2", name: "Prithvi Ki Aantarik Sanrachna", nameHi: "पृथ्वी की आंतरिक संरचना" },
@@ -480,7 +480,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         {
           id: "math-8", name: "Mathematics", nameHi: "गणित",
           chapters: [
-            { id: "m8-ch1", name: "Parimy Sankhyaen", nameHi: "परिमेय संख्याएँ" },
+       { id: "m8-ch1", name: "Parimy Sankhyaen", nameHi: "परिमेय संख्याएँ" },
             { id: "m8-ch2", name: "Ek Char Wale Raikhik Samikaran", nameHi: "एक चर वाले रैखिक समीकरण" },
             { id: "m8-ch3", name: "Chaturbhujon Ki Samajh", nameHi: "चतुर्भुजों की समझ" },
             { id: "m8-ch4", name: "Aankdon Ka Prabandhan", nameHi: "आँकड़ों का प्रबंधन" },
@@ -605,8 +605,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         },
       ]
     },
-            {
-               id: "english", name: "English", nameHi: "English", icon: "book-open",
+    {
+      id: "english", name: "English", nameHi: "English", icon: "book-open",
       books: [
         {
           id: "beehive", name: "Beehive", nameHi: "Beehive",
@@ -780,7 +780,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         {
           id: "first-flight", name: "First Flight", nameHi: "First Flight",
           chapters: [
-            { id: "ff-ch1", name: "A Letter to God", nameHi: "A Letter to God" },
+    { id: "ff-ch1", name: "A Letter to God", nameHi: "A Letter to God" },
             { id: "ff-ch2", name: "Nelson Mandela: Long Walk to Freedom", nameHi: "Nelson Mandela: Long Walk to Freedom" },
             { id: "ff-ch3", name: "Two Stories about Flying", nameHi: "Two Stories about Flying" },
             { id: "ff-ch4", name: "From the Diary of Anne Frank", nameHi: "From the Diary of Anne Frank" },
@@ -835,8 +835,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         },
       ]
     },
-             {
-              id: "science", name: "Science", nameHi: "विज्ञान", icon: "flask",
+    {
+      id: "science", name: "Science", nameHi: "विज्ञान", icon: "flask",
       books: [
         {
           id: "science-10", name: "Science", nameHi: "विज्ञान",
@@ -996,283 +996,4 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
                 { id: "bi11-ch7", name: "Koshika Vibhajan", nameHi: "कोशिका विभाजन" },
                 { id: "bi11-ch8", name: "Jeevon Mein Parivahan", nameHi: "जीवों में परिवहन" },
                 { id: "bi11-ch9", name: "Paudhon Mein Khanij Poshan", nameHi: "पौधों में खनिज पोषण" },
-                { id: "bi11-ch10-com-2", name: "Mathematics Part 2", nameHi: "गणित भाग 2",
-              chapters: [
-                { id: "ma12c-ch7", name: "Samakal", nameHi: "समाकलन" },
-                { id: "ma12c-ch8", name: "Samakalon Ke Anuprayog", nameHi: "समाकलों के अनुप्रयोग" },
-                { id: "ma12c-ch9", name: "Avkal Samikaran", nameHi: "अवकल समीकरण" },
-                { id: "ma12c-ch10", name: "Sadir Beejganit", nameHi: "सदिश बीजगणित" },
-                { id: "ma12c-ch11", name: "Tri-Aayami Jyamiti", nameHi: "त्रि-आयामी ज्यामिति" },
-                { id: "ma12c-ch12", name: "Raikhik Programan", nameHi: "रैखिक प्रोग्रामन" },
-                { id: "ma12c-ch13", name: "Prayikta", nameHi: "प्रायिकता" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "english", name: "English", nameHi: "English", icon: "book-open",
-          books: [
-            {
-              id: "flamingo-12-com", name: "Flamingo", nameHi: "Flamingo",
-              chapters: [
-                { id: "fl12c-ch1", name: "The Last Lesson", nameHi: "The Last Lesson" },
-                { id: "fl12c-ch2", name: "Lost Spring", nameHi: "Lost Spring" },
-                { id: "fl12c-ch3", name: "Deep Water", nameHi: "Deep Water" },
-                { id: "fl12c-ch4", name: "The Rattrap", nameHi: "The Rattrap" },
-                { id: "fl12c-ch5", name: "Indigo", nameHi: "Indigo" },
-                { id: "fl12c-ch6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
-                { id: "fl12c-ch7", name: "The Interview", nameHi: "The Interview" },
-                { id: "fl12c-ch8", name: "Going Places", nameHi: "Going Places" },
-              ]
-            },
-            {
-              id: "vistas-12-com", name: "Vistas", nameHi: "Vistas",
-              chapters: [
-                { id: "vi12c-ch1", name: "The Third Level", nameHi: "The Third Level" },
-                { id: "vi12c-ch2", name: "The Tiger King", nameHi: "The Tiger King" },
-                { id: "vi12c-ch3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
-                { id: "vi12c-ch4", name: "The Enemy", nameHi: "The Enemy" },
-                { id: "vi12c-ch5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy" },
-                { id: "vi12c-ch6", name: "On the Face of It", nameHi: "On the Face of It" },
-                { id: "vi12c-ch7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
-                { id: "vi12c-ch8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
-          books: [
-            {
-              id: "aroh-12-com", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2",
-              chapters: [
-                { id: "ar12c-ch1", name: "Aatmaparichay", nameHi: "आत्मपरिचय" },
-                { id: "ar12c-ch2", name: "Patang", nameHi: "पतंग" },
-                { id: "ar12c-ch3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
-                { id: "ar12c-ch4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
-                { id: "ar12c-ch5", name: "Saroj Smriti", nameHi: "सरोज स्मृति" },
-                { id: "ar12c-ch6", name: "Usha", nameHi: "उषा" },
-                { id: "ar12c-ch7", name: "Badal Raag", nameHi: "बादल राग" },
-                { id: "ar12c-ch8", name: "Kavyansh", nameHi: "काव्यांश" },
-                { id: "ar12c-ch9", name: "Kutaj", nameHi: "कुटज" },
-                { id: "ar12c-ch10", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
-                { id: "ar12c-ch11", name: "Shirish Ke Phool", nameHi: "शिरीष के फूल" },
-                { id: "ar12c-ch12", name: "Tatsam", nameHi: "तत्सम" },
-                { id: "ar12c-ch13", name: "Namak", nameHi: "नमक" },
-                { id: "ar12c-ch14", name: "Pahalwan Ki Dholak", nameHi: "पहलवान की ढोलक" },
-              ]
-            },
-            {
-              id: "vitan-12-com", name: "Vitan Bhag 2", nameHi: "वितान भाग 2",
-              chapters: [
-                { id: "vi12hc-ch1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
-                { id: "vi12hc-ch2", name: "Juthan", nameHi: "जूठन" },
-                { id: "vi12hc-ch3", name: "Vitamin", nameHi: "विटामिन" },
-                { id: "vi12hc-ch4", name: "Biskohar Ki Mati", nameHi: "बिस्कोहर की माटी" },
-              ]
-            },
-          ]
-        },
-      ]
-    },
-    {
-      id: "arts", name: "Arts", nameHi: "कला",
-      subjects: [
-        {
-          id: "history", name: "History", nameHi: "इतिहास", icon: "book",
-          books: [
-            {
-              id: "history-12-1", name: "Themes in Indian History Part 1", nameHi: "भारतीय इतिहास के कुछ विषय भाग 1",
-              chapters: [
-                { id: "hi12-ch1", name: "Eenten Manke Aur Asthiyan", nameHi: "ईंटें, मनके और अस्थियाँ" },
-                { id: "hi12-ch2", name: "Rajaon Kisanon Aur Nagaron", nameHi: "राजाओं, किसानों और नगरों" },
-                { id: "hi12-ch3", name: "Bandhuva Jati Aur Varg", nameHi: "बंधुत्व, जाति और वर्ग" },
-                { id: "hi12-ch4", name: "Vicharko Vishvason Aur Imaraton", nameHi: "विचारक, विश्वास और इमारतें" },
-              ]
-            },
-            {
-              id: "history-12-2", name: "Themes in Indian History Part 2", nameHi: "भारतीय इतिहास के कुछ विषय भाग 2",
-              chapters: [
-                { id: "hi12-ch5", name: "Yatri Aur Yatra Vrittant", nameHi: "यात्री और यात्रा वृत्तांत" },
-                { id: "hi12-ch6", name: "Bhakti Sufi Paramparaen", nameHi: "भक्ति-सूफी परंपराएँ" },
-                { id: "hi12-ch7", name: "Aupniveshik Shahar", nameHi: "औपनिवेशिक शहर" },
-                { id: "hi12-ch8", name: "Kisan Zamindar Aur Rajya", nameHi: "किसान, जमींदार और राज्य" },
-              ]
-            },
-            {
-              id: "history-12-3", name: "Themes in Indian History Part 3", nameHi: "भारतीय इतिहास के कुछ विषय भाग 3",
-              chapters: [
-                { id: "hi12-ch9", name: "Rashtravad", nameHi: "राष्ट्रवाद" },
-                { id: "hi12-ch10", name: "Swatantrata Aur Vibhajan", nameHi: "स्वतंत्रता और विभाजन" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "geography", name: "Geography", nameHi: "भूगोल", icon: "map",
-          books: [
-            {
-              id: "geo-12-1", name: "Fundamentals of Human Geography", nameHi: "मानव भूगोल के मूल सिद्धांत",
-              chapters: [
-                { id: "ge12-ch1", name: "Manav Bhugol Ka Parichay", nameHi: "मानव भूगोल का परिचय" },
-                { id: "ge12-ch2", name: "Janasankhya", nameHi: "जनसंख्या" },
-                { id: "ge12-ch3", name: "Manav Bastiyan", nameHi: "मानव बस्तियाँ" },
-                { id: "ge12-ch4", name: "Sansadhan", nameHi: "संसाधन" },
-                { id: "ge12-ch5", name: "Parivahan Aur Sanchar", nameHi: "परिवहन और संचार" },
-                { id: "ge12-ch6", name: "Antarrashtriy Vyapar", nameHi: "अंतरराष्ट्रीय व्यापार" },
-              ]
-            },
-            {
-              id: "geo-12-2", name: "India People and Economy", nameHi: "भारत – लोग और अर्थव्यवस्था",
-              chapters: [
-                { id: "ge12-ch7", name: "Janasankhya Bharat", nameHi: "जनसंख्या" },
-                { id: "ge12-ch8", name: "Manav Bastiyan Bharat", nameHi: "मानव बस्तियाँ" },
-                { id: "ge12-ch9", name: "Sansadhan Bharat", nameHi: "संसाधन" },
-                { id: "ge12-ch10", name: "Krishi", nameHi: "कृषि" },
-                { id: "ge12-ch11", name: "Udyog", nameHi: "उद्योग" },
-                { id: "ge12-ch12", name: "Parivahan", nameHi: "परिवहन" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "political-science", name: "Political Science", nameHi: "राजनीति विज्ञान", icon: "landmark",
-          books: [
-            {
-              id: "polsci-12-1", name: "Contemporary World Politics", nameHi: "समकालीन विश्व राजनीति",
-              chapters: [
-                { id: "ps12-ch1", name: "Sheet Yuddha", nameHi: "शीत युद्ध" },
-                { id: "ps12-ch2", name: "Shakti Santulan", nameHi: "शक्ति संतुलन" },
-                { id: "ps12-ch3", name: "Vaishvikaran", nameHi: "वैश्वीकरण" },
-                { id: "ps12-ch4", name: "Paryavaran Aur Sansadhan", nameHi: "पर्यावरण और संसाधन" },
-                { id: "ps12-ch5", name: "Antarrashtriy Sangathan", nameHi: "अंतरराष्ट्रीय संगठन" },
-              ]
-            },
-            {
-              id: "polsci-12-2", name: "Politics in India Since Independence", nameHi: "स्वतंत्र भारत की राजनीति",
-              chapters: [
-                { id: "ps12-ch6", name: "Rashtra Nirman", nameHi: "राष्ट्र निर्माण" },
-                { id: "ps12-ch7", name: "Loktantra Ka Vistar", nameHi: "लोकतंत्र का विस्तार" },
-                { id: "ps12-ch8", name: "Kshetriy Aakankshaaen", nameHi: "क्षेत्रीय आकांक्षाएँ" },
-                { id: "ps12-ch9", name: "Gathbandhan Rajniti", nameHi: "गठबंधन राजनीति" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "sociology", name: "Sociology", nameHi: "समाजशास्त्र", icon: "users",
-          books: [
-            {
-              id: "soc-12-1", name: "Indian Society", nameHi: "भारतीय समाज",
-              chapters: [
-                { id: "so12-ch1", name: "Bhartiya Samaj", nameHi: "भारतीय समाज" },
-                { id: "so12-ch2", name: "Samajik Parivartan", nameHi: "सामाजिक परिवर्तन" },
-                { id: "so12-ch3", name: "Vaishvikaran", nameHi: "वैश्वीकरण" },
-              ]
-            },
-            {
-              id: "soc-12-2", name: "Social Change and Development", nameHi: "सामाजिक परिवर्तन और विकास",
-              chapters: [
-                { id: "so12-ch4", name: "Janasankhya", nameHi: "जनसंख्या" },
-                { id: "so12-ch5", name: "Samajik Andolan", nameHi: "सामाजिक आंदोलन" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "psychology", name: "Psychology", nameHi: "मनोविज्ञान", icon: "brain",
-          books: [
-            {
-              id: "psych-12", name: "Psychology", nameHi: "मनोविज्ञान",
-              chapters: [
-                { id: "py12-ch1", name: "Vividhata Mein Aatm", nameHi: "विविधता में आत्म" },
-                { id: "py12-ch2", name: "Manovigyanik Vikar", nameHi: "मनोवैज्ञानिक विकार" },
-                { id: "py12-ch3", name: "Chikitsa Paddhatiyaan", nameHi: "चिकित्सा पद्धतियाँ" },
-                { id: "py12-ch4", name: "Samajik Prabhav", nameHi: "सामाजिक प्रभाव" },
-                { id: "py12-ch5", name: "Drishtikon", nameHi: "दृष्टिकोण" },
-                { id: "py12-ch6", name: "Anuprayukt Manovigyan", nameHi: "अनुप्रयुक्त मनोविज्ञान" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "english", name: "English", nameHi: "English", icon: "book-open",
-          books: [
-            {
-              id: "flamingo-12-arts", name: "Flamingo", nameHi: "Flamingo",
-              chapters: [
-                { id: "fl12a-ch1", name: "The Last Lesson", nameHi: "The Last Lesson" },
-                { id: "fl12a-ch2", name: "Lost Spring", nameHi: "Lost Spring" },
-                { id: "fl12a-ch3", name: "Deep Water", nameHi: "Deep Water" },
-                { id: "fl12a-ch4", name: "The Rattrap", nameHi: "The Rattrap" },
-                { id: "fl12a-ch5", name: "Indigo", nameHi: "Indigo" },
-                { id: "fl12a-ch6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
-                { id: "fl12a-ch7", name: "The Interview", nameHi: "The Interview" },
-                { id: "fl12a-ch8", name: "Going Places", nameHi: "Going Places" },
-              ]
-            },
-            {
-              id: "vistas-12-arts", name: "Vistas", nameHi: "Vistas",
-              chapters: [
-                { id: "vi12a-ch1", name: "The Third Level", nameHi: "The Third Level" },
-                { id: "vi12a-ch2", name: "The Tiger King", nameHi: "The Tiger King" },
-                { id: "vi12a-ch3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
-                { id: "vi12a-ch4", name: "The Enemy", nameHi: "The Enemy" },
-                { id: "vi12a-ch5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy" },
-                { id: "vi12a-ch6", name: "On the Face of It", nameHi: "On the Face of It" },
-                { id: "vi12a-ch7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
-                { id: "vi12a-ch8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
-              ]
-            },
-          ]
-        },
-        {
-          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
-          books: [
-            {
-              id: "aroh-12-arts", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2",
-              chapters: [
-                { id: "ar12a-ch1", name: "Aatmaparichay", nameHi: "आत्मपरिचय" },
-                { id: "ar12a-ch2", name: "Patang", nameHi: "पतंग" },
-                { id: "ar12a-ch3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
-                { id: "ar12a-ch4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
-                { id: "ar12a-ch5", name: "Saroj Smriti", nameHi: "सरोज स्मृति" },
-                { id: "ar12a-ch6", name: "Usha", nameHi: "उषा" },
-                { id: "ar12a-ch7", name: "Badal Raag", nameHi: "बादल राग" },
-                { id: "ar12a-ch8", name: "Kavyansh", nameHi: "काव्यांश" },
-                { id: "ar12a-ch9", name: "Kutaj", nameHi: "कुटज" },
-                { id: "ar12a-ch10", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
-                { id: "ar12a-ch11", name: "Shirish Ke Phool", nameHi: "शिरीष के फूल" },
-                { id: "ar12a-ch12", name: "Tatsam", nameHi: "तत्सम" },
-                { id: "ar12a-ch13", name: "Namak", nameHi: "नमक" },
-                { id: "ar12a-ch14", name: "Pahalwan Ki Dholak", nameHi: "पहलवान की ढोलक" },
-              ]
-            },
-            {
-              id: "vitan-12-arts", name: "Vitan Bhag 2", nameHi: "वितान भाग 2",
-              chapters: [
-                { id: "vi12ha-ch1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
-                { id: "vi12ha-ch2", name: "Juthan", nameHi: "जूठन" },
-                { id: "vi12ha-ch3", name: "Vitamin", nameHi: "विटामिन" },
-                { id: "vi12ha-ch4", name: "Biskohar Ki Mati", nameHi: "बिस्कोहर की माटी" },
-              ]
-            },
-          ]
-        },
-      ]
-    },
-  ],
-}
-
-export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
-  return []
-}
-
-export function getNotesContent(chapterName: string): string {
-  return `# ${chapterName}\n\nNotes coming soon...`
-}
-
-export function getImportantQuestions(chapterName: string): string[] {
-  return []
-                }
-              
+                { id: "bi11-ch10
