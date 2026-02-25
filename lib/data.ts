@@ -265,14 +265,17 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
             { id: "ah7-ch7", name: "An Alien Hand", nameHi: "An Alien Hand" },
           ]
         },
-      ]
-    },
-  ],
-  [
-    {
-      id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
-      books: [{
-        id: "math-8", name: "Mathematics", nameHi: "गणित",
+  ]
+},
+  {
+  id: "math",
+  name: "Mathematics",
+  nameHi: "गणित",
+  icon: "calculator",
+  books: [{
+id: "math-8",
+    name: "Mathematics",
+    nameHi: "गणित",
         chapters: [
           { id: "m8-ch1", name: "Parimey Sankhyaen", nameHi: "परिमेय संख्याएँ" },
           { id: "m8-ch2", name: "Ek Char Wale Raikhik Samikaran", nameHi: "एक चर वाले रैखिक समीकरण" },
