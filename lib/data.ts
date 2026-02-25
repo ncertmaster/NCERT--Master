@@ -1185,3 +1185,184 @@ id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
       ]
     },
   ],
+12: [
+    {
+      id: "science", name: "Science", nameHi: "विज्ञान",
+      subjects: [
+        {
+          id: "physics", name: "Physics", nameHi: "भौतिक विज्ञान", icon: "atom",
+          books: [
+            {
+              id: "physics-12-1", name: "Physics Part 1", nameHi: "भौतिक विज्ञान भाग 1",
+              chapters: [
+                { id: "ph12-ch1", name: "Vaidyut Aavesh Tatha Kshetra", nameHi: "वैद्युत आवेश तथा क्षेत्र" },
+                { id: "ph12-ch2", name: "Sthir Vaidyut Vibhav Tatha Dharita", nameHi: "स्थिरवैद्युत विभव तथा धारिता" },
+                { id: "ph12-ch3", name: "Vidyut Dhara", nameHi: "विद्युत धारा" },
+                { id: "ph12-ch4", name: "Gatiman Aavesh Aur Chumbaktv", nameHi: "गतिमान आवेश और चुंबकत्व" },
+                { id: "ph12-ch5", name: "Chumbaktv Evam Dravya", nameHi: "चुंबकत्व एवं द्रव्य" },
+                { id: "ph12-ch6", name: "Vaidyutchumbakiy Prerna", nameHi: "वैद्युतचुंबकीय प्रेरण" },
+                { id: "ph12-ch7", name: "Pratyavartan Dhara", nameHi: "प्रत्यावर्ती धारा" },
+                { id: "ph12-ch8", name: "Vaidyutchumbakiy Tarangen", nameHi: "वैद्युतचुंबकीय तरंगें" },
+              ]
+            },
+            {
+              id: "physics-12-2", name: "Physics Part 2", nameHi: "भौतिक विज्ञान भाग 2",
+              chapters: [
+                { id: "ph12-ch9", name: "Kiran Prakashiki Evam Prakashik Yantra", nameHi: "किरण प्रकाशिकी एवं प्रकाशिक यंत्र" },
+                { id: "ph12-ch10", name: "Tarang Prakashiki", nameHi: "तरंग-प्रकाशिकी" },
+                { id: "ph12-ch11", name: "Vikiran Tatha Dravya Ki Dvait Prakriti", nameHi: "विकिरण तथा द्रव्य की द्वैत प्रकृति" },
+                { id: "ph12-ch12", name: "Parmaanu", nameHi: "परमाणु" },
+                { id: "ph12-ch13", name: "Nabhik", nameHi: "नाभिक" },
+                { id: "ph12-ch14", name: "Ardhchalak Electronics", nameHi: "अर्धचालक इलेक्ट्रॉनिकी: पदार्थ, युक्तियाँ तथा सरल परिपथ" },
+                { id: "ph12-ch15", name: "Sanchar Vyavastha", nameHi: "संचार व्यवस्था" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "chemistry", name: "Chemistry", nameHi: "रसायन विज्ञान", icon: "flask",
+          books: [
+            {
+              id: "chemistry-12-1", name: "Chemistry Part 1", nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "ch12-ch1", name: "Thos Avastha", nameHi: "ठोस अवस्था" },
+                { id: "ch12-ch2", name: "Vilayan", nameHi: "विलयन" },
+                { id: "ch12-ch3", name: "Vaidyut Rasayan", nameHi: "वैद्युतरसायन" },
+                { id: "ch12-ch4", name: "Rasayanik Balgatiki", nameHi: "रासायनिक बलगतिकी" },
+                { id: "ch12-ch5", name: "Pristh Rasayan", nameHi: "पृष्ठ रसायन" },
+                { id: "ch12-ch6", name: "Tatvon Ke Nishkarshan Ke Siddhant Evam Prakram", nameHi: "तत्वों के निष्कर्षण के सिद्धांत एवं प्रक्रम" },
+                { id: "ch12-ch7", name: "P-Block Ke Tatv", nameHi: "p-ब्लॉक के तत्व" },
+                { id: "ch12-ch8", name: "D Evam F Block Ke Tatv", nameHi: "d- एवं f-ब्लॉक के तत्व" },
+                { id: "ch12-ch9", name: "Upasahsanyojan Yaugik", nameHi: "उपसहसंयोजन यौगिक" },
+              ]
+            },
+            {
+              id: "chemistry-12-2", name: "Chemistry Part 2", nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "ch12-ch10", name: "Haloalkane Tatha Haloarene", nameHi: "हैलोऐल्केन तथा हैलोऐरीन" },
+                { id: "ch12-ch11", name: "Alcohol Phenol Evam Ether", nameHi: "ऐल्कोहॉल, फ़ीनॉल एवं ईथर" },
+                { id: "ch12-ch12", name: "Aldehyde Ketone Evam Carboxylic Aml", nameHi: "ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल" },
+                { id: "ch12-ch13", name: "Amine", nameHi: "ऐमीन" },
+                { id: "ch12-ch14", name: "Jaiv Anu", nameHi: "जैव-अणु" },
+                { id: "ch12-ch15", name: "Bahulamar", nameHi: "बहुलक" },
+                { id: "ch12-ch16", name: "Dainik Jeevan Mein Rasayan", nameHi: "दैनिक जीवन में रसायन" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "biology", name: "Biology", nameHi: "जीव विज्ञान", icon: "leaf",
+          books: [{
+            id: "biology-12", name: "Biology", nameHi: "जीव विज्ञान",
+            chapters: [
+              { id: "bi12-ch1", name: "Jeevon Mein Janan", nameHi: "जीवों में जनन" },
+              { id: "bi12-ch2", name: "Pushpi Padhon Mein Laingik Prajanan", nameHi: "पुष्पी पादपों में लैंगिक प्रजनन" },
+              { id: "bi12-ch3", name: "Manav Janan", nameHi: "मानव जनन" },
+              { id: "bi12-ch4", name: "Janan Swasthya", nameHi: "जनन स्वास्थ्य" },
+              { id: "bi12-ch5", name: "Vanshaagati Tatha Vividhata Ke Siddhant", nameHi: "वंशागति तथा विविधता के सिद्धांत" },
+              { id: "bi12-ch6", name: "Vanshaagati Ke Aanvik Aadhar", nameHi: "वंशागति के आणविक आधार" },
+              { id: "bi12-ch7", name: "Vikas", nameHi: "विकास" },
+              { id: "bi12-ch8", name: "Manav Swasthya Tatha Rog", nameHi: "मानव स्वास्थ्य तथा रोग" },
+              { id: "bi12-ch9", name: "Khadya Utpadan Mein Vriddhi Ki Karyaneeti", nameHi: "खाद्य उत्पादन में वृद्धि की कार्यनीति" },
+              { id: "bi12-ch10", name: "Manav Kalyan Mein Sukshmajeev", nameHi: "मानव कल्याण में सूक्ष्मजीव" },
+              { id: "bi12-ch11", name: "Jaiv Praudyogiki Siddhant Evam Prakriyaen", nameHi: "जैव प्रौद्योगिकी: सिद्धांत एवं प्रक्रम" },
+              { id: "bi12-ch12", name: "Jaiv Praudyogiki Evam Uske Upayog", nameHi: "जैव प्रौद्योगिकी एवं उसके उपयोग" },
+              { id: "bi12-ch13", name: "Jeev Aur Samashtiyan", nameHi: "जीव और समष्टियाँ" },
+              { id: "bi12-ch14", name: "Paritantra", nameHi: "पारितंत्र" },
+              { id: "bi12-ch15", name: "Jaiv Vividhata Evam Sanrakshan", nameHi: "जैव-विविधता एवं संरक्षण" },
+              { id: "bi12-ch16", name: "Paryavarniy Mudde", nameHi: "पर्यावरण के मुद्दे" },
+            ]
+          }]
+        },
+        {
+          id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
+          books: [
+            {
+              id: "math-12-1", name: "Mathematics Part 1", nameHi: "गणित भाग 1",
+              chapters: [
+                { id: "ma12-ch1", name: "Sambandh Evam Phaln", nameHi: "संबंध एवं फलन" },
+                { id: "ma12-ch2", name: "Pratilom Trikonmitiy Phaln", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
+                { id: "ma12-ch3", name: "Aavyuh", nameHi: "आव्यूह (Matrices)" },
+                { id: "ma12-ch4", name: "Saranik", nameHi: "सारणिक (Determinants)" },
+                { id: "ma12-ch5", name: "Santatya Tatha Avkalniyta", nameHi: "सांतत्य तथा अवकलनीयता" },
+                { id: "ma12-ch6", name: "Avkalaj Ke Anuprayog", nameHi: "अवकलज के अनुप्रयोग" },
+              ]
+            },
+            {
+              id: "math-12-2", name: "Mathematics Part 2", nameHi: "गणित भाग 2",
+              chapters: [
+                { id: "ma12-ch7", name: "Samakal", nameHi: "समाकलन (Integrals)" },
+                { id: "ma12-ch8", name: "Samakalon Ke Anuprayog", nameHi: "समाकलनों के अनुप्रयोग" },
+                { id: "ma12-ch9", name: "Avkal Samikaran", nameHi: "अवकल समीकरण" },
+                { id: "ma12-ch10", name: "Sadir Beejganit", nameHi: "सदिश बीजगणित" },
+                { id: "ma12-ch11", name: "Tri-Vimiy Jyamiti", nameHi: "त्रि-विमीय ज्यामिति" },
+                { id: "ma12-ch12", name: "Raikhik Programan", nameHi: "रैखिक प्रोग्रामन" },
+                { id: "ma12-ch13", name: "Prayikta", nameHi: "प्रायिकता" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12", name: "Flamingo", nameHi: "Flamingo",
+              chapters: [
+                { id: "fl12-ch1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "fl12-ch2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "fl12-ch3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "fl12-ch4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "fl12-ch5", name: "Indigo", nameHi: "Indigo" },
+                { id: "fl12-ch6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "fl12-ch7", name: "The Interview", nameHi: "The Interview" },
+                { id: "fl12-ch8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12", name: "Vistas (Supplementary)", nameHi: "Vistas (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12-ch1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vi12-ch2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vi12-ch3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vi12-ch4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vi12-ch5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy?" },
+                { id: "vi12-ch6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vi12-ch7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vi12-ch8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            {
+              id: "aroh-12", name: "Aroh Bhag 2", nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "ar12-ch1", name: "Aatmaparichay", nameHi: "आत्मपरिचय" },
+                { id: "ar12-ch2", name: "Patang", nameHi: "पतंग" },
+                { id: "ar12-ch3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "ar12-ch4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "ar12-ch5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "ar12-ch6", name: "Usha", nameHi: "उषा" },
+                { id: "ar12-ch7", name: "Badal Raag", nameHi: "बादल राग" },
+                { id: "ar12-ch8", name: "Laharon Ke Rajhans", nameHi: "लहरों के राजहंस" },
+                { id: "ar12-ch9", name: "Namak", nameHi: "नमक" },
+                { id: "ar12-ch10", name: "Shirish Ke Phool", nameHi: "शिरीष के फूल" },
+                { id: "ar12-ch11", name: "Purrak Pathyapustak", nameHi: "पूरक पाठ्यपुस्तक" },
+              ]
+            },
+            {
+              id: "vitan-12", name: "Vitan Bhag 2 (Supplementary)", nameHi: "वितान भाग 2 (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi12h-ch1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vi12h-ch2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vi12h-ch3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vi12h-ch4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+                { id: "vi12h-ch5", name: "Apne Apne Ajnabi", nameHi: "अपने-अपने अजनबी" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
