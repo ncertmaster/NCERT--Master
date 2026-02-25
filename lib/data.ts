@@ -1,4 +1,4 @@
-export type ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12
 
 export interface Chapter {
   id: string
@@ -151,7 +151,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
       ]
     },
   ],
-  [
+  7: [
     {
       id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
       books: [{
@@ -265,17 +265,14 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
             { id: "ah7-ch7", name: "An Alien Hand", nameHi: "An Alien Hand" },
           ]
         },
-  ]
-},
-  {
-  id: "math",
-  name: "Mathematics",
-  nameHi: "गणित",
-  icon: "calculator",
-  books: [{
-id: "math-8",
-    name: "Mathematics",
-    nameHi: "गणित",
+      ]
+    },
+  ],
+  8: [
+    {
+      id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
+      books: [{
+        id: "math-8", name: "Mathematics", nameHi: "गणित",
         chapters: [
           { id: "m8-ch1", name: "Parimey Sankhyaen", nameHi: "परिमेय संख्याएँ" },
           { id: "m8-ch2", name: "Ek Char Wale Raikhik Samikaran", nameHi: "एक चर वाले रैखिक समीकरण" },
@@ -386,7 +383,8 @@ id: "math-8",
         },
       ]
     },
-    ],
+  ],
+  9: [
     {
       id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
       books: [{
@@ -505,7 +503,7 @@ id: "math-8",
       ]
     },
   ],
-  [
+  10: [
     {
       id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
       books: [{
@@ -630,7 +628,7 @@ id: "math-8",
       ]
     },
   ],
-  [
+  11: [
     {
       id: "science", name: "Science", nameHi: "विज्ञान",
       subjects: [
@@ -820,7 +818,8 @@ id: "math-8",
         },
       ]
     },
-id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
+    {
+      id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
       subjects: [
         {
           id: "accountancy", name: "Accountancy", nameHi: "लेखाशास्त्र", icon: "book",
@@ -998,8 +997,8 @@ id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
           ]
         },
       ]
-    },
-  {
+                 }
+    {
       id: "arts", name: "Arts", nameHi: "कला",
       subjects: [
         {
@@ -1184,10 +1183,7 @@ id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
             },
           ]
         },
-      ]
-    },
-  ],
-12: [
+        12: [
     {
       id: "science", name: "Science", nameHi: "विज्ञान",
       subjects: [
@@ -1368,7 +1364,10 @@ id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
         },
       ]
     },
-{
+      ]
+    },
+  ],
+        {
       id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
       subjects: [
         {
@@ -1759,4 +1758,4 @@ export function getNotesContent(chapterName: string): string {
 
 export function getImportantQuestions(chapterName: string): string[] {
   return []
-              }
+  }
