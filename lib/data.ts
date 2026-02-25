@@ -818,3 +818,370 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         },
       ]
     },
+id: "commerce", name: "Commerce", nameHi: "वाणिज्य",
+      subjects: [
+        {
+          id: "accountancy", name: "Accountancy", nameHi: "लेखाशास्त्र", icon: "book",
+          books: [
+            {
+              id: "accountancy-11-1", name: "Financial Accounting Part 1", nameHi: "वित्तीय लेखांकन भाग 1",
+              chapters: [
+                { id: "ac11-ch1", name: "Lekhankan Ek Parichay", nameHi: "लेखांकन-एक परिचय" },
+                { id: "ac11-ch2", name: "Lekhankan Ka Saiddhantik Aadhar", nameHi: "लेखांकन का सैद्धांतिक आधार" },
+                { id: "ac11-ch3", name: "Len-Den Ka Abhilekhan 1", nameHi: "लेन-देनों का अभिलेखन-1" },
+                { id: "ac11-ch4", name: "Len-Den Ka Abhilekhan 2", nameHi: "लेन-देनों का अभिलेखन-2" },
+                { id: "ac11-ch5", name: "Bank Samadhan Vivaran", nameHi: "बैंक समाधान विवरण" },
+                { id: "ac11-ch6", name: "Talapat Evam Ashudhiyon Ka Shodhan", nameHi: "तलपट एवं अशुद्धियों का शोधन" },
+                { id: "ac11-ch7", name: "Hrash Pravdhan Aur Sanchay", nameHi: "ह्रास, प्रावधान और संचय" },
+                { id: "ac11-ch8", name: "Vinimay Vipatr", nameHi: "विनिमय विपत्र" },
+              ]
+            },
+            {
+              id: "accountancy-11-2", name: "Financial Accounting Part 2", nameHi: "वित्तीय लेखांकन भाग 2",
+              chapters: [
+                { id: "ac11-ch9", name: "Vittiy Vivaran 1", nameHi: "वित्तीय विवरण-1" },
+                { id: "ac11-ch10", name: "Vittiy Vivaran 2", nameHi: "वित्तीय विवरण-2" },
+                { id: "ac11-ch11", name: "Apurn Abhilekh", nameHi: "अपूर्ण अभिलेखों से खाते" },
+                { id: "ac11-ch12", name: "Lekhankan Mein Computer Ka Anuprayog", nameHi: "लेखांकन में कंप्यूटर का अनुप्रयोग" },
+                { id: "ac11-ch13", name: "Computerikrit Lekhankan Pranali", nameHi: "कंप्यूटरीकृत लेखांकन प्रणाली" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "business-studies", name: "Business Studies", nameHi: "व्यवसाय अध्ययन", icon: "briefcase",
+          books: [{
+            id: "business-11", name: "Business Studies", nameHi: "व्यवसाय अध्ययन",
+            chapters: [
+              { id: "bs11-ch1", name: "Vyavsay Vyapar Aur Vanijya", nameHi: "व्यवसाय, व्यापार और वाणिज्य" },
+              { id: "bs11-ch2", name: "Vyavsayik Sangathan Ke Swaroop", nameHi: "व्यावसायिक संगठन के स्वरूप" },
+              { id: "bs11-ch3", name: "Niji Sarvajanik Evam Bhumandliy Upkram", nameHi: "निजी, सार्वजनिक एवं भूमंडलीय उपक्रम" },
+              { id: "bs11-ch4", name: "Vyavsayik Sevaen", nameHi: "व्यावसायिक सेवाएँ" },
+              { id: "bs11-ch5", name: "Vyavsay Ki Ubharti Paddhatiyan", nameHi: "व्यवसाय की उभरती पद्धतियाँ" },
+              { id: "bs11-ch6", name: "Samajik Uttardayitv Evam Vyavsayik Naitikta", nameHi: "व्यवसाय का सामाजिक उत्तरदायित्व एवं व्यावसायिक नैतिकता" },
+              { id: "bs11-ch7", name: "Company Nirman", nameHi: "कंपनी निर्माण" },
+              { id: "bs11-ch8", name: "Vyavsayik Vitt Ke Srot", nameHi: "व्यावसायिक वित्त के स्रोत" },
+              { id: "bs11-ch9", name: "Laghu Vyavsay Evam Udyamita", nameHi: "लघु व्यवसाय एवं उद्यमिता" },
+              { id: "bs11-ch10", name: "Aantarik Vyapar", nameHi: "आंतरिक व्यापार" },
+              { id: "bs11-ch11", name: "Antarrashtriy Vyapar", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+            ]
+          }]
+        },
+        {
+          id: "economics", name: "Economics", nameHi: "अर्थशास्त्र", icon: "trending-up",
+          books: [
+            {
+              id: "eco-dev-11", name: "Bhartiya Arthvyavastha Ka Vikas", nameHi: "भारतीय अर्थव्यवस्था का विकास",
+              chapters: [
+                { id: "ec11-ch1", name: "Swatantrata Ki Purvsandh Par Bhartiya Arthvyavastha", nameHi: "स्वतंत्रता की पूर्व संध्या पर भारतीय अर्थव्यवस्था" },
+                { id: "ec11-ch2", name: "Bhartiya Arthvyavastha 1950-1990", nameHi: "भारतीय अर्थव्यवस्था (1950-1990)" },
+                { id: "ec11-ch3", name: "Udarikaran Nijikaran Aur Vaishvikaran", nameHi: "उदारीकरण, निजीकरण और वैश्वीकरण: एक समीक्षा" },
+                { id: "ec11-ch4", name: "Nirdhanta", nameHi: "निर्धनता" },
+                { id: "ec11-ch5", name: "Bharat Mein Manav Punji Ka Nirman", nameHi: "भारत में मानव पूँजी का निर्माण" },
+                { id: "ec11-ch6", name: "Gramin Vikas", nameHi: "ग्रामीण विकास" },
+                { id: "ec11-ch7", name: "Rojgar Samvridhi Anaupacharikaran", nameHi: "रोजगार-संवृद्धि, अनौपचारीकरण एवं अन्य मुद्दे" },
+                { id: "ec11-ch8", name: "Aadharbhut Sanrachna", nameHi: "आधारिक संरचना" },
+                { id: "ec11-ch9", name: "Paryavaran Aur Dharaniy Vikas", nameHi: "पर्यावरण और धारणीय विकास" },
+                { id: "ec11-ch10", name: "Bharat Aur Padosi Deshon Ke Tulnatmak Vikas Anubhav", nameHi: "भारत और इसके पड़ोसी देशों के तुलनात्मक विकास अनुभव" },
+              ]
+            },
+            {
+              id: "stats-11", name: "Statistics for Economics", nameHi: "सांख्यिकी (अर्थशास्त्र के लिए)",
+              chapters: [
+                { id: "st11-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "st11-ch2", name: "Aankdon Ka Sangrah", nameHi: "आँकड़ों का संग्रह" },
+                { id: "st11-ch3", name: "Aankdon Ka Sangathan", nameHi: "आँकड़ों का संगठन" },
+                { id: "st11-ch4", name: "Aankdon Ka Prastutikaran", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "st11-ch5", name: "Kendriy Pravriti Ke Maap", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "st11-ch6", name: "Vikiran Ke Maap", nameHi: "परिक्षेपण के माप" },
+                { id: "st11-ch7", name: "Sahsambandh", nameHi: "सहसंबंध" },
+                { id: "st11-ch8", name: "Suchkank", nameHi: "सूचकांक" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "math", name: "Mathematics", nameHi: "गणित", icon: "calculator",
+          books: [{
+            id: "math-11-com", name: "Mathematics", nameHi: "गणित",
+            chapters: [
+              { id: "ma11c-ch1", name: "Samucchay", nameHi: "समुच्चय (Sets)" },
+              { id: "ma11c-ch2", name: "Sambandh Evam Phaln", nameHi: "संबंध एवं फलन" },
+              { id: "ma11c-ch3", name: "Trikonmitiy Phaln", nameHi: "त्रिकोणमितीय फलन" },
+              { id: "ma11c-ch4", name: "Gannatiy Aagaman Ka Siddhant", nameHi: "गणितीय आगमन का सिद्धांत" },
+              { id: "ma11c-ch5", name: "Samishra Sankhyaen Aur Dwisghatiy Samikaran", nameHi: "सम्मिश्र संख्याएँ और द्विघातीय समीकरण" },
+              { id: "ma11c-ch6", name: "Raikhik Asamikaen", nameHi: "रैखिक असमिकाएँ" },
+              { id: "ma11c-ch7", name: "Kramachar Aur Sanchay", nameHi: "क्रमचय और संचय" },
+              { id: "ma11c-ch8", name: "Dwipad Prameya", nameHi: "द्विपद प्रमेय" },
+              { id: "ma11c-ch9", name: "Anukram Tatha Shreni", nameHi: "अनुक्रम तथा श्रेणी" },
+              { id: "ma11c-ch10", name: "Saral Rekhaen", nameHi: "सरल रेखाएँ" },
+              { id: "ma11c-ch11", name: "Shanku Parichhhed", nameHi: "शंकु परिच्छेद" },
+              { id: "ma11c-ch12", name: "Trivimiy Jyamiti Ka Parichay", nameHi: "त्रिविमीय ज्यामिति का परिचय" },
+              { id: "ma11c-ch13", name: "Seema Aur Avkalaj", nameHi: "सीमा और अवकलज" },
+              { id: "ma11c-ch14", name: "Gannatiy Vivechan", nameHi: "गणितीय विवेचन" },
+              { id: "ma11c-ch15", name: "Sankhyiki", nameHi: "सांख्यिकी" },
+              { id: "ma11c-ch16", name: "Prayikta", nameHi: "प्रायिकता" },
+            ]
+          }]
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11-com", name: "Hornbill", nameHi: "Hornbill",
+              chapters: [
+                { id: "ho11c-ch1", name: "The Portrait of a Lady", nameHi: "The Portrait of a Lady" },
+                { id: "ho11c-ch2", name: "We're Not Afraid to Die", nameHi: "We're Not Afraid to Die" },
+                { id: "ho11c-ch3", name: "Discovering Tut", nameHi: "Discovering Tut" },
+                { id: "ho11c-ch4", name: "Landscape of the Soul", nameHi: "Landscape of the Soul" },
+                { id: "ho11c-ch5", name: "The Ailing Planet", nameHi: "The Ailing Planet" },
+                { id: "ho11c-ch6", name: "The Browning Version", nameHi: "The Browning Version" },
+                { id: "ho11c-ch7", name: "The Adventure", nameHi: "The Adventure" },
+              ]
+            },
+            {
+              id: "snapshots-11-com", name: "Snapshots (Supplementary)", nameHi: "Snapshots (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "sn11c-ch1", name: "The Summer of the Beautiful White Horse", nameHi: "The Summer of the Beautiful White Horse" },
+                { id: "sn11c-ch2", name: "The Address", nameHi: "The Address" },
+                { id: "sn11c-ch3", name: "Ranga's Marriage", nameHi: "Ranga's Marriage" },
+                { id: "sn11c-ch4", name: "Albert Einstein at School", nameHi: "Albert Einstein at School" },
+                { id: "sn11c-ch5", name: "Mother's Day", nameHi: "Mother's Day" },
+                { id: "sn11c-ch6", name: "The Ghat of the Only World", nameHi: "The Ghat of the Only World" },
+                { id: "sn11c-ch7", name: "Birth", nameHi: "Birth" },
+                { id: "sn11c-ch8", name: "The Tale of Melon City", nameHi: "The Tale of Melon City" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            {
+              id: "aroh-11-com", name: "Aroh Bhag 1", nameHi: "आरोह भाग 1",
+              chapters: [
+                { id: "ar11c-ch1", name: "Kabir (Kabita)", nameHi: "कबीर" },
+                { id: "ar11c-ch2", name: "Meera (Kabita)", nameHi: "मीरा" },
+                { id: "ar11c-ch3", name: "Ramnresh Tripathi (Kabita)", nameHi: "रामनरेश त्रिपाठी" },
+                { id: "ar11c-ch4", name: "Sumitranandan Pant (Kabita)", nameHi: "सुमित्रानंदन पंत" },
+                { id: "ar11c-ch5", name: "Bhawani Prasad Mishra (Kabita)", nameHi: "भवानी प्रसाद मिश्र" },
+                { id: "ar11c-ch6", name: "Trilochan (Kabita)", nameHi: "त्रिलोचन" },
+                { id: "ar11c-ch7", name: "Dushyant Kumar (Kabita)", nameHi: "दुष्यंत कुमार" },
+                { id: "ar11c-ch8", name: "Akk Mahadevi (Kabita)", nameHi: "अक्क महादेवी" },
+                { id: "ar11c-ch9", name: "Pash (Kabita)", nameHi: "पाश" },
+                { id: "ar11c-ch10", name: "Nirmala Putul (Kabita)", nameHi: "निर्मला पुतुल" },
+                { id: "ar11c-ch11", name: "Namak Ka Daroga (Gadya)", nameHi: "नमक का दरोगा" },
+                { id: "ar11c-ch12", name: "Miyan Nasiruddin (Gadya)", nameHi: "मियाँ नसीरुद्दीन" },
+                { id: "ar11c-ch13", name: "Appu Ke Saath Dhai Saal (Gadya)", nameHi: "अप्पू के साथ ढाई साल" },
+                { id: "ar11c-ch14", name: "Vidaai Sambhashan (Gadya)", nameHi: "विदाई-संभाषण" },
+                { id: "ar11c-ch15", name: "Galta Loha (Gadya)", nameHi: "गलता लोहा" },
+                { id: "ar11c-ch16", name: "Speeti Mein Baarish (Gadya)", nameHi: "स्पीति में बारिश" },
+                { id: "ar11c-ch17", name: "Rajni (Gadya)", nameHi: "रजनी" },
+                { id: "ar11c-ch18", name: "Jamun Ka Ped (Gadya)", nameHi: "जामुन का पेड़" },
+                { id: "ar11c-ch19", name: "Bharat Mata (Gadya)", nameHi: "भारत माता" },
+                { id: "ar11c-ch20", name: "Aatma Ka Taap (Gadya)", nameHi: "आत्मा का ताप" },
+              ]
+            },
+            {
+              id: "vitan-11-com", name: "Vitan Bhag 1 (Supplementary)", nameHi: "वितान भाग 1 (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi11c-ch1", name: "Bhartiya Gayika Lata Mangeshkar", nameHi: "भारतीय गायिका लता मंगेशकर" },
+                { id: "vi11c-ch2", name: "Rajasthan Ki Rajat Boonden", nameHi: "राजस्थान की रजत बूँदें" },
+                { id: "vi11c-ch3", name: "Aalo Aandhare", nameHi: "आलो आंधारि" },
+                { id: "vi11c-ch4", name: "Ghar Ki Yaad", nameHi: "घर की याद" },
+                { id: "vi11c-ch5", name: "Ek Kahani Yeh Bhi", nameHi: "एक कहानी यह भी" },
+                { id: "vi11c-ch6", name: "Pahchana Kaun", nameHi: "पहचाना कौन" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+  {
+      id: "arts", name: "Arts", nameHi: "कला",
+      subjects: [
+        {
+          id: "history", name: "History", nameHi: "इतिहास", icon: "book",
+          books: [{
+            id: "history-11", name: "Vishwa Itihas Ke Kuch Vishay", nameHi: "विश्व इतिहास के कुछ विषय",
+            chapters: [
+              { id: "hi11-ch1", name: "Samay Ki Shuruaat Se", nameHi: "समय की शुरुआत से" },
+              { id: "hi11-ch2", name: "Lekhan Kala Aur Shahari Jeevan", nameHi: "लेखन कला और शहरी जीवन" },
+              { id: "hi11-ch3", name: "Teen Mahadvipion Mein Phela Samrajya", nameHi: "तीन महाद्वीपों में फैला हुआ साम्राज्य" },
+              { id: "hi11-ch4", name: "Islam Ka Uday Aur Vistar", nameHi: "इस्लाम का उदय और विस्तार" },
+              { id: "hi11-ch5", name: "Yayavar Samrajya", nameHi: "यायावर साम्राज्य" },
+              { id: "hi11-ch6", name: "Teen Varg", nameHi: "तीन वर्ग" },
+              { id: "hi11-ch7", name: "Badalti Hui Sanskriti Paramparaen", nameHi: "बदलती हुई सांस्कृतिक परंपराएँ" },
+              { id: "hi11-ch8", name: "Sanskritiyon Ka Takrav", nameHi: "संस्कृतियों का टकराव" },
+              { id: "hi11-ch9", name: "Audyogik Kranti", nameHi: "औद्योगिक क्रांति" },
+              { id: "hi11-ch10", name: "Mool Nivasiyon Ka Visthapan", nameHi: "मूल निवासियों का विस्थापन" },
+              { id: "hi11-ch11", name: "Aadhunikaran Ke Raste", nameHi: "आधुनिकीकरण के रास्ते" },
+            ]
+          }]
+        },
+        {
+          id: "political-science", name: "Political Science", nameHi: "राजनीति विज्ञान", icon: "landmark",
+          books: [
+            {
+              id: "polsci-11-1", name: "Bharat Ka Samvidhan Siddhant Aur Vyavhar", nameHi: "भारत का संविधान: सिद्धांत और व्यवहार",
+              chapters: [
+                { id: "ps11-ch1", name: "Samvidhan Kyon Aur Kaise", nameHi: "संविधान: क्यों और कैसे?" },
+                { id: "ps11-ch2", name: "Bhartiya Samvidhan Mein Adhikar", nameHi: "भारतीय संविधान में अधिकार" },
+                { id: "ps11-ch3", name: "Chunav Aur Pratinidhitv", nameHi: "चुनाव और प्रतिनिधित्व" },
+                { id: "ps11-ch4", name: "Karyapalika", nameHi: "कार्यपालिका" },
+                { id: "ps11-ch5", name: "Vidhayika", nameHi: "विधायिका" },
+                { id: "ps11-ch6", name: "Nyaypalika", nameHi: "न्यायपालिका" },
+                { id: "ps11-ch7", name: "Sanghvad", nameHi: "संघवाद" },
+                { id: "ps11-ch8", name: "Sthaniy Shasan", nameHi: "स्थानीय शासन" },
+                { id: "ps11-ch9", name: "Samvidhan Ek Jeevant Dastavez", nameHi: "संविधान: एक जीवंत दस्तावेज़" },
+                { id: "ps11-ch10", name: "Samvidhan Ka Rajnitik Darshan", nameHi: "संविधान का राजनीतिक दर्शन" },
+              ]
+            },
+            {
+              id: "polsci-11-2", name: "Rajnitik Siddhant", nameHi: "राजनीतिक सिद्धांत",
+              chapters: [
+                { id: "ps11-ch11", name: "Rajnitik Siddhant Ek Parichay", nameHi: "राजनीतिक सिद्धांत: एक परिचय" },
+                { id: "ps11-ch12", name: "Swatantrata", nameHi: "स्वतंत्रता" },
+                { id: "ps11-ch13", name: "Samanta", nameHi: "समानता" },
+                { id: "ps11-ch14", name: "Samajik Nyay", nameHi: "सामाजिक न्याय" },
+                { id: "ps11-ch15", name: "Adhikar", nameHi: "अधिकार" },
+                { id: "ps11-ch16", name: "Nagrikta", nameHi: "नागरिकता" },
+                { id: "ps11-ch17", name: "Rashtravad", nameHi: "राष्ट्रवाद" },
+                { id: "ps11-ch18", name: "Dharmnirpekshata", nameHi: "धर्मनिरपेक्षता" },
+                { id: "ps11-ch19", name: "Shanti", nameHi: "शांति" },
+                { id: "ps11-ch20", name: "Vikas", nameHi: "विकास" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "geography", name: "Geography", nameHi: "भूगोल", icon: "map",
+          books: [{
+            id: "geo-11", name: "Bhautik Bhugol Ke Mool Siddhant", nameHi: "भौतिक भूगोल के मूल सिद्धांत",
+            chapters: [
+              { id: "ge11-ch1", name: "Bhugol Ek Vishay Ke Roop Mein", nameHi: "भूगोल एक विषय के रूप में" },
+              { id: "ge11-ch2", name: "Prithvi Ki Utpatti Evam Vikas", nameHi: "पृथ्वी की उत्पत्ति एवं विकास" },
+              { id: "ge11-ch3", name: "Prithvi Ki Aantarik Sanrachna", nameHi: "पृथ्वी की आंतरिक संरचना" },
+              { id: "ge11-ch4", name: "Mahsaagaron Aur Mahadvipion Ka Vitaran", nameHi: "महासागरों और महाद्वीपों का वितरण" },
+              { id: "ge11-ch5", name: "Khanij Evam Shail", nameHi: "खनिज एवं शैल" },
+              { id: "ge11-ch6", name: "Bhu-Aakriti Prakriyaen", nameHi: "भू-आकृतिक प्रक्रियाएँ" },
+              { id: "ge11-ch7", name: "Bhu-Aakritiyan Tatha Unka Vikas", nameHi: "भू-आकृतियाँ तथा उनका विकास" },
+              { id: "ge11-ch8", name: "Vayumandal Ka Sangathan Tatha Sanrachna", nameHi: "वायुमंडल का संघटन तथा संरचना" },
+              { id: "ge11-ch9", name: "Saur Vikiran Ushma Santulan Evam Tapman", nameHi: "सौर विकिरण, ऊष्मा संतुलन एवं तापमान" },
+              { id: "ge11-ch10", name: "Vayumandliy Parisancharan Tatha Mausam Pranaliyan", nameHi: "वायुमंडलीय परिसंचरण तथा मौसम प्रणालियाँ" },
+              { id: "ge11-ch11", name: "Vayumandal Mein Jal", nameHi: "वायुमंडल में जल" },
+              { id: "ge11-ch12", name: "Vishwa Ki Jalvayu Evam Jalvayu Parivartan", nameHi: "विश्व की जलवायु एवं जलवायु परिवर्तन" },
+              { id: "ge11-ch13", name: "Mahasagariy Jal", nameHi: "महासागरीय जल" },
+              { id: "ge11-ch14", name: "Mahasagariy Jal Sanchalan", nameHi: "महासागरीय जल संचलन" },
+              { id: "ge11-ch15", name: "Prithvi Par Jeevan", nameHi: "पृथ्वी पर जीवन" },
+              { id: "ge11-ch16", name: "Jaiv Vividhata Evam Sanrakshan", nameHi: "जैव-विविधता एवं संरक्षण" },
+            ]
+          }]
+        },
+        {
+          id: "economics", name: "Economics", nameHi: "अर्थशास्त्र", icon: "trending-up",
+          books: [
+            {
+              id: "eco-dev-11-arts", name: "Bhartiya Arthvyavastha Ka Vikas", nameHi: "भारतीय अर्थव्यवस्था का विकास",
+              chapters: [
+                { id: "ea11-ch1", name: "Swatantrata Ki Purvsandh Par Bhartiya Arthvyavastha", nameHi: "स्वतंत्रता की पूर्व संध्या पर भारतीय अर्थव्यवस्था" },
+                { id: "ea11-ch2", name: "Bhartiya Arthvyavastha 1950-1990", nameHi: "भारतीय अर्थव्यवस्था (1950-1990)" },
+                { id: "ea11-ch3", name: "Udarikaran Nijikaran Aur Vaishvikaran", nameHi: "उदारीकरण, निजीकरण और वैश्वीकरण: एक समीक्षा" },
+                { id: "ea11-ch4", name: "Nirdhanta", nameHi: "निर्धनता" },
+                { id: "ea11-ch5", name: "Bharat Mein Manav Punji Ka Nirman", nameHi: "भारत में मानव पूँजी का निर्माण" },
+                { id: "ea11-ch6", name: "Gramin Vikas", nameHi: "ग्रामीण विकास" },
+                { id: "ea11-ch7", name: "Rojgar Samvridhi Anaupacharikaran", nameHi: "रोजगार-संवृद्धि, अनौपचारीकरण एवं अन्य मुद्दे" },
+                { id: "ea11-ch8", name: "Aadharbhut Sanrachna", nameHi: "आधारिक संरचना" },
+                { id: "ea11-ch9", name: "Paryavaran Aur Dharaniy Vikas", nameHi: "पर्यावरण और धारणीय विकास" },
+                { id: "ea11-ch10", name: "Bharat Aur Padosi Deshon Ke Tulnatmak Vikas Anubhav", nameHi: "भारत और इसके पड़ोसी देशों के तुलनात्मक विकास अनुभव" },
+              ]
+            },
+            {
+              id: "stats-11-arts", name: "Statistics for Economics", nameHi: "सांख्यिकी (अर्थशास्त्र के लिए)",
+              chapters: [
+                { id: "sa11-ch1", name: "Parichay", nameHi: "परिचय" },
+                { id: "sa11-ch2", name: "Aankdon Ka Sangrah", nameHi: "आँकड़ों का संग्रह" },
+                { id: "sa11-ch3", name: "Aankdon Ka Sangathan", nameHi: "आँकड़ों का संगठन" },
+                { id: "sa11-ch4", name: "Aankdon Ka Prastutikaran", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "sa11-ch5", name: "Kendriy Pravriti Ke Maap", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "sa11-ch6", name: "Vikiran Ke Maap", nameHi: "परिक्षेपण के माप" },
+                { id: "sa11-ch7", name: "Sahsambandh", nameHi: "सहसंबंध" },
+                { id: "sa11-ch8", name: "Suchkank", nameHi: "सूचकांक" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english", name: "English", nameHi: "English", icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11-arts", name: "Hornbill", nameHi: "Hornbill",
+              chapters: [
+                { id: "ho11a-ch1", name: "The Portrait of a Lady", nameHi: "The Portrait of a Lady" },
+                { id: "ho11a-ch2", name: "We're Not Afraid to Die", nameHi: "We're Not Afraid to Die" },
+                { id: "ho11a-ch3", name: "Discovering Tut", nameHi: "Discovering Tut" },
+                { id: "ho11a-ch4", name: "Landscape of the Soul", nameHi: "Landscape of the Soul" },
+                { id: "ho11a-ch5", name: "The Ailing Planet", nameHi: "The Ailing Planet" },
+                { id: "ho11a-ch6", name: "The Browning Version", nameHi: "The Browning Version" },
+                { id: "ho11a-ch7", name: "The Adventure", nameHi: "The Adventure" },
+              ]
+            },
+            {
+              id: "snapshots-11-arts", name: "Snapshots (Supplementary)", nameHi: "Snapshots (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "sn11a-ch1", name: "The Summer of the Beautiful White Horse", nameHi: "The Summer of the Beautiful White Horse" },
+                { id: "sn11a-ch2", name: "The Address", nameHi: "The Address" },
+                { id: "sn11a-ch3", name: "Ranga's Marriage", nameHi: "Ranga's Marriage" },
+                { id: "sn11a-ch4", name: "Albert Einstein at School", nameHi: "Albert Einstein at School" },
+                { id: "sn11a-ch5", name: "Mother's Day", nameHi: "Mother's Day" },
+                { id: "sn11a-ch6", name: "The Ghat of the Only World", nameHi: "The Ghat of the Only World" },
+                { id: "sn11a-ch7", name: "Birth", nameHi: "Birth" },
+                { id: "sn11a-ch8", name: "The Tale of Melon City", nameHi: "The Tale of Melon City" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+          books: [
+            {
+              id: "aroh-11-arts", name: "Aroh Bhag 1", nameHi: "आरोह भाग 1",
+              chapters: [
+                { id: "ar11a-ch1", name: "Kabir (Kabita)", nameHi: "कबीर" },
+                { id: "ar11a-ch2", name: "Meera (Kabita)", nameHi: "मीरा" },
+                { id: "ar11a-ch3", name: "Ramnresh Tripathi (Kabita)", nameHi: "रामनरेश त्रिपाठी" },
+                { id: "ar11a-ch4", name: "Sumitranandan Pant (Kabita)", nameHi: "सुमित्रानंदन पंत" },
+                { id: "ar11a-ch5", name: "Bhawani Prasad Mishra (Kabita)", nameHi: "भवानी प्रसाद मिश्र" },
+                { id: "ar11a-ch6", name: "Trilochan (Kabita)", nameHi: "त्रिलोचन" },
+                { id: "ar11a-ch7", name: "Dushyant Kumar (Kabita)", nameHi: "दुष्यंत कुमार" },
+                { id: "ar11a-ch8", name: "Akk Mahadevi (Kabita)", nameHi: "अक्क महादेवी" },
+                { id: "ar11a-ch9", name: "Pash (Kabita)", nameHi: "पाश" },
+                { id: "ar11a-ch10", name: "Nirmala Putul (Kabita)", nameHi: "निर्मला पुतुल" },
+                { id: "ar11a-ch11", name: "Namak Ka Daroga (Gadya)", nameHi: "नमक का दरोगा" },
+                { id: "ar11a-ch12", name: "Miyan Nasiruddin (Gadya)", nameHi: "मियाँ नसीरुद्दीन" },
+                { id: "ar11a-ch13", name: "Appu Ke Saath Dhai Saal (Gadya)", nameHi: "अप्पू के साथ ढाई साल" },
+                { id: "ar11a-ch14", name: "Vidaai Sambhashan (Gadya)", nameHi: "विदाई-संभाषण" },
+                { id: "ar11a-ch15", name: "Galta Loha (Gadya)", nameHi: "गलता लोहा" },
+                { id: "ar11a-ch16", name: "Speeti Mein Baarish (Gadya)", nameHi: "स्पीति में बारिश" },
+                { id: "ar11a-ch17", name: "Rajni (Gadya)", nameHi: "रजनी" },
+                { id: "ar11a-ch18", name: "Jamun Ka Ped (Gadya)", nameHi: "जामुन का पेड़" },
+                { id: "ar11a-ch19", name: "Bharat Mata (Gadya)", nameHi: "भारत माता" },
+                { id: "ar11a-ch20", name: "Aatma Ka Taap (Gadya)", nameHi: "आत्मा का ताप" },
+              ]
+            },
+            {
+              id: "vitan-11-arts", name: "Vitan Bhag 1 (Supplementary)", nameHi: "वितान भाग 1 (पूरक पाठ्यपुस्तक)",
+              chapters: [
+                { id: "vi11a-ch1", name: "Bhartiya Gayika Lata Mangeshkar", nameHi: "भारतीय गायिका लता मंगेशकर" },
+                { id: "vi11a-ch2", name: "Rajasthan Ki Rajat Boonden", nameHi: "राजस्थान की रजत बूँदें" },
+                { id: "vi11a-ch3", name: "Aalo Aandhare", nameHi: "आलो आंधारि" },
+                { id: "vi11a-ch4", name: "Ghar Ki Yaad", nameHi: "घर की याद" },
+                { id: "vi11a-ch5", name: "Ek Kahani Yeh Bhi", nameHi: "एक कहानी यह भी" },
+                { id: "vi11a-ch6", name: "Pahchana Kaun", nameHi: "पहचाना कौन" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+  ],
