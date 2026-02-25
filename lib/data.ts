@@ -1,4 +1,4 @@
-port type ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12
+export type ClassNumber = 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export interface Chapter {
   id: string
