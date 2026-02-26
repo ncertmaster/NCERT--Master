@@ -233,3 +233,203 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     ]
   }
 ],
+7: [
+  {
+    id: "math",
+    name: "Mathematics",
+    nameHi: "गणित",
+    icon: "calculator",
+    books: [{
+      id: "math-7",
+      name: "Mathematics",
+      nameHi: "गणित",
+      chapters: [
+        { id: "m7-ch1", name: "Integers", nameHi: "पूर्णांक" },
+        { id: "m7-ch2", name: "Fractions and Decimals", nameHi: "भिन्न एवं दशमलव" },
+        { id: "m7-ch3", name: "Data Handling", nameHi: "आँकड़ों का प्रबंधन" },
+        { id: "m7-ch4", name: "Simple Equations", nameHi: "सरल समीकरण" },
+        { id: "m7-ch5", name: "Lines and Angles", nameHi: "रेखा एवं कोण" },
+        { id: "m7-ch6", name: "The Triangle and its Properties", nameHi: "त्रिभुज और उसके गुण" },
+        { id: "m7-ch7", name: "Comparing Quantities", nameHi: "राशियों की तुलना" },
+        { id: "m7-ch8", name: "Rational Numbers", nameHi: "परिमेय संख्याएँ" },
+        { id: "m7-ch9", name: "Perimeter and Area", nameHi: "परिमाप और क्षेत्रफल" },
+        { id: "m7-ch10", name: "Algebraic Expressions", nameHi: "बीजीय व्यंजक" },
+        { id: "m7-ch11", name: "Exponents and Powers", nameHi: "घातांक और घात" },
+        { id: "m7-ch12", name: "Symmetry", nameHi: "सममिति" },
+        { id: "m7-ch13", name: "Visualising Solid Shapes", nameHi: "ठोस आकारों का चित्रण" }
+      ]
+    }]
+  },
+
+  {
+    id: "science",
+    name: "Science",
+    nameHi: "विज्ञान",
+    icon: "flask",
+    books: [{
+      id: "science-7",
+      name: "Science",
+      nameHi: "विज्ञान",
+      chapters: [
+        { id: "s7-ch1", name: "Nutrition in Plants", nameHi: "पादपों में पोषण" },
+        { id: "s7-ch2", name: "Nutrition in Animals", nameHi: "प्राणियों में पोषण" },
+        { id: "s7-ch3", name: "Heat", nameHi: "ऊष्मा" },
+        { id: "s7-ch4", name: "Acids, Bases and Salts", nameHi: "अम्ल, क्षारक और लवण" },
+        { id: "s7-ch5", name: "Physical and Chemical Changes", nameHi: "भौतिक एवं रासायनिक परिवर्तन" },
+        { id: "s7-ch6", name: "Respiration in Organisms", nameHi: "जीवों में श्वसन" },
+        { id: "s7-ch7", name: "Transportation in Animals and Plants", nameHi: "जंतुओं और पादप में परिवहन" },
+        { id: "s7-ch8", name: "Reproduction in Plants", nameHi: "पादप में जनन" },
+        { id: "s7-ch9", name: "Motion and Time", nameHi: "गति एवं समय" },
+        { id: "s7-ch10", name: "Electric Current and its Effects", nameHi: "विद्युत धारा और इसके प्रभाव" },
+        { id: "s7-ch11", name: "Light", nameHi: "प्रकाश" },
+        { id: "s7-ch12", name: "Forests: Our Lifeline", nameHi: "वन: हमारी जीवन रेखा" },
+        { id: "s7-ch13", name: "Wastewater Story", nameHi: "अपशिष्ट जल की कहानी" }
+      ]
+    }]
+  },
+
+  {
+    id: "social-studies",
+    name: "Social Studies",
+    nameHi: "सामाजिक विज्ञान",
+    icon: "globe",
+    books: [
+      {
+        id: "history-7",
+        name: "Hamare Ateet – 2",
+        nameHi: "हमारे अतीत – 2",
+        chapters: [
+          { id: "h7-ch1", name: "Tracing Changes Through a Thousand Years", nameHi: "हज़ार वर्षों के दौरान हुए परिवर्तनों की पड़ताल" },
+          { id: "h7-ch2", name: "New Kings and Kingdoms", nameHi: "नये राजा और उनके राज्य" },
+          { id: "h7-ch3", name: "The Delhi Sultans", nameHi: "दिल्ली सल्तनत" },
+          { id: "h7-ch4", name: "The Mughal Empire", nameHi: "मुग़ल साम्राज्य" },
+          { id: "h7-ch5", name: "Rulers and Buildings", nameHi: "शासक और इमारतें" },
+          { id: "h7-ch6", name: "Towns, Traders and Craftspersons", nameHi: "नगर, व्यापारी और शिल्पकार" },
+          { id: "h7-ch7", name: "Tribes, Nomads and Settled Communities", nameHi: "जनजातियाँ, खानाबदोश और बसे हुए समुदाय" },
+          { id: "h7-ch8", name: "Devotional Paths to the Divine", nameHi: "ईश्वर से अनुराग" },
+          { id: "h7-ch9", name: "The Making of Regional Cultures", nameHi: "क्षेत्रीय संस्कृतियों का निर्माण" },
+          { id: "h7-ch10", name: "Eighteenth-Century Political Formations", nameHi: "अठारहवीं शताब्दी में राजनीतिक गठन" }
+        ]
+      },
+      {
+        id: "geography-7",
+        name: "Hamara Paryavaran",
+        nameHi: "हमारा पर्यावरण",
+        chapters: [
+          { id: "g7-ch1", name: "Environment", nameHi: "पर्यावरण" },
+          { id: "g7-ch2", name: "Inside Our Earth", nameHi: "हमारी पृथ्वी के अंदर" },
+          { id: "g7-ch3", name: "Our Changing Earth", nameHi: "हमारी बदलती पृथ्वी" },
+          { id: "g7-ch4", name: "Air", nameHi: "वायु" },
+          { id: "g7-ch5", name: "Water", nameHi: "जल" },
+          { id: "g7-ch6", name: "Natural Vegetation and Wildlife", nameHi: "प्राकृतिक वनस्पति और वन्य जीवन" },
+          { id: "g7-ch7", name: "Human Environment – Settlement, Transport and Communication", nameHi: "मानव पर्यावरण – बस्तियाँ, परिवहन और संचार" },
+          { id: "g7-ch8", name: "Human Environment Interactions – Tropical and Subtropical Region", nameHi: "उष्णकटिबंधीय एवं उपोष्ण प्रदेश" },
+          { id: "g7-ch9", name: "Life in the Temperate Grasslands", nameHi: "शीतोष्ण घास के मैदानों में जीवन" },
+          { id: "g7-ch10", name: "Life in the Deserts", nameHi: "रेगिस्तान में जीवन" }
+        ]
+      },
+      {
+        id: "civics-7",
+        name: "Samajik Evam Rajnitik Jeevan – 2",
+        nameHi: "सामाजिक एवं राजनीतिक जीवन – 2",
+        chapters: [
+          { id: "c7-ch1", name: "On Equality", nameHi: "समानता" },
+          { id: "c7-ch2", name: "Role of the Government in Health", nameHi: "स्वास्थ्य में सरकार की भूमिका" },
+          { id: "c7-ch3", name: "How the State Government Works", nameHi: "राज्य शासन कैसे काम करता है" },
+          { id: "c7-ch4", name: "Growing Up as Boys and Girls", nameHi: "लड़के और लड़कियों के रूप में बड़ा होना" },
+          { id: "c7-ch5", name: "Women Change the World", nameHi: "औरतों ने बदली दुनिया" },
+          { id: "c7-ch6", name: "Understanding Media", nameHi: "संचार माध्यमों को समझना" },
+          { id: "c7-ch7", name: "Understanding Advertising", nameHi: "विज्ञापन को समझना" },
+          { id: "c7-ch8", name: "Markets Around Us", nameHi: "हमारे आस-पास के बाज़ार" },
+          { id: "c7-ch9", name: "A Shirt in the Market", nameHi: "बाज़ार में एक कमीज़" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "english",
+    name: "English",
+    nameHi: "English",
+    icon: "book-open",
+    books: [
+      {
+        id: "honeycomb-7",
+        name: "Honeycomb",
+        nameHi: "Honeycomb",
+        chapters: [
+          { id: "hc7-ch1", name: "Three Questions", nameHi: "Three Questions" },
+          { id: "hc7-ch2", name: "A Gift of Chappals", nameHi: "A Gift of Chappals" },
+          { id: "hc7-ch3", name: "Gopal and the Hilsa Fish", nameHi: "Gopal and the Hilsa Fish" },
+          { id: "hc7-ch4", name: "The Ashes That Made Trees Bloom", nameHi: "The Ashes That Made Trees Bloom" },
+          { id: "hc7-ch5", name: "Quality", nameHi: "Quality" },
+          { id: "hc7-ch6", name: "Expert Detectives", nameHi: "Expert Detectives" },
+          { id: "hc7-ch7", name: "The Invention of Vita-Wonk", nameHi: "The Invention of Vita-Wonk" },
+          { id: "hc7-ch8", name: "A Homage to our Brave Soldiers", nameHi: "A Homage to our Brave Soldiers" }
+        ]
+      },
+      {
+        id: "alien-hand-7",
+        name: "An Alien Hand",
+        nameHi: "An Alien Hand",
+        chapters: [
+          { id: "ah7-ch1", name: "The Tiny Teacher", nameHi: "The Tiny Teacher" },
+          { id: "ah7-ch2", name: "Bringing up Kari", nameHi: "Bringing up Kari" },
+          { id: "ah7-ch3", name: "Golu Grows a Nose", nameHi: "Golu Grows a Nose" },
+          { id: "ah7-ch4", name: "Chandni", nameHi: "Chandni" },
+          { id: "ah7-ch5", name: "The Bear Story", nameHi: "The Bear Story" },
+          { id: "ah7-ch6", name: "A Tiger in the House", nameHi: "A Tiger in the House" },
+          { id: "ah7-ch7", name: "An Alien Hand", nameHi: "An Alien Hand" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "hindi",
+    name: "Hindi",
+    nameHi: "हिंदी",
+    icon: "languages",
+    books: [
+      {
+        id: "vasant-7",
+        name: "Vasant Bhag 2",
+        nameHi: "वसंत भाग 2",
+        chapters: [
+          { id: "va7-ch1", name: "Hum Panchhi Unmukt Gagan Ke", nameHi: "हम पंछी उन्मुक्त गगन के" },
+          { id: "va7-ch2", name: "Daadi Maa", nameHi: "दादी माँ" },
+          { id: "va7-ch3", name: "Himalaya Ki Betiyan", nameHi: "हिमालय की बेटियाँ" },
+          { id: "va7-ch4", name: "Kathputli", nameHi: "कठपुतली" },
+          { id: "va7-ch5", name: "Mithaiwala", nameHi: "मिठाईवाला" },
+          { id: "va7-ch6", name: "Rakt Aur Hamara Sharir", nameHi: "रक्त और हमारा शरीर" },
+          { id: "va7-ch7", name: "Papa Kho Gaye", nameHi: "पापा खो गए" },
+          { id: "va7-ch8", name: "Shaam Ek Kisan", nameHi: "शाम – एक किसान" },
+          { id: "va7-ch9", name: "Ek Tinka", nameHi: "एक तिनका" },
+          { id: "va7-ch10", name: "Khanabadosh", nameHi: "खानाबदोश" },
+          { id: "va7-ch11", name: "Neelkanth", nameHi: "नीलकंठ" },
+          { id: "va7-ch12", name: "Bhor Aur Barkha", nameHi: "भोर और बरखा" },
+          { id: "va7-ch13", name: "Veer Kunwar Singh", nameHi: "वीर कुँवर सिंह" },
+          { id: "va7-ch14", name: "Sangharsh Ke Kaaran Main Tunukmizaj Ho Gaya", nameHi: "संघर्ष के कारण मैं तुनुकमिज़ाज हो गया" },
+          { id: "va7-ch15", name: "Aashram Ka Anumanit Vyay", nameHi: "आश्रम का अनुमानित व्यय" }
+        ]
+      },
+      {
+        id: "bal-mahabharat-7",
+        name: "Bal Mahabharat Katha",
+        nameHi: "बाल महाभारत कथा",
+        chapters: [
+          { id: "bm7-ch1", name: "Adi Parv", nameHi: "आदि पर्व" },
+          { id: "bm7-ch2", name: "Sabha Parv", nameHi: "सभा पर्व" },
+          { id: "bm7-ch3", name: "Vana Parv", nameHi: "वन पर्व" },
+          { id: "bm7-ch4", name: "Virat Parv", nameHi: "विराट पर्व" },
+          { id: "bm7-ch5", name: "Udyog Parv", nameHi: "उद्योग पर्व" },
+          { id: "bm7-ch6", name: "Bhishma Parv", nameHi: "भीष्म पर्व" },
+          { id: "bm7-ch7", name: "Drona Parv", nameHi: "द्रोण पर्व" },
+          { id: "bm7-ch8", name: "Karna Parv", nameHi: "कर्ण पर्व" },
+          { id: "bm7-ch9", name: "Shalya Parv", nameHi: "शल्य पर्व" },
+          { id: "bm7-ch10", name: "Shanti Parv", nameHi: "शांति पर्व" }
+        ]
+      }
+    ]
+  }
+],
