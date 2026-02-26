@@ -1083,7 +1083,7 @@ chapters: [
       ]
     }
         ]
-};
+},
 export const streamsByClass: Record<ClassNumber, Stream[]> = {
   11: [
     {
