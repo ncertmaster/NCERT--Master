@@ -1314,3 +1314,260 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
             }
+{
+      id: "commerce",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: [
+
+        // ================= ACCOUNTANCY =================
+        {
+          id: "accountancy-11",
+          name: "Accountancy",
+          nameHi: "लेखाशास्त्र",
+          icon: "book",
+          books: [
+            {
+              id: "accounts-11-part-1",
+              name: "Financial Accounting Part I",
+              nameHi: "वित्तीय लेखांकन भाग 1",
+              chapters: [
+                { id: "acc11-1", name: "Introduction to Accounting", nameHi: "लेखांकन का परिचय" },
+                { id: "acc11-2", name: "Theory Base of Accounting", nameHi: "लेखांकन का सैद्धांतिक आधार" },
+                { id: "acc11-3", name: "Recording of Transactions – I", nameHi: "लेन-देन का लेखा – I" },
+                { id: "acc11-4", name: "Recording of Transactions – II", nameHi: "लेन-देन का लेखा – II" },
+                { id: "acc11-5", name: "Bank Reconciliation Statement", nameHi: "बैंक मिलान विवरण" }
+              ]
+            },
+            {
+              id: "accounts-11-part-2",
+              name: "Financial Accounting Part II",
+              nameHi: "वित्तीय लेखांकन भाग 2",
+              chapters: [
+                { id: "acc11-6", name: "Trial Balance and Rectification", nameHi: "परीक्षण संतुलन एवं त्रुटि सुधार" },
+                { id: "acc11-7", name: "Depreciation", nameHi: "मूल्यह्रास" },
+                { id: "acc11-8", name: "Bills of Exchange", nameHi: "विनिमय पत्र" },
+                { id: "acc11-9", name: "Financial Statements – I", nameHi: "वित्तीय विवरण – I" },
+                { id: "acc11-10", name: "Financial Statements – II", nameHi: "वित्तीय विवरण – II" }
+              ]
+            }
+          ]
+        },
+
+        // ================= BUSINESS STUDIES =================
+        {
+          id: "business-11",
+          name: "Business Studies",
+          nameHi: "व्यवसाय अध्ययन",
+          icon: "briefcase",
+          books: [
+            {
+              id: "business-11",
+              name: "Business Studies",
+              nameHi: "व्यवसाय अध्ययन",
+              chapters: [
+                { id: "bst11-1", name: "Business, Trade and Commerce", nameHi: "व्यवसाय, व्यापार एवं वाणिज्य" },
+                { id: "bst11-2", name: "Forms of Business Organisation", nameHi: "व्यवसाय संगठन के स्वरूप" },
+                { id: "bst11-3", name: "Private, Public and Global Enterprises", nameHi: "निजी, सार्वजनिक एवं वैश्विक उद्यम" },
+                { id: "bst11-4", name: "Business Services", nameHi: "व्यवसाय सेवाएँ" },
+                { id: "bst11-5", name: "Emerging Modes of Business", nameHi: "उभरते व्यवसाय स्वरूप" },
+                { id: "bst11-6", name: "Social Responsibilities of Business", nameHi: "व्यवसाय की सामाजिक जिम्मेदारियाँ" },
+                { id: "bst11-7", name: "Sources of Business Finance", nameHi: "व्यवसाय वित्त के स्रोत" },
+                { id: "bst11-8", name: "Small Business", nameHi: "लघु व्यवसाय" },
+                { id: "bst11-9", name: "Internal Trade", nameHi: "आंतरिक व्यापार" },
+                { id: "bst11-10", name: "International Business", nameHi: "अंतरराष्ट्रीय व्यापार" }
+              ]
+            }
+          ]
+        },
+
+        // ================= ECONOMICS =================
+        {
+          id: "economics-11",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "bar-chart",
+          books: [
+            {
+              id: "eco-11-statistics",
+              name: "Statistics for Economics",
+              nameHi: "अर्थशास्त्र के लिए सांख्यिकी",
+              chapters: [
+                { id: "eco11-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "eco11-2", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "eco11-3", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "eco11-4", name: "Presentation of Data", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "eco11-5", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "eco11-6", name: "Correlation", nameHi: "सहसंबंध" }
+              ]
+            },
+            {
+              id: "eco-11-indian-dev",
+              name: "Indian Economic Development",
+              nameHi: "भारतीय आर्थिक विकास",
+              chapters: [
+                { id: "eco11-7", name: "Indian Economy on the Eve of Independence", nameHi: "स्वतंत्रता पूर्व भारतीय अर्थव्यवस्था" },
+                { id: "eco11-8", name: "Indian Economy (1950–1990)", nameHi: "भारतीय अर्थव्यवस्था (1950–1990)" },
+                { id: "eco11-9", name: "Liberalisation, Privatisation and Globalisation", nameHi: "उदारीकरण, निजीकरण एवं वैश्वीकरण" },
+                { id: "eco11-10", name: "Human Capital Formation", nameHi: "मानव पूँजी निर्माण" },
+                { id: "eco11-11", name: "Rural Development", nameHi: "ग्रामीण विकास" },
+                { id: "eco11-12", name: "Employment", nameHi: "रोजगार" },
+                { id: "eco11-13", name: "Environment and Sustainable Development", nameHi: "पर्यावरण एवं सतत विकास" }
+              ]
+            }
+          ]
+        }
+
+      ]
+                  }
+,
+
+        // ================= MATHEMATICS (COMMERCE) =================
+        {
+          id: "math-11-commerce",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "math-11-commerce-book",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "m11c-1", name: "Sets", nameHi: "समुच्चय" },
+                { id: "m11c-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "m11c-3", name: "Trigonometric Functions", nameHi: "त्रिकोणमितीय फलन" },
+                { id: "m11c-4", name: "Complex Numbers and Quadratic Equations", nameHi: "समिश्र संख्याएँ एवं द्विघात समीकरण" },
+                { id: "m11c-5", name: "Linear Inequalities", nameHi: "रेखीय असमिकाएँ" },
+                { id: "m11c-6", name: "Permutations and Combinations", nameHi: "क्रमचय एवं संचय" },
+                { id: "m11c-7", name: "Binomial Theorem", nameHi: "द्विपद प्रमेय" },
+                { id: "m11c-8", name: "Sequences and Series", nameHi: "अनुक्रम एवं श्रेणियाँ" },
+                { id: "m11c-9", name: "Straight Lines", nameHi: "सरल रेखाएँ" },
+                { id: "m11c-10", name: "Conic Sections", nameHi: "शंकु परिच्छेद" },
+                { id: "m11c-11", name: "Limits and Derivatives", nameHi: "सीमाएँ एवं अवकलज" },
+                { id: "m11c-12", name: "Statistics", nameHi: "सांख्यिकी" },
+                { id: "m11c-13", name: "Probability", nameHi: "प्रायिकता" }
+              ]
+            }
+          ]
+        },
+
+        // ================= ENTREPRENEURSHIP =================
+        {
+          id: "entrepreneurship-11",
+          name: "Entrepreneurship",
+          nameHi: "उद्यमिता",
+          icon: "lightbulb",
+          books: [
+            {
+              id: "entrepreneurship-11-book",
+              name: "Entrepreneurship",
+              nameHi: "उद्यमिता",
+              chapters: [
+                { id: "ent11-1", name: "Entrepreneurship Concept and Functions", nameHi: "उद्यमिता की अवधारणा एवं कार्य" },
+                { id: "ent11-2", name: "Entrepreneurial Journey", nameHi: "उद्यमी यात्रा" },
+                { id: "ent11-3", name: "Entrepreneurial Competencies", nameHi: "उद्यमी दक्षताएँ" },
+                { id: "ent11-4", name: "Business Plan", nameHi: "व्यवसाय योजना" },
+                { id: "ent11-5", name: "Entrepreneurship as Innovation", nameHi: "नवाचार के रूप में उद्यमिता" }
+              ]
+            }
+          ]
+        },
+
+        // ================= INFORMATICS PRACTICES =================
+        {
+          id: "ip-11",
+          name: "Informatics Practices",
+          nameHi: "सूचना विज्ञान व्यवहार",
+          icon: "cpu",
+          books: [
+            {
+              id: "ip-11-book",
+              name: "Informatics Practices",
+              nameHi: "सूचना विज्ञान व्यवहार",
+              chapters: [
+                { id: "ip11-1", name: "Introduction to Computer System", nameHi: "कंप्यूटर प्रणाली का परिचय" },
+                { id: "ip11-2", name: "Introduction to Python", nameHi: "पायथन का परिचय" },
+                { id: "ip11-3", name: "Data Handling using Python", nameHi: "पायथन द्वारा डेटा प्रबंधन" },
+                { id: "ip11-4", name: "Society, Law and Ethics", nameHi: "समाज, विधि एवं नैतिकता" }
+              ]
+            }
+          ]
+        }
+,
+    {
+      id: "arts",
+      name: "Arts",
+      nameHi: "कला",
+      subjects: [
+
+        // ================= HISTORY =================
+        {
+          id: "history-11",
+          name: "History",
+          nameHi: "इतिहास",
+          icon: "book",
+          books: [
+            {
+              id: "history-11-themes-1",
+              name: "Themes in World History",
+              nameHi: "विश्व इतिहास के कुछ विषय",
+              chapters: [
+                { id: "his11-1", name: "From the Beginning of Time", nameHi: "समय की शुरुआत से" },
+                { id: "his11-2", name: "Writing and City Life", nameHi: "लेखन और शहरी जीवन" },
+                { id: "his11-3", name: "An Empire Across Three Continents", nameHi: "तीन महाद्वीपों में फैला साम्राज्य" },
+                { id: "his11-4", name: "The Central Islamic Lands", nameHi: "केंद्रीय इस्लामी भूभाग" },
+                { id: "his11-5", name: "Nomadic Empires", nameHi: "खानाबदोश साम्राज्य" },
+                { id: "his11-6", name: "The Three Orders", nameHi: "तीन वर्ग" },
+                { id: "his11-7", name: "Changing Cultural Traditions", nameHi: "सांस्कृतिक परंपराओं में परिवर्तन" },
+                { id: "his11-8", name: "Confrontation of Cultures", nameHi: "संस्कृतियों का टकराव" },
+                { id: "his11-9", name: "The Industrial Revolution", nameHi: "औद्योगिक क्रांति" },
+                { id: "his11-10", name: "Displacing Indigenous Peoples", nameHi: "मूल निवासियों का विस्थापन" },
+                { id: "his11-11", name: "Paths to Modernisation", nameHi: "आधुनिकीकरण के मार्ग" }
+              ]
+            }
+          ]
+        },
+
+        // ================= POLITICAL SCIENCE =================
+        {
+          id: "polity-11",
+          name: "Political Science",
+          nameHi: "राजनीति विज्ञान",
+          icon: "globe",
+          books: [
+            {
+              id: "polity-11-indian-constitution",
+              name: "Indian Constitution at Work",
+              nameHi: "भारतीय संविधान का कार्यान्वयन",
+              chapters: [
+                { id: "pol11-1", name: "Constitution: Why and How?", nameHi: "संविधान: क्यों और कैसे?" },
+                { id: "pol11-2", name: "Rights in the Indian Constitution", nameHi: "भारतीय संविधान में अधिकार" },
+                { id: "pol11-3", name: "Election and Representation", nameHi: "निर्वाचन और प्रतिनिधित्व" },
+                { id: "pol11-4", name: "Executive", nameHi: "कार्यपालिका" },
+                { id: "pol11-5", name: "Legislature", nameHi: "विधायिका" },
+                { id: "pol11-6", name: "Judiciary", nameHi: "न्यायपालिका" },
+                { id: "pol11-7", name: "Federalism", nameHi: "संघवाद" },
+                { id: "pol11-8", name: "Local Governments", nameHi: "स्थानीय शासन" },
+                { id: "pol11-9", name: "Constitution as a Living Document", nameHi: "संविधान एक जीवंत दस्तावेज" }
+              ]
+            },
+            {
+              id: "polity-11-political-theory",
+              name: "Political Theory",
+              nameHi: "राजनीतिक सिद्धांत",
+              chapters: [
+                { id: "pol11-10", name: "Political Theory: An Introduction", nameHi: "राजनीतिक सिद्धांत: एक परिचय" },
+                { id: "pol11-11", name: "Freedom", nameHi: "स्वतंत्रता" },
+                { id: "pol11-12", name: "Equality", nameHi: "समानता" },
+                { id: "pol11-13", name: "Social Justice", nameHi: "सामाजिक न्याय" },
+                { id: "pol11-14", name: "Rights", nameHi: "अधिकार" },
+                { id: "pol11-15", name: "Citizenship", nameHi: "नागरिकता" },
+                { id: "pol11-16", name: "Nationalism", nameHi: "राष्ट्रवाद" },
+                { id: "pol11-17", name: "Secularism", nameHi: "धर्मनिरपेक्षता" }
+              ]
+            }
+          ]
+        }
+      ]
+        }
