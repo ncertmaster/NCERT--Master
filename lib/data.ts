@@ -1171,3 +1171,40 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
         },
+{
+          id: "biology-11",
+          name: "Biology",
+          nameHi: "जीव विज्ञान",
+          icon: "leaf",
+          books: [
+            {
+              id: "biology-11",
+              name: "Biology",
+              nameHi: "जीव विज्ञान",
+              chapters: [
+                { id: "bio11-1", name: "The Living World", nameHi: "जीव जगत" },
+                { id: "bio11-2", name: "Biological Classification", nameHi: "जैव वर्गीकरण" },
+                { id: "bio11-3", name: "Plant Kingdom", nameHi: "पादप जगत" },
+                { id: "bio11-4", name: "Animal Kingdom", nameHi: "प्राणि जगत" },
+                { id: "bio11-5", name: "Morphology of Flowering Plants", nameHi: "आवृतबीजी पौधों की बाह्य संरचना" },
+                { id: "bio11-6", name: "Anatomy of Flowering Plants", nameHi: "आवृतबीजी पौधों की आंतरिक संरचना" },
+                { id: "bio11-7", name: "Structural Organisation in Animals", nameHi: "प्राणियों में संरचनात्मक संगठन" },
+                { id: "bio11-8", name: "Cell – The Unit of Life", nameHi: "कोशिका – जीवन की इकाई" },
+                { id: "bio11-9", name: "Biomolecules", nameHi: "जैव अणु" },
+                { id: "bio11-10", name: "Cell Cycle and Cell Division", nameHi: "कोशिका चक्र और कोशिका विभाजन" },
+                { id: "bio11-11", name: "Transport in Plants", nameHi: "पौधों में परिवहन" },
+                { id: "bio11-12", name: "Mineral Nutrition", nameHi: "खनिज पोषण" },
+                { id: "bio11-13", name: "Photosynthesis in Higher Plants", nameHi: "उच्चतर पौधों में प्रकाश संश्लेषण" },
+                { id: "bio11-14", name: "Respiration in Plants", nameHi: "पौधों में श्वसन" },
+                { id: "bio11-15", name: "Plant Growth and Development", nameHi: "पौधों की वृद्धि और विकास" },
+                { id: "bio11-16", name: "Digestion and Absorption", nameHi: "पाचन और अवशोषण" },
+                { id: "bio11-17", name: "Breathing and Exchange of Gases", nameHi: "श्वसन और गैसों का आदान-प्रदान" },
+                { id: "bio11-18", name: "Body Fluids and Circulation", nameHi: "शरीर द्रव और परिसंचरण" },
+                { id: "bio11-19", name: "Excretory Products and their Elimination", nameHi: "उत्सर्जी पदार्थ और उनका निष्कासन" },
+                { id: "bio11-20", name: "Locomotion and Movement", nameHi: "गमन और संचलन" },
+                { id: "bio11-21", name: "Neural Control and Coordination", nameHi: "तंत्रिका नियंत्रण और समन्वय" },
+                { id: "bio11-22", name: "Chemical Coordination and Integration", nameHi: "रासायनिक समन्वय और एकीकरण" }
+              ]
+            }
+          ]
+        },
