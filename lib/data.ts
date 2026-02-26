@@ -638,3 +638,202 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     ]
   }
 ],
+9: [
+  {
+    id: "math",
+    name: "Mathematics",
+    nameHi: "गणित",
+    icon: "calculator",
+    books: [{
+      id: "math-9",
+      name: "Mathematics",
+      nameHi: "गणित",
+      chapters: [
+        { id: "m9-ch1", name: "Number Systems", nameHi: "संख्या पद्धति" },
+        { id: "m9-ch2", name: "Polynomials", nameHi: "बहुपद" },
+        { id: "m9-ch3", name: "Coordinate Geometry", nameHi: "निर्देशांक ज्यामिति" },
+        { id: "m9-ch4", name: "Linear Equations in Two Variables", nameHi: "दो चरों वाले रैखिक समीकरण" },
+        { id: "m9-ch5", name: "Introduction to Euclid’s Geometry", nameHi: "यूक्लिड की ज्यामिति का परिचय" },
+        { id: "m9-ch6", name: "Lines and Angles", nameHi: "रेखाएँ और कोण" },
+        { id: "m9-ch7", name: "Triangles", nameHi: "त्रिभुज" },
+        { id: "m9-ch8", name: "Quadrilaterals", nameHi: "चतुर्भुज" },
+        { id: "m9-ch9", name: "Areas of Parallelograms and Triangles", nameHi: "समांतर चतुर्भुज और त्रिभुज के क्षेत्रफल" },
+        { id: "m9-ch10", name: "Circles", nameHi: "वृत्त" },
+        { id: "m9-ch11", name: "Constructions", nameHi: "रचनाएँ" },
+        { id: "m9-ch12", name: "Heron’s Formula", nameHi: "हीरोन का सूत्र" },
+        { id: "m9-ch13", name: "Surface Areas and Volumes", nameHi: "पृष्ठीय क्षेत्रफल और आयतन" },
+        { id: "m9-ch14", name: "Statistics", nameHi: "सांख्यिकी" },
+        { id: "m9-ch15", name: "Probability", nameHi: "प्रायिकता" }
+      ]
+    }]
+  },
+
+  {
+    id: "science",
+    name: "Science",
+    nameHi: "विज्ञान",
+    icon: "flask",
+    books: [{
+      id: "science-9",
+      name: "Science",
+      nameHi: "विज्ञान",
+      chapters: [
+        { id: "s9-ch1", name: "Matter in Our Surroundings", nameHi: "हमारे आसपास के पदार्थ" },
+        { id: "s9-ch2", name: "Is Matter Around Us Pure", nameHi: "क्या हमारे आसपास का पदार्थ शुद्ध है" },
+        { id: "s9-ch3", name: "Atoms and Molecules", nameHi: "परमाणु और अणु" },
+        { id: "s9-ch4", name: "Structure of the Atom", nameHi: "परमाणु की संरचना" },
+        { id: "s9-ch5", name: "The Fundamental Unit of Life", nameHi: "जीवन की मूल इकाई" },
+        { id: "s9-ch6", name: "Tissues", nameHi: "ऊतक" },
+        { id: "s9-ch7", name: "Motion", nameHi: "गति" },
+        { id: "s9-ch8", name: "Force and Laws of Motion", nameHi: "बल तथा गति के नियम" },
+        { id: "s9-ch9", name: "Gravitation", nameHi: "गुरुत्वाकर्षण" },
+        { id: "s9-ch10", name: "Work and Energy", nameHi: "कार्य और ऊर्जा" },
+        { id: "s9-ch11", name: "Sound", nameHi: "ध्वनि" },
+        { id: "s9-ch12", name: "Improvement in Food Resources", nameHi: "खाद्य संसाधनों में सुधार" }
+      ]
+    }]
+  },
+
+  {
+    id: "social-science",
+    name: "Social Science",
+    nameHi: "सामाजिक विज्ञान",
+    icon: "globe",
+    books: [
+      {
+        id: "history-9",
+        name: "India and the Contemporary World – I",
+        nameHi: "भारत और समकालीन विश्व – I",
+        chapters: [
+          { id: "h9-ch1", name: "The French Revolution", nameHi: "फ्रांसीसी क्रांति" },
+          { id: "h9-ch2", name: "Socialism in Europe and the Russian Revolution", nameHi: "यूरोप में समाजवाद और रूसी क्रांति" },
+          { id: "h9-ch3", name: "Nazism and the Rise of Hitler", nameHi: "नाज़ीवाद और हिटलर का उदय" },
+          { id: "h9-ch4", name: "Forest Society and Colonialism", nameHi: "वन समाज और उपनिवेशवाद" },
+          { id: "h9-ch5", name: "Pastoralists in the Modern World", nameHi: "आधुनिक विश्व में पशुपालक" }
+        ]
+      },
+      {
+        id: "geography-9",
+        name: "Contemporary India – I",
+        nameHi: "समकालीन भारत – I",
+        chapters: [
+          { id: "g9-ch1", name: "India – Size and Location", nameHi: "भारत – आकार और स्थिति" },
+          { id: "g9-ch2", name: "Physical Features of India", nameHi: "भारत के भौतिक स्वरूप" },
+          { id: "g9-ch3", name: "Drainage", nameHi: "अपवाह" },
+          { id: "g9-ch4", name: "Climate", nameHi: "जलवायु" },
+          { id: "g9-ch5", name: "Natural Vegetation and Wildlife", nameHi: "प्राकृतिक वनस्पति और वन्य जीवन" },
+          { id: "g9-ch6", name: "Population", nameHi: "जनसंख्या" }
+        ]
+      },
+      {
+        id: "civics-9",
+        name: "Democratic Politics – I",
+        nameHi: "लोकतांत्रिक राजनीति – I",
+        chapters: [
+          { id: "c9-ch1", name: "What is Democracy? Why Democracy?", nameHi: "लोकतंत्र क्या? क्यों लोकतंत्र?" },
+          { id: "c9-ch2", name: "Constitutional Design", nameHi: "संवैधानिक संरचना" },
+          { id: "c9-ch3", name: "Electoral Politics", nameHi: "चुनावी राजनीति" },
+          { id: "c9-ch4", name: "Working of Institutions", nameHi: "संस्थाओं का कामकाज" },
+          { id: "c9-ch5", name: "Democratic Rights", nameHi: "लोकतांत्रिक अधिकार" }
+        ]
+      },
+      {
+        id: "economics-9",
+        name: "Economics",
+        nameHi: "अर्थशास्त्र",
+        chapters: [
+          { id: "e9-ch1", name: "The Story of Village Palampur", nameHi: "ग्राम पलमपुर की कहानी" },
+          { id: "e9-ch2", name: "People as Resource", nameHi: "संसाधन के रूप में लोग" },
+          { id: "e9-ch3", name: "Poverty as a Challenge", nameHi: "गरीबी एक चुनौती" },
+          { id: "e9-ch4", name: "Food Security in India", nameHi: "भारत में खाद्य सुरक्षा" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "english",
+    name: "English",
+    nameHi: "English",
+    icon: "book-open",
+    books: [
+      {
+        id: "beehive-9",
+        name: "Beehive",
+        nameHi: "Beehive",
+        chapters: [
+          { id: "b9-ch1", name: "The Fun They Had", nameHi: "The Fun They Had" },
+          { id: "b9-ch2", name: "The Sound of Music", nameHi: "The Sound of Music" },
+          { id: "b9-ch3", name: "The Little Girl", nameHi: "The Little Girl" },
+          { id: "b9-ch4", name: "A Truly Beautiful Mind", nameHi: "A Truly Beautiful Mind" },
+          { id: "b9-ch5", name: "The Snake and the Mirror", nameHi: "The Snake and the Mirror" },
+          { id: "b9-ch6", name: "My Childhood", nameHi: "My Childhood" },
+          { id: "b9-ch7", name: "Packing", nameHi: "Packing" },
+          { id: "b9-ch8", name: "Reach for the Top", nameHi: "Reach for the Top" },
+          { id: "b9-ch9", name: "The Bond of Love", nameHi: "The Bond of Love" },
+          { id: "b9-ch10", name: "Kathmandu", nameHi: "Kathmandu" },
+          { id: "b9-ch11", name: "If I Were You", nameHi: "If I Were You" }
+        ]
+      },
+      {
+        id: "moments-9",
+        name: "Moments",
+        nameHi: "Moments",
+        chapters: [
+          { id: "m9m-ch1", name: "The Lost Child", nameHi: "The Lost Child" },
+          { id: "m9m-ch2", name: "The Adventures of Toto", nameHi: "The Adventures of Toto" },
+          { id: "m9m-ch3", name: "Iswaran the Storyteller", nameHi: "Iswaran the Storyteller" },
+          { id: "m9m-ch4", name: "In the Kingdom of Fools", nameHi: "In the Kingdom of Fools" },
+          { id: "m9m-ch5", name: "The Happy Prince", nameHi: "The Happy Prince" },
+          { id: "m9m-ch6", name: "Weathering the Storm in Ersama", nameHi: "Weathering the Storm in Ersama" },
+          { id: "m9m-ch7", name: "The Last Leaf", nameHi: "The Last Leaf" },
+          { id: "m9m-ch8", name: "A House Is Not a Home", nameHi: "A House Is Not a Home" },
+          { id: "m9m-ch9", name: "The Accidental Tourist", nameHi: "The Accidental Tourist" },
+          { id: "m9m-ch10", name: "The Beggar", nameHi: "The Beggar" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "hindi",
+    name: "Hindi",
+    nameHi: "हिंदी",
+    icon: "languages",
+    books: [
+      {
+        id: "kshitij-1-9",
+        name: "Kshitij – 1",
+        nameHi: "क्षितिज – 1",
+        chapters: [
+          { id: "k9-ch1", name: "Do Bailon Ki Katha", nameHi: "दो बैलों की कथा" },
+          { id: "k9-ch2", name: "Lhasa Ki Or", nameHi: "ल्हासा की ओर" },
+          { id: "k9-ch3", name: "Upbhokta Ki Sanskriti", nameHi: "उपभोक्ता की संस्कृति" },
+          { id: "k9-ch4", name: "Saanwale Sapnon Ki Yaad", nameHi: "सांवले सपनों की याद" },
+          { id: "k9-ch5", name: "Nana Sahab Ki Putri Devi Maina Ko Bhasm Kar Diya Gaya", nameHi: "नाना साहब की पुत्री देवी मैना को भस्म कर दिया गया" },
+          { id: "k9-ch6", name: "Premchand Ke Phate Jute", nameHi: "प्रेमचंद के फटे जूते" },
+          { id: "k9-ch7", name: "Mere Bachpan Ke Din", nameHi: "मेरे बचपन के दिन" },
+          { id: "k9-ch8", name: "Ek Kutte Ki Aatmkatha", nameHi: "एक कुत्ते की आत्मकथा" },
+          { id: "k9-ch9", name: "Sakhi", nameHi: "साखी" },
+          { id: "k9-ch10", name: "Dohe", nameHi: "दोहे" },
+          { id: "k9-ch11", name: "Geet A-Geet", nameHi: "गीत-अगीत" },
+          { id: "k9-ch12", name: "Agni Path", nameHi: "अग्निपथ" },
+          { id: "k9-ch13", name: "Naye Ilaake Mein", nameHi: "नए इलाके में" },
+          { id: "k9-ch14", name: "Khushboo Rachte Hain Haath", nameHi: "खुशबू रचते हैं हाथ" }
+        ]
+      },
+      {
+        id: "kritika-1-9",
+        name: "Kritika – 1",
+        nameHi: "कृतिका – 1",
+        chapters: [
+          { id: "kr9-ch1", name: "Is Jal Pralay Mein", nameHi: "इस जल प्रलय में" },
+          { id: "kr9-ch2", name: "Mere Sang Ki Auratein", nameHi: "मेरे संग की औरतें" },
+          { id: "kr9-ch3", name: "Reedh Ki Haddi", nameHi: "रीढ़ की हड्डी" },
+          { id: "kr9-ch4", name: "Mati Wali", nameHi: "माटी वाली" },
+          { id: "kr9-ch5", name: "Kis Tarah Aakhirkar Main Hindi Mein Aaya", nameHi: "किस तरह आखिरकार मैं हिंदी में आया" }
+        ]
+      }
+    ]
+  }
+],
