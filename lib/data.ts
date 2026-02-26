@@ -1551,54 +1551,13 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
   ]
 },
-  {
-  id: "hindi-12",
-  name: "Hindi",
-  nameHi: "हिंदी",
-  icon: "book",
-  books: [
-    {
-      id: "antra-12",
-      name: "Antra – 2",
-      nameHi: "अंतराल / अंतरा – 2",
-      chapters: [
-        { id: "hin12-a1", name: "आत्मपरिचय" },
-        { id: "hin12-a2", name: "पतंग" },
-        { id: "hin12-a3", name: "कविता के बहाने" },
-        { id: "hin12-a4", name: "कैमरे में बंद अपाहिज" },
-        { id: "hin12-a5", name: "साहस और उत्साह" }
-      ]
-    },
-    {
-      id: "aroh-12",
-      name: "Aroh – 2",
-      nameHi: "आरोह – 2",
-      chapters: [
-        { id: "hin12-ar1", name: "भक्तिन" },
-        { id: "hin12-ar2", name: "बाजार दर्शन" },
-        { id: "hin12-ar3", name: "काले मेघा पानी दे" },
-        { id: "hin12-ar4", name: "पहलवान की ढोलक" }
-      ]
-    },
-    {
-      id: "vitan-12",
-      name: "Vitan – 2",
-      nameHi: "वितान – 2",
-      chapters: [
-        { id: "hin12-v1", name: "सिल्वर वेडिंग" },
-        { id: "hin12-v2", name: "जूझ" },
-        { id: "hin12-v3", name: "अतीत में दबे पांव" }
-      ]
-    }
-  ]
-},
+  
   {
   id: "english-12",
   name: "English",
   nameHi: "अंग्रेज़ी",
   icon: "pen-tool",
   books: [
-
 {
   id: "commerce",
   name: "Commerce",
@@ -1715,34 +1674,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   nameHi: "अंग्रेज़ी",
   icon: "pen-tool",
   books: [
-    {
-      id: "flamingo-12",
-      name: "Flamingo",
-      chapters: [
-        { id: "eng12-f1", name: "The Last Lesson" },
-        { id: "eng12-f2", name: "Lost Spring" },
-        { id: "eng12-f3", name: "Deep Water" },
-        { id: "eng12-f4", name: "The Rattrap" },
-        { id: "eng12-f5", name: "Indigo" },
-        { id: "eng12-f6", name: "Poets and Pancakes" },
-        { id: "eng12-f7", name: "The Interview" },
-        { id: "eng12-f8", name: "Going Places" }
-      ]
-    },
-    {
-      id: "vistas-12",
-      name: "Vistas",
-      chapters: [
-        { id: "eng12-v1", name: "The Third Level" },
-        { id: "eng12-v2", name: "The Tiger King" },
-        { id: "eng12-v3", name: "Journey to the End of the Earth" },
-        { id: "eng12-v4", name: "The Enemy" },
-        { id: "eng12-v5", name: "On the Face of It" },
-        { id: "eng12-v6", name: "Memories of Childhood" }
-      ]
-    }
-  ]
-},
+
   {
   id: "hindi-12-commerce",
   name: "Hindi",
@@ -1775,7 +1707,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   name: "Arts",
   nameHi: "कला",
   subjects: [
-
     // ================= HISTORY =================
     {
       id: "history-12",
