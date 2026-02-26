@@ -1598,36 +1598,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   nameHi: "अंग्रेज़ी",
   icon: "pen-tool",
   books: [
-    {
-      id: "flamingo-12",
-      name: "Flamingo",
-      nameHi: "फ्लेमिंगो",
-      chapters: [
-        { id: "eng12-f1", name: "The Last Lesson" },
-        { id: "eng12-f2", name: "Lost Spring" },
-        { id: "eng12-f3", name: "Deep Water" },
-        { id: "eng12-f4", name: "The Rattrap" },
-        { id: "eng12-f5", name: "Indigo" },
-        { id: "eng12-f6", name: "Poets and Pancakes" },
-        { id: "eng12-f7", name: "The Interview" },
-        { id: "eng12-f8", name: "Going Places" }
-      ]
-    },
-    {
-      id: "vistas-12",
-      name: "Vistas",
-      nameHi: "विस्टास",
-      chapters: [
-        { id: "eng12-v1", name: "The Third Level" },
-        { id: "eng12-v2", name: "The Tiger King" },
-        { id: "eng12-v3", name: "Journey to the End of the Earth" },
-        { id: "eng12-v4", name: "The Enemy" },
-        { id: "eng12-v5", name: "On the Face of It" },
-        { id: "eng12-v6", name: "Memories of Childhood" }
-      ]
-    }
-  ]
-  },
+
 {
   id: "commerce",
   name: "Commerce",
