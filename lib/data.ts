@@ -1042,9 +1042,7 @@ chapters: [
 }
 ]
 },
-
   {
-    {
   id: "hindi-course-b",
   name: "Hindi Course B",
   nameHi: "हिंदी कोर्स B",
