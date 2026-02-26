@@ -1086,3 +1086,231 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
 
 ]
 }
+export const streamsByClass: Record<ClassNumber, Stream[]> = {
+  11: [
+    {
+      id: "science",
+      name: "Science",
+      nameHi: "विज्ञान",
+      subjects: [
+
+        // ================= PHYSICS =================
+        {
+          id: "physics-11",
+          name: "Physics",
+          nameHi: "भौतिकी",
+          icon: "atom",
+          books: [
+            {
+              id: "physics-11-part-1",
+              name: "Physics Part I",
+              nameHi: "भौतिकी भाग 1",
+              chapters: [
+                { id: "phy11-1", name: "Physical World", nameHi: "भौतिक जगत" },
+                { id: "phy11-2", name: "Units and Measurements", nameHi: "इकाइयाँ एवं मापन" },
+                { id: "phy11-3", name: "Motion in a Straight Line", nameHi: "सरल रेखा में गति" },
+                { id: "phy11-4", name: "Motion in a Plane", nameHi: "समतल में गति" },
+                { id: "phy11-5", name: "Laws of Motion", nameHi: "गति के नियम" },
+                { id: "phy11-6", name: "Work, Energy and Power", nameHi: "कार्य, ऊर्जा और शक्ति" },
+                { id: "phy11-7", name: "System of Particles and Rotational Motion", nameHi: "कणों का तंत्र एवं घूर्णन गति" }
+              ]
+            },
+            {
+              id: "physics-11-part-2",
+              name: "Physics Part II",
+              nameHi: "भौतिकी भाग 2",
+              chapters: [
+                { id: "phy11-8", name: "Gravitation", nameHi: "गुरुत्वाकर्षण" },
+                { id: "phy11-9", name: "Mechanical Properties of Solids", nameHi: "ठोसों के यांत्रिक गुण" },
+                { id: "phy11-10", name: "Mechanical Properties of Fluids", nameHi: "द्रवों के यांत्रिक गुण" },
+                { id: "phy11-11", name: "Thermal Properties of Matter", nameHi: "पदार्थ के तापीय गुण" },
+                { id: "phy11-12", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+                { id: "phy11-13", name: "Kinetic Theory", nameHi: "गति सिद्धांत" },
+                { id: "phy11-14", name: "Oscillations", nameHi: "दोलन" },
+                { id: "phy11-15", name: "Waves", nameHi: "तरंगें" }
+              ]
+            }
+          ]
+        },
+
+        // ================= CHEMISTRY =================
+        {
+          id: "chemistry-11",
+          name: "Chemistry",
+          nameHi: "रसायन विज्ञान",
+          icon: "flask",
+          books: [
+            {
+              id: "chem-11-part-1",
+              name: "Chemistry Part I",
+              nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "chem11-1", name: "Some Basic Concepts of Chemistry", nameHi: "रसायन विज्ञान की कुछ मूल अवधारणाएँ" },
+                { id: "chem11-2", name: "Structure of Atom", nameHi: "परमाणु की संरचना" },
+                { id: "chem11-3", name: "Classification of Elements and Periodicity", nameHi: "तत्वों का वर्गीकरण एवं आवर्तिता" },
+                { id: "chem11-4", name: "Chemical Bonding and Molecular Structure", nameHi: "रासायनिक बंधन एवं अणु संरचना" },
+                { id: "chem11-5", name: "States of Matter", nameHi: "पदार्थ की अवस्थाएँ" },
+                { id: "chem11-6", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+                { id: "chem11-7", name: "Equilibrium", nameHi: "साम्यावस्था" }
+              ]
+            },
+            {
+              id: "chem-11-part-2",
+              name: "Chemistry Part II",
+              nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "chem11-8", name: "Redox Reactions", nameHi: "अपचयन-ऑक्सीकरण अभिक्रियाएँ" },
+                { id: "chem11-9", name: "Hydrogen", nameHi: "हाइड्रोजन" },
+                { id: "chem11-10", name: "The s-Block Elements", nameHi: "s-ब्लॉक तत्व" },
+                { id: "chem11-11", name: "The p-Block Elements", nameHi: "p-ब्लॉक तत्व" },
+                { id: "chem11-12", name: "Organic Chemistry – Basic Principles", nameHi: "कार्बनिक रसायन – मूल सिद्धांत" },
+                { id: "chem11-13", name: "Hydrocarbons", nameHi: "हाइड्रोकार्बन" },
+                { id: "chem11-14", name: "Environmental Chemistry", nameHi: "पर्यावरण रसायन" }
+              ]
+            }
+          ]
+        }
+
+      ]
+    }
+  ],
+  12: []
+                 }
+// ================= BIOLOGY =================
+        {
+          id: "biology-11",
+          name: "Biology",
+          nameHi: "जीव विज्ञान",
+          icon: "dna",
+          books: [
+            {
+              id: "biology-11",
+              name: "Biology",
+              nameHi: "जीव विज्ञान",
+              chapters: [
+                { id: "bio11-1", name: "The Living World", nameHi: "जीव जगत" },
+                { id: "bio11-2", name: "Biological Classification", nameHi: "जैव वर्गीकरण" },
+                { id: "bio11-3", name: "Plant Kingdom", nameHi: "पादप जगत" },
+                { id: "bio11-4", name: "Animal Kingdom", nameHi: "प्राणी जगत" },
+                { id: "bio11-5", name: "Morphology of Flowering Plants", nameHi: "आवृतबीजी पौधों की आकृति विज्ञान" },
+                { id: "bio11-6", name: "Anatomy of Flowering Plants", nameHi: "आवृतबीजी पौधों की आंतरिक संरचना" },
+                { id: "bio11-7", name: "Structural Organisation in Animals", nameHi: "प्राणियों में संरचनात्मक संगठन" },
+                { id: "bio11-8", name: "Cell: The Unit of Life", nameHi: "कोशिका : जीवन की इकाई" },
+                { id: "bio11-9", name: "Biomolecules", nameHi: "जैव अणु" },
+                { id: "bio11-10", name: "Cell Cycle and Cell Division", nameHi: "कोशिका चक्र एवं विभाजन" },
+                { id: "bio11-11", name: "Transport in Plants", nameHi: "पादपों में परिवहन" },
+                { id: "bio11-12", name: "Mineral Nutrition", nameHi: "खनिज पोषण" },
+                { id: "bio11-13", name: "Photosynthesis in Higher Plants", nameHi: "उच्च पादपों में प्रकाश संश्लेषण" },
+                { id: "bio11-14", name: "Respiration in Plants", nameHi: "पादपों में श्वसन" },
+                { id: "bio11-15", name: "Plant Growth and Development", nameHi: "पादप वृद्धि एवं विकास" },
+                { id: "bio11-16", name: "Digestion and Absorption", nameHi: "पाचन एवं अवशोषण" },
+                { id: "bio11-17", name: "Breathing and Exchange of Gases", nameHi: "श्वसन एवं गैसों का विनिमय" },
+                { id: "bio11-18", name: "Body Fluids and Circulation", nameHi: "शरीर द्रव एवं परिसंचरण" },
+                { id: "bio11-19", name: "Excretory Products and their Elimination", nameHi: "उत्सर्जी पदार्थ एवं उनका निष्कासन" },
+                { id: "bio11-20", name: "Locomotion and Movement", nameHi: "गति एवं संचलन" },
+                { id: "bio11-21", name: "Neural Control and Coordination", nameHi: "तंत्रिका नियंत्रण एवं समन्वय" },
+                { id: "bio11-22", name: "Chemical Coordination and Integration", nameHi: "रासायनिक समन्वय एवं एकीकरण" }
+              ]
+            }
+          ]
+        },
+
+        // ================= MATHEMATICS =================
+        {
+          id: "math-11",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "math-11",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "math11-1", name: "Sets", nameHi: "समुच्चय" },
+                { id: "math11-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "math11-3", name: "Trigonometric Functions", nameHi: "त्रिकोणमितीय फलन" },
+                { id: "math11-4", name: "Complex Numbers and Quadratic Equations", nameHi: "समिश्र संख्याएँ एवं द्विघात समीकरण" },
+                { id: "math11-5", name: "Linear Inequalities", nameHi: "रेखीय असमिकाएँ" },
+                { id: "math11-6", name: "Permutations and Combinations", nameHi: "क्रमचय एवं संचय" },
+                { id: "math11-7", name: "Binomial Theorem", nameHi: "द्विपद प्रमेय" },
+                { id: "math11-8", name: "Sequences and Series", nameHi: "अनुक्रम एवं श्रेणियाँ" },
+                { id: "math11-9", name: "Straight Lines", nameHi: "सरल रेखाएँ" },
+                { id: "math11-10", name: "Conic Sections", nameHi: "शंकु परिच्छेद" },
+                { id: "math11-11", name: "Introduction to 3D Geometry", nameHi: "त्रिविमीय ज्यामिति का परिचय" },
+                { id: "math11-12", name: "Limits and Derivatives", nameHi: "सीमाएँ एवं अवकलज" },
+                { id: "math11-13", name: "Statistics", nameHi: "सांख्यिकी" },
+                { id: "math11-14", name: "Probability", nameHi: "प्रायिकता" }
+              ]
+            }
+          ]
+        },
+
+        // ================= COMPUTER SCIENCE =================
+        {
+          id: "cs-11",
+          name: "Computer Science",
+          nameHi: "कंप्यूटर विज्ञान",
+          icon: "cpu",
+          books: [
+            {
+              id: "cs-11",
+              name: "Computer Science",
+              nameHi: "कंप्यूटर विज्ञान",
+              chapters: [
+                { id: "cs11-1", name: "Computer System Overview", nameHi: "कंप्यूटर प्रणाली का परिचय" },
+                { id: "cs11-2", name: "Data Representation", nameHi: "डेटा निरूपण" },
+                { id: "cs11-3", name: "Boolean Logic", nameHi: "बूलियन लॉजिक" },
+                { id: "cs11-4", name: "Introduction to Python", nameHi: "पायथन का परिचय" },
+                { id: "cs11-5", name: "Control Statements", nameHi: "नियंत्रण कथन" },
+                { id: "cs11-6", name: "Functions", nameHi: "फंक्शन" },
+                { id: "cs11-7", name: "Lists", nameHi: "सूचियाँ" }
+              ]
+            }
+          ]
+        },
+
+        // ================= PHYSICAL EDUCATION =================
+        {
+          id: "pe-11",
+          name: "Physical Education",
+          nameHi: "शारीरिक शिक्षा",
+          icon: "dumbbell",
+          books: [
+            {
+              id: "pe-11",
+              name: "Physical Education",
+              nameHi: "शारीरिक शिक्षा",
+              chapters: [
+                { id: "pe11-1", name: "Changing Trends & Career", nameHi: "परिवर्तनशील प्रवृत्तियाँ एवं करियर" },
+                { id: "pe11-2", name: "Olympism", nameHi: "ओलंपिज़्म" },
+                { id: "pe11-3", name: "Yoga", nameHi: "योग" },
+                { id: "pe11-4", name: "Physical Education & Sports for CWSN", nameHi: "विशेष आवश्यकता वाले बच्चों के लिए खेल" },
+                { id: "pe11-5", name: "Physical Fitness", nameHi: "शारीरिक फिटनेस" }
+              ]
+            }
+          ]
+        },
+
+        // ================= STATISTICS =================
+        {
+          id: "statistics-11",
+          name: "Statistics",
+          nameHi: "सांख्यिकी",
+          icon: "bar-chart",
+          books: [
+            {
+              id: "statistics-11",
+              name: "Statistics",
+              nameHi: "सांख्यिकी",
+              chapters: [
+                { id: "stat11-1", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "stat11-2", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "stat11-3", name: "Presentation of Data", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "stat11-4", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "stat11-5", name: "Correlation", nameHi: "सहसंबंध" },
+                { id: "stat11-6", name: "Index Numbers", nameHi: "सूचकांक" }
+              ]
+            }
+          ]
+            }
