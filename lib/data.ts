@@ -1079,7 +1079,10 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
           { id: "sa10b-ch1", name: "Harihar Kaka", nameHi: "हरिहर काका" },
           { id: "sa10b-ch2", name: "Sapnon Ke Se Din", nameHi: "सपनों के-से दिन" },
           { id: "sa10b-ch3", name: "Topi Shukla", nameHi: "टोपी शुक्ला" }
-   ]
+          ]
       }
     ]
   }
+
+]
+}
