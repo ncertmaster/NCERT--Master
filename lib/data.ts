@@ -2220,3 +2220,20 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
             ]
             }
+        }
+      ]
+    },
+  ],
+}
+
+export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
+  return []
+}
+
+export function getNotesContent(chapterName: string): string {
+  return `# ${chapterName}\n\nNotes coming soon...`
+}
+
+export function getImportantQuestions(chapterName: string): string[] {
+  return []
+                                }
