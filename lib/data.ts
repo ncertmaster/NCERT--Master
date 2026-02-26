@@ -2224,7 +2224,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   },
   ],
 }
-    } 
 export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
   return []
 }
