@@ -1784,3 +1784,453 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
         }
+12: [
+    {
+      id: "science-12",
+      name: "Science",
+      nameHi: "विज्ञान",
+      subjects: [
+
+        // ================= PHYSICS =================
+        {
+          id: "physics-12",
+          name: "Physics",
+          nameHi: "भौतिकी",
+          icon: "atom",
+          books: [
+            {
+              id: "physics-12-part-1",
+              name: "Physics Part I",
+              nameHi: "भौतिकी भाग 1",
+              chapters: [
+                { id: "phy12-1", name: "Electric Charges and Fields", nameHi: "वैद्युत आवेश एवं क्षेत्र" },
+                { id: "phy12-2", name: "Electrostatic Potential and Capacitance", nameHi: "स्थिरवैद्युत विभव एवं धारिता" },
+                { id: "phy12-3", name: "Current Electricity", nameHi: "धारा विद्युत" },
+                { id: "phy12-4", name: "Moving Charges and Magnetism", nameHi: "गतिमान आवेश एवं चुम्बकत्व" },
+                { id: "phy12-5", name: "Magnetism and Matter", nameHi: "चुम्बकत्व एवं पदार्थ" },
+                { id: "phy12-6", name: "Electromagnetic Induction", nameHi: "विद्युतचुम्बकीय प्रेरण" },
+                { id: "phy12-7", name: "Alternating Current", nameHi: "प्रत्यावर्ती धारा" }
+              ]
+            },
+            {
+              id: "physics-12-part-2",
+              name: "Physics Part II",
+              nameHi: "भौतिकी भाग 2",
+              chapters: [
+                { id: "phy12-8", name: "Electromagnetic Waves", nameHi: "विद्युतचुम्बकीय तरंगें" },
+                { id: "phy12-9", name: "Ray Optics and Optical Instruments", nameHi: "किरण प्रकाशिकी" },
+                { id: "phy12-10", name: "Wave Optics", nameHi: "तरंग प्रकाशिकी" },
+                { id: "phy12-11", name: "Dual Nature of Radiation and Matter", nameHi: "विकिरण एवं पदार्थ की द्वैत प्रकृति" },
+                { id: "phy12-12", name: "Atoms", nameHi: "परमाणु" },
+                { id: "phy12-13", name: "Nuclei", nameHi: "नाभिक" },
+                { id: "phy12-14", name: "Semiconductor Electronics", nameHi: "अर्धचालक इलेक्ट्रॉनिकी" }
+              ]
+            }
+          ]
+        },
+
+        // ================= CHEMISTRY =================
+        {
+          id: "chemistry-12",
+          name: "Chemistry",
+          nameHi: "रसायन विज्ञान",
+          icon: "flask",
+          books: [
+            {
+              id: "chem-12-part-1",
+              name: "Chemistry Part I",
+              nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "chem12-1", name: "Solutions", nameHi: "विलयन" },
+                { id: "chem12-2", name: "Electrochemistry", nameHi: "विद्युत रसायन" },
+                { id: "chem12-3", name: "Chemical Kinetics", nameHi: "रासायनिक गतिकी" },
+                { id: "chem12-4", name: "d and f Block Elements", nameHi: "d एवं f ब्लॉक तत्व" },
+                { id: "chem12-5", name: "Coordination Compounds", nameHi: "समन्वय यौगिक" }
+              ]
+            },
+            {
+              id: "chem-12-part-2",
+              name: "Chemistry Part II",
+              nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "chem12-6", name: "Haloalkanes and Haloarenes", nameHi: "हैलोऐल्केन एवं हैलोएरीन" },
+                { id: "chem12-7", name: "Alcohols, Phenols and Ethers", nameHi: "एल्कोहल, फिनॉल एवं ईथर" },
+                { id: "chem12-8", name: "Aldehydes, Ketones and Carboxylic Acids", nameHi: "एल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल" },
+                { id: "chem12-9", name: "Amines", nameHi: "एमाइन" },
+                { id: "chem12-10", name: "Biomolecules", nameHi: "जैव अणु" },
+                { id: "chem12-11", name: "Polymers", nameHi: "बहुलक" },
+                { id: "chem12-12", name: "Chemistry in Everyday Life", nameHi: "दैनिक जीवन में रसायन" }
+              ]
+            }
+          ]
+        }
+
+      ]
+    }
+  ],
+
+        // ================= BIOLOGY =================
+        {
+          id: "biology-12",
+          name: "Biology",
+          nameHi: "जीव विज्ञान",
+          icon: "dna",
+          books: [
+            {
+              id: "biology-12-book",
+              name: "Biology",
+              nameHi: "जीव विज्ञान",
+              chapters: [
+                { id: "bio12-1", name: "Reproduction in Organisms", nameHi: "जीवों में प्रजनन" },
+                { id: "bio12-2", name: "Sexual Reproduction in Flowering Plants", nameHi: "आवृतबीजी पौधों में लैंगिक प्रजनन" },
+                { id: "bio12-3", name: "Human Reproduction", nameHi: "मानव प्रजनन" },
+                { id: "bio12-4", name: "Reproductive Health", nameHi: "प्रजनन स्वास्थ्य" },
+                { id: "bio12-5", name: "Principles of Inheritance and Variation", nameHi: "वंशागति एवं विविधता के सिद्धांत" },
+                { id: "bio12-6", name: "Molecular Basis of Inheritance", nameHi: "वंशागति का आणविक आधार" },
+                { id: "bio12-7", name: "Evolution", nameHi: "विकासवाद" },
+                { id: "bio12-8", name: "Human Health and Disease", nameHi: "मानव स्वास्थ्य एवं रोग" },
+                { id: "bio12-9", name: "Strategies for Enhancement in Food Production", nameHi: "खाद्य उत्पादन में वृद्धि की रणनीतियाँ" },
+                { id: "bio12-10", name: "Microbes in Human Welfare", nameHi: "मानव कल्याण में सूक्ष्मजीव" },
+                { id: "bio12-11", name: "Biotechnology: Principles and Processes", nameHi: "जैव प्रौद्योगिकी: सिद्धांत एवं प्रक्रियाएँ" },
+                { id: "bio12-12", name: "Biotechnology and its Applications", nameHi: "जैव प्रौद्योगिकी एवं उसके अनुप्रयोग" },
+                { id: "bio12-13", name: "Organisms and Populations", nameHi: "जीव एवं जनसंख्या" },
+                { id: "bio12-14", name: "Ecosystem", nameHi: "पारिस्थितिकी तंत्र" },
+                { id: "bio12-15", name: "Biodiversity and Conservation", nameHi: "जैव विविधता एवं संरक्षण" },
+                { id: "bio12-16", name: "Environmental Issues", nameHi: "पर्यावरणीय मुद्दे" }
+              ]
+            }
+          ]
+        },
+
+        // ================= MATHEMATICS =================
+        {
+          id: "math-12",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "math-12-book",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "math12-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "math12-2", name: "Inverse Trigonometric Functions", nameHi: "व्युत्क्रम त्रिकोणमितीय फलन" },
+                { id: "math12-3", name: "Matrices", nameHi: "आव्यूह" },
+                { id: "math12-4", name: "Determinants", nameHi: "सारण्यक" },
+                { id: "math12-5", name: "Continuity and Differentiability", nameHi: "सातत्य एवं अवकलनीयता" },
+                { id: "math12-6", name: "Applications of Derivatives", nameHi: "अवकलज के अनुप्रयोग" },
+                { id: "math12-7", name: "Integrals", nameHi: "समाकलन" },
+                { id: "math12-8", name: "Applications of Integrals", nameHi: "समाकलनों के अनुप्रयोग" },
+                { id: "math12-9", name: "Differential Equations", nameHi: "अवकल समीकरण" },
+                { id: "math12-10", name: "Vector Algebra", nameHi: "सदिश बीजगणित" },
+                { id: "math12-11", name: "Three Dimensional Geometry", nameHi: "त्रिविमीय ज्यामिति" },
+                { id: "math12-12", name: "Linear Programming", nameHi: "रेखीय प्रोग्रामन" },
+                { id: "math12-13", name: "Probability", nameHi: "प्रायिकता" }
+              ]
+            }
+          ]
+        },
+
+        // ================= COMPUTER SCIENCE =================
+        {
+          id: "cs-12",
+          name: "Computer Science",
+          nameHi: "कंप्यूटर विज्ञान",
+          icon: "cpu",
+          books: [
+            {
+              id: "cs-12-book",
+              name: "Computer Science",
+              nameHi: "कंप्यूटर विज्ञान",
+              chapters: [
+                { id: "cs12-1", name: "Python Revision Tour", nameHi: "पायथन पुनरावलोकन" },
+                { id: "cs12-2", name: "Functions", nameHi: "फंक्शन" },
+                { id: "cs12-3", name: "File Handling", nameHi: "फ़ाइल प्रबंधन" },
+                { id: "cs12-4", name: "Data Structures", nameHi: "डेटा संरचनाएँ" },
+                { id: "cs12-5", name: "Database Concepts", nameHi: "डेटाबेस अवधारणाएँ" },
+                { id: "cs12-6", name: "SQL", nameHi: "एसक्यूएल" },
+                { id: "cs12-7", name: "Computer Networks", nameHi: "कंप्यूटर नेटवर्क" }
+              ]
+            }
+          ]
+        },
+
+        // ================= PHYSICAL EDUCATION =================
+        {
+          id: "pe-12",
+          name: "Physical Education",
+          nameHi: "शारीरिक शिक्षा",
+          icon: "dumbbell",
+          books: [
+            {
+              id: "pe-12-book",
+              name: "Physical Education",
+              nameHi: "शारीरिक शिक्षा",
+              chapters: [
+                { id: "pe12-1", name: "Planning in Sports", nameHi: "खेलों में योजना" },
+                { id: "pe12-2", name: "Sports and Nutrition", nameHi: "खेल एवं पोषण" },
+                { id: "pe12-3", name: "Yoga and Lifestyle", nameHi: "योग एवं जीवनशैली" },
+                { id: "pe12-4", name: "Physical Education & Sports for CWSN", nameHi: "विशेष आवश्यकता वाले बच्चों के लिए खेल" },
+                { id: "pe12-5", name: "Children and Women in Sports", nameHi: "खेलों में बच्चे एवं महिलाएँ" },
+                { id: "pe12-6", name: "Test and Measurement in Sports", nameHi: "खेलों में परीक्षण एवं मापन" },
+                { id: "pe12-7", name: "Physiology and Injuries in Sports", nameHi: "खेलों में शरीर क्रिया विज्ञान एवं चोटें" },
+                { id: "pe12-8", name: "Biomechanics and Sports", nameHi: "जैव-यांत्रिकी एवं खेल" }
+              ]
+            }
+          ]
+                }
+,
+    {
+      id: "commerce-12",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: [
+
+        // ================= ACCOUNTANCY =================
+        {
+          id: "accountancy-12",
+          name: "Accountancy",
+          nameHi: "लेखाशास्त्र",
+          icon: "calculator",
+          books: [
+            {
+              id: "acc-12-part-1",
+              name: "Accountancy Part I",
+              nameHi: "लेखाशास्त्र भाग 1",
+              chapters: [
+                { id: "acc12-1", name: "Accounting for Partnership Firms – Fundamentals", nameHi: "साझेदारी फर्म का लेखांकन – मूल सिद्धांत" },
+                { id: "acc12-2", name: "Goodwill", nameHi: "गुडविल" },
+                { id: "acc12-3", name: "Change in Profit Sharing Ratio", nameHi: "लाभांश अनुपात में परिवर्तन" },
+                { id: "acc12-4", name: "Admission of a Partner", nameHi: "नए साझेदार का प्रवेश" },
+                { id: "acc12-5", name: "Retirement and Death of a Partner", nameHi: "साझेदार की सेवानिवृत्ति एवं मृत्यु" },
+                { id: "acc12-6", name: "Dissolution of Partnership Firm", nameHi: "साझेदारी फर्म का विघटन" }
+              ]
+            },
+            {
+              id: "acc-12-part-2",
+              name: "Accountancy Part II",
+              nameHi: "लेखाशास्त्र भाग 2",
+              chapters: [
+                { id: "acc12-7", name: "Accounting for Share Capital", nameHi: "अंश पूंजी का लेखांकन" },
+                { id: "acc12-8", name: "Issue and Redemption of Debentures", nameHi: "ऋणपत्रों का निर्गम एवं विमोचन" },
+                { id: "acc12-9", name: "Financial Statements of a Company", nameHi: "कंपनी के वित्तीय विवरण" },
+                { id: "acc12-10", name: "Financial Statement Analysis", nameHi: "वित्तीय विवरणों का विश्लेषण" },
+                { id: "acc12-11", name: "Cash Flow Statement", nameHi: "नकदी प्रवाह विवरण" }
+              ]
+            }
+          ]
+        },
+
+        // ================= BUSINESS STUDIES =================
+        {
+          id: "bst-12",
+          name: "Business Studies",
+          nameHi: "व्यवसाय अध्ययन",
+          icon: "briefcase",
+          books: [
+            {
+              id: "bst-12-book",
+              name: "Business Studies",
+              nameHi: "व्यवसाय अध्ययन",
+              chapters: [
+                { id: "bst12-1", name: "Nature and Significance of Management", nameHi: "प्रबंधन का स्वरूप एवं महत्व" },
+                { id: "bst12-2", name: "Principles of Management", nameHi: "प्रबंधन के सिद्धांत" },
+                { id: "bst12-3", name: "Business Environment", nameHi: "व्यावसायिक वातावरण" },
+                { id: "bst12-4", name: "Planning", nameHi: "नियोजन" },
+                { id: "bst12-5", name: "Organising", nameHi: "संगठन" },
+                { id: "bst12-6", name: "Staffing", nameHi: "कर्मचारी व्यवस्था" },
+                { id: "bst12-7", name: "Directing", nameHi: "निर्देशन" },
+                { id: "bst12-8", name: "Controlling", nameHi: "नियंत्रण" },
+                { id: "bst12-9", name: "Financial Management", nameHi: "वित्तीय प्रबंधन" },
+                { id: "bst12-10", name: "Financial Markets", nameHi: "वित्तीय बाजार" },
+                { id: "bst12-11", name: "Marketing Management", nameHi: "विपणन प्रबंधन" },
+                { id: "bst12-12", name: "Consumer Protection", nameHi: "उपभोक्ता संरक्षण" }
+              ]
+            }
+          ]
+        },
+
+        // ================= ECONOMICS =================
+        {
+          id: "economics-12",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "trending-up",
+          books: [
+            {
+              id: "eco-12-macro",
+              name: "Macroeconomics",
+              nameHi: "समष्टि अर्थशास्त्र",
+              chapters: [
+                { id: "eco12-1", name: "National Income", nameHi: "राष्ट्रीय आय" },
+                { id: "eco12-2", name: "Money and Banking", nameHi: "मुद्रा एवं बैंकिंग" },
+                { id: "eco12-3", name: "Income Determination", nameHi: "आय निर्धारण" },
+                { id: "eco12-4", name: "Government Budget", nameHi: "सरकारी बजट" },
+                { id: "eco12-5", name: "Balance of Payments", nameHi: "भुगतान संतुलन" }
+              ]
+            },
+            {
+              id: "eco-12-indian",
+              name: "Indian Economic Development",
+              nameHi: "भारतीय आर्थिक विकास",
+              chapters: [
+                { id: "eco12-6", name: "Development Experience of India", nameHi: "भारत का विकास अनुभव" },
+                { id: "eco12-7", name: "Liberalisation and Globalisation", nameHi: "उदारीकरण एवं वैश्वीकरण" },
+                { id: "eco12-8", name: "Rural Development", nameHi: "ग्रामीण विकास" },
+                { id: "eco12-9", name: "Human Capital Formation", nameHi: "मानव पूंजी निर्माण" },
+                { id: "eco12-10", name: "Employment", nameHi: "रोज़गार" },
+                { id: "eco12-11", name: "Infrastructure", nameHi: "आधारभूत संरचना" },
+                { id: "eco12-12", name: "Environment and Sustainable Development", nameHi: "पर्यावरण एवं सतत विकास" }
+              ]
+            }
+          ]
+        },
+
+        // ================= MATHEMATICS =================
+        {
+          id: "maths-12-commerce",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "maths-12-book",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "mcom12-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "mcom12-2", name: "Matrices", nameHi: "आव्यूह" },
+                { id: "mcom12-3", name: "Determinants", nameHi: "सारण्यक" },
+                { id: "mcom12-4", name: "Linear Programming", nameHi: "रेखीय प्रोग्रामन" },
+                { id: "mcom12-5", name: "Probability", nameHi: "प्रायिकता" }
+              ]
+            }
+          ]
+        }
+
+      ]
+          }
+,
+    {
+      id: "arts-12",
+      name: "Arts",
+      nameHi: "कला",
+      subjects: [
+
+        // ================= HISTORY =================
+        {
+          id: "history-12",
+          name: "History",
+          nameHi: "इतिहास",
+          icon: "book",
+          books: [
+            {
+              id: "history-12-book",
+              name: "Themes in Indian History",
+              nameHi: "भारतीय इतिहास के कुछ विषय",
+              chapters: [
+                { id: "his12-1", name: "Bricks, Beads and Bones", nameHi: "ईंटें, मनके और अस्थियाँ" },
+                { id: "his12-2", name: "Kings, Farmers and Towns", nameHi: "राजा, किसान और नगर" },
+                { id: "his12-3", name: "Kinship, Caste and Class", nameHi: "वंश, जाति और वर्ग" },
+                { id: "his12-4", name: "Thinkers, Beliefs and Buildings", nameHi: "विचारक, विश्वास और इमारतें" },
+                { id: "his12-5", name: "Through the Eyes of Travellers", nameHi: "यात्रियों की नजर से" },
+                { id: "his12-6", name: "Bhakti-Sufi Traditions", nameHi: "भक्ति-सूफी परंपराएँ" },
+                { id: "his12-7", name: "An Imperial Capital: Vijayanagara", nameHi: "विजयनगर: एक शाही राजधानी" },
+                { id: "his12-8", name: "Peasants, Zamindars and the State", nameHi: "किसान, जमींदार और राज्य" },
+                { id: "his12-9", name: "Colonialism and the Countryside", nameHi: "औपनिवेशिक काल और देहात" },
+                { id: "his12-10", name: "Rebels and the Raj", nameHi: "विद्रोही और राज" },
+                { id: "his12-11", name: "Mahatma Gandhi and the Nationalist Movement", nameHi: "महात्मा गांधी और राष्ट्रीय आंदोलन" },
+                { id: "his12-12", name: "Framing the Constitution", nameHi: "संविधान निर्माण" }
+              ]
+            }
+          ]
+        },
+
+        // ================= POLITICAL SCIENCE =================
+        {
+          id: "polity-12",
+          name: "Political Science",
+          nameHi: "राजनीति विज्ञान",
+          icon: "globe",
+          books: [
+            {
+              id: "polity-12-contemporary",
+              name: "Contemporary World Politics",
+              nameHi: "समकालीन विश्व राजनीति",
+              chapters: [
+                { id: "pol12-1", name: "The End of Bipolarity", nameHi: "द्विध्रुवीयता का अंत" },
+                { id: "pol12-2", name: "Contemporary Centres of Power", nameHi: "समकालीन शक्ति केंद्र" },
+                { id: "pol12-3", name: "Contemporary South Asia", nameHi: "समकालीन दक्षिण एशिया" },
+                { id: "pol12-4", name: "International Organizations", nameHi: "अंतर्राष्ट्रीय संगठन" },
+                { id: "pol12-5", name: "Security in the Contemporary World", nameHi: "समकालीन विश्व में सुरक्षा" },
+                { id: "pol12-6", name: "Environment and Natural Resources", nameHi: "पर्यावरण और प्राकृतिक संसाधन" },
+                { id: "pol12-7", name: "Globalisation", nameHi: "वैश्वीकरण" }
+              ]
+            },
+            {
+              id: "polity-12-politics-india",
+              name: "Politics in India Since Independence",
+              nameHi: "स्वतंत्रता के बाद भारत की राजनीति",
+              chapters: [
+                { id: "pol12-8", name: "Challenges of Nation Building", nameHi: "राष्ट्र निर्माण की चुनौतियाँ" },
+                { id: "pol12-9", name: "Era of One Party Dominance", nameHi: "एकदलीय प्रभुत्व का युग" },
+                { id: "pol12-10", name: "Politics of Planned Development", nameHi: "नियोजित विकास की राजनीति" },
+                { id: "pol12-11", name: "India’s External Relations", nameHi: "भारत के बाहरी संबंध" },
+                { id: "pol12-12", name: "Challenges to and Restoration of the Congress System", nameHi: "कांग्रेस प्रणाली की चुनौतियाँ और पुनर्स्थापन" },
+                { id: "pol12-13", name: "The Crisis of Democratic Order", nameHi: "लोकतांत्रिक व्यवस्था का संकट" },
+                { id: "pol12-14", name: "Rise of Popular Movements", nameHi: "लोक आंदोलनों का उदय" },
+                { id: "pol12-15", name: "Recent Developments in Indian Politics", nameHi: "भारतीय राजनीति में हाल के विकास" }
+              ]
+            }
+          ]
+        },
+
+        // ================= GEOGRAPHY =================
+        {
+          id: "geography-12",
+          name: "Geography",
+          nameHi: "भूगोल",
+          icon: "map",
+          books: [
+            {
+              id: "geo12-1",
+              name: "Fundamentals of Human Geography",
+              nameHi: "मानव भूगोल के मूल सिद्धांत",
+              chapters: [
+                { id: "geo12-1-1", name: "Human Geography", nameHi: "मानव भूगोल" },
+                { id: "geo12-1-2", name: "World Population", nameHi: "विश्व जनसंख्या" },
+                { id: "geo12-1-3", name: "Primary Activities", nameHi: "प्राथमिक क्रियाएँ" },
+                { id: "geo12-1-4", name: "Secondary Activities", nameHi: "द्वितीयक क्रियाएँ" },
+                { id: "geo12-1-5", name: "Tertiary and Quaternary Activities", nameHi: "तृतीयक एवं चतुर्थक क्रियाएँ" },
+                { id: "geo12-1-6", name: "Transport and Communication", nameHi: "परिवहन और संचार" },
+                { id: "geo12-1-7", name: "International Trade", nameHi: "अंतर्राष्ट्रीय व्यापार" }
+              ]
+            }
+          ]
+        },
+
+        // ================= SOCIOLOGY =================
+        {
+          id: "sociology-12",
+          name: "Sociology",
+          nameHi: "समाजशास्त्र",
+          icon: "users",
+          books: [
+            {
+              id: "soc12-1",
+              name: "Indian Society",
+              nameHi: "भारतीय समाज",
+              chapters: [
+                { id: "soc12-1-1", name: "The Demographic Structure of Indian Society", nameHi: "भारतीय समाज की जनसंख्या संरचना" },
+                { id: "soc12-1-2", name: "Social Institutions: Continuity and Change", nameHi: "सामाजिक संस्थाएँ: निरंतरता और परिवर्तन" },
+                { id: "soc12-1-3", name: "The Market as a Social Institution", nameHi: "बाज़ार एक सामाजिक संस्था" },
+                { id: "soc12-1-4", name: "Patterns of Social Inequality", nameHi: "सामाजिक असमानता के प्रतिरूप" },
+                { id: "soc12-1-5", name: "Challenges of Cultural Diversity", nameHi: "सांस्कृतिक विविधता की चुनौतियाँ" }
+              ]
+            }
+          ]
+        }
+
+      ]
+                 }
