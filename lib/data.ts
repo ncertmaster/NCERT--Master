@@ -2002,7 +2002,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
       ]
     }
   ]
-  }
+  },
   {
   id: "hindi-12-arts",
   name: "Hindi",
