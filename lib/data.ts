@@ -837,3 +837,250 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     ]
   }
 ],
+10: [
+  {
+    id: "math",
+    name: "Mathematics",
+    nameHi: "गणित",
+    icon: "calculator",
+    books: [{
+      id: "math-10",
+      name: "Mathematics",
+      nameHi: "गणित",
+      chapters: [
+        { id: "m10-ch1", name: "Real Numbers", nameHi: "वास्तविक संख्याएँ" },
+        { id: "m10-ch2", name: "Polynomials", nameHi: "बहुपद" },
+        { id: "m10-ch3", name: "Pair of Linear Equations in Two Variables", nameHi: "दो चरों वाले रैखिक समीकरण युग्म" },
+        { id: "m10-ch4", name: "Quadratic Equations", nameHi: "द्विघात समीकरण" },
+        { id: "m10-ch5", name: "Arithmetic Progressions", nameHi: "समांतर श्रेणी" },
+        { id: "m10-ch6", name: "Triangles", nameHi: "त्रिभुज" },
+        { id: "m10-ch7", name: "Coordinate Geometry", nameHi: "निर्देशांक ज्यामिति" },
+        { id: "m10-ch8", name: "Introduction to Trigonometry", nameHi: "त्रिकोणमिति का परिचय" },
+        { id: "m10-ch9", name: "Some Applications of Trigonometry", nameHi: "त्रिकोणमिति के कुछ अनुप्रयोग" },
+        { id: "m10-ch10", name: "Circles", nameHi: "वृत्त" },
+        { id: "m10-ch11", name: "Constructions", nameHi: "रचनाएँ" },
+        { id: "m10-ch12", name: "Areas Related to Circles", nameHi: "वृत्त से संबंधित क्षेत्रफल" },
+        { id: "m10-ch13", name: "Surface Areas and Volumes", nameHi: "पृष्ठीय क्षेत्रफल और आयतन" },
+        { id: "m10-ch14", name: "Statistics", nameHi: "सांख्यिकी" },
+        { id: "m10-ch15", name: "Probability", nameHi: "प्रायिकता" }
+      ]
+    }]
+  },
+
+  {
+    id: "science",
+    name: "Science",
+    nameHi: "विज्ञान",
+    icon: "flask",
+    books: [{
+      id: "science-10",
+      name: "Science",
+      nameHi: "विज्ञान",
+      chapters: [
+        { id: "s10-ch1", name: "Chemical Reactions and Equations", nameHi: "रासायनिक अभिक्रियाएँ एवं समीकरण" },
+        { id: "s10-ch2", name: "Acids, Bases and Salts", nameHi: "अम्ल, क्षारक एवं लवण" },
+        { id: "s10-ch3", name: "Metals and Non-metals", nameHi: "धातु और अधातु" },
+        { id: "s10-ch4", name: "Carbon and its Compounds", nameHi: "कार्बन और उसके यौगिक" },
+        { id: "s10-ch5", name: "Life Processes", nameHi: "जीवन प्रक्रियाएँ" },
+        { id: "s10-ch6", name: "Control and Coordination", nameHi: "नियंत्रण एवं समन्वय" },
+        { id: "s10-ch7", name: "How do Organisms Reproduce", nameHi: "जीव जनन कैसे करते हैं" },
+        { id: "s10-ch8", name: "Heredity and Evolution", nameHi: "आनुवंशिकता एवं विकास" },
+        { id: "s10-ch9", name: "Light – Reflection and Refraction", nameHi: "प्रकाश – परावर्तन एवं अपवर्तन" },
+        { id: "s10-ch10", name: "The Human Eye and the Colourful World", nameHi: "मानव नेत्र तथा रंगबिरंगा संसार" },
+        { id: "s10-ch11", name: "Electricity", nameHi: "विद्युत" },
+        { id: "s10-ch12", name: "Magnetic Effects of Electric Current", nameHi: "विद्युत धारा के चुम्बकीय प्रभाव" },
+        { id: "s10-ch13", name: "Our Environment", nameHi: "हमारा पर्यावरण" },
+        { id: "s10-ch14", name: "Management of Natural Resources", nameHi: "प्राकृतिक संसाधनों का प्रबंधन" }
+      ]
+    }]
+  },
+
+  {
+    id: "social-science",
+    name: "Social Science",
+    nameHi: "सामाजिक विज्ञान",
+    icon: "globe",
+    books: [
+      {
+        id: "history-10",
+        name: "India and the Contemporary World – II",
+        nameHi: "भारत और समकालीन विश्व – II",
+        chapters: [
+          { id: "h10-ch1", name: "The Rise of Nationalism in Europe", nameHi: "यूरोप में राष्ट्रवाद का उदय" },
+          { id: "h10-ch2", name: "Nationalism in India", nameHi: "भारत में राष्ट्रवाद" },
+          { id: "h10-ch3", name: "The Making of a Global World", nameHi: "वैश्वीकरण का निर्माण" },
+          { id: "h10-ch4", name: "The Age of Industrialisation", nameHi: "औद्योगीकरण का युग" },
+          { id: "h10-ch5", name: "Print Culture and the Modern World", nameHi: "मुद्रण संस्कृति और आधुनिक विश्व" }
+        ]
+      },
+      {
+        id: "geography-10",
+        name: "Contemporary India – II",
+        nameHi: "समकालीन भारत – II",
+        chapters: [
+          { id: "g10-ch1", name: "Resources and Development", nameHi: "संसाधन और विकास" },
+          { id: "g10-ch2", name: "Forest and Wildlife Resources", nameHi: "वन एवं वन्य जीव संसाधन" },
+          { id: "g10-ch3", name: "Water Resources", nameHi: "जल संसाधन" },
+          { id: "g10-ch4", name: "Agriculture", nameHi: "कृषि" },
+          { id: "g10-ch5", name: "Minerals and Energy Resources", nameHi: "खनिज एवं ऊर्जा संसाधन" },
+          { id: "g10-ch6", name: "Manufacturing Industries", nameHi: "निर्माण उद्योग" },
+          { id: "g10-ch7", name: "Lifelines of National Economy", nameHi: "राष्ट्रीय अर्थव्यवस्था की जीवन रेखाएँ" }
+        ]
+      },
+      {
+        id: "civics-10",
+        name: "Democratic Politics – II",
+        nameHi: "लोकतांत्रिक राजनीति – II",
+        chapters: [
+          { id: "c10-ch1", name: "Power Sharing", nameHi: "सत्ता की साझेदारी" },
+          { id: "c10-ch2", name: "Federalism", nameHi: "संघवाद" },
+          { id: "c10-ch3", name: "Gender, Religion and Caste", nameHi: "लैंगिकता, धर्म और जाति" },
+          { id: "c10-ch4", name: "Political Parties", nameHi: "राजनीतिक दल" },
+          { id: "c10-ch5", name: "Outcomes of Democracy", nameHi: "लोकतंत्र के परिणाम" }
+        ]
+      },
+      {
+        id: "economics-10",
+        name: "Understanding Economic Development",
+        nameHi: "आर्थिक विकास की समझ",
+        chapters: [
+          { id: "e10-ch1", name: "Development", nameHi: "विकास" },
+          { id: "e10-ch2", name: "Sectors of Indian Economy", nameHi: "भारतीय अर्थव्यवस्था के क्षेत्र" },
+          { id: "e10-ch3", name: "Money and Credit", nameHi: "मुद्रा और ऋण" },
+          { id: "e10-ch4", name: "Globalisation and the Indian Economy", nameHi: "वैश्वीकरण और भारतीय अर्थव्यवस्था" },
+          { id: "e10-ch5", name: "Consumer Rights", nameHi: "उपभोक्ता अधिकार" }
+        ]
+      }
+    ]
+  },
+{
+    id: "english",
+    name: "English",
+    nameHi: "English",
+    icon: "book-open",
+    books: [
+      {
+        id: "first-flight-10",
+        name: "First Flight",
+        nameHi: "First Flight",
+        chapters: [
+          { id: "ff10-ch1", name: "A Letter to God", nameHi: "A Letter to God" },
+          { id: "ff10-ch2", name: "Nelson Mandela: Long Walk to Freedom", nameHi: "Nelson Mandela: Long Walk to Freedom" },
+          { id: "ff10-ch3", name: "Two Stories about Flying", nameHi: "Two Stories about Flying" },
+          { id: "ff10-ch4", name: "From the Diary of Anne Frank", nameHi: "From the Diary of Anne Frank" },
+          { id: "ff10-ch5", name: "The Hundred Dresses I", nameHi: "The Hundred Dresses I" },
+          { id: "ff10-ch6", name: "The Hundred Dresses II", nameHi: "The Hundred Dresses II" },
+          { id: "ff10-ch7", name: "Glimpses of India", nameHi: "Glimpses of India" },
+          { id: "ff10-ch8", name: "Mijbil the Otter", nameHi: "Mijbil the Otter" },
+          { id: "ff10-ch9", name: "Madam Rides the Bus", nameHi: "Madam Rides the Bus" },
+          { id: "ff10-ch10", name: "The Sermon at Benares", nameHi: "The Sermon at Benares" },
+          { id: "ff10-ch11", name: "The Proposal", nameHi: "The Proposal" }
+        ]
+      },
+      {
+        id: "footprints-10",
+        name: "Footprints Without Feet",
+        nameHi: "Footprints Without Feet",
+        chapters: [
+          { id: "fp10-ch1", name: "A Triumph of Surgery", nameHi: "A Triumph of Surgery" },
+          { id: "fp10-ch2", name: "The Thief’s Story", nameHi: "The Thief’s Story" },
+          { id: "fp10-ch3", name: "The Midnight Visitor", nameHi: "The Midnight Visitor" },
+          { id: "fp10-ch4", name: "A Question of Trust", nameHi: "A Question of Trust" },
+          { id: "fp10-ch5", name: "Footprints Without Feet", nameHi: "Footprints Without Feet" },
+          { id: "fp10-ch6", name: "The Making of a Scientist", nameHi: "The Making of a Scientist" },
+          { id: "fp10-ch7", name: "The Necklace", nameHi: "The Necklace" },
+          { id: "fp10-ch8", name: "The Hack Driver", nameHi: "The Hack Driver" },
+          { id: "fp10-ch9", name: "Bholi", nameHi: "Bholi" },
+          { id: "fp10-ch10", name: "The Book That Saved the Earth", nameHi: "The Book That Saved the Earth" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "hindi-course-a",
+    name: "Hindi Course A",
+    nameHi: "हिंदी कोर्स A",
+    icon: "languages",
+    books: [
+      {
+        id: "kshitij-2-10",
+        name: "Kshitij – 2",
+        nameHi: "क्षितिज – 2",
+        chapters: [
+          { id: "k10a-ch1", name: "Surdas", nameHi: "सूरदास" },
+          { id: "k10a-ch2", name: "Tulsidas", nameHi: "तुलसीदास" },
+          { id: "k10a-ch3", name: "Dev", nameHi: "देव" },
+          { id: "k10a-ch4", name: "Jaishankar Prasad", nameHi: "जयशंकर प्रसाद" },
+          { id: "k10a-ch5", name: "Suryakant Tripathi Nirala", nameHi: "सूर्यकांत त्रिपाठी निराला" },
+          { id: "k10a-ch6", name: "Nagarjun", nameHi: "नागार्जुन" },
+          { id: "k10a-ch7", name: "Girija Kumar Mathur", nameHi: "गिरिजा कुमार माथुर" },
+          { id: "k10a-ch8", name: "Rituraj", nameHi: "ऋतुराज" },
+          { id: "k10a-ch9", name: "Netaji Ka Chashma", nameHi: "नेताजी का चश्मा" },
+          { id: "k10a-ch10", name: "Bal Govind Bhagat", nameHi: "बाल गोविंद भगत" },
+          { id: "k10a-ch11", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
+          { id: "k10a-ch12", name: "Manushyata", nameHi: "मनुष्यता" },
+          { id: "k10a-ch13", name: "Ek Kahani Yeh Bhi", nameHi: "एक कहानी यह भी" },
+          { id: "k10a-ch14", name: "Stri Shiksha Ke Virodhi Kutarkon Ka Khandan", nameHi: "स्त्री शिक्षा के विरोधी कुतर्कों का खंडन" },
+          { id: "k10a-ch15", name: "Naubatkhane Mein Ibadat", nameHi: "नौबतखाने में इबादत" },
+          { id: "k10a-ch16", name: "Sanskriti", nameHi: "संस्कृति" },
+          { id: "k10a-ch17", name: "Atmkathya", nameHi: "आत्मकथ्य" }
+        ]
+      },
+      {
+        id: "kritika-2-10",
+        name: "Kritika – 2",
+        nameHi: "कृतिका – 2",
+        chapters: [
+          { id: "kr10a-ch1", name: "Mata Ka Anchal", nameHi: "माता का आँचल" },
+          { id: "kr10a-ch2", name: "George Pancham Ki Naak", nameHi: "जॉर्ज पंचम की नाक" },
+          { id: "kr10a-ch3", name: "Sana Sana Hath Jodi", nameHi: "साना-साना हाथ जोड़ि" },
+          { id: "kr10a-ch4", name: "Ehi Thain Jhulan Heryani Ho Rama", nameHi: "एही ठैयाँ झुलनी हेरानी हो रामा" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "hindi-course-b",
+    name: "Hindi Course B",
+    nameHi: "हिंदी कोर्स B",
+    icon: "languages",
+    books: [
+      {
+        id: "sparsh-2-10",
+        name: "Sparsh – 2",
+        nameHi: "स्पर्श – 2",
+        chapters: [
+          { id: "sp10b-ch1", name: "Kabir", nameHi: "कबीर" },
+          { id: "sp10b-ch2", name: "Meera", nameHi: "मीरा" },
+          { id: "sp10b-ch3", name: "Bihari", nameHi: "बिहारी" },
+          { id: "sp10b-ch4", name: "Manushyata", nameHi: "मनुष्यता" },
+          { id: "sp10b-ch5", name: "Parvat Pradesh Mein Pavas", nameHi: "पर्वत प्रदेश में पावस" },
+          { id: "sp10b-ch6", name: "Topi Shukla", nameHi: "टोपी शुक्ला" },
+          { id: "sp10b-ch7", name: "Netaji Ka Chashma", nameHi: "नेताजी का चश्मा" },
+          { id: "sp10b-ch8", name: "Bal Govind Bhagat", nameHi: "बाल गोविंद भगत" },
+          { id: "sp10b-ch9", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
+          { id: "sp10b-ch10", name: "Stri Shiksha Ke Virodhi Kutarkon Ka Khandan", nameHi: "स्त्री शिक्षा के विरोधी कुतर्कों का खंडन" },
+          { id: "sp10b-ch11", name: "Naubatkhane Mein Ibadat", nameHi: "नौबतखाने में इबादत" },
+          { id: "sp10b-ch12", name: "Sanskriti", nameHi: "संस्कृति" },
+          { id: "sp10b-ch13", name: "Atmkathya", nameHi: "आत्मकथ्य" },
+          { id: "sp10b-ch14", name: "Sana Sana Hath Jodi", nameHi: "साना-साना हाथ जोड़ि" },
+          { id: "sp10b-ch15", name: "Ehi Thain Jhulan Heryani Ho Rama", nameHi: "एही ठैयाँ झुलनी हेरानी हो रामा" },
+          { id: "sp10b-ch16", name: "Bholi", nameHi: "भोली" },
+          { id: "sp10b-ch17", name: "The Proposal (Hindi Adaptation)", nameHi: "प्रस्ताव" }
+        ]
+      },
+      {
+        id: "sanchayan-2-10",
+        name: "Sanchayan – 2",
+        nameHi: "संचयन – 2",
+        chapters: [
+          { id: "sa10b-ch1", name: "Harihar Kaka", nameHi: "हरिहर काका" },
+          { id: "sa10b-ch2", name: "Sapnon Ke Se Din", nameHi: "सपनों के-से दिन" },
+          { id: "sa10b-ch3", name: "Topi Shukla", nameHi: "टोपी शुक्ला" }
+        ]
+      }
+    ]
+  }
+]
