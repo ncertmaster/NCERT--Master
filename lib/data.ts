@@ -1082,4 +1082,4 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
    ]
       }
     ]
-  },
+  }
