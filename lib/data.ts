@@ -1308,3 +1308,110 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
         }
+{
+      id: "commerce",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: [
+
+        {
+          id: "accountancy-11",
+          name: "Accountancy",
+          nameHi: "लेखाशास्त्र",
+          icon: "calculator",
+          books: [
+            {
+              id: "accountancy-11-part-1",
+              name: "Financial Accounting – I",
+              nameHi: "वित्तीय लेखांकन – 1",
+              chapters: [
+                { id: "acc11-1", name: "Introduction to Accounting", nameHi: "लेखांकन का परिचय" },
+                { id: "acc11-2", name: "Theory Base of Accounting", nameHi: "लेखांकन का सैद्धांतिक आधार" },
+                { id: "acc11-3", name: "Recording of Transactions – I", nameHi: "लेन-देन का लेखा – 1" },
+                { id: "acc11-4", name: "Recording of Transactions – II", nameHi: "लेन-देन का लेखा – 2" },
+                { id: "acc11-5", name: "Bank Reconciliation Statement", nameHi: "बैंक सुलह विवरण" }
+              ]
+            },
+            {
+              id: "accountancy-11-part-2",
+              name: "Financial Accounting – II",
+              nameHi: "वित्तीय लेखांकन – 2",
+              chapters: [
+                { id: "acc11-6", name: "Trial Balance and Rectification of Errors", nameHi: "तलपट और त्रुटि सुधार" },
+                { id: "acc11-7", name: "Depreciation, Provisions and Reserves", nameHi: "मूल्यह्रास, प्रावधान और भंडार" },
+                { id: "acc11-8", name: "Financial Statements – I", nameHi: "वित्तीय विवरण – 1" },
+                { id: "acc11-9", name: "Financial Statements – II", nameHi: "वित्तीय विवरण – 2" }
+              ]
+            }
+          ]
+        },
+
+        {
+          id: "business-studies-11",
+          name: "Business Studies",
+          nameHi: "व्यवसाय अध्ययन",
+          icon: "briefcase",
+          books: [
+            {
+              id: "business-studies-11",
+              name: "Business Studies",
+              nameHi: "व्यवसाय अध्ययन",
+              chapters: [
+                { id: "bst11-1", name: "Business, Trade and Commerce", nameHi: "व्यवसाय, व्यापार और वाणिज्य" },
+                { id: "bst11-2", name: "Forms of Business Organisation", nameHi: "व्यवसाय संगठन के रूप" },
+                { id: "bst11-3", name: "Private, Public and Global Enterprises", nameHi: "निजी, सार्वजनिक और वैश्विक उद्यम" },
+                { id: "bst11-4", name: "Business Services", nameHi: "व्यावसायिक सेवाएँ" },
+                { id: "bst11-5", name: "Emerging Modes of Business", nameHi: "व्यवसाय के उभरते रूप" },
+                { id: "bst11-6", name: "Social Responsibilities of Business", nameHi: "व्यवसाय की सामाजिक जिम्मेदारियाँ" },
+                { id: "bst11-7", name: "Formation of a Company", nameHi: "कंपनी का गठन" },
+                { id: "bst11-8", name: "Sources of Business Finance", nameHi: "व्यवसाय वित्त के स्रोत" },
+                { id: "bst11-9", name: "Small Business", nameHi: "लघु व्यवसाय" },
+                { id: "bst11-10", name: "Internal Trade", nameHi: "आंतरिक व्यापार" },
+                { id: "bst11-11", name: "International Business – I", nameHi: "अंतर्राष्ट्रीय व्यापार – 1" }
+              ]
+            }
+          ]
+        },
+
+        {
+          id: "economics-11",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "chart-line",
+          books: [
+            {
+              id: "statistics-for-economics-11",
+              name: "Statistics for Economics",
+              nameHi: "अर्थशास्त्र के लिए सांख्यिकी",
+              chapters: [
+                { id: "eco11-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "eco11-2", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "eco11-3", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "eco11-4", name: "Presentation of Data", nameHi: "आँकड़ों की प्रस्तुति" },
+                { id: "eco11-5", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "eco11-6", name: "Measures of Dispersion", nameHi: "विचलन के माप" },
+                { id: "eco11-7", name: "Correlation", nameHi: "सहसंबंध" },
+                { id: "eco11-8", name: "Index Numbers", nameHi: "सूचकांक संख्या" }
+              ]
+            },
+            {
+              id: "indian-economic-development-11",
+              name: "Indian Economic Development",
+              nameHi: "भारतीय आर्थिक विकास",
+              chapters: [
+                { id: "eco11-9", name: "Indian Economy on the Eve of Independence", nameHi: "स्वतंत्रता की पूर्व संध्या पर भारतीय अर्थव्यवस्था" },
+                { id: "eco11-10", name: "Indian Economy (1950–1990)", nameHi: "भारतीय अर्थव्यवस्था (1950–1990)" },
+                { id: "eco11-11", name: "Liberalisation, Privatisation and Globalisation", nameHi: "उदारीकरण, निजीकरण और वैश्वीकरण" },
+                { id: "eco11-12", name: "Poverty", nameHi: "गरीबी" },
+                { id: "eco11-13", name: "Human Capital Formation", nameHi: "मानव पूंजी निर्माण" },
+                { id: "eco11-14", name: "Rural Development", nameHi: "ग्रामीण विकास" },
+                { id: "eco11-15", name: "Employment", nameHi: "रोजगार" },
+                { id: "eco11-16", name: "Infrastructure", nameHi: "अवसंरचना" },
+                { id: "eco11-17", name: "Environment and Sustainable Development", nameHi: "पर्यावरण और सतत विकास" }
+              ]
+            }
+          ]
+        }
+
+      ]
+  }
