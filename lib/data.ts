@@ -149,5 +149,47 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
           ]
         },
       ]
+    },      
+{
+      id: "hindi", name: "Hindi", nameHi: "हिंदी", icon: "languages",
+      books: [
+        {
+          id: "vasant-6", name: "Vasant Bhag 1", nameHi: "वसंत भाग 1",
+          chapters: [
+            { id: "va6-ch1", name: "Vah Chidiya Jo", nameHi: "वह चिड़िया जो" },
+            { id: "va6-ch2", name: "Bachpan", nameHi: "बचपन" },
+            { id: "va6-ch3", name: "Naadan Dost", nameHi: "नादान दोस्त" },
+            { id: "va6-ch4", name: "Chaand Se Thodi Si Gappe", nameHi: "चाँद से थोड़ी सी गप्पें" },
+            { id: "va6-ch5", name: "Aksharon Ka Mahatva", nameHi: "अक्षरों का महत्व" },
+            { id: "va6-ch6", name: "Paar Nazar Ke", nameHi: "पार नज़र के" },
+            { id: "va6-ch7", name: "Saathi Haath Badhana", nameHi: "साथी हाथ बढ़ाना" },
+            { id: "va6-ch8", name: "Aise Aise", nameHi: "ऐसे–ऐसे" },
+            { id: "va6-ch9", name: "Ticket Album", nameHi: "टिकट अलबम" },
+            { id: "va6-ch10", name: "Jhansi Ki Rani", nameHi: "झाँसी की रानी" },
+            { id: "va6-ch11", name: "Jo Dekhkar Bhi Nahi Dekhte", nameHi: "जो देखकर भी नहीं देखते" },
+            { id: "va6-ch12", name: "Sansar Pustak Hai", nameHi: "संसार पुस्तक है" },
+            { id: "va6-ch13", name: "Mein Sabse Chhoti Hoon", nameHi: "मैं सबसे छोटी होऊं" },
+            { id: "va6-ch14", name: "Lokgeet", nameHi: "लोकगीत" },
+            { id: "va6-ch15", name: "Naukardoot", nameHi: "नौकरदूत" },
+            { id: "va6-ch16", name: "Vaan Walon Ke Paar", nameHi: "वन के मार्ग में" },
+          ]
+        },
+        {
+          id: "bal-ram-katha-6", name: "Bal Ram Katha (Supplementary)", nameHi: "बाल राम कथा (पूरक पाठ्यपुस्तक)",
+          chapters: [
+            { id: "brk6-ch1", name: "Avadh Ki Jhankiyaan", nameHi: "अवध की झाँकियाँ" },
+            { id: "brk6-ch2", name: "Jab Tak Hai Jaan", nameHi: "जंगल और जनकपुर" },
+            { id: "brk6-ch3", name: "Do Vardan", nameHi: "दो वरदान" },
+            { id: "brk6-ch4", name: "Ram Ka Van Gaman", nameHi: "राम का वन गमन" },
+            { id: "brk6-ch5", name: "Chitrakoot Mein Bharat", nameHi: "चित्रकूट में भरत" },
+            { id: "brk6-ch6", name: "Dandak Van Mein Das Varsh", nameHi: "दंडक वन में दस वर्ष" },
+            { id: "brk6-ch7", name: "Sone Ka Hiran", nameHi: "सोने का हिरन" },
+            { id: "brk6-ch8", name: "Sita Ki Khoj", nameHi: "सीता की खोज" },
+            { id: "brk6-ch9", name: "Ram Aur Sugriv", nameHi: "राम और सुग्रीव" },
+            { id: "brk6-ch10", name: "Lanka Mein Hanuman", nameHi: "लंका में हनुमान" },
+            { id: "brk6-ch11", name: "Lanka Vijay", nameHi: "लंका विजय" },
+            { id: "brk6-ch12", name: "Ram Ka Rajyabhishek", nameHi: "राम का राज्याभिषेक" },
+          ]
+        },
+      ]
     },
-           
