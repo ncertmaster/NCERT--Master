@@ -1136,3 +1136,38 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         },
 
         // ================= CHEMISTRY =================
+{
+          id: "chemistry-11",
+          name: "Chemistry",
+          nameHi: "रसायन विज्ञान",
+          icon: "flask",
+          books: [
+            {
+              id: "chemistry-11-part-1",
+              name: "Chemistry Part I",
+              nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "chem11-1", name: "Some Basic Concepts of Chemistry", nameHi: "रसायन विज्ञान की कुछ मूल अवधारणाएँ" },
+                { id: "chem11-2", name: "Structure of Atom", nameHi: "परमाणु की संरचना" },
+                { id: "chem11-3", name: "Classification of Elements and Periodicity in Properties", nameHi: "तत्वों का वर्गीकरण एवं गुणों में आवर्तिता" },
+                { id: "chem11-4", name: "Chemical Bonding and Molecular Structure", nameHi: "रासायनिक बंध एवं अणु संरचना" },
+                { id: "chem11-5", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+                { id: "chem11-6", name: "Equilibrium", nameHi: "साम्यावस्था" },
+                { id: "chem11-7", name: "Redox Reactions", nameHi: "ऑक्सीकरण-अपचयन अभिक्रियाएँ" }
+              ]
+            },
+            {
+              id: "chemistry-11-part-2",
+              name: "Chemistry Part II",
+              nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "chem11-8", name: "Hydrogen", nameHi: "हाइड्रोजन" },
+                { id: "chem11-9", name: "The s-Block Elements", nameHi: "s-ब्लॉक तत्व" },
+                { id: "chem11-10", name: "The p-Block Elements", nameHi: "p-ब्लॉक तत्व" },
+                { id: "chem11-11", name: "Organic Chemistry – Some Basic Principles and Techniques", nameHi: "कार्बनिक रसायन – कुछ मूल सिद्धांत एवं तकनीकें" },
+                { id: "chem11-12", name: "Hydrocarbons", nameHi: "हाइड्रोकार्बन" },
+                { id: "chem11-13", name: "Environmental Chemistry", nameHi: "पर्यावरणीय रसायन" }
+              ]
+            }
+          ]
+        },
