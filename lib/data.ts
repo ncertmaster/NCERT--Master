@@ -1966,7 +1966,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
   ]
   }
-  ]
 };
 export function getQuizQuestions() {
   return []
