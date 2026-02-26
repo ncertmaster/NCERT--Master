@@ -2217,6 +2217,5 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
                 { id: "soc12-1-4", name: "Patterns of Social Inequality", nameHi: "सामाजिक असमानता के प्रतिरूप" },
                 { id: "soc12-1-5", name: "Challenges of Cultural Diversity", nameHi: "सांस्कृतिक विविधता की चुनौतियाँ" }
               ]
+    }
             }
-          ]
-        }
