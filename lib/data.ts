@@ -1414,7 +1414,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         }
 
       ]
-  }
+  },
 {
           id: "sociology-11",
           name: "Sociology",
