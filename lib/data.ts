@@ -1799,3 +1799,274 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
   ]
   }
+{
+  id: "arts",
+  name: "Arts",
+  nameHi: "कला",
+  subjects: [
+
+    // ================= HISTORY =================
+    {
+      id: "history-12",
+      name: "History",
+      nameHi: "इतिहास",
+      icon: "book-open",
+      books: [
+        {
+          id: "themes-indian-history-1",
+          name: "Themes in Indian History – Part I",
+          chapters: [
+            { id: "his12-1", name: "Bricks, Beads and Bones" },
+            { id: "his12-2", name: "Kings, Farmers and Towns" },
+            { id: "his12-3", name: "Kinship, Caste and Class" },
+            { id: "his12-4", name: "Thinkers, Beliefs and Buildings" }
+          ]
+        },
+        {
+          id: "themes-indian-history-2",
+          name: "Themes in Indian History – Part II",
+          chapters: [
+            { id: "his12-5", name: "Through the Eyes of Travellers" },
+            { id: "his12-6", name: "Bhakti-Sufi Traditions" },
+            { id: "his12-7", name: "An Imperial Capital: Vijayanagara" },
+            { id: "his12-8", name: "Peasants, Zamindars and the State" }
+          ]
+        },
+        {
+          id: "themes-indian-history-3",
+          name: "Themes in Indian History – Part III",
+          chapters: [
+            { id: "his12-9", name: "Colonialism and the Countryside" },
+            { id: "his12-10", name: "Rebels and the Raj" },
+            { id: "his12-11", name: "Mahatma Gandhi and the Nationalist Movement" },
+            { id: "his12-12", name: "Framing the Constitution" }
+          ]
+        }
+      ]
+    },
+
+    // ================= POLITICAL SCIENCE =================
+    {
+      id: "political-science-12",
+      name: "Political Science",
+      nameHi: "राजनीति विज्ञान",
+      icon: "landmark",
+      books: [
+        {
+          id: "contemporary-world-politics",
+          name: "Contemporary World Politics",
+          chapters: [
+            { id: "pol12-1", name: "The Cold War Era" },
+            { id: "pol12-2", name: "The End of Bipolarity" },
+            { id: "pol12-3", name: "US Hegemony in World Politics" },
+            { id: "pol12-4", name: "Alternative Centres of Power" },
+            { id: "pol12-5", name: "Contemporary South Asia" },
+            { id: "pol12-6", name: "International Organisations" },
+            { id: "pol12-7", name: "Security in the Contemporary World" },
+            { id: "pol12-8", name: "Environment and Natural Resources" }
+          ]
+        },
+        {
+          id: "politics-in-india-since-independence",
+          name: "Politics in India Since Independence",
+          chapters: [
+            { id: "pol12-9", name: "Challenges of Nation Building" },
+            { id: "pol12-10", name: "Era of One-Party Dominance" },
+            { id: "pol12-11", name: "Politics of Planned Development" },
+            { id: "pol12-12", name: "India's External Relations" },
+            { id: "pol12-13", name: "Challenges to the Congress System" },
+            { id: "pol12-14", name: "The Crisis of Democratic Order" },
+            { id: "pol12-15", name: "Regional Aspirations" },
+            { id: "pol12-16", name: "Recent Developments in Indian Politics" }
+          ]
+        }
+      ]
+    },
+
+    // ================= GEOGRAPHY =================
+    {
+      id: "geography-12",
+      name: "Geography",
+      nameHi: "भूगोल",
+      icon: "globe",
+      books: [
+        {
+          id: "fundamentals-human-geography",
+          name: "Fundamentals of Human Geography",
+          chapters: [
+            { id: "geo12-1", name: "Human Geography: Nature and Scope" },
+            { id: "geo12-2", name: "The World Population" },
+            { id: "geo12-3", name: "Human Development" },
+            { id: "geo12-4", name: "Primary Activities" },
+            { id: "geo12-5", name: "Secondary Activities" },
+            { id: "geo12-6", name: "Tertiary and Quaternary Activities" }
+          ]
+        },
+        {
+          id: "india-people-economy",
+          name: "India: People and Economy",
+          chapters: [
+            { id: "geo12-7", name: "Population: Distribution and Growth" },
+            { id: "geo12-8", name: "Human Settlements" },
+            { id: "geo12-9", name: "Land Resources and Agriculture" },
+            { id: "geo12-10", name: "Water Resources" },
+            { id: "geo12-11", name: "Mineral and Energy Resources" },
+            { id: "geo12-12", name: "Planning and Sustainable Development" }
+          ]
+        }
+      ]
+    }
+
+  ]
+}
+  {
+  id: "economics-12-arts",
+  name: "Economics",
+  nameHi: "अर्थशास्त्र",
+  icon: "trending-up",
+  books: [
+    {
+      id: "intro-microeconomics-12",
+      name: "Introductory Microeconomics",
+      chapters: [
+        { id: "eco12a-1", name: "Introduction" },
+        { id: "eco12a-2", name: "Theory of Consumer Behaviour" },
+        { id: "eco12a-3", name: "Production and Costs" },
+        { id: "eco12a-4", name: "The Theory of the Firm under Perfect Competition" },
+        { id: "eco12a-5", name: "Market Equilibrium" }
+      ]
+    },
+    {
+      id: "intro-macroeconomics-12",
+      name: "Introductory Macroeconomics",
+      chapters: [
+        { id: "eco12a-6", name: "National Income Accounting" },
+        { id: "eco12a-7", name: "Money and Banking" },
+        { id: "eco12a-8", name: "Determination of Income and Employment" },
+        { id: "eco12a-9", name: "Government Budget and the Economy" },
+        { id: "eco12a-10", name: "Balance of Payments" }
+      ]
+    }
+  ]
+},
+  {
+  id: "sociology-12",
+  name: "Sociology",
+  nameHi: "समाजशास्त्र",
+  icon: "users",
+  books: [
+    {
+      id: "indian-society-12",
+      name: "Indian Society",
+      chapters: [
+        { id: "soc12-1", name: "Introducing Indian Society" },
+        { id: "soc12-2", name: "The Demographic Structure of Indian Society" },
+        { id: "soc12-3", name: "Social Institutions: Continuity and Change" },
+        { id: "soc12-4", name: "The Market as a Social Institution" },
+        { id: "soc12-5", name: "Patterns of Social Inequality and Exclusion" },
+        { id: "soc12-6", name: "The Challenges of Cultural Diversity" },
+        { id: "soc12-7", name: "Suggestions for Project Work" }
+      ]
+    },
+    {
+      id: "social-change-development-12",
+      name: "Social Change and Development in India",
+      chapters: [
+        { id: "soc12-8", name: "Structural Change" },
+        { id: "soc12-9", name: "Cultural Change" },
+        { id: "soc12-10", name: "Change and Development in Rural Society" },
+        { id: "soc12-11", name: "Change and Development in Industrial Society" },
+        { id: "soc12-12", name: "Globalisation and Social Change" },
+        { id: "soc12-13", name: "Mass Media and Communications" }
+      ]
+    }
+  ]
+},
+  {
+  id: "psychology-12",
+  name: "Psychology",
+  nameHi: "मनोविज्ञान",
+  icon: "brain",
+  books: [
+    {
+      id: "psychology-12",
+      name: "Psychology",
+      chapters: [
+        { id: "psy12-1", name: "Variations in Psychological Attributes" },
+        { id: "psy12-2", name: "Self and Personality" },
+        { id: "psy12-3", name: "Meeting Life Challenges" },
+        { id: "psy12-4", name: "Psychological Disorders" },
+        { id: "psy12-5", name: "Therapeutic Approaches" },
+        { id: "psy12-6", name: "Attitude and Social Cognition" },
+        { id: "psy12-7", name: "Social Influence and Group Processes" }
+      ]
+    }
+  ]
+  }
+  {
+  id: "hindi-12-arts",
+  name: "Hindi",
+  nameHi: "हिंदी",
+  icon: "book",
+  books: [
+    {
+      id: "aroh-12-arts",
+      name: "Aroh – 2",
+      chapters: [
+        { id: "hin12a-1", name: "भक्तिन" },
+        { id: "hin12a-2", name: "बाजार दर्शन" },
+        { id: "hin12a-3", name: "काले मेघा पानी दे" },
+        { id: "hin12a-4", name: "पहलवान की ढोलक" },
+        { id: "hin12a-5", name: "कविता के बहाने" },
+        { id: "hin12a-6", name: "पतंग" }
+      ]
+    },
+    {
+      id: "vitan-12-arts",
+      name: "Vitan – 2",
+      chapters: [
+        { id: "hin12v-1", name: "सिल्वर वेडिंग" },
+        { id: "hin12v-2", name: "जूझ" },
+        { id: "hin12v-3", name: "अतीत में दबे पांव" }
+      ]
+    }
+  ]
+},
+  {
+  id: "english-12-arts",
+  name: "English",
+  nameHi: "अंग्रेज़ी",
+  icon: "pen-tool",
+  books: [
+    {
+      id: "flamingo-12-arts",
+      name: "Flamingo",
+      chapters: [
+        { id: "eng12a-1", name: "The Last Lesson" },
+        { id: "eng12a-2", name: "Lost Spring" },
+        { id: "eng12a-3", name: "Deep Water" },
+        { id: "eng12a-4", name: "The Rattrap" },
+        { id: "eng12a-5", name: "Indigo" },
+        { id: "eng12a-6", name: "Poets and Pancakes" },
+        { id: "eng12a-7", name: "The Interview" },
+        { id: "eng12a-8", name: "Going Places" }
+      ]
+    },
+    {
+      id: "vistas-12-arts",
+      name: "Vistas",
+      chapters: [
+        { id: "eng12v-1", name: "The Third Level" },
+        { id: "eng12v-2", name: "The Tiger King" },
+        { id: "eng12v-3", name: "Journey to the End of the Earth" },
+        { id: "eng12v-4", name: "The Enemy" },
+        { id: "eng12v-5", name: "On the Face of It" },
+        { id: "eng12v-6", name: "Memories of Childhood" }
+      ]
+    }
+  ]
+  }
+  ]
+}
+]
+};
