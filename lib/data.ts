@@ -1737,7 +1737,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
 
   ]
-}
+},
   {
   id: "english-12-commerce",
   name: "English",
