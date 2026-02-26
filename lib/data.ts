@@ -1082,10 +1082,13 @@ chapters: [
         { id: "sa10b-ch3", name: "Topi Shukla", nameHi: "टोपी शुक्ला" }
       ]
     }
-        ]
-};
+  ]        // books close
+}          // subject close
+]          // class 10 close
+};         // subjectsByClass object close
 
 export const streamsByClass: Record<ClassNumber, Stream[]> = {
+  
   11: [
     {
       id: "science",
