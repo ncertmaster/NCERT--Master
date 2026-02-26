@@ -1208,3 +1208,103 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
         },
+{
+          id: "mathematics-11",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "math-11",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "math11-1", name: "Sets", nameHi: "समुच्चय" },
+                { id: "math11-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "math11-3", name: "Trigonometric Functions", nameHi: "त्रिकोणमितीय फलन" },
+                { id: "math11-4", name: "Complex Numbers and Quadratic Equations", nameHi: "समिश्र संख्याएँ एवं द्विघात समीकरण" },
+                { id: "math11-5", name: "Linear Inequalities", nameHi: "रेखीय असमिकाएँ" },
+                { id: "math11-6", name: "Permutations and Combinations", nameHi: "क्रमचय और संचय" },
+                { id: "math11-7", name: "Binomial Theorem", nameHi: "द्विपद प्रमेय" },
+                { id: "math11-8", name: "Sequences and Series", nameHi: "अनुक्रम और श्रेणी" },
+                { id: "math11-9", name: "Straight Lines", nameHi: "सीधी रेखाएँ" },
+                { id: "math11-10", name: "Conic Sections", nameHi: "शंकु परिच्छेद" },
+                { id: "math11-11", name: "Introduction to Three Dimensional Geometry", nameHi: "त्रिविमीय ज्यामिति का परिचय" },
+                { id: "math11-12", name: "Limits and Derivatives", nameHi: "सीमाएँ एवं अवकलज" },
+                { id: "math11-13", name: "Statistics", nameHi: "सांख्यिकी" },
+                { id: "math11-14", name: "Probability", nameHi: "प्रायिकता" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "english-core-11",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11",
+              name: "Hornbill",
+              nameHi: "हॉर्नबिल",
+              chapters: [
+                { id: "eng11-h-1", name: "The Portrait of a Lady", nameHi: "द पोर्ट्रेट ऑफ अ लेडी" },
+                { id: "eng11-h-2", name: "We're Not Afraid to Die... if We Can All Be Together", nameHi: "वी आर नॉट अफ्रेड टू डाई..." },
+                { id: "eng11-h-3", name: "Discovering Tut: the Saga Continues", nameHi: "डिस्कवरिंग टट" },
+                { id: "eng11-h-4", name: "Landscape of the Soul", nameHi: "लैंडस्केप ऑफ द सोल" },
+                { id: "eng11-h-5", name: "The Ailing Planet: the Green Movement’s Role", nameHi: "द एइलिंग प्लैनेट" },
+                { id: "eng11-h-6", name: "The Browning Version", nameHi: "द ब्राउनिंग वर्ज़न" },
+                { id: "eng11-h-7", name: "The Adventure", nameHi: "द एडवेंचर" },
+                { id: "eng11-h-8", name: "Silk Road", nameHi: "सिल्क रोड" }
+              ]
+            },
+            {
+              id: "snapshots-11",
+              name: "Snapshots",
+              nameHi: "स्नैपशॉट्स",
+              chapters: [
+                { id: "eng11-s-1", name: "The Summer of the Beautiful White Horse", nameHi: "द समर ऑफ द ब्यूटीफुल व्हाइट हॉर्स" },
+                { id: "eng11-s-2", name: "The Address", nameHi: "द एड्रेस" },
+                { id: "eng11-s-3", name: "Ranga’s Marriage", nameHi: "रंगा’स मैरिज" },
+                { id: "eng11-s-4", name: "Albert Einstein at School", nameHi: "अल्बर्ट आइंस्टीन एट स्कूल" },
+                { id: "eng11-s-5", name: "Mother’s Day", nameHi: "मदर्स डे" },
+                { id: "eng11-s-6", name: "The Ghat of the Only World", nameHi: "द घाट ऑफ द ओनली वर्ल्ड" },
+                { id: "eng11-s-7", name: "Birth", nameHi: "बर्थ" },
+                { id: "eng11-s-8", name: "The Tale of Melon City", nameHi: "द टेल ऑफ मेलॉन सिटी" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "hindi-core-11",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aaroh-11",
+              name: "Aaroh – 1",
+              nameHi: "आरोह – 1",
+              chapters: [
+                { id: "hin11-a-1", name: "Namkaran", nameHi: "नामकरण" },
+                { id: "hin11-a-2", name: "Miyaa Nasiruddin", nameHi: "मियाँ नसीरुद्दीन" },
+                { id: "hin11-a-3", name: "Apna Apna Bhagya", nameHi: "अपना-अपना भाग्य" },
+                { id: "hin11-a-4", name: "Vidai Sambhashan", nameHi: "विदाई संभाषण" },
+                { id: "hin11-a-5", name: "Ghar Ki Yaad", nameHi: "घर की याद" },
+                { id: "hin11-a-6", name: "Champaa Kaale Kaale Achchhar Nahin Cheenhti", nameHi: "चंपा काले-काले अक्षर नहीं चीन्हती" },
+                { id: "hin11-a-7", name: "Gajanan Madhav Muktibodh", nameHi: "गजानन माधव मुक्तिबोध" },
+                { id: "hin11-a-8", name: "Rajnaitik Samasyaen", nameHi: "राजनीतिक समस्याएँ" }
+              ]
+            },
+            {
+              id: "vitaan-11",
+              name: "Vitaan – 1",
+              nameHi: "वितान – 1",
+              chapters: [
+                { id: "hin11-v-1", name: "Bhartiya Samaj", nameHi: "भारतीय समाज" },
+                { id: "hin11-v-2", name: "Sanskriti Ke Char Adhyay", nameHi: "संस्कृति के चार अध्याय" },
+                { id: "hin11-v-3", name: "Apna Desh", nameHi: "अपना देश" }
+              ]
+            }
+          ]
+        }
