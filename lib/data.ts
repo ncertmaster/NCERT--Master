@@ -433,3 +433,208 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     ]
   }
 ],
+8: [
+  {
+    id: "math",
+    name: "Mathematics",
+    nameHi: "गणित",
+    icon: "calculator",
+    books: [{
+      id: "math-8",
+      name: "Mathematics",
+      nameHi: "गणित",
+      chapters: [
+        { id: "m8-ch1", name: "Rational Numbers", nameHi: "परिमेय संख्याएँ" },
+        { id: "m8-ch2", name: "Linear Equations in One Variable", nameHi: "एक चर वाले रैखिक समीकरण" },
+        { id: "m8-ch3", name: "Understanding Quadrilaterals", nameHi: "चतुर्भुजों को समझना" },
+        { id: "m8-ch4", name: "Practical Geometry", nameHi: "प्रायोगिक ज्यामिति" },
+        { id: "m8-ch5", name: "Data Handling", nameHi: "आँकड़ों का प्रबंधन" },
+        { id: "m8-ch6", name: "Squares and Square Roots", nameHi: "वर्ग और वर्गमूल" },
+        { id: "m8-ch7", name: "Cubes and Cube Roots", nameHi: "घन और घनमूल" },
+        { id: "m8-ch8", name: "Comparing Quantities", nameHi: "राशियों की तुलना" },
+        { id: "m8-ch9", name: "Algebraic Expressions and Identities", nameHi: "बीजीय व्यंजक और सर्वसमिकाएँ" },
+        { id: "m8-ch10", name: "Visualising Solid Shapes", nameHi: "ठोस आकारों का चित्रण" },
+        { id: "m8-ch11", name: "Mensuration", nameHi: "क्षेत्रमिति" },
+        { id: "m8-ch12", name: "Exponents and Powers", nameHi: "घातांक और घात" },
+        { id: "m8-ch13", name: "Direct and Inverse Proportions", nameHi: "प्रत्यक्ष और व्युत्क्रमानुपात" },
+        { id: "m8-ch14", name: "Factorisation", nameHi: "गुणनखंडन" },
+        { id: "m8-ch15", name: "Introduction to Graphs", nameHi: "ग्राफ का परिचय" },
+        { id: "m8-ch16", name: "Playing with Numbers", nameHi: "संख्याओं के साथ खेलना" }
+      ]
+    }]
+  },
+
+  {
+    id: "science",
+    name: "Science",
+    nameHi: "विज्ञान",
+    icon: "flask",
+    books: [{
+      id: "science-8",
+      name: "Science",
+      nameHi: "विज्ञान",
+      chapters: [
+        { id: "s8-ch1", name: "Crop Production and Management", nameHi: "फसल उत्पादन एवं प्रबंधन" },
+        { id: "s8-ch2", name: "Microorganisms: Friend and Foe", nameHi: "सूक्ष्मजीव: मित्र एवं शत्रु" },
+        { id: "s8-ch3", name: "Synthetic Fibres and Plastics", nameHi: "कृत्रिम रेशे और प्लास्टिक" },
+        { id: "s8-ch4", name: "Materials: Metals and Non-Metals", nameHi: "पदार्थ: धातु और अधातु" },
+        { id: "s8-ch5", name: "Coal and Petroleum", nameHi: "कोयला और पेट्रोलियम" },
+        { id: "s8-ch6", name: "Combustion and Flame", nameHi: "दहन और ज्वाला" },
+        { id: "s8-ch7", name: "Conservation of Plants and Animals", nameHi: "पौधों और जंतुओं का संरक्षण" },
+        { id: "s8-ch8", name: "Cell – Structure and Functions", nameHi: "कोशिका – संरचना एवं कार्य" },
+        { id: "s8-ch9", name: "Reproduction in Animals", nameHi: "जंतुओं में जनन" },
+        { id: "s8-ch10", name: "Reaching the Age of Adolescence", nameHi: "किशोरावस्था की ओर" },
+        { id: "s8-ch11", name: "Force and Pressure", nameHi: "बल तथा दाब" },
+        { id: "s8-ch12", name: "Friction", nameHi: "घर्षण" },
+        { id: "s8-ch13", name: "Sound", nameHi: "ध्वनि" },
+        { id: "s8-ch14", name: "Chemical Effects of Electric Current", nameHi: "विद्युत धारा के रासायनिक प्रभाव" },
+        { id: "s8-ch15", name: "Some Natural Phenomena", nameHi: "कुछ प्राकृतिक परिघटनाएँ" },
+        { id: "s8-ch16", name: "Light", nameHi: "प्रकाश" },
+        { id: "s8-ch17", name: "Stars and the Solar System", nameHi: "तारे और सौरमंडल" },
+        { id: "s8-ch18", name: "Pollution of Air and Water", nameHi: "वायु और जल का प्रदूषण" }
+      ]
+    }]
+  },
+
+  {
+    id: "social-studies",
+    name: "Social Studies",
+    nameHi: "सामाजिक विज्ञान",
+    icon: "globe",
+    books: [
+      {
+        id: "history-8",
+        name: "Hamare Ateet – 3",
+        nameHi: "हमारे अतीत – 3",
+        chapters: [
+          { id: "h8-ch1", name: "How, When and Where", nameHi: "कैसे, कब और कहाँ" },
+          { id: "h8-ch2", name: "From Trade to Territory", nameHi: "व्यापार से सत्ता तक" },
+          { id: "h8-ch3", name: "Ruling the Countryside", nameHi: "देहात पर शासन" },
+          { id: "h8-ch4", name: "Tribals, Dikus and the Vision of a Golden Age", nameHi: "आदिवासी, दीकू और स्वर्ण युग की कल्पना" },
+          { id: "h8-ch5", name: "When People Rebel", nameHi: "जब जनता बगावत करती है" },
+          { id: "h8-ch6", name: "Colonialism and the City", nameHi: "औपनिवेशिक काल और शहर" },
+          { id: "h8-ch7", name: "Weavers, Iron Smelters and Factory Owners", nameHi: "बुनकर, लोहा गलाने वाले और कारखाना मालिक" },
+          { id: "h8-ch8", name: "Civilising the Native, Educating the Nation", nameHi: "सभ्य बनाने की नीति और राष्ट्र को शिक्षित करना" },
+          { id: "h8-ch9", name: "Women, Caste and Reform", nameHi: "महिलाएँ, जाति और सुधार" },
+          { id: "h8-ch10", name: "The Changing World of Visual Arts", nameHi: "दृश्य कलाओं की बदलती दुनिया" },
+          { id: "h8-ch11", name: "The Making of the National Movement", nameHi: "राष्ट्रीय आंदोलन का निर्माण" },
+          { id: "h8-ch12", name: "India After Independence", nameHi: "स्वतंत्रता के बाद भारत" }
+        ]
+      },
+      {
+        id: "geography-8",
+        name: "Resources and Development",
+        nameHi: "संसाधन और विकास",
+        chapters: [
+          { id: "g8-ch1", name: "Resources", nameHi: "संसाधन" },
+          { id: "g8-ch2", name: "Land, Soil, Water, Natural Vegetation and Wildlife Resources", nameHi: "भूमि, मृदा, जल, प्राकृतिक वनस्पति और वन्य संसाधन" },
+          { id: "g8-ch3", name: "Mineral and Power Resources", nameHi: "खनिज और शक्ति संसाधन" },
+          { id: "g8-ch4", name: "Agriculture", nameHi: "कृषि" },
+          { id: "g8-ch5", name: "Industries", nameHi: "उद्योग" },
+          { id: "g8-ch6", name: "Human Resources", nameHi: "मानव संसाधन" }
+        ]
+      },
+      {
+        id: "civics-8",
+        name: "Social and Political Life – 3",
+        nameHi: "सामाजिक एवं राजनीतिक जीवन – 3",
+        chapters: [
+          { id: "c8-ch1", name: "The Indian Constitution", nameHi: "भारतीय संविधान" },
+          { id: "c8-ch2", name: "Understanding Secularism", nameHi: "धर्मनिरपेक्षता की समझ" },
+          { id: "c8-ch3", name: "Why Do We Need a Parliament?", nameHi: "हमें संसद की आवश्यकता क्यों है?" },
+          { id: "c8-ch4", name: "Understanding Laws", nameHi: "कानून की समझ" },
+          { id: "c8-ch5", name: "Judiciary", nameHi: "न्यायपालिका" },
+          { id: "c8-ch6", name: "Understanding Our Criminal Justice System", nameHi: "आपराधिक न्याय प्रणाली की समझ" },
+          { id: "c8-ch7", name: "Understanding Marginalisation", nameHi: "हाशियाकरण की समझ" },
+          { id: "c8-ch8", name: "Confronting Marginalisation", nameHi: "हाशियाकरण का सामना करना" },
+          { id: "c8-ch9", name: "Public Facilities", nameHi: "सार्वजनिक सुविधाएँ" },
+          { id: "c8-ch10", name: "Law and Social Justice", nameHi: "कानून और सामाजिक न्याय" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "english",
+    name: "English",
+    nameHi: "English",
+    icon: "book-open",
+    books: [
+      {
+        id: "honeydew-8",
+        name: "Honeydew",
+        nameHi: "Honeydew",
+        chapters: [
+          { id: "hd8-ch1", name: "The Best Christmas Present in the World", nameHi: "The Best Christmas Present in the World" },
+          { id: "hd8-ch2", name: "The Tsunami", nameHi: "The Tsunami" },
+          { id: "hd8-ch3", name: "Glimpses of the Past", nameHi: "Glimpses of the Past" },
+          { id: "hd8-ch4", name: "Bepin Choudhury’s Lapse of Memory", nameHi: "Bepin Choudhury’s Lapse of Memory" },
+          { id: "hd8-ch5", name: "The Summit Within", nameHi: "The Summit Within" },
+          { id: "hd8-ch6", name: "This is Jody’s Fawn", nameHi: "This is Jody’s Fawn" },
+          { id: "hd8-ch7", name: "A Visit to Cambridge", nameHi: "A Visit to Cambridge" },
+          { id: "hd8-ch8", name: "A Short Monsoon Diary", nameHi: "A Short Monsoon Diary" }
+        ]
+      },
+      {
+        id: "it-so-happened-8",
+        name: "It So Happened",
+        nameHi: "It So Happened",
+        chapters: [
+          { id: "ish8-ch1", name: "How the Camel Got His Hump", nameHi: "How the Camel Got His Hump" },
+          { id: "ish8-ch2", name: "Children at Work", nameHi: "Children at Work" },
+          { id: "ish8-ch3", name: "The Selfish Giant", nameHi: "The Selfish Giant" },
+          { id: "ish8-ch4", name: "The Treasure Within", nameHi: "The Treasure Within" },
+          { id: "ish8-ch5", name: "Princess September", nameHi: "Princess September" },
+          { id: "ish8-ch6", name: "The Fight", nameHi: "The Fight" },
+          { id: "ish8-ch7", name: "The Open Window", nameHi: "The Open Window" },
+          { id: "ish8-ch8", name: "Jalebis", nameHi: "Jalebis" }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: "hindi",
+    name: "Hindi",
+    nameHi: "हिंदी",
+    icon: "languages",
+    books: [
+      {
+        id: "vasant-8",
+        name: "Vasant Bhag 3",
+        nameHi: "वसंत भाग 3",
+        chapters: [
+          { id: "va8-ch1", name: "Dhool", nameHi: "धूल" },
+          { id: "va8-ch2", name: "Lakh Ki Choodiyan", nameHi: "लाख की चूड़ियाँ" },
+          { id: "va8-ch3", name: "Bus Ki Yatra", nameHi: "बस की यात्रा" },
+          { id: "va8-ch4", name: "Deewanon Ki Hasti", nameHi: "दीवानों की हस्ती" },
+          { id: "va8-ch5", name: "Chitthiyon Ki Anokhi Duniya", nameHi: "चिट्ठियों की अनोखी दुनिया" },
+          { id: "va8-ch6", name: "Bhagwan Ke Dakiye", nameHi: "भगवान के डाकिए" },
+          { id: "va8-ch7", name: "Kya Nirash Hua Jaye", nameHi: "क्या निराश हुआ जाए" },
+          { id: "va8-ch8", name: "Yeh Sabse Kathin Samay Nahin", nameHi: "यह सबसे कठिन समय नहीं" },
+          { id: "va8-ch9", name: "Kabir Ki Sakhiyan", nameHi: "कबीर की साखियाँ" },
+          { id: "va8-ch10", name: "Kaamchor", nameHi: "कामचोर" },
+          { id: "va8-ch11", name: "Jab Cinema Ne Bolna Seekha", nameHi: "जब सिनेमा ने बोलना सीखा" },
+          { id: "va8-ch12", name: "Sudama Charit", nameHi: "सुदामा चरित" }
+        ]
+      },
+      {
+        id: "bharat-ki-khoj-8",
+        name: "Bharat Ki Khoj",
+        nameHi: "भारत की खोज",
+        chapters: [
+          { id: "bk8-ch1", name: "Ahmadnagar Ka Kila", nameHi: "अहमदनगर का किला" },
+          { id: "bk8-ch2", name: "Talash", nameHi: "तलाश" },
+          { id: "bk8-ch3", name: "Sindhu Ghati Sabhyata", nameHi: "सिंधु घाटी सभ्यता" },
+          { id: "bk8-ch4", name: "Vedon Ka Yug", nameHi: "वेदों का युग" },
+          { id: "bk8-ch5", name: "Buddh Aur Mahavir", nameHi: "बुद्ध और महावीर" },
+          { id: "bk8-ch6", name: "Maurya Aur Gupta Samrajya", nameHi: "मौर्य और गुप्त साम्राज्य" },
+          { id: "bk8-ch7", name: "Harshvardhan Se Delhi Sultanat Tak", nameHi: "हर्षवर्धन से दिल्ली सल्तनत तक" },
+          { id: "bk8-ch8", name: "Mughal Samrajya", nameHi: "मुगल साम्राज्य" },
+          { id: "bk8-ch9", name: "Angrezon Ka Aagman", nameHi: "अंग्रेजों का आगमन" },
+          { id: "bk8-ch10", name: "Swatantrata Andolan", nameHi: "स्वतंत्रता आंदोलन" }
+        ]
+      }
+    ]
+  }
+],
