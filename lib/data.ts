@@ -1081,7 +1081,10 @@ chapters: [
         { id: "sa10b-ch2", name: "Sapnon Ke Se Din", nameHi: "सपनों के-से दिन" },
         { id: "sa10b-ch3", name: "Topi Shukla", nameHi: "टोपी शुक्ला" }
       ]
+    }
         ],
+]
+};
 export const streamsByClass: Record<ClassNumber, Stream[]> = {
   11: [
     {
