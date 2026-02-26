@@ -2218,4 +2218,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
                 { id: "soc12-1-5", name: "Challenges of Cultural Diversity", nameHi: "सांस्कृतिक विविधता की चुनौतियाँ" }
               ]
     }
+            ]
             }
+        }
