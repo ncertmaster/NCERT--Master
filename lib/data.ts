@@ -1173,9 +1173,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
 
       ]
     }
-  ],
-  12: []
-                 }
 // ================= BIOLOGY =================
         {
           id: "biology-11",
