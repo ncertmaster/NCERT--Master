@@ -1471,3 +1471,160 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         },
         ],  
 12: [
+{
+  id: "science",
+  name: "Science",
+  nameHi: "विज्ञान",
+  subjects: [
+
+    // ================= PHYSICS =================
+    {
+      id: "physics-12",
+      name: "Physics",
+      nameHi: "भौतिकी",
+      icon: "atom",
+      books: [
+        {
+          id: "physics-12-part-1",
+          name: "Physics Part I",
+          nameHi: "भौतिकी भाग 1",
+          chapters: [
+            { id: "phy12-1", name: "Electric Charges and Fields" },
+            { id: "phy12-2", name: "Electrostatic Potential and Capacitance" },
+            { id: "phy12-3", name: "Current Electricity" },
+            { id: "phy12-4", name: "Moving Charges and Magnetism" },
+            { id: "phy12-5", name: "Magnetism and Matter" },
+            { id: "phy12-6", name: "Electromagnetic Induction" },
+            { id: "phy12-7", name: "Alternating Current" }
+          ]
+        },
+        {
+          id: "physics-12-part-2",
+          name: "Physics Part II",
+          nameHi: "भौतिकी भाग 2",
+          chapters: [
+            { id: "phy12-8", name: "Electromagnetic Waves" },
+            { id: "phy12-9", name: "Ray Optics and Optical Instruments" },
+            { id: "phy12-10", name: "Wave Optics" },
+            { id: "phy12-11", name: "Dual Nature of Radiation and Matter" },
+            { id: "phy12-12", name: "Atoms" },
+            { id: "phy12-13", name: "Nuclei" },
+            { id: "phy12-14", name: "Semiconductor Electronics" }
+          ]
+        }
+      ]
+    }
+
+  ]
+}
+  {
+  id: "chemistry-12",
+  name: "Chemistry",
+  nameHi: "रसायन विज्ञान",
+  icon: "flask",
+  books: [
+    {
+      id: "chemistry-12-part-1",
+      name: "Chemistry Part I",
+      nameHi: "रसायन विज्ञान भाग 1",
+      chapters: [
+        { id: "chem12-1", name: "Solutions" },
+        { id: "chem12-2", name: "Electrochemistry" },
+        { id: "chem12-3", name: "Chemical Kinetics" },
+        { id: "chem12-4", name: "d- and f-Block Elements" },
+        { id: "chem12-5", name: "Coordination Compounds" }
+      ]
+    },
+    {
+      id: "chemistry-12-part-2",
+      name: "Chemistry Part II",
+      nameHi: "रसायन विज्ञान भाग 2",
+      chapters: [
+        { id: "chem12-6", name: "Haloalkanes and Haloarenes" },
+        { id: "chem12-7", name: "Alcohols, Phenols and Ethers" },
+        { id: "chem12-8", name: "Aldehydes, Ketones and Carboxylic Acids" },
+        { id: "chem12-9", name: "Amines" },
+        { id: "chem12-10", name: "Biomolecules" },
+        { id: "chem12-11", name: "Polymers" },
+        { id: "chem12-12", name: "Chemistry in Everyday Life" }
+      ]
+    }
+  ]
+},
+  {
+  id: "hindi-12",
+  name: "Hindi",
+  nameHi: "हिंदी",
+  icon: "book",
+  books: [
+    {
+      id: "antra-12",
+      name: "Antra – 2",
+      nameHi: "अंतराल / अंतरा – 2",
+      chapters: [
+        { id: "hin12-a1", name: "आत्मपरिचय" },
+        { id: "hin12-a2", name: "पतंग" },
+        { id: "hin12-a3", name: "कविता के बहाने" },
+        { id: "hin12-a4", name: "कैमरे में बंद अपाहिज" },
+        { id: "hin12-a5", name: "साहस और उत्साह" }
+      ]
+    },
+    {
+      id: "aroh-12",
+      name: "Aroh – 2",
+      nameHi: "आरोह – 2",
+      chapters: [
+        { id: "hin12-ar1", name: "भक्तिन" },
+        { id: "hin12-ar2", name: "बाजार दर्शन" },
+        { id: "hin12-ar3", name: "काले मेघा पानी दे" },
+        { id: "hin12-ar4", name: "पहलवान की ढोलक" }
+      ]
+    },
+    {
+      id: "vitan-12",
+      name: "Vitan – 2",
+      nameHi: "वितान – 2",
+      chapters: [
+        { id: "hin12-v1", name: "सिल्वर वेडिंग" },
+        { id: "hin12-v2", name: "जूझ" },
+        { id: "hin12-v3", name: "अतीत में दबे पांव" }
+      ]
+    }
+  ]
+},
+  {
+  id: "english-12",
+  name: "English",
+  nameHi: "अंग्रेज़ी",
+  icon: "pen-tool",
+  books: [
+    {
+      id: "flamingo-12",
+      name: "Flamingo",
+      nameHi: "फ्लेमिंगो",
+      chapters: [
+        { id: "eng12-f1", name: "The Last Lesson" },
+        { id: "eng12-f2", name: "Lost Spring" },
+        { id: "eng12-f3", name: "Deep Water" },
+        { id: "eng12-f4", name: "The Rattrap" },
+        { id: "eng12-f5", name: "Indigo" },
+        { id: "eng12-f6", name: "Poets and Pancakes" },
+        { id: "eng12-f7", name: "The Interview" },
+        { id: "eng12-f8", name: "Going Places" }
+      ]
+    },
+    {
+      id: "vistas-12",
+      name: "Vistas",
+      nameHi: "विस्टास",
+      chapters: [
+        { id: "eng12-v1", name: "The Third Level" },
+        { id: "eng12-v2", name: "The Tiger King" },
+        { id: "eng12-v3", name: "Journey to the End of the Earth" },
+        { id: "eng12-v4", name: "The Enemy" },
+        { id: "eng12-v5", name: "On the Face of It" },
+        { id: "eng12-v6", name: "Memories of Childhood" }
+      ]
+    }
+  ]
+  }
