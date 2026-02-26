@@ -1628,3 +1628,174 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
   ]
   }
+{
+  id: "commerce",
+  name: "Commerce",
+  nameHi: "वाणिज्य",
+  subjects: [
+
+    // ================= ACCOUNTANCY =================
+    {
+      id: "accountancy-12",
+      name: "Accountancy",
+      nameHi: "लेखाशास्त्र",
+      icon: "calculator",
+      books: [
+        {
+          id: "accountancy-12-part-1",
+          name: "Partnership Accounts",
+          nameHi: "साझेदारी लेखांकन",
+          chapters: [
+            { id: "acc12-1", name: "Accounting for Partnership Firms – Fundamentals" },
+            { id: "acc12-2", name: "Change in Profit Sharing Ratio" },
+            { id: "acc12-3", name: "Admission of a Partner" },
+            { id: "acc12-4", name: "Retirement and Death of a Partner" },
+            { id: "acc12-5", name: "Dissolution of Partnership Firm" }
+          ]
+        },
+        {
+          id: "accountancy-12-part-2",
+          name: "Company Accounts",
+          nameHi: "कंपनी लेखांकन",
+          chapters: [
+            { id: "acc12-6", name: "Accounting for Share Capital" },
+            { id: "acc12-7", name: "Issue and Redemption of Debentures" },
+            { id: "acc12-8", name: "Financial Statements of a Company" },
+            { id: "acc12-9", name: "Analysis of Financial Statements" },
+            { id: "acc12-10", name: "Cash Flow Statement" }
+          ]
+        }
+      ]
+    },
+
+    // ================= BUSINESS STUDIES =================
+    {
+      id: "business-studies-12",
+      name: "Business Studies",
+      nameHi: "व्यवसाय अध्ययन",
+      icon: "briefcase",
+      books: [
+        {
+          id: "business-studies-12-part-1",
+          name: "Principles and Functions of Management",
+          nameHi: "प्रबंधन के सिद्धांत और कार्य",
+          chapters: [
+            { id: "bst12-1", name: "Nature and Significance of Management" },
+            { id: "bst12-2", name: "Principles of Management" },
+            { id: "bst12-3", name: "Business Environment" },
+            { id: "bst12-4", name: "Planning" },
+            { id: "bst12-5", name: "Organising" },
+            { id: "bst12-6", name: "Staffing" },
+            { id: "bst12-7", name: "Directing" },
+            { id: "bst12-8", name: "Controlling" }
+          ]
+        },
+        {
+          id: "business-studies-12-part-2",
+          name: "Business Finance and Marketing",
+          nameHi: "व्यवसाय वित्त और विपणन",
+          chapters: [
+            { id: "bst12-9", name: "Financial Management" },
+            { id: "bst12-10", name: "Financial Markets" },
+            { id: "bst12-11", name: "Marketing Management" },
+            { id: "bst12-12", name: "Consumer Protection" }
+          ]
+        }
+      ]
+    },
+
+    // ================= ECONOMICS =================
+    {
+      id: "economics-12",
+      name: "Economics",
+      nameHi: "अर्थशास्त्र",
+      icon: "trending-up",
+      books: [
+        {
+          id: "microeconomics-12",
+          name: "Introductory Microeconomics",
+          chapters: [
+            { id: "eco12-1", name: "Introduction" },
+            { id: "eco12-2", name: "Consumer Behaviour and Demand" },
+            { id: "eco12-3", name: "Production and Costs" },
+            { id: "eco12-4", name: "The Theory of the Firm under Perfect Competition" },
+            { id: "eco12-5", name: "Market Equilibrium" }
+          ]
+        },
+        {
+          id: "macro-12",
+          name: "Introductory Macroeconomics",
+          chapters: [
+            { id: "eco12-6", name: "National Income Accounting" },
+            { id: "eco12-7", name: "Money and Banking" },
+            { id: "eco12-8", name: "Determination of Income and Employment" },
+            { id: "eco12-9", name: "Government Budget and the Economy" },
+            { id: "eco12-10", name: "Balance of Payments" }
+          ]
+        }
+      ]
+    }
+
+  ]
+}
+  {
+  id: "english-12-commerce",
+  name: "English",
+  nameHi: "अंग्रेज़ी",
+  icon: "pen-tool",
+  books: [
+    {
+      id: "flamingo-12",
+      name: "Flamingo",
+      chapters: [
+        { id: "eng12-f1", name: "The Last Lesson" },
+        { id: "eng12-f2", name: "Lost Spring" },
+        { id: "eng12-f3", name: "Deep Water" },
+        { id: "eng12-f4", name: "The Rattrap" },
+        { id: "eng12-f5", name: "Indigo" },
+        { id: "eng12-f6", name: "Poets and Pancakes" },
+        { id: "eng12-f7", name: "The Interview" },
+        { id: "eng12-f8", name: "Going Places" }
+      ]
+    },
+    {
+      id: "vistas-12",
+      name: "Vistas",
+      chapters: [
+        { id: "eng12-v1", name: "The Third Level" },
+        { id: "eng12-v2", name: "The Tiger King" },
+        { id: "eng12-v3", name: "Journey to the End of the Earth" },
+        { id: "eng12-v4", name: "The Enemy" },
+        { id: "eng12-v5", name: "On the Face of It" },
+        { id: "eng12-v6", name: "Memories of Childhood" }
+      ]
+    }
+  ]
+},
+  {
+  id: "hindi-12-commerce",
+  name: "Hindi",
+  nameHi: "हिंदी",
+  icon: "book",
+  books: [
+    {
+      id: "aroh-12",
+      name: "Aroh – 2",
+      chapters: [
+        { id: "hin12-ar1", name: "भक्तिन" },
+        { id: "hin12-ar2", name: "बाजार दर्शन" },
+        { id: "hin12-ar3", name: "काले मेघा पानी दे" },
+        { id: "hin12-ar4", name: "पहलवान की ढोलक" }
+      ]
+    },
+    {
+      id: "vitan-12",
+      name: "Vitan – 2",
+      chapters: [
+        { id: "hin12-v1", name: "सिल्वर वेडिंग" },
+        { id: "hin12-v2", name: "जूझ" },
+        { id: "hin12-v3", name: "अतीत में दबे पांव" }
+      ]
+    }
+  ]
+  }
