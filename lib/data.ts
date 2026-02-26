@@ -1932,9 +1932,8 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         { id: "hin12v-3", name: "अतीत में दबे पांव" }
       ]
     }
-  ]
-},
-  {
+  },
+    {
   id: "english-12-arts",
   name: "English",
   nameHi: "अंग्रेज़ी",
@@ -1969,8 +1968,6 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   ]
   }
   ]
-}
-]
 };
 export function getQuizQuestions() {
   return []
