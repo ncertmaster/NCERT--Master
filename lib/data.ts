@@ -2220,4 +2220,3 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
             ]
             }
-        }
