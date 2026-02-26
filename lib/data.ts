@@ -955,3 +955,183 @@ chapters: [
       }
     ]
   },
+{
+id: "english",
+name: "English",
+nameHi: "English",
+icon: "book-open",
+books: [
+{
+id: "first-flight-10",
+name: "First Flight",
+nameHi: "First Flight",
+chapters: [
+{ id: "ff10-ch1", name: "A Letter to God", nameHi: "A Letter to God" },
+{ id: "ff10-ch2", name: "Nelson Mandela: Long Walk to Freedom", nameHi: "Nelson Mandela: Long Walk to Freedom" },
+{ id: "ff10-ch3", name: "Two Stories about Flying", nameHi: "Two Stories about Flying" },
+{ id: "ff10-ch4", name: "From the Diary of Anne Frank", nameHi: "From the Diary of Anne Frank" },
+{ id: "ff10-ch5", name: "The Hundred Dresses I", nameHi: "The Hundred Dresses I" },
+{ id: "ff10-ch6", name: "The Hundred Dresses II", nameHi: "The Hundred Dresses II" },
+{ id: "ff10-ch7", name: "Glimpses of India", nameHi: "Glimpses of India" },
+{ id: "ff10-ch8", name: "Mijbil the Otter", nameHi: "Mijbil the Otter" },
+{ id: "ff10-ch9", name: "Madam Rides the Bus", nameHi: "Madam Rides the Bus" },
+{ id: "ff10-ch10", name: "The Sermon at Benares", nameHi: "The Sermon at Benares" },
+{ id: "ff10-ch11", name: "The Proposal", nameHi: "The Proposal" }
+]
+},
+{
+id: "footprints-10",
+name: "Footprints Without Feet",
+nameHi: "Footprints Without Feet",
+chapters: [
+{ id: "fp10-ch1", name: "A Triumph of Surgery", nameHi: "A Triumph of Surgery" },
+{ id: "fp10-ch2", name: "The Thief’s Story", nameHi: "The Thief’s Story" },
+{ id: "fp10-ch3", name: "The Midnight Visitor", nameHi: "The Midnight Visitor" },
+{ id: "fp10-ch4", name: "A Question of Trust", nameHi: "A Question of Trust" },
+{ id: "fp10-ch5", name: "Footprints Without Feet", nameHi: "Footprints Without Feet" },
+{ id: "fp10-ch6", name: "The Making of a Scientist", nameHi: "The Making of a Scientist" },
+{ id: "fp10-ch7", name: "The Necklace", nameHi: "The Necklace" },
+{ id: "fp10-ch8", name: "The Hack Driver", nameHi: "The Hack Driver" },
+{ id: "fp10-ch9", name: "Bholi", nameHi: "Bholi" },
+{ id: "fp10-ch10", name: "The Book That Saved the Earth", nameHi: "The Book That Saved the Earth" }
+]
+}
+]
+},
+
+{
+id: "hindi-course-a",
+name: "Hindi Course A",
+nameHi: "हिंदी कोर्स A",
+icon: "languages",
+books: [
+{
+id: "kshitij-2-10",
+name: "Kshitij – 2",
+nameHi: "क्षितिज – 2",
+chapters: [
+{ id: "k10a-ch1", name: "Surdas", nameHi: "सूरदास" },
+{ id: "k10a-ch2", name: "Tulsidas", nameHi: "तुलसीदास" },
+{ id: "k10a-ch3", name: "Dev", nameHi: "देव" },
+{ id: "k10a-ch4", name: "Jaishankar Prasad", nameHi: "जयशंकर प्रसाद" },
+{ id: "k10a-ch5", name: "Suryakant Tripathi Nirala", nameHi: "सूर्यकांत त्रिपाठी निराला" },
+{ id: "k10a-ch6", name: "Nagarjun", nameHi: "नागार्जुन" },
+{ id: "k10a-ch7", name: "Girija Kumar Mathur", nameHi: "गिरिजा कुमार माथुर" },
+{ id: "k10a-ch8", name: "Rituraj", nameHi: "ऋतुराज" },
+{ id: "k10a-ch9", name: "Netaji Ka Chashma", nameHi: "नेताजी का चश्मा" },
+{ id: "k10a-ch10", name: "Bal Govind Bhagat", nameHi: "बाल गोविंद भगत" },
+{ id: "k10a-ch11", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
+{ id: "k10a-ch12", name: "Manushyata", nameHi: "मनुष्यता" },
+{ id: "k10a-ch13", name: "Ek Kahani Yeh Bhi", nameHi: "एक कहानी यह भी" },
+{ id: "k10a-ch14", name: "Stri Shiksha Ke Virodhi Kutarkon Ka Khandan", nameHi: "स्त्री शिक्षा के विरोधी कुतर्कों का खंडन" },
+{ id: "k10a-ch15", name: "Naubatkhane Mein Ibadat", nameHi: "नौबतखाने में इबादत" },
+{ id: "k10a-ch16", name: "Sanskriti", nameHi: "संस्कृति" },
+{ id: "k10a-ch17", name: "Atmkathya", nameHi: "आत्मकथ्य" }
+]
+},
+{
+id: "kritika-2-10",
+name: "Kritika – 2",
+nameHi: "कृतिका – 2",
+chapters: [
+{ id: "kr10a-ch1", name: "Mata Ka Anchal", nameHi: "माता का आँचल" },
+{ id: "kr10a-ch2", name: "George Pancham Ki Naak", nameHi: "जॉर्ज पंचम की नाक" },
+{ id: "kr10a-ch3", name: "Sana Sana Hath Jodi", nameHi: "साना-साना हाथ जोड़ि" },
+{ id: "kr10a-ch4", name: "Ehi Thain Jhulan Heryani Ho Rama", nameHi: "एही ठैयाँ झुलनी हेरानी हो रामा" }
+]
+}
+]
+},
+
+  {
+    {
+  id: "hindi-course-b",
+  name: "Hindi Course B",
+  nameHi: "हिंदी कोर्स B",
+  icon: "languages",
+  books: [
+    {
+      id: "sparsh-2-10",
+      name: "Sparsh – 2",
+      nameHi: "स्पर्श – 2",
+      chapters: [
+        { id: "sp10b-ch1", name: "Kabir", nameHi: "कबीर" },
+        { id: "sp10b-ch2", name: "Meera", nameHi: "मीरा" },
+        { id: "sp10b-ch3", name: "Bihari", nameHi: "बिहारी" },
+        { id: "sp10b-ch4", name: "Manushyata", nameHi: "मनुष्यता" },
+        { id: "sp10b-ch5", name: "Parvat Pradesh Mein Pavas", nameHi: "पर्वत प्रदेश में पावस" },
+        { id: "sp10b-ch6", name: "Topi Shukla", nameHi: "टोपी शुक्ला" },
+        { id: "sp10b-ch7", name: "Netaji Ka Chashma", nameHi: "नेताजी का चश्मा" },
+        { id: "sp10b-ch8", name: "Bal Govind Bhagat", nameHi: "बाल गोविंद भगत" },
+        { id: "sp10b-ch9", name: "Lakhnavi Andaz", nameHi: "लखनवी अंदाज़" },
+        { id: "sp10b-ch10", name: "Stri Shiksha Ke Virodhi Kutarkon Ka Khandan", nameHi: "स्त्री शिक्षा के विरोधी कुतर्कों का खंडन" },
+        { id: "sp10b-ch11", name: "Naubatkhane Mein Ibadat", nameHi: "नौबतखाने में इबादत" },
+        { id: "sp10b-ch12", name: "Sanskriti", nameHi: "संस्कृति" },
+        { id: "sp10b-ch13", name: "Atmkathya", nameHi: "आत्मकथ्य" },
+        { id: "sp10b-ch14", name: "Sana Sana Hath Jodi", nameHi: "साना-साना हाथ जोड़ि" },
+        { id: "sp10b-ch15", name: "Ehi Thain Jhulan Heryani Ho Rama", nameHi: "एही ठैयाँ झुलनी हेरानी हो रामा" },
+        { id: "sp10b-ch16", name: "Bholi", nameHi: "भोली" },
+        { id: "sp10b-ch17", name: "The Proposal (Hindi Adaptation)", nameHi: "प्रस्ताव" }
+      ]
+    },
+    {
+      id: "sanchayan-2-10",
+      name: "Sanchayan – 2",
+      nameHi: "संचयन – 2",
+      chapters: [
+        { id: "sa10b-ch1", name: "Harihar Kaka", nameHi: "हरिहर काका" },
+        { id: "sa10b-ch2", name: "Sapnon Ke Se Din", nameHi: "सपनों के-से दिन" },
+        { id: "sa10b-ch3", name: "Topi Shukla", nameHi: "टोपी शुक्ला" }
+      ]
+    }
+  ]
+}
+],
+}export const streamsByClass: Record<ClassNumber, Stream[]> = {
+  11: [
+    {
+      id: "science",
+      name: "Science",
+      nameHi: "विज्ञान",
+      subjects: [
+
+        // ================= PHYSICS =================
+        {
+          id: "physics-11",
+          name: "Physics",
+          nameHi: "भौतिकी",
+          icon: "atom",
+          books: [
+            {
+              id: "physics-11-part-1",
+              name: "Physics Part I",
+              nameHi: "भौतिकी भाग 1",
+              chapters: [
+                { id: "phy11-1", name: "Physical World", nameHi: "भौतिक जगत" },
+                { id: "phy11-2", name: "Units and Measurements", nameHi: "इकाइयाँ एवं मापन" },
+                { id: "phy11-3", name: "Motion in a Straight Line", nameHi: "सरल रेखा में गति" },
+                { id: "phy11-4", name: "Motion in a Plane", nameHi: "समतल में गति" },
+                { id: "phy11-5", name: "Laws of Motion", nameHi: "गति के नियम" },
+                { id: "phy11-6", name: "Work, Energy and Power", nameHi: "कार्य, ऊर्जा और शक्ति" },
+                { id: "phy11-7", name: "System of Particles and Rotational Motion", nameHi: "कणों का तंत्र एवं घूर्णन गति" }
+              ]
+            },
+            {
+              id: "physics-11-part-2",
+              name: "Physics Part II",
+              nameHi: "भौतिकी भाग 2",
+              chapters: [
+                { id: "phy11-8", name: "Gravitation", nameHi: "गुरुत्वाकर्षण" },
+                { id: "phy11-9", name: "Mechanical Properties of Solids", nameHi: "ठोसों के यांत्रिक गुण" },
+                { id: "phy11-10", name: "Mechanical Properties of Fluids", nameHi: "द्रवों के यांत्रिक गुण" },
+                { id: "phy11-11", name: "Thermal Properties of Matter", nameHi: "पदार्थ के तापीय गुण" },
+                { id: "phy11-12", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+                { id: "phy11-13", name: "Kinetic Theory", nameHi: "गति सिद्धांत" },
+                { id: "phy11-14", name: "Oscillations", nameHi: "दोलन" },
+                { id: "phy11-15", name: "Waves", nameHi: "तरंगें" }
+              ]
+            }
+          ]
+        },
+
+        // ================= CHEMISTRY =================
