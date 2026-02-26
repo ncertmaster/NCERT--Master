@@ -1307,7 +1307,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
               ]
             }
           ]
-        }
+        },
 {
       id: "commerce",
       name: "Commerce",
@@ -1415,3 +1415,57 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
 
       ]
   }
+{
+          id: "sociology-11",
+          name: "Sociology",
+          nameHi: "समाजशास्त्र",
+          icon: "users",
+          books: [
+            {
+              id: "introducing-sociology-11",
+              name: "Introducing Sociology",
+              nameHi: "समाजशास्त्र का परिचय",
+              chapters: [
+                { id: "soc11-1", name: "Sociology and Society", nameHi: "समाजशास्त्र और समाज" },
+                { id: "soc11-2", name: "Terms, Concepts and their Use in Sociology", nameHi: "शब्द, अवधारणाएँ और उनका प्रयोग" },
+                { id: "soc11-3", name: "Understanding Social Institutions", nameHi: "सामाजिक संस्थाओं की समझ" },
+                { id: "soc11-4", name: "Culture and Socialisation", nameHi: "संस्कृति और समाजीकरण" },
+                { id: "soc11-5", name: "Doing Sociology: Research Methods", nameHi: "समाजशास्त्र का अध्ययन: अनुसंधान पद्धति" }
+              ]
+            },
+            {
+              id: "understanding-society-11",
+              name: "Understanding Society",
+              nameHi: "समाज को समझना",
+              chapters: [
+                { id: "soc11-6", name: "Social Structure and Stratification", nameHi: "सामाजिक संरचना और स्तरीकरण" },
+                { id: "soc11-7", name: "Social Change and Social Order", nameHi: "सामाजिक परिवर्तन और सामाजिक व्यवस्था" },
+                { id: "soc11-8", name: "Environment and Society", nameHi: "पर्यावरण और समाज" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "psychology-11",
+          name: "Psychology",
+          nameHi: "मनोविज्ञान",
+          icon: "brain",
+          books: [
+            {
+              id: "psychology-11",
+              name: "Psychology",
+              nameHi: "मनोविज्ञान",
+              chapters: [
+                { id: "psy11-1", name: "What is Psychology?", nameHi: "मनोविज्ञान क्या है?" },
+                { id: "psy11-2", name: "Methods of Enquiry in Psychology", nameHi: "मनोविज्ञान में अनुसंधान की विधियाँ" },
+                { id: "psy11-3", name: "The Bases of Human Behaviour", nameHi: "मानव व्यवहार के आधार" },
+                { id: "psy11-4", name: "Human Development", nameHi: "मानव विकास" },
+                { id: "psy11-5", name: "Sensory, Attentional and Perceptual Processes", nameHi: "संवेदी एवं बोध प्रक्रियाएँ" },
+                { id: "psy11-6", name: "Learning", nameHi: "अधिगम" },
+                { id: "psy11-7", name: "Human Memory", nameHi: "मानव स्मृति" },
+                { id: "psy11-8", name: "Thinking", nameHi: "चिंतन" },
+                { id: "psy11-9", name: "Motivation and Emotion", nameHi: "प्रेरणा और भावना" }
+              ]
+            }
+          ]
+        }
