@@ -1571,3 +1571,216 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         }
       ]
         }
+,
+
+        // ================= GEOGRAPHY =================
+        {
+          id: "geography-11",
+          name: "Geography",
+          nameHi: "भूगोल",
+          icon: "globe",
+          books: [
+            {
+              id: "geo11-fundamentals",
+              name: "Fundamentals of Physical Geography",
+              nameHi: "भौतिक भूगोल के मूल सिद्धांत",
+              chapters: [
+                { id: "geo11-1", name: "Geography as a Discipline", nameHi: "विषय के रूप में भूगोल" },
+                { id: "geo11-2", name: "The Origin and Evolution of the Earth", nameHi: "पृथ्वी की उत्पत्ति और विकास" },
+                { id: "geo11-3", name: "Interior of the Earth", nameHi: "पृथ्वी का आंतरिक भाग" },
+                { id: "geo11-4", name: "Distribution of Oceans and Continents", nameHi: "महासागरों और महाद्वीपों का वितरण" },
+                { id: "geo11-5", name: "Minerals and Rocks", nameHi: "खनिज और चट्टानें" },
+                { id: "geo11-6", name: "Geomorphic Processes", nameHi: "भू-आकृतिक प्रक्रियाएँ" },
+                { id: "geo11-7", name: "Landforms and their Evolution", nameHi: "स्थलरूप और उनका विकास" },
+                { id: "geo11-8", name: "Composition and Structure of Atmosphere", nameHi: "वायुमंडल की संरचना" },
+                { id: "geo11-9", name: "Solar Radiation and Heat Budget", nameHi: "सौर विकिरण और ऊष्मा संतुलन" },
+                { id: "geo11-10", name: "Atmospheric Circulation", nameHi: "वायुमंडलीय परिसंचरण" },
+                { id: "geo11-11", name: "Water in the Atmosphere", nameHi: "वायुमंडल में जल" },
+                { id: "geo11-12", name: "World Climate and Climate Change", nameHi: "विश्व जलवायु और जलवायु परिवर्तन" },
+                { id: "geo11-13", name: "Water (Oceans)", nameHi: "महासागरीय जल" },
+                { id: "geo11-14", name: "Movements of Ocean Water", nameHi: "महासागरीय जल की गतियाँ" },
+                { id: "geo11-15", name: "Life on the Earth", nameHi: "पृथ्वी पर जीवन" }
+              ]
+            },
+            {
+              id: "geo11-india",
+              name: "India Physical Environment",
+              nameHi: "भारत का भौतिक पर्यावरण",
+              chapters: [
+                { id: "geo11-16", name: "India: Location", nameHi: "भारत: स्थिति" },
+                { id: "geo11-17", name: "Structure and Physiography", nameHi: "संरचना एवं भू-आकृति" },
+                { id: "geo11-18", name: "Drainage System", nameHi: "अपवाह तंत्र" },
+                { id: "geo11-19", name: "Climate", nameHi: "जलवायु" },
+                { id: "geo11-20", name: "Natural Vegetation", nameHi: "प्राकृतिक वनस्पति" },
+                { id: "geo11-21", name: "Natural Hazards", nameHi: "प्राकृतिक आपदाएँ" }
+              ]
+            }
+          ]
+        },
+
+        // ================= ECONOMICS (ARTS) =================
+        {
+          id: "economics-11-arts",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "bar-chart",
+          books: [
+            {
+              id: "eco11-arts-stat",
+              name: "Statistics for Economics",
+              nameHi: "अर्थशास्त्र के लिए सांख्यिकी",
+              chapters: [
+                { id: "eco11a-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "eco11a-2", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "eco11a-3", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "eco11a-4", name: "Presentation of Data", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "eco11a-5", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति के माप" },
+                { id: "eco11a-6", name: "Correlation", nameHi: "सहसंबंध" }
+              ]
+            }
+          ]
+        },
+
+        // ================= SOCIOLOGY =================
+        {
+          id: "sociology-11",
+          name: "Sociology",
+          nameHi: "समाजशास्त्र",
+          icon: "users",
+          books: [
+            {
+              id: "soc11-1",
+              name: "Introducing Sociology",
+              nameHi: "समाजशास्त्र का परिचय",
+              chapters: [
+                { id: "soc11-1a", name: "Sociology and Society", nameHi: "समाजशास्त्र और समाज" },
+                { id: "soc11-2a", name: "Terms, Concepts and their Use", nameHi: "शब्दावली एवं अवधारणाएँ" },
+                { id: "soc11-3a", name: "Understanding Social Institutions", nameHi: "सामाजिक संस्थाओं को समझना" }
+              ]
+            },
+            {
+              id: "soc11-2",
+              name: "Understanding Society",
+              nameHi: "समाज को समझना",
+              chapters: [
+                { id: "soc11-4a", name: "Social Structure", nameHi: "सामाजिक संरचना" },
+                { id: "soc11-5a", name: "Social Change", nameHi: "सामाजिक परिवर्तन" }
+              ]
+            }
+          ]
+        },
+
+        // ================= PSYCHOLOGY =================
+        {
+          id: "psychology-11",
+          name: "Psychology",
+          nameHi: "मनोविज्ञान",
+          icon: "brain",
+          books: [
+            {
+              id: "psych11-book",
+              name: "Psychology",
+              nameHi: "मनोविज्ञान",
+              chapters: [
+                { id: "psy11-1", name: "What is Psychology?", nameHi: "मनोविज्ञान क्या है?" },
+                { id: "psy11-2", name: "Methods of Enquiry", nameHi: "अनुसंधान की विधियाँ" },
+                { id: "psy11-3", name: "Human Development", nameHi: "मानव विकास" },
+                { id: "psy11-4", name: "Sensory, Attentional and Perceptual Processes", nameHi: "संवेदनात्मक प्रक्रियाएँ" },
+                { id: "psy11-5", name: "Learning", nameHi: "अधिगम" },
+                { id: "psy11-6", name: "Memory", nameHi: "स्मृति" },
+                { id: "psy11-7", name: "Thinking", nameHi: "चिंतन" },
+                { id: "psy11-8", name: "Motivation and Emotion", nameHi: "प्रेरणा एवं भाव" }
+              ]
+            }
+          ]
+}
+,
+
+        // ================= HINDI CORE =================
+        {
+          id: "hindi-core-11",
+          name: "Hindi Core",
+          nameHi: "हिंदी कोर",
+          icon: "languages",
+          books: [
+            {
+              id: "hindi-core-11-aaroh",
+              name: "Aaroh – 1",
+              nameHi: "आरोह – 1",
+              chapters: [
+                { id: "hin11-1", name: "Kabeer", nameHi: "कबीर" },
+                { id: "hin11-2", name: "Meera", nameHi: "मीरा" },
+                { id: "hin11-3", name: "Bharatendu Harishchandra", nameHi: "भारतेंदु हरिश्चंद्र" },
+                { id: "hin11-4", name: "Suryakant Tripathi Nirala", nameHi: "सूर्यकांत त्रिपाठी निराला" },
+                { id: "hin11-5", name: "Ramdhari Singh Dinkar", nameHi: "रामधारी सिंह दिनकर" }
+              ]
+            },
+            {
+              id: "hindi-core-11-vitaan",
+              name: "Vitaan – 1",
+              nameHi: "वितान – 1",
+              chapters: [
+                { id: "hin11-6", name: "Bharat Mata", nameHi: "भारत माता" },
+                { id: "hin11-7", name: "Samvedana", nameHi: "संवेदना" },
+                { id: "hin11-8", name: "Aatmkatha", nameHi: "आत्मकथा" }
+              ]
+            }
+          ]
+        },
+
+        // ================= ENGLISH CORE =================
+        {
+          id: "english-core-11",
+          name: "English Core",
+          nameHi: "अंग्रेज़ी कोर",
+          icon: "book-open",
+          books: [
+            {
+              id: "eng11-hornbill",
+              name: "Hornbill",
+              nameHi: "हॉर्नबिल",
+              chapters: [
+                { id: "eng11-1", name: "The Portrait of a Lady", nameHi: "द पोर्ट्रेट ऑफ ए लेडी" },
+                { id: "eng11-2", name: "We're Not Afraid to Die", nameHi: "वी आर नॉट अफ्रेड टू डाई" },
+                { id: "eng11-3", name: "Discovering Tut", nameHi: "डिस्कवरिंग टट" },
+                { id: "eng11-4", name: "Landscape of the Soul", nameHi: "लैंडस्केप ऑफ द सोल" },
+                { id: "eng11-5", name: "The Ailing Planet", nameHi: "द एलिंग प्लेनेट" },
+                { id: "eng11-6", name: "The Browning Version", nameHi: "द ब्राउनिंग वर्जन" },
+                { id: "eng11-7", name: "The Adventure", nameHi: "द एडवेंचर" }
+              ]
+            },
+            {
+              id: "eng11-snapshot",
+              name: "Snapshots",
+              nameHi: "स्नैपशॉट्स",
+              chapters: [
+                { id: "eng11-8", name: "The Summer of the Beautiful White Horse", nameHi: "द समर ऑफ द ब्यूटीफुल व्हाइट हॉर्स" },
+                { id: "eng11-9", name: "The Address", nameHi: "द एड्रेस" },
+                { id: "eng11-10", name: "Mother's Day", nameHi: "मदर्स डे" },
+                { id: "eng11-11", name: "Birth", nameHi: "बर्थ" },
+                { id: "eng11-12", name: "The Tale of Melon City", nameHi: "द टेल ऑफ मेलन सिटी" }
+              ]
+            }
+          ]
+        },
+
+        // ================= SANSKRIT =================
+        {
+          id: "sanskrit-11",
+          name: "Sanskrit",
+          nameHi: "संस्कृत",
+          icon: "book",
+          books: [
+            {
+              id: "sanskrit-11-book",
+              name: "Bhaswati",
+              nameHi: "भास्वती",
+              chapters: [
+                { id: "san11-1", name: "Subhashitani", nameHi: "सुभाषितानि" },
+                { id: "san11-2", name: "Ramayan Kathasaar", nameHi: "रामायण कथासार" },
+                { id: "san11-3", name: "Mahabharat Kathasaar", nameHi: "महाभारत कथासार" },
+                { id: "san11-4", name: "Naitik Kathayen", nameHi: "नैतिक कथाएँ" }
+              ]
+            }
+          ]
+        }
