@@ -352,7 +352,6 @@ export function ContentScreen({ title }: { title: string }) {
   </div>
 </div>
       </div>
-    </div>
   )
 }
 
