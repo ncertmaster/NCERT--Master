@@ -1140,34 +1140,38 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
 ]
   },
 
-  {
-  id: "chemistry-11",
-  name: "Chemistry",
-  nameHi: "रसायन विज्ञान",
-  icon: "flask",
-  books: [
-
-    chapters: [
-
-  { id: "chem11-1", name: "Some Basic Concepts of Chemistry", nameHi: "रसायन विज्ञान के कुछ मूल सिद्धांत" },
-  { id: "chem11-2", name: "Structure of Atom", nameHi: "परमाणु की संरचना" },
-  { id: "chem11-3", name: "Classification of Elements and Periodicity in Properties", nameHi: "तत्वों का वर्गीकरण और गुणों में आवर्तिता" },
-  { id: "chem11-4", name: "Chemical Bonding and Molecular Structure", nameHi: "रासायनिक बंधन और आणविक संरचना" },
-  { id: "chem11-5", name: "States of Matter", nameHi: "पदार्थ की अवस्थाएँ" },
-  { id: "chem11-6", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
-  { id: "chem11-7", name: "Equilibrium", nameHi: "साम्यावस्था" }
-
-]
-
-    {
-      id: "chemistry-11-part-2",
-      name: "Chemistry Part II",
-      nameHi: "रसायन विज्ञान भाग 2",
-      chapters: []
-    }
-
-  ]
-  },
+     {
+          id: "chemistry-11",
+          name: "Chemistry",
+          nameHi: "रसायन विज्ञान",
+          icon: "flask",
+          books: [
+            {
+              id: "chemistry-11-part-1",
+              name: "Chemistry Part I",
+              nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "chem11-1", name: "Some Basic Concepts of Chemistry", nameHi: "रसायन विज्ञान की कुछ मूल अवधारणाएँ" },
+                { id: "chem11-2", name: "Structure of Atom", nameHi: "परमाणु की संरचना" },
+                { id: "chem11-3", name: "Classification of Elements and Periodicity in Properties", nameHi: "तत्वों का वर्गीकरण एवं गुणधर्मों में आवर्तिता" },
+                { id: "chem11-4", name: "Chemical Bonding and Molecular Structure", nameHi: "रासायनिक आबंधन तथा आण्विक संरचना" },
+                { id: "chem11-5", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+                { id: "chem11-6", name: "Equilibrium", nameHi: "साम्यावस्था" },
+                { id: "chem11-7", name: "Redox Reactions", nameHi: "अपचयोपचय अभिक्रियाएँ" },
+              ]
+            },
+            {
+              id: "chemistry-11-part-2",
+              name: "Chemistry Part II",
+              nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "chem11-8", name: "Organic Chemistry: Some Basic Principles and Techniques", nameHi: "कार्बनिक रसायन: कुछ आधारभूत सिद्धांत तथा तकनीकें" },
+                { id: "chem11-9", name: "Hydrocarbons", nameHi: "हाइड्रोकार्बन" },
+                { id: "chem11-10", name: "Environmental Chemistry", nameHi: "पर्यावरणीय रसायन" },
+              ]
+            },
+          ]
+        },
 
   {
     id: "biology-11",
