@@ -48,7 +48,7 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
   const { setScreen, setSelectedSubject, selectedClass, goBack } = useApp()
 
   // 11th & 12th - Streams dikhao
-  if (selectedClass === 11 || selectedClass === 12) {
+  if ((selectedClass === 11 || selectedClass === 12) && !selectedSubject) {
     const streams = streamsByClass[selectedClass] || []
     return (
       <div className="flex flex-col h-full bg-background">
