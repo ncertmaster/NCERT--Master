@@ -48,7 +48,7 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
   const { setScreen, setSelectedSubject, selectedClass, goBack } = useApp()
 
   // 11th & 12th - Streams dikhao
-  if ((selectedClass === 11 || selectedClass === 12) && !selectedSubject) {
+  if (selectedClass === 11 || selectedClass === 12) {
     const streams = streamsByClass[selectedClass] || []
     return (
       <div className="flex flex-col h-full bg-background">
@@ -63,9 +63,9 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
             <button
               key={stream.id}
               onClick={() => {
-                setSelectedSubject(stream.id)
-                setScreen(`${flow}-subject`)
-              }}
+  setSelectedSubject(stream.id)
+  setScreen(`${flow}-chapter`)
+}}
               className="w-full flex items-center justify-between p-4 bg-card border rounded-xl hover:border-primary transition-colors"
             >
               <div className="flex items-center">
@@ -140,7 +140,7 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
               key={subject.id}
               onClick={() => {
                 setSelectedSubject(subject.id)
-                if (subject.books.length === 1) {
+                if ((subject.books || []).length === 1) {
                   setScreen(`${flow}-content`)
                 } else {
                   setScreen(`${flow}-content`)
