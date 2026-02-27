@@ -1086,7 +1086,51 @@ chapters: [
 }          // subject close
 ]          // class 10 close
 };         // subjectsByClass object close
+export const streamsByClass: Record<ClassNumber, Stream[]> = {
 
+  11: [
+    {
+      id: "science",
+      name: "Science",
+      nameHi: "विज्ञान",
+      subjects: []
+    },
+    {
+      id: "commerce",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: []
+    },
+    {
+      id: "arts",
+      name: "Arts",
+      nameHi: "कला",
+      subjects: []
+    }
+  ],
+
+  12: [
+    {
+      id: "science",
+      name: "Science",
+      nameHi: "विज्ञान",
+      subjects: []
+    },
+    {
+      id: "commerce",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: []
+    },
+    {
+      id: "arts",
+      name: "Arts",
+      nameHi: "कला",
+      subjects: []
+    }
+  ]
+
+};
 export function getQuizQuestions() {
   return []
 }
