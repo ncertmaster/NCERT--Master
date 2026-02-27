@@ -1,7 +1,7 @@
-export default async function NotesPage({ params }: any) {
+export default function NotesPage(props: any) {
   return (
     <div style={{ padding: "20px" }}>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
+      <pre>{JSON.stringify(props, null, 2)}</pre>
     </div>
   )
 }
