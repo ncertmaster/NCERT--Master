@@ -1093,7 +1093,57 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
       id: "science",
       name: "Science",
       nameHi: "विज्ञान",
-      subjects: []
+      subjects: [
+
+  {
+    id: "physics-11",
+    name: "Physics",
+    nameHi: "भौतिकी",
+    icon: "atom",
+    books: []
+  },
+
+  {
+    id: "chemistry-11",
+    name: "Chemistry",
+    nameHi: "रसायन विज्ञान",
+    icon: "flask",
+    books: []
+  },
+
+  {
+    id: "biology-11",
+    name: "Biology",
+    nameHi: "जीव विज्ञान",
+    icon: "leaf",
+    books: []
+  },
+
+  {
+    id: "mathematics-11",
+    name: "Mathematics",
+    nameHi: "गणित",
+    icon: "calculator",
+    books: []
+  },
+
+  {
+    id: "english-core-11",
+    name: "English (Core)",
+    nameHi: "अंग्रेज़ी (कोर)",
+    icon: "book-open",
+    books: []
+  },
+
+  {
+    id: "hindi-core-11",
+    name: "Hindi (Core)",
+    nameHi: "हिंदी (कोर)",
+    icon: "book",
+    books: []
+  }
+
+]
     },
     {
       id: "commerce",
