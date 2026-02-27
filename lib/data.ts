@@ -1237,6 +1237,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
             }
           ]
         },
+
         {
           id: "english-core-11",
           name: "English (Core)",
@@ -1274,7 +1275,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
               ]
             }
           ]
-        },
+                 }
         {
           id: "hindi-core-11",
           name: "Hindi (Core)",
@@ -1307,45 +1308,46 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
               ]
             }
           ]
-        },
-{
-      id: "commerce",
-      name: "Commerce",
-      nameHi: "वाणिज्य",
-      subjects: [
-
-        {
-          id: "accountancy-11",
-          name: "Accountancy",
-          nameHi: "लेखाशास्त्र",
-          icon: "calculator",
-          books: [
-            {
-              id: "accountancy-11-part-1",
-              name: "Financial Accounting – I",
-              nameHi: "वित्तीय लेखांकन – 1",
-              chapters: [
-                { id: "acc11-1", name: "Introduction to Accounting", nameHi: "लेखांकन का परिचय" },
-                { id: "acc11-2", name: "Theory Base of Accounting", nameHi: "लेखांकन का सैद्धांतिक आधार" },
-                { id: "acc11-3", name: "Recording of Transactions – I", nameHi: "लेन-देन का लेखा – 1" },
-                { id: "acc11-4", name: "Recording of Transactions – II", nameHi: "लेन-देन का लेखा – 2" },
-                { id: "acc11-5", name: "Bank Reconciliation Statement", nameHi: "बैंक सुलह विवरण" }
-              ]
-            },
-            {
-              id: "accountancy-11-part-2",
-              name: "Financial Accounting – II",
-              nameHi: "वित्तीय लेखांकन – 2",
-              chapters: [
-                { id: "acc11-6", name: "Trial Balance and Rectification of Errors", nameHi: "तलपट और त्रुटि सुधार" },
-                { id: "acc11-7", name: "Depreciation, Provisions and Reserves", nameHi: "मूल्यह्रास, प्रावधान और भंडार" },
-                { id: "acc11-8", name: "Financial Statements – I", nameHi: "वित्तीय विवरण – 1" },
-                { id: "acc11-9", name: "Financial Statements – II", nameHi: "वित्तीय विवरण – 2" }
-              ]
-            }
-          ]
-        },
-
+          }
+        ,
+      {
+        id: "commerce",
+        name: "Commerce",
+        nameHi: "वाणिज्य",
+        subjects: [
+          {
+            id: "accountancy-11",
+            name: "Accountancy",
+            nameHi: "लेखाशास्त्र",
+            icon: "calculator",
+            books: [
+              {
+                id: "accountancy-11-part-1",
+                name: "Financial Accounting – I",
+                nameHi: "वित्तीय लेखांकन – 1",
+                chapters: [
+                  { id: "acc11-1", name: "Introduction to Accounting", nameHi: "लेखांकन का परिचय" },
+                  { id: "acc11-2", name: "Theory Base of Accounting", nameHi: "लेखांकन का सैद्धांतिक आधार" },
+                  { id: "acc11-3", name: "Recording of Transactions – I", nameHi: "लेन-देन का लेखा – 1" },
+                  { id: "acc11-4", name: "Recording of Transactions – II", nameHi: "लेन-देन का लेखा – 2" },
+                  { id: "acc11-5", name: "Bank Reconciliation Statement", nameHi: "बैंक सुलह विवरण" }
+                ]
+              },
+              {
+                id: "accountancy-11-part-2",
+                name: "Financial Accounting – II",
+                nameHi: "वित्तीय लेखांकन – 2",
+                chapters: [
+                  { id: "acc11-6", name: "Trial Balance and Rectification of Errors", nameHi: "तलपट और त्रुटि सुधार" },
+                  { id: "acc11-7", name: "Depreciation, Provisions and Reserves", nameHi: "मूल्यह्रास, प्रावधान और भंडार" },
+                  { id: "acc11-8", name: "Financial Statements – I", nameHi: "वित्तीय विवरण – 1" },
+                  { id: "acc11-9", name: "Financial Statements – II", nameHi: "वित्तीय विवरण – 2" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
         {
           id: "business-studies-11",
           name: "Business Studies",
