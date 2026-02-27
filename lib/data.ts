@@ -1120,10 +1120,21 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   },
 
   {
-    id: "physics-11-part-2",
-    name: "Physics Part II",
-    nameHi: "भौतिकी भाग 2",
-    chapters: []
+  id: "physics-11-part-2",
+  name: "Physics Part II",
+  nameHi: "भौतिकी भाग 2",
+  chapters: [
+
+    { id: "phy11-8",  name: "Gravitation", nameHi: "गुरुत्वाकर्षण" },
+    { id: "phy11-9",  name: "Mechanical Properties of Solids", nameHi: "ठोसों के यांत्रिक गुण" },
+    { id: "phy11-10", name: "Mechanical Properties of Fluids", nameHi: "द्रवों के यांत्रिक गुण" },
+    { id: "phy11-11", name: "Thermal Properties of Matter", nameHi: "पदार्थ के तापीय गुण" },
+    { id: "phy11-12", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+    { id: "phy11-13", name: "Kinetic Theory", nameHi: "गति सिद्धांत" },
+    { id: "phy11-14", name: "Oscillations", nameHi: "दोलन" },
+    { id: "phy11-15", name: "Waves", nameHi: "तरंगें" }
+
+  ]
   }
 
 ]
