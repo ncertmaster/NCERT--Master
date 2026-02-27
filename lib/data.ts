@@ -1173,54 +1173,547 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
           ]
         },
 
-  {
-    id: "biology-11",
-    name: "Biology",
-    nameHi: "जीव विज्ञान",
-    icon: "leaf",
-    books: []
-  },
-
-  {
-    id: "mathematics-11",
-    name: "Mathematics",
-    nameHi: "गणित",
-    icon: "calculator",
-    books: []
-  },
-
-  {
-    id: "english-core-11",
-    name: "English (Core)",
-    nameHi: "अंग्रेज़ी (कोर)",
-    icon: "book-open",
-    books: []
-  },
-
-  {
-    id: "hindi-core-11",
-    name: "Hindi (Core)",
-    nameHi: "हिंदी (कोर)",
-    icon: "book",
-    books: []
-  }
-
-]
+{
+          id: "biology-11",
+          name: "Biology",
+          nameHi: "जीव विज्ञान",
+          icon: "leaf",
+          books: [
+            {
+              id: "biology-11-book",
+              name: "Biology",
+              nameHi: "जीव विज्ञान",
+              chapters: [
+                { id: "bio11-1", name: "The Living World", nameHi: "जीव जगत" },
+                { id: "bio11-2", name: "Biological Classification", nameHi: "जीव जगत का वर्गीकरण" },
+                { id: "bio11-3", name: "Plant Kingdom", nameHi: "वनस्पति जगत" },
+                { id: "bio11-4", name: "Animal Kingdom", nameHi: "प्राणि जगत" },
+                { id: "bio11-5", name: "Morphology of Flowering Plants", nameHi: "पुष्पी पादपों की आकारिकी" },
+                { id: "bio11-6", name: "Anatomy of Flowering Plants", nameHi: "पुष्पी पादपों का शारीर" },
+                { id: "bio11-7", name: "Structural Organisation in Animals", nameHi: "प्राणियों में संरचनात्मक संगठन" },
+                { id: "bio11-8", name: "Cell: The Unit of Life", nameHi: "कोशिका: जीवन की इकाई" },
+                { id: "bio11-9", name: "Biomolecules", nameHi: "जैव अणु" },
+                { id: "bio11-10", name: "Cell Cycle and Cell Division", nameHi: "कोशिका चक्र और कोशिका विभाजन" },
+                { id: "bio11-11", name: "Photosynthesis in Higher Plants", nameHi: "उच्च पादपों में प्रकाश-संश्लेषण" },
+                { id: "bio11-12", name: "Respiration in Plants", nameHi: "पादप में श्वसन" },
+                { id: "bio11-13", name: "Plant Growth and Development", nameHi: "पादप वृद्धि एवं परिवर्धन" },
+                { id: "bio11-14", name: "Breathing and Exchange of Gases", nameHi: "श्वासोच्छ्वास और गैसों का विनिमय" },
+                { id: "bio11-15", name: "Body Fluids and Circulation", nameHi: "शरीर द्रव तथा परिसंचरण" },
+                { id: "bio11-16", name: "Excretory Products and their Elimination", nameHi: "उत्सर्जी उत्पाद एवं उनका निष्कासन" },
+                { id: "bio11-17", name: "Locomotion and Movement", nameHi: "गमन एवं संचलन" },
+                { id: "bio11-18", name: "Neural Control and Coordination", nameHi: "तंत्रिकीय नियंत्रण एवं समन्वय" },
+                { id: "bio11-19", name: "Chemical Coordination and Integration", nameHi: "रासायनिक समन्वय तथा एकीकरण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "mathematics-11",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "mathematics-11-book",
+              name: "Mathematics",
+              nameHi: "गणित",
+              chapters: [
+                { id: "math11-1", name: "Sets", nameHi: "समुच्चय" },
+                { id: "math11-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "math11-3", name: "Trigonometric Functions", nameHi: "त्रिकोणमितीय फलन" },
+                { id: "math11-4", name: "Complex Numbers and Quadratic Equations", nameHi: "सम्मिश्र संख्याएँ और द्विघातीय समीकरण" },
+                { id: "math11-5", name: "Linear Inequalities", nameHi: "रैखिक असमिकाएँ" },
+                { id: "math11-6", name: "Permutations and Combinations", nameHi: "क्रमचय और संचय" },
+                { id: "math11-7", name: "Binomial Theorem", nameHi: "द्विपद प्रमेय" },
+                { id: "math11-8", name: "Sequences and Series", nameHi: "अनुक्रम तथा श्रेणी" },
+                { id: "math11-9", name: "Straight Lines", nameHi: "सरल रेखाएँ" },
+                { id: "math11-10", name: "Conic Sections", nameHi: "शंकु परिच्छेद" },
+                { id: "math11-11", name: "Introduction to Three Dimensional Geometry", nameHi: "त्रिविमीय ज्यामिति का परिचय" },
+                { id: "math11-12", name: "Limits and Derivatives", nameHi: "सीमा और अवकलज" },
+                { id: "math11-13", name: "Statistics", nameHi: "सांख्यिकी" },
+                { id: "math11-14", name: "Probability", nameHi: "प्रायिकता" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-11",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11",
+              name: "Hornbill",
+              nameHi: "Hornbill",
+              chapters: [
+                { id: "eng11-1", name: "The Portrait of a Lady", nameHi: "The Portrait of a Lady" },
+                { id: "eng11-2", name: "We're Not Afraid to Die", nameHi: "We're Not Afraid to Die" },
+                { id: "eng11-3", name: "Discovering Tut: the Saga Continues", nameHi: "Discovering Tut" },
+                { id: "eng11-4", name: "Landscape of the Soul", nameHi: "Landscape of the Soul" },
+                { id: "eng11-5", name: "The Ailing Planet", nameHi: "The Ailing Planet" },
+                { id: "eng11-6", name: "The Browning Version", nameHi: "The Browning Version" },
+                { id: "eng11-7", name: "The Adventure", nameHi: "The Adventure" },
+                { id: "eng11-8", name: "Silk Road", nameHi: "Silk Road" },
+              ]
+            },
+            {
+              id: "snapshots-11",
+              name: "Snapshots (Supplementary)",
+              nameHi: "Snapshots",
+              chapters: [
+                { id: "snap11-1", name: "The Summer of the Beautiful White Horse", nameHi: "The Summer of the Beautiful White Horse" },
+                { id: "snap11-2", name: "The Address", nameHi: "The Address" },
+                { id: "snap11-3", name: "Ranga's Marriage", nameHi: "Ranga's Marriage" },
+                { id: "snap11-4", name: "Albert Einstein at School", nameHi: "Albert Einstein at School" },
+                { id: "snap11-5", name: "Mother's Day", nameHi: "Mother's Day" },
+                { id: "snap11-6", name: "The Ghat of the Only World", nameHi: "The Ghat of the Only World" },
+                { id: "snap11-7", name: "Birth", nameHi: "Birth" },
+                { id: "snap11-8", name: "The Tale of Melon City", nameHi: "The Tale of Melon City" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-11",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-11",
+              name: "Aroh Bhag 1",
+              nameHi: "आरोह भाग 1",
+              chapters: [
+                { id: "hin11-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
+                { id: "hin11-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
+                { id: "hin11-3", name: "Paththar Ki Pankh Se", nameHi: "पथेर पाँचाली" },
+                { id: "hin11-4", name: "Ghazal", nameHi: "गज़ल" },
+                { id: "hin11-5", name: "Sab Aankho Ke Aansoo Ujalein", nameHi: "सब आँखों के आँसू उजले" },
+                { id: "hin11-6", name: "Aao Milkar Bachaayen", nameHi: "आओ मिलकर बचाएँ" },
+                { id: "hin11-7", name: "Namskar", nameHi: "नमस्कार" },
+                { id: "hin11-8", name: "Jama Hua Hai Akela", nameHi: "जामुन का पेड़" },
+                { id: "hin11-9", name: "India Mata", nameHi: "भारत माता" },
+                { id: "hin11-10", name: "Aatma Ka Taap", nameHi: "आत्मा का ताप" },
+                { id: "hin11-11", name: "Khaana Khaane Ki Table Par", nameHi: "खाना खाने की टेबिल पर" },
+                { id: "hin11-12", name: "Urvi Ke Geet", nameHi: "उर्वी के गीत" },
+              ]
+            },
+            {
+              id: "vitan-11",
+              name: "Vitan Bhag 1 (Supplementary)",
+              nameHi: "वितान भाग 1",
+              chapters: [
+                { id: "vit11-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
+                { id: "vit11-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
+                { id: "vit11-3", name: "Aalo Aandhari", nameHi: "आलो-आँधारि" },
+              ]
+            },
+          ]
+        },
+      ]
     },
     {
       id: "commerce",
       name: "Commerce",
       nameHi: "वाणिज्य",
-      subjects: []
+      subjects: [
+        {
+          id: "accountancy-11",
+          name: "Accountancy",
+          nameHi: "लेखाशास्त्र",
+          icon: "book",
+          books: [
+            {
+              id: "accountancy-11-part-1",
+              name: "Accountancy Part I",
+              nameHi: "लेखाशास्त्र भाग 1",
+              chapters: [
+                { id: "acc11-1", name: "Introduction to Accounting", nameHi: "लेखांकन का परिचय" },
+                { id: "acc11-2", name: "Theory Base of Accounting", nameHi: "लेखांकन का सैद्धांतिक आधार" },
+                { id: "acc11-3", name: "Recording of Transactions I", nameHi: "लेनदेनों का अभिलेखन 1" },
+                { id: "acc11-4", name: "Recording of Transactions II", nameHi: "लेनदेनों का अभिलेखन 2" },
+                { id: "acc11-5", name: "Bank Reconciliation Statement", nameHi: "बैंक समाधान विवरण" },
+                { id: "acc11-6", name: "Trial Balance and Rectification of Errors", nameHi: "तलपट और अशुद्धियों का सुधार" },
+                { id: "acc11-7", name: "Depreciation, Provisions and Reserves", nameHi: "मूल्यह्रास, प्रावधान और संचय" },
+              ]
+            },
+            {
+              id: "accountancy-11-part-2",
+              name: "Accountancy Part II",
+              nameHi: "लेखाशास्त्र भाग 2",
+              chapters: [
+                { id: "acc11-8", name: "Bill of Exchange", nameHi: "विनिमय विपत्र" },
+                { id: "acc11-9", name: "Financial Statements I", nameHi: "वित्तीय विवरण 1" },
+                { id: "acc11-10", name: "Financial Statements II", nameHi: "वित्तीय विवरण 2" },
+                { id: "acc11-11", name: "Accounts from Incomplete Records", nameHi: "अपूर्ण अभिलेखों से खाते" },
+                { id: "acc11-12", name: "Applications of Computers in Accounting", nameHi: "लेखांकन में कंप्यूटर का अनुप्रयोग" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "business-studies-11",
+          name: "Business Studies",
+          nameHi: "व्यवसाय अध्ययन",
+          icon: "briefcase",
+          books: [
+            {
+              id: "business-11-book",
+              name: "Business Studies",
+              nameHi: "व्यवसाय अध्ययन",
+              chapters: [
+                { id: "bst11-1", name: "Nature and Purpose of Business", nameHi: "व्यवसाय की प्रकृति एवं उद्देश्य" },
+                { id: "bst11-2", name: "Forms of Business Organisation", nameHi: "व्यावसायिक संगठन के स्वरूप" },
+                { id: "bst11-3", name: "Private, Public and Global Enterprises", nameHi: "निजी, सार्वजनिक एवं भूमंडलीय उद्यम" },
+                { id: "bst11-4", name: "Business Services", nameHi: "व्यावसायिक सेवाएँ" },
+                { id: "bst11-5", name: "Emerging Modes of Business", nameHi: "व्यवसाय के उभरते स्वरूप" },
+                { id: "bst11-6", name: "Social Responsibility of Business and Business Ethics", nameHi: "व्यवसाय की सामाजिक जिम्मेदारी और व्यावसायिक नैतिकता" },
+                { id: "bst11-7", name: "Formation of a Company", nameHi: "कंपनी निर्माण" },
+                { id: "bst11-8", name: "Sources of Business Finance", nameHi: "व्यावसायिक वित्त के स्रोत" },
+                { id: "bst11-9", name: "Small Business and Entrepreneurship", nameHi: "लघु व्यवसाय और उद्यमिता" },
+                { id: "bst11-10", name: "Internal Trade", nameHi: "आंतरिक व्यापार" },
+                { id: "bst11-11", name: "International Business", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics-11",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "trending-up",
+          books: [
+            {
+              id: "statistics-11",
+              name: "Statistics for Economics",
+              nameHi: "अर्थशास्त्र में सांख्यिकी",
+              chapters: [
+                { id: "eco11-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "eco11-2", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "eco11-3", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "eco11-4", name: "Presentation of Data", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "eco11-5", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति की माप" },
+                { id: "eco11-6", name: "Measures of Dispersion", nameHi: "परिक्षेपण की माप" },
+                { id: "eco11-7", name: "Correlation", nameHi: "सहसंबंध" },
+                { id: "eco11-8", name: "Index Numbers", nameHi: "सूचकांक" },
+              ]
+            },
+            {
+              id: "indian-economy-11",
+              name: "Indian Economic Development",
+              nameHi: "भारतीय अर्थव्यवस्था का विकास",
+              chapters: [
+                { id: "ied11-1", name: "Indian Economy on the Eve of Independence", nameHi: "स्वतंत्रता की पूर्व संध्या पर भारतीय अर्थव्यवस्था" },
+                { id: "ied11-2", name: "Indian Economy 1950-1990", nameHi: "भारतीय अर्थव्यवस्था 1950-1990" },
+                { id: "ied11-3", name: "Liberalisation, Privatisation and Globalisation", nameHi: "उदारीकरण, निजीकरण और वैश्वीकरण" },
+                { id: "ied11-4", name: "Poverty", nameHi: "निर्धनता" },
+                { id: "ied11-5", name: "Human Capital Formation in India", nameHi: "भारत में मानव पूँजी का निर्माण" },
+                { id: "ied11-6", name: "Rural Development", nameHi: "ग्रामीण विकास" },
+                { id: "ied11-7", name: "Employment: Growth, Informalisation and Other Issues", nameHi: "रोजगार: संवृद्धि, अनौपचारीकरण एवं अन्य मुद्दे" },
+                { id: "ied11-8", name: "Infrastructure", nameHi: "आधारिक संरचना" },
+                { id: "ied11-9", name: "Environment and Sustainable Development", nameHi: "पर्यावरण और धारणीय विकास" },
+                { id: "ied11-10", name: "Comparative Development Experiences of India", nameHi: "भारत और उसके पड़ोसी देशों के तुलनात्मक विकास अनुभव" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-11-com",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11-com",
+              name: "Hornbill",
+              nameHi: "Hornbill",
+              chapters: [
+                { id: "eng11c-1", name: "The Portrait of a Lady", nameHi: "The Portrait of a Lady" },
+                { id: "eng11c-2", name: "We're Not Afraid to Die", nameHi: "We're Not Afraid to Die" },
+                { id: "eng11c-3", name: "Discovering Tut: the Saga Continues", nameHi: "Discovering Tut" },
+                { id: "eng11c-4", name: "Landscape of the Soul", nameHi: "Landscape of the Soul" },
+                { id: "eng11c-5", name: "The Ailing Planet", nameHi: "The Ailing Planet" },
+                { id: "eng11c-6", name: "The Browning Version", nameHi: "The Browning Version" },
+                { id: "eng11c-7", name: "The Adventure", nameHi: "The Adventure" },
+                { id: "eng11c-8", name: "Silk Road", nameHi: "Silk Road" },
+              ]
+            },
+            {
+              id: "snapshots-11-com",
+              name: "Snapshots (Supplementary)",
+              nameHi: "Snapshots",
+              chapters: [
+                { id: "snap11c-1", name: "The Summer of the Beautiful White Horse", nameHi: "The Summer of the Beautiful White Horse" },
+                { id: "snap11c-2", name: "The Address", nameHi: "The Address" },
+                { id: "snap11c-3", name: "Ranga's Marriage", nameHi: "Ranga's Marriage" },
+                { id: "snap11c-4", name: "Albert Einstein at School", nameHi: "Albert Einstein at School" },
+                { id: "snap11c-5", name: "Mother's Day", nameHi: "Mother's Day" },
+                { id: "snap11c-6", name: "The Ghat of the Only World", nameHi: "The Ghat of the Only World" },
+                { id: "snap11c-7", name: "Birth", nameHi: "Birth" },
+                { id: "snap11c-8", name: "The Tale of Melon City", nameHi: "The Tale of Melon City" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-11-com",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-11-com",
+              name: "Aroh Bhag 1",
+              nameHi: "आरोह भाग 1",
+              chapters: [
+                { id: "hin11c-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
+                { id: "hin11c-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
+                { id: "hin11c-3", name: "Paththar Ki Pankh Se", nameHi: "पथेर पाँचाली" },
+                { id: "hin11c-4", name: "Ghazal", nameHi: "गज़ल" },
+                { id: "hin11c-5", name: "Sab Aankho Ke Aansoo Ujalein", nameHi: "सब आँखों के आँसू उजले" },
+                { id: "hin11c-6", name: "Aao Milkar Bachaayen", nameHi: "आओ मिलकर बचाएँ" },
+                { id: "hin11c-7", name: "Namskar", nameHi: "नमस्कार" },
+                { id: "hin11c-8", name: "Jama Hua Hai Akela", nameHi: "जामुन का पेड़" },
+                { id: "hin11c-9", name: "India Mata", nameHi: "भारत माता" },
+                { id: "hin11c-10", name: "Aatma Ka Taap", nameHi: "आत्मा का ताप" },
+                { id: "hin11c-11", name: "Khaana Khaane Ki Table Par", nameHi: "खाना खाने की टेबिल पर" },
+                { id: "hin11c-12", name: "Urvi Ke Geet", nameHi: "उर्वी के गीत" },
+              ]
+            },
+            {
+              id: "vitan-11-com",
+              name: "Vitan Bhag 1 (Supplementary)",
+              nameHi: "वितान भाग 1",
+              chapters: [
+                { id: "vit11c-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
+                { id: "vit11c-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
+                { id: "vit11c-3", name: "Aalo Aandhari", nameHi: "आलो-आँधारि" },
+              ]
+            },
+          ]
+        },
+      ]
     },
     {
       id: "arts",
       name: "Arts",
       nameHi: "कला",
-      subjects: []
-    }
+      subjects: [
+        {
+          id: "history-11",
+          name: "History",
+          nameHi: "इतिहास",
+          icon: "book",
+          books: [
+            {
+              id: "history-11-book",
+              name: "Vishwa Itihas Ke Kuch Vishay",
+              nameHi: "विश्व इतिहास के कुछ विषय",
+              chapters: [
+                { id: "his11-1", name: "From the Beginning of Time", nameHi: "समय की शुरुआत से" },
+                { id: "his11-2", name: "Writing and City Life", nameHi: "लेखन कला और शहरी जीवन" },
+                { id: "his11-3", name: "An Empire Across Three Continents", nameHi: "तीन महाद्वीपों में फैला हुआ साम्राज्य" },
+                { id: "his11-4", name: "The Central Islamic Lands", nameHi: "इस्लाम का उदय और विस्तार" },
+                { id: "his11-5", name: "Nomadic Empires", nameHi: "यायावर साम्राज्य" },
+                { id: "his11-6", name: "The Three Orders", nameHi: "तीन वर्ग" },
+                { id: "his11-7", name: "Changing Cultural Traditions", nameHi: "बदलती हुई सांस्कृतिक परंपराएँ" },
+                { id: "his11-8", name: "Confrontation of Cultures", nameHi: "संस्कृतियों का टकराव" },
+                { id: "his11-9", name: "The Industrial Revolution", nameHi: "औद्योगिक क्रांति" },
+                { id: "his11-10", name: "Displacing Indigenous Peoples", nameHi: "मूल निवासियों का विस्थापन" },
+                { id: "his11-11", name: "Paths to Modernisation", nameHi: "आधुनिकीकरण के रास्ते" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "political-science-11",
+          name: "Political Science",
+          nameHi: "राजनीति विज्ञान",
+          icon: "landmark",
+          books: [
+            {
+              id: "polsci-11-book",
+              name: "Political Theory",
+              nameHi: "राजनीतिक सिद्धांत",
+              chapters: [
+                { id: "pol11-1", name: "Political Theory: An Introduction", nameHi: "राजनीतिक सिद्धांत: एक परिचय" },
+                { id: "pol11-2", name: "Freedom", nameHi: "स्वतंत्रता" },
+                { id: "pol11-3", name: "Equality", nameHi: "समानता" },
+                { id: "pol11-4", name: "Social Justice", nameHi: "सामाजिक न्याय" },
+                { id: "pol11-5", name: "Rights", nameHi: "अधिकार" },
+                { id: "pol11-6", name: "Citizenship", nameHi: "नागरिकता" },
+                { id: "pol11-7", name: "Nationalism", nameHi: "राष्ट्रवाद" },
+                { id: "pol11-8", name: "Secularism", nameHi: "धर्मनिरपेक्षता" },
+                { id: "pol11-9", name: "Peace", nameHi: "शांति" },
+                { id: "pol11-10", name: "Development", nameHi: "विकास" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "geography-11",
+          name: "Geography",
+          nameHi: "भूगोल",
+          icon: "map",
+          books: [
+            {
+              id: "geo-11-part-1",
+              name: "Fundamentals of Physical Geography",
+              nameHi: "भौतिक भूगोल के मूल सिद्धांत",
+              chapters: [
+                { id: "geo11-1", name: "Geography as a Discipline", nameHi: "भूगोल एक विषय के रूप में" },
+                { id: "geo11-2", name: "The Origin and Evolution of the Earth", nameHi: "पृथ्वी की उत्पत्ति एवं विकास" },
+                { id: "geo11-3", name: "Interior of the Earth", nameHi: "पृथ्वी की आंतरिक संरचना" },
+                { id: "geo11-4", name: "Distribution of Oceans and Continents", nameHi: "महासागरों और महाद्वीपों का वितरण" },
+                { id: "geo11-5", name: "Minerals and Rocks", nameHi: "खनिज एवं शैल" },
+                { id: "geo11-6", name: "Geomorphic Processes", nameHi: "भू-आकृतिक प्रक्रियाएँ" },
+                { id: "geo11-7", name: "Landforms and their Evolution", nameHi: "भू-आकृतियाँ तथा उनका विकास" },
+                { id: "geo11-8", name: "Composition and Structure of Atmosphere", nameHi: "वायुमंडल की संरचना तथा संघटन" },
+                { id: "geo11-9", name: "Solar Radiation, Heat Balance and Temperature", nameHi: "सौर विकिरण, ऊष्मा संतुलन एवं तापमान" },
+                { id: "geo11-10", name: "Atmospheric Circulation and Weather Systems", nameHi: "वायुमंडलीय परिसंचरण तथा मौसम प्रणालियाँ" },
+                { id: "geo11-11", name: "Water in the Atmosphere", nameHi: "वायुमंडल में जल" },
+                { id: "geo11-12", name: "World Climate and Climate Change", nameHi: "विश्व की जलवायु एवं जलवायु परिवर्तन" },
+                { id: "geo11-13", name: "Water (Oceans)", nameHi: "महासागरीय जल" },
+                { id: "geo11-14", name: "Movements of Ocean Water", nameHi: "महासागरीय जल संचलन" },
+                { id: "geo11-15", name: "Life on the Earth", nameHi: "पृथ्वी पर जीवन" },
+                { id: "geo11-16", name: "Biodiversity and Conservation", nameHi: "जैव-विविधता एवं संरक्षण" },
+              ]
+            },
+            {
+              id: "geo-11-part-2",
+              name: "India: Physical Environment",
+              nameHi: "भारत: भौतिक पर्यावरण",
+              chapters: [
+                { id: "geo11i-1", name: "India: Location", nameHi: "भारत: स्थिति" },
+                { id: "geo11i-2", name: "Structure and Physiography", nameHi: "संरचना तथा भू-आकृति विज्ञान" },
+                { id: "geo11i-3", name: "Drainage System", nameHi: "अपवाह तंत्र" },
+                { id: "geo11i-4", name: "Climate", nameHi: "जलवायु" },
+                { id: "geo11i-5", name: "Natural Vegetation", nameHi: "प्राकृतिक वनस्पति" },
+                { id: "geo11i-6", name: "Soils", nameHi: "मृदा" },
+                { id: "geo11i-7", name: "Natural Hazards and Disasters", nameHi: "प्राकृतिक संकट तथा आपदाएँ" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics-11-arts",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "trending-up",
+          books: [
+            {
+              id: "statistics-11-arts",
+              name: "Statistics for Economics",
+              nameHi: "अर्थशास्त्र में सांख्यिकी",
+              chapters: [
+                { id: "eco11a-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "eco11a-2", name: "Collection of Data", nameHi: "आँकड़ों का संग्रह" },
+                { id: "eco11a-3", name: "Organisation of Data", nameHi: "आँकड़ों का संगठन" },
+                { id: "eco11a-4", name: "Presentation of Data", nameHi: "आँकड़ों का प्रस्तुतीकरण" },
+                { id: "eco11a-5", name: "Measures of Central Tendency", nameHi: "केंद्रीय प्रवृत्ति की माप" },
+                { id: "eco11a-6", name: "Measures of Dispersion", nameHi: "परिक्षेपण की माप" },
+                { id: "eco11a-7", name: "Correlation", nameHi: "सहसंबंध" },
+                { id: "eco11a-8", name: "Index Numbers", nameHi: "सूचकांक" },
+              ]
+            },
+            {
+              id: "indian-economy-11-arts",
+              name: "Indian Economic Development",
+              nameHi: "भारतीय अर्थव्यवस्था का विकास",
+              chapters: [
+                { id: "ied11a-1", name: "Indian Economy on the Eve of Independence", nameHi: "स्वतंत्रता की पूर्व संध्या पर भारतीय अर्थव्यवस्था" },
+                { id: "ied11a-2", name: "Indian Economy 1950-1990", nameHi: "भारतीय अर्थव्यवस्था 1950-1990" },
+                { id: "ied11a-3", name: "Liberalisation, Privatisation and Globalisation", nameHi: "उदारीकरण, निजीकरण और वैश्वीकरण" },
+                { id: "ied11a-4", name: "Poverty", nameHi: "निर्धनता" },
+                { id: "ied11a-5", name: "Human Capital Formation in India", nameHi: "भारत में मानव पूँजी का निर्माण" },
+                { id: "ied11a-6", name: "Rural Development", nameHi: "ग्रामीण विकास" },
+                { id: "ied11a-7", name: "Employment: Growth, Informalisation and Other Issues", nameHi: "रोजगार: संवृद्धि, अनौपचारीकरण एवं अन्य मुद्दे" },
+                { id: "ied11a-8", name: "Infrastructure", nameHi: "आधारिक संरचना" },
+                { id: "ied11a-9", name: "Environment and Sustainable Development", nameHi: "पर्यावरण और धारणीय विकास" },
+                { id: "ied11a-10", name: "Comparative Development Experiences of India", nameHi: "भारत और उसके पड़ोसी देशों के तुलनात्मक विकास अनुभव" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-11-arts",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "hornbill-11-arts",
+              name: "Hornbill",
+              nameHi: "Hornbill",
+              chapters: [
+                { id: "eng11a-1", name: "The Portrait of a Lady", nameHi: "The Portrait of a Lady" },
+                { id: "eng11a-2", name: "We're Not Afraid to Die", nameHi: "We're Not Afraid to Die" },
+                { id: "eng11a-3", name: "Discovering Tut: the Saga Continues", nameHi: "Discovering Tut" },
+                { id: "eng11a-4", name: "Landscape of the Soul", nameHi: "Landscape of the Soul" },
+                { id: "eng11a-5", name: "The Ailing Planet", nameHi: "The Ailing Planet" },
+                { id: "eng11a-6", name: "The Browning Version", nameHi: "The Browning Version" },
+                { id: "eng11a-7", name: "The Adventure", nameHi: "The Adventure" },
+                { id: "eng11a-8", name: "Silk Road", nameHi: "Silk Road" },
+              ]
+            },
+            {
+              id: "snapshots-11-arts",
+              name: "Snapshots (Supplementary)",
+              nameHi: "Snapshots",
+              chapters: [
+                { id: "snap11a-1", name: "The Summer of the Beautiful White Horse", nameHi: "The Summer of the Beautiful White Horse" },
+                { id: "snap11a-2", name: "The Address", nameHi: "The Address" },
+                { id: "snap11a-3", name: "Ranga's Marriage", nameHi: "Ranga's Marriage" },
+                { id: "snap11a-4", name: "Albert Einstein at School", nameHi: "Albert Einstein at School" },
+                { id: "snap11a-5", name: "Mother's Day", nameHi: "Mother's Day" },
+                { id: "snap11a-6", name: "The Ghat of the Only World", nameHi: "The Ghat of the Only World" },
+                { id: "snap11a-7", name: "Birth", nameHi: "Birth" },
+                { id: "snap11a-8", name: "The Tale of Melon City", nameHi: "The Tale of Melon City" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-11-arts",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-11-arts",
+              name: "Aroh Bhag 1",
+              nameHi: "आरोह भाग 1",
+              chapters: [
+                { id: "hin11a-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
+                { id: "hin11a-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
+                { id: "hin11a-3", name: "Paththar Ki Pankh Se", nameHi: "पथेर पाँचाली" },
+                { id: "hin11a-4", name: "Ghazal", nameHi: "गज़ल" },
+                { id: "hin11a-5", name: "Sab Aankho Ke Aansoo Ujalein", nameHi: "सब आँखों के आँसू उजले" },
+                { id: "hin11a-6", name: "Aao Milkar Bachaayen", nameHi: "आओ मिलकर बचाएँ" },
+                { id: "hin11a-7", name: "Namskar", nameHi: "नमस्कार" },
+                { id: "hin11a-8", name: "Jama Hua Hai Akela", nameHi: "जामुन का पेड़" },
+                { id: "hin11a-9", name: "India Mata", nameHi: "भारत माता" },
+                { id: "hin11a-10", name: "Aatma Ka Taap", nameHi: "आत्मा का ताप" },
+                { id: "hin11a-11", name: "Khaana Khaane Ki Table Par", nameHi: "खाना खाने की टेबिल पर" },
+                { id: "hin11a-12", name: "Urvi Ke Geet", nameHi: "उर्वी के गीत" },
+              ]
+            },
+            {
+              id: "vitan-11-arts",
+              name: "Vitan Bhag 1 (Supplementary)",
+              nameHi: "वितान भाग 1",
+              chapters: [
+                { id: "vit11a-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
+                { id: "vit11a-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
+                { id: "vit11a-3", name: "Aalo Aandhari", nameHi: "आलो-आँधारि" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
   ],
-
   12: [
     {
       id: "science",
