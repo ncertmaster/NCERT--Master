@@ -1162,7 +1162,7 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     }
 
   ]
-  }
+  },
 
   {
     id: "biology-11",
