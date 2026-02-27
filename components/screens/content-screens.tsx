@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useApp } from "@/lib/app-context"
-import { ChevronLeft, ChevronRight, Book, GraduationCap } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { ClassNumber } from "@/lib/data"
 
@@ -11,7 +11,16 @@ import type { ClassNumber } from "@/lib/data"
 // ===============================
 
 export function ClassSelectScreen({ flow }: { flow: string }) {
-  const { setScreen, setSelectedClass, goBack } = useApp()
+  const {
+    setScreen,
+    setSelectedClass,
+    setSelectedStream,
+    setSelectedSubject,
+    setSelectedBook,
+    setSelectedChapter,
+    goBack,
+  } = useApp()
+
   const classes = [12, 11, 10, 9, 8, 7, 6]
 
   return (
@@ -29,6 +38,10 @@ export function ClassSelectScreen({ flow }: { flow: string }) {
             key={cls}
             onClick={() => {
               setSelectedClass(cls as ClassNumber)
+              setSelectedStream(null)
+              setSelectedSubject(null)
+              setSelectedBook(null)
+              setSelectedChapter(null)
               setScreen(`${flow}-subject`)
             }}
             className="w-full p-4 bg-card border rounded-xl flex justify-between"
@@ -47,7 +60,15 @@ export function ClassSelectScreen({ flow }: { flow: string }) {
 // ===============================
 
 export function SubjectSelectScreen({ flow }: { flow: string }) {
-  const { selectedClass, setScreen, setSelectedSubject, goBack } = useApp()
+  const {
+    selectedClass,
+    setSelectedStream,
+    setSelectedSubject,
+    setSelectedBook,
+    setSelectedChapter,
+    setScreen,
+    goBack,
+  } = useApp()
 
   // 11 & 12 → Streams
   if (selectedClass === 11 || selectedClass === 12) {
@@ -67,7 +88,10 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
             <button
               key={stream.id}
               onClick={() => {
-                setSelectedSubject(stream.id)
+                setSelectedStream(stream.id)
+                setSelectedSubject(null)
+                setSelectedBook(null)
+                setSelectedChapter(null)
                 setScreen(`${flow}-chapter`)
               }}
               className="w-full p-4 bg-card border rounded-xl flex justify-between"
@@ -99,6 +123,8 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
             key={subject.id}
             onClick={() => {
               setSelectedSubject(subject.id)
+              setSelectedBook(null)
+              setSelectedChapter(null)
               setScreen(`${flow}-chapter`)
             }}
             className="w-full p-4 bg-card border rounded-xl flex justify-between"
@@ -110,66 +136,71 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
       </div>
     </div>
   )
-    }
+}
+
 // ===============================
-// 3️⃣ CHAPTER / BOOK SELECT
+// 3️⃣ BOOK / CHAPTER SELECT
 // ===============================
 
 export function ChapterSelectScreen({ flow }: { flow: string }) {
   const {
     selectedClass,
+    selectedStream,
     selectedSubject,
+    selectedBook,
     setSelectedSubject,
+    setSelectedBook,
     setSelectedChapter,
     setScreen,
     goBack,
   } = useApp()
 
   // ======================
-  // 11th & 12th Logic
+  // 11th & 12th
   // ======================
 
   if (selectedClass === 11 || selectedClass === 12) {
     const streams = streamsByClass[selectedClass] || []
 
-    // Step 1 → Stream match
-    const stream = streams.find((s) => s.id === selectedSubject)
+    // 1️⃣ Stream → Show Subjects
+    if (selectedStream) {
+      const stream = streams.find((s) => s.id === selectedStream)
+      if (!stream) return null
 
-    // अगर stream select हुआ है → subjects दिखाओ
-    if (stream) {
-      return (
-        <div className="flex flex-col h-full bg-background">
-          <div className="flex items-center p-4 border-b">
-            <button onClick={goBack}>
-              <ChevronLeft />
-            </button>
-            <h1 className="ml-2 text-xl font-bold">Select Subject</h1>
-          </div>
-
-          <div className="flex-1 p-4 space-y-3">
-            {stream.subjects.map((subject) => (
-              <button
-                key={subject.id}
-                onClick={() => {
-                  setSelectedSubject(subject.id)
-                  setScreen(`${flow}-chapter`)
-                }}
-                className="w-full p-4 bg-card border rounded-xl flex justify-between"
-              >
-                <span>{subject.nameHi}</span>
-                <ChevronRight />
+      if (!selectedSubject) {
+        return (
+          <div className="flex flex-col h-full bg-background">
+            <div className="flex items-center p-4 border-b">
+              <button onClick={goBack}>
+                <ChevronLeft />
               </button>
-            ))}
+              <h1 className="ml-2 text-xl font-bold">Select Subject</h1>
+            </div>
+
+            <div className="flex-1 p-4 space-y-3">
+              {stream.subjects.map((subject) => (
+                <button
+                  key={subject.id}
+                  onClick={() => {
+                    setSelectedSubject(subject.id)
+                    setSelectedBook(null)
+                  }}
+                  className="w-full p-4 bg-card border rounded-xl flex justify-between"
+                >
+                  <span>{subject.nameHi}</span>
+                  <ChevronRight />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )
-    }
+        )
+      }
 
-    // Step 2 → Subject match (Books दिखाओ)
-    for (const s of streams) {
-      const subject = s.subjects.find((sub) => sub.id === selectedSubject)
+      // 2️⃣ Subject → Show Books
+      const subject = stream.subjects.find((s) => s.id === selectedSubject)
+      if (!subject) return null
 
-      if (subject) {
+      if (!selectedBook) {
         return (
           <div className="flex flex-col h-full bg-background">
             <div className="flex items-center p-4 border-b">
@@ -183,10 +214,7 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
               {subject.books.map((book) => (
                 <button
                   key={book.id}
-                  onClick={() => {
-                    setSelectedChapter(book.id)
-                    setScreen(`${flow}-content`)
-                  }}
+                  onClick={() => setSelectedBook(book.id)}
                   className="w-full p-4 bg-card border rounded-xl flex justify-between"
                 >
                   <span>{book.nameHi}</span>
@@ -197,22 +225,50 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
           </div>
         )
       }
-    }
 
-    return null
+      // 3️⃣ Book → Show Chapters
+      const book = subject.books.find((b) => b.id === selectedBook)
+      if (!book) return null
+
+      return (
+        <div className="flex flex-col h-full bg-background">
+          <div className="flex items-center p-4 border-b">
+            <button onClick={goBack}>
+              <ChevronLeft />
+            </button>
+            <h1 className="ml-2 text-xl font-bold">Chapters</h1>
+          </div>
+
+          <div className="flex-1 p-4 space-y-3">
+            {book.chapters.map((chapter) => (
+              <button
+                key={chapter.id}
+                onClick={() => {
+                  setSelectedChapter(chapter.id)
+                  setScreen(`${flow}-content`)
+                }}
+                className="w-full p-4 bg-card border rounded-xl flex justify-between"
+              >
+                <span>{chapter.nameHi}</span>
+                <ChevronRight />
+              </button>
+            ))}
+          </div>
+        </div>
+      )
+    }
   }
 
   // ======================
-  // 6th–10th Logic
+  // 6th–10th
   // ======================
 
   const subjects = subjectsByClass[selectedClass || 6] || []
   const subject = subjects.find((s) => s.id === selectedSubject)
-
   if (!subject) return null
 
-  // Multiple books → Books दिखाओ
-  if (subject.books.length > 1) {
+  // 1️⃣ Show Books (if multiple)
+  if (!selectedBook && subject.books.length > 1) {
     return (
       <div className="flex flex-col h-full bg-background">
         <div className="flex items-center p-4 border-b">
@@ -226,10 +282,7 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
           {subject.books.map((book) => (
             <button
               key={book.id}
-              onClick={() => {
-                setSelectedChapter(book.id)
-                setScreen(`${flow}-content`)
-              }}
+              onClick={() => setSelectedBook(book.id)}
               className="w-full p-4 bg-card border rounded-xl flex justify-between"
             >
               <span>{book.nameHi}</span>
@@ -241,9 +294,14 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
     )
   }
 
-  // Single book → Chapters दिखाओ
-  const book = subject.books[0]
+  const book =
+    subject.books.length === 1
+      ? subject.books[0]
+      : subject.books.find((b) => b.id === selectedBook)
 
+  if (!book) return null
+
+  // 2️⃣ Show Chapters
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex items-center p-4 border-b">
@@ -273,7 +331,7 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
 }
 
 // ===============================
-// 4️⃣ CONTENT SCREEN
+// 4️⃣ CONTENT WRAPPERS
 // ===============================
 
 export function ContentScreen({ title }: { title: string }) {
@@ -293,22 +351,20 @@ export function ContentScreen({ title }: { title: string }) {
       </div>
     </div>
   )
-          }
+}
+
 export function BookContentScreen() {
   return <ContentScreen title="Book Content" />
 }
-
 export function NotesContentScreen() {
   return <ContentScreen title="Notes" />
 }
-
 export function IQContentScreen() {
   return <ContentScreen title="Important Questions" />
 }
 export function QuizModeScreen() {
   return <ContentScreen title="Quiz Mode" />
 }
-
 export function QuizPlayScreen() {
   return <ContentScreen title="Quiz Play" />
-}
+                  }
