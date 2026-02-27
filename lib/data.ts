@@ -2158,3 +2158,258 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         },
       ]
     },
+{
+      id: "arts",
+      name: "Arts",
+      nameHi: "कला",
+      subjects: [
+        {
+          id: "history-12",
+          name: "History",
+          nameHi: "इतिहास",
+          icon: "book",
+          books: [
+            {
+              id: "history-12-part-1",
+              name: "Themes in Indian History Part I",
+              nameHi: "भारतीय इतिहास के कुछ विषय भाग 1",
+              chapters: [
+                { id: "his12-1", name: "Bricks, Beads and Bones", nameHi: "ईंटें, मनके तथा अस्थियाँ" },
+                { id: "his12-2", name: "Kings, Farmers and Towns", nameHi: "राजा, किसान और नगर" },
+                { id: "his12-3", name: "Kinship, Caste and Class", nameHi: "बंधुत्व, जाति तथा वर्ग" },
+                { id: "his12-4", name: "Thinkers, Beliefs and Buildings", nameHi: "विचारक, विश्वास और इमारतें" },
+              ]
+            },
+            {
+              id: "history-12-part-2",
+              name: "Themes in Indian History Part II",
+              nameHi: "भारतीय इतिहास के कुछ विषय भाग 2",
+              chapters: [
+                { id: "his12-5", name: "Through the Eyes of Travellers", nameHi: "यात्रियों के नज़रिए" },
+                { id: "his12-6", name: "Bhakti-Sufi Traditions", nameHi: "भक्ति-सूफी परंपराएँ" },
+                { id: "his12-7", name: "An Imperial Capital: Vijayanagara", nameHi: "एक साम्राज्य की राजधानी: विजयनगर" },
+                { id: "his12-8", name: "Peasants, Zamindars and the State", nameHi: "किसान, ज़मींदार और राज्य" },
+                { id: "his12-9", name: "Kings and Chronicles", nameHi: "राजा और विभिन्न इतिवृत्त" },
+              ]
+            },
+            {
+              id: "history-12-part-3",
+              name: "Themes in Indian History Part III",
+              nameHi: "भारतीय इतिहास के कुछ विषय भाग 3",
+              chapters: [
+                { id: "his12-10", name: "Colonialism and the Countryside", nameHi: "उपनिवेशवाद और देहात" },
+                { id: "his12-11", name: "Rebels and the Raj", nameHi: "विद्रोही और राज" },
+                { id: "his12-12", name: "Colonial Cities", nameHi: "औपनिवेशिक शहर" },
+                { id: "his12-13", name: "Mahatma Gandhi and the Nationalist Movement", nameHi: "महात्मा गांधी और राष्ट्रीय आंदोलन" },
+                { id: "his12-14", name: "Understanding Partition", nameHi: "विभाजन को समझना" },
+                { id: "his12-15", name: "Framing the Constitution", nameHi: "संविधान का निर्माण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "political-science-12",
+          name: "Political Science",
+          nameHi: "राजनीति विज्ञान",
+          icon: "landmark",
+          books: [
+            {
+              id: "polsci-12-part-1",
+              name: "Contemporary World Politics",
+              nameHi: "समकालीन विश्व राजनीति",
+              chapters: [
+                { id: "pol12-1", name: "The Cold War Era", nameHi: "शीतयुद्ध का दौर" },
+                { id: "pol12-2", name: "The End of Bipolarity", nameHi: "दो ध्रुवीयता का अंत" },
+                { id: "pol12-3", name: "US Hegemony in World Politics", nameHi: "समकालीन विश्व में अमेरिकी वर्चस्व" },
+                { id: "pol12-4", name: "Alternative Centres of Power", nameHi: "सत्ता के वैकल्पिक केंद्र" },
+                { id: "pol12-5", name: "Contemporary South Asia", nameHi: "समकालीन दक्षिण एशिया" },
+                { id: "pol12-6", name: "International Organisations", nameHi: "अंतर्राष्ट्रीय संगठन" },
+                { id: "pol12-7", name: "Security in the Contemporary World", nameHi: "समकालीन विश्व में सुरक्षा" },
+                { id: "pol12-8", name: "Environment and Natural Resources", nameHi: "पर्यावरण और प्राकृतिक संसाधन" },
+                { id: "pol12-9", name: "Globalisation", nameHi: "वैश्वीकरण" },
+              ]
+            },
+            {
+              id: "polsci-12-part-2",
+              name: "Politics in India since Independence",
+              nameHi: "स्वतंत्र भारत में राजनीति",
+              chapters: [
+                { id: "pol12-10", name: "Challenges of Nation Building", nameHi: "राष्ट्र-निर्माण की चुनौतियाँ" },
+                { id: "pol12-11", name: "Era of One-Party Dominance", nameHi: "एक दल के प्रभुत्व का दौर" },
+                { id: "pol12-12", name: "Politics of Planned Development", nameHi: "नियोजित विकास की राजनीति" },
+                { id: "pol12-13", name: "India's External Relations", nameHi: "भारत के विदेश संबंध" },
+                { id: "pol12-14", name: "Challenges to and Restoration of Congress System", nameHi: "कांग्रेस प्रणाली: चुनौतियाँ और पुनर्स्थापना" },
+                { id: "pol12-15", name: "Crisis of Democratic Order", nameHi: "लोकतांत्रिक व्यवस्था का संकट" },
+                { id: "pol12-16", name: "Rise of Popular Movements", nameHi: "जन आंदोलनों का उदय" },
+                { id: "pol12-17", name: "Regional Aspirations", nameHi: "क्षेत्रीय आकांक्षाएँ" },
+                { id: "pol12-18", name: "Recent Developments in Indian Politics", nameHi: "भारतीय राजनीति: नए बदलाव" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "geography-12",
+          name: "Geography",
+          nameHi: "भूगोल",
+          icon: "map",
+          books: [
+            {
+              id: "geo-12-part-1",
+              name: "Fundamentals of Human Geography",
+              nameHi: "मानव भूगोल के मूल सिद्धांत",
+              chapters: [
+                { id: "geo12-1", name: "Human Geography: Nature and Scope", nameHi: "मानव भूगोल: प्रकृति एवं विषय क्षेत्र" },
+                { id: "geo12-2", name: "World Population: Distribution, Density and Growth", nameHi: "विश्व जनसंख्या: वितरण, घनत्व और वृद्धि" },
+                { id: "geo12-3", name: "Population Composition", nameHi: "जनसंख्या संघटन" },
+                { id: "geo12-4", name: "Human Development", nameHi: "मानव विकास" },
+                { id: "geo12-5", name: "Primary Activities", nameHi: "प्राथमिक क्रियाएँ" },
+                { id: "geo12-6", name: "Secondary Activities", nameHi: "द्वितीयक क्रियाएँ" },
+                { id: "geo12-7", name: "Tertiary and Quaternary Activities", nameHi: "तृतीयक और चतुर्थक क्रियाकलाप" },
+                { id: "geo12-8", name: "Transport and Communication", nameHi: "परिवहन एवं संचार" },
+                { id: "geo12-9", name: "International Trade", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+                { id: "geo12-10", name: "Human Settlements", nameHi: "मानव बस्ती" },
+              ]
+            },
+            {
+              id: "geo-12-part-2",
+              name: "India: People and Economy",
+              nameHi: "भारत: लोग और अर्थव्यवस्था",
+              chapters: [
+                { id: "geo12i-1", name: "Population: Distribution, Density, Growth and Composition", nameHi: "जनसंख्या: वितरण, घनत्व, वृद्धि और संघटन" },
+                { id: "geo12i-2", name: "Migration: Types, Causes and Consequences", nameHi: "प्रवास: प्रकार, कारण और परिणाम" },
+                { id: "geo12i-3", name: "Human Development", nameHi: "मानव विकास" },
+                { id: "geo12i-4", name: "Human Settlements", nameHi: "मानव बस्तियाँ" },
+                { id: "geo12i-5", name: "Land Resources and Agriculture", nameHi: "भू-संसाधन तथा कृषि" },
+                { id: "geo12i-6", name: "Water Resources", nameHi: "जल-संसाधन" },
+                { id: "geo12i-7", name: "Mineral and Energy Resources", nameHi: "खनिज तथा ऊर्जा संसाधन" },
+                { id: "geo12i-8", name: "Manufacturing Industries", nameHi: "निर्माण उद्योग" },
+                { id: "geo12i-9", name: "Planning and Sustainable Development", nameHi: "नियोजन और सततपोषणीय विकास" },
+                { id: "geo12i-10", name: "Transport and Communication", nameHi: "परिवहन तथा संचार" },
+                { id: "geo12i-11", name: "International Trade", nameHi: "अंतर्राष्ट्रीय व्यापार" },
+                { id: "geo12i-12", name: "Geographical Perspective on Selected Issues", nameHi: "भौगोलिक परिप्रेक्ष्य में चयनित कुछ मुद्दे एवं समस्याएँ" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics-12-arts",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "trending-up",
+          books: [
+            {
+              id: "micro-economics-12-arts",
+              name: "Introductory Microeconomics",
+              nameHi: "व्यष्टि अर्थशास्त्र एक परिचय",
+              chapters: [
+                { id: "mic12a-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "mic12a-2", name: "Theory of Consumer Behaviour", nameHi: "उपभोक्ता के व्यवहार का सिद्धांत" },
+                { id: "mic12a-3", name: "Production and Costs", nameHi: "उत्पादन तथा लागत" },
+                { id: "mic12a-4", name: "The Theory of the Firm under Perfect Competition", nameHi: "पूर्ण प्रतिस्पर्धा की स्थिति में फर्म का सिद्धांत" },
+                { id: "mic12a-5", name: "Market Equilibrium", nameHi: "बाज़ार संतुलन" },
+                { id: "mic12a-6", name: "Non-Competitive Markets", nameHi: "प्रतिस्पर्धारहित बाज़ार" },
+              ]
+            },
+            {
+              id: "macro-economics-12-arts",
+              name: "Introductory Macroeconomics",
+              nameHi: "समष्टि अर्थशास्त्र एक परिचय",
+              chapters: [
+                { id: "mac12a-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "mac12a-2", name: "National Income Accounting", nameHi: "राष्ट्रीय आय का लेखांकन" },
+                { id: "mac12a-3", name: "Money and Banking", nameHi: "मुद्रा और बैंकिंग" },
+                { id: "mac12a-4", name: "Determination of Income and Employment", nameHi: "आय और रोजगार का निर्धारण" },
+                { id: "mac12a-5", name: "Government Budget and the Economy", nameHi: "सरकारी बजट एवं अर्थव्यवस्था" },
+                { id: "mac12a-6", name: "Open Economy Macroeconomics", nameHi: "खुली अर्थव्यवस्था: समष्टि अर्थशास्त्र" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-12-arts",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12-arts",
+              name: "Flamingo",
+              nameHi: "Flamingo",
+              chapters: [
+                { id: "eng12a-1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "eng12a-2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "eng12a-3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "eng12a-4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "eng12a-5", name: "Indigo", nameHi: "Indigo" },
+                { id: "eng12a-6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "eng12a-7", name: "The Interview", nameHi: "The Interview" },
+                { id: "eng12a-8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12-arts",
+              name: "Vistas (Supplementary)",
+              nameHi: "Vistas",
+              chapters: [
+                { id: "vis12a-1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vis12a-2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vis12a-3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vis12a-4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vis12a-5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy" },
+                { id: "vis12a-6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vis12a-7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vis12a-8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-12-arts",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-12-arts",
+              name: "Aroh Bhag 2",
+              nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "hin12a-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
+                { id: "hin12a-2", name: "Patang", nameHi: "पतंग" },
+                { id: "hin12a-3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "hin12a-4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "hin12a-5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "hin12a-6", name: "Saharse Sweekaara Hai", nameHi: "सहर्ष स्वीकारा है" },
+                { id: "hin12a-7", name: "Usha", nameHi: "उषा" },
+                { id: "hin12a-8", name: "Kavitavali", nameHi: "कवितावली (उत्तर कांड से)" },
+                { id: "hin12a-9", name: "Rubaaiyaan Gazal", nameHi: "रुबाइयाँ, गज़ल" },
+                { id: "hin12a-10", name: "Chhota Mera Khet", nameHi: "छोटा मेरा खेत, बगुलों के पंख" },
+                { id: "hin12a-11", name: "Bazar Darshan", nameHi: "बाज़ार दर्शन" },
+                { id: "hin12a-12", name: "Kaale Megha Pani De", nameHi: "काले मेघा पानी दे" },
+                { id: "hin12a-13", name: "Pahalwan Ki Dholak", nameHi: "पहलवान की ढोलक" },
+                { id: "hin12a-14", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "hin12a-15", name: "Namak", nameHi: "नमक" },
+                { id: "hin12a-16", name: "Shram Vibhajan Aur Jati Pratha", nameHi: "श्रम-विभाजन और जाति-प्रथा" },
+              ]
+            },
+            {
+              id: "vitan-12-arts",
+              name: "Vitan Bhag 2 (Supplementary)",
+              nameHi: "वितान भाग 2",
+              chapters: [
+                { id: "vit12a-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vit12a-2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vit12a-3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vit12a-4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
+  ],
+}
+
+export function getQuizQuestions() {
+  return []
+}
