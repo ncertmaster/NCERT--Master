@@ -1719,23 +1719,220 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
       id: "science",
       name: "Science",
       nameHi: "विज्ञान",
-      subjects: []
+      subjects: [
+        {
+          id: "physics-12",
+          name: "Physics",
+          nameHi: "भौतिक विज्ञान",
+          icon: "atom",
+          books: [
+            {
+              id: "physics-12-part-1",
+              name: "Physics Part I",
+              nameHi: "भौतिक विज्ञान भाग 1",
+              chapters: [
+                { id: "phy12-1", name: "Electric Charges and Fields", nameHi: "वैद्युत आवेश तथा क्षेत्र" },
+                { id: "phy12-2", name: "Electrostatic Potential and Capacitance", nameHi: "स्थिरवैद्युत विभव तथा धारिता" },
+                { id: "phy12-3", name: "Current Electricity", nameHi: "विद्युत धारा" },
+                { id: "phy12-4", name: "Moving Charges and Magnetism", nameHi: "गतिमान आवेश और चुंबकत्व" },
+                { id: "phy12-5", name: "Magnetism and Matter", nameHi: "चुंबकत्व एवं द्रव्य" },
+                { id: "phy12-6", name: "Electromagnetic Induction", nameHi: "वैद्युतचुंबकीय प्रेरण" },
+                { id: "phy12-7", name: "Alternating Current", nameHi: "प्रत्यावर्ती धारा" },
+                { id: "phy12-8", name: "Electromagnetic Waves", nameHi: "वैद्युतचुंबकीय तरंगें" },
+              ]
+            },
+            {
+              id: "physics-12-part-2",
+              name: "Physics Part II",
+              nameHi: "भौतिक विज्ञान भाग 2",
+              chapters: [
+                { id: "phy12-9", name: "Ray Optics and Optical Instruments", nameHi: "किरण प्रकाशिकी एवं प्रकाशिक यंत्र" },
+                { id: "phy12-10", name: "Wave Optics", nameHi: "तरंग-प्रकाशिकी" },
+                { id: "phy12-11", name: "Dual Nature of Radiation and Matter", nameHi: "विकिरण तथा द्रव्य की द्वैत प्रकृति" },
+                { id: "phy12-12", name: "Atoms", nameHi: "परमाणु" },
+                { id: "phy12-13", name: "Nuclei", nameHi: "नाभिक" },
+                { id: "phy12-14", name: "Semiconductor Electronics", nameHi: "अर्धचालक इलेक्ट्रॉनिकी: पदार्थ, युक्तियाँ तथा सरल परिपथ" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "chemistry-12",
+          name: "Chemistry",
+          nameHi: "रसायन विज्ञान",
+          icon: "flask",
+          books: [
+            {
+              id: "chemistry-12-part-1",
+              name: "Chemistry Part I",
+              nameHi: "रसायन विज्ञान भाग 1",
+              chapters: [
+                { id: "chem12-1", name: "Solutions", nameHi: "विलयन" },
+                { id: "chem12-2", name: "Electrochemistry", nameHi: "वैद्युतरसायन" },
+                { id: "chem12-3", name: "Chemical Kinetics", nameHi: "रासायनिक बलगतिकी" },
+                { id: "chem12-4", name: "d and f Block Elements", nameHi: "d एवं f-ब्लॉक के तत्व" },
+                { id: "chem12-5", name: "Coordination Compounds", nameHi: "उपसहसंयोजन यौगिक" },
+              ]
+            },
+      {
+              id: "chemistry-12-part-2",
+              name: "Chemistry Part II",
+              nameHi: "रसायन विज्ञान भाग 2",
+              chapters: [
+                { id: "chem12-6", name: "Haloalkanes and Haloarenes", nameHi: "हैलोऐल्केन तथा हैलोऐरीन" },
+                { id: "chem12-7", name: "Alcohols, Phenols and Ethers", nameHi: "ऐल्कोहॉल, फ़ीनॉल एवं ईथर" },
+                { id: "chem12-8", name: "Aldehydes, Ketones and Carboxylic Acids", nameHi: "ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल" },
+                { id: "chem12-9", name: "Amines", nameHi: "ऐमीन" },
+                { id: "chem12-10", name: "Biomolecules", nameHi: "जैव-अणु" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "biology-12",
+          name: "Biology",
+          nameHi: "जीव विज्ञान",
+          icon: "leaf",
+          books: [
+            {
+              id: "biology-12-book",
+              name: "Biology",
+              nameHi: "जीव विज्ञान",
+              chapters: [
+                { id: "bio12-1", name: "Reproduction in Organisms", nameHi: "जीवों में जनन" },
+                { id: "bio12-2", name: "Sexual Reproduction in Flowering Plants", nameHi: "पुष्पी पादपों में लैंगिक प्रजनन" },
+                { id: "bio12-3", name: "Human Reproduction", nameHi: "मानव जनन" },
+                { id: "bio12-4", name: "Reproductive Health", nameHi: "जनन स्वास्थ्य" },
+                { id: "bio12-5", name: "Principles of Inheritance and Variation", nameHi: "वंशागति तथा विविधता के सिद्धांत" },
+                { id: "bio12-6", name: "Molecular Basis of Inheritance", nameHi: "वंशागति के आणविक आधार" },
+                { id: "bio12-7", name: "Evolution", nameHi: "विकास" },
+                { id: "bio12-8", name: "Human Health and Disease", nameHi: "मानव स्वास्थ्य तथा रोग" },
+                { id: "bio12-9", name: "Strategies for Enhancement in Food Production", nameHi: "खाद्य उत्पादन में वृद्धि की कार्यनीति" },
+                { id: "bio12-10", name: "Microbes in Human Welfare", nameHi: "मानव कल्याण में सूक्ष्मजीव" },
+                { id: "bio12-11", name: "Biotechnology: Principles and Processes", nameHi: "जैव प्रौद्योगिकी: सिद्धांत एवं प्रक्रम" },
+                { id: "bio12-12", name: "Biotechnology and its Applications", nameHi: "जैव प्रौद्योगिकी एवं उसके उपयोग" },
+                { id: "bio12-13", name: "Organisms and Populations", nameHi: "जीव और समष्टियाँ" },
+                { id: "bio12-14", name: "Ecosystem", nameHi: "पारितंत्र" },
+                { id: "bio12-15", name: "Biodiversity and Conservation", nameHi: "जैव-विविधता एवं संरक्षण" },
+                { id: "bio12-16", name: "Environmental Issues", nameHi: "पर्यावरण के मुद्दे" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "mathematics-12",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "mathematics-12-part-1",
+              name: "Mathematics Part I",
+              nameHi: "गणित भाग 1",
+              chapters: [
+                { id: "math12-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "math12-2", name: "Inverse Trigonometric Functions", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
+                { id: "math12-3", name: "Matrices", nameHi: "आव्यूह" },
+                { id: "math12-4", name: "Determinants", nameHi: "सारणिक" },
+                { id: "math12-5", name: "Continuity and Differentiability", nameHi: "सांतत्य तथा अवकलनीयता" },
+                { id: "math12-6", name: "Application of Derivatives", nameHi: "अवकलज के अनुप्रयोग" },
+              ]
+            },
+            {
+              id: "mathematics-12-part-2",
+              name: "Mathematics Part II",
+              nameHi: "गणित भाग 2",
+              chapters: [
+                { id: "math12-7", name: "Integrals", nameHi: "समाकलन" },
+                { id: "math12-8", name: "Application of Integrals", nameHi: "समाकलनों के अनुप्रयोग" },
+                { id: "math12-9", name: "Differential Equations", nameHi: "अवकल समीकरण" },
+                { id: "math12-10", name: "Vector Algebra", nameHi: "सदिश बीजगणित" },
+                { id: "math12-11", name: "Three Dimensional Geometry", nameHi: "त्रिविमीय ज्यामिति" },
+                { id: "math12-12", name: "Linear Programming", nameHi: "रैखिक प्रोग्रामन" },
+                { id: "math12-13", name: "Probability", nameHi: "प्रायिकता" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-12",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12",
+              name: "Flamingo",
+              nameHi: "Flamingo",
+              chapters: [
+                { id: "eng12-1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "eng12-2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "eng12-3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "eng12-4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "eng12-5", name: "Indigo", nameHi: "Indigo" },
+                { id: "eng12-6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "eng12-7", name: "The Interview", nameHi: "The Interview" },
+                { id: "eng12-8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12",
+              name: "Vistas (Supplementary)",
+              nameHi: "Vistas",
+              chapters: [
+                { id: "vis12-1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vis12-2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vis12-3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vis12-4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vis12-5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy" },
+                { id: "vis12-6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vis12-7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vis12-8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-12",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-12",
+              name: "Aroh Bhag 2",
+              nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "hin12-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
+                { id: "hin12-2", name: "Patang", nameHi: "पतंग" },
+                { id: "hin12-3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "hin12-4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "hin12-5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "hin12-6", name: "Saharse Sweekaara Hai", nameHi: "सहर्ष स्वीकारा है" },
+                { id: "hin12-7", name: "Usha", nameHi: "उषा" },
+                { id: "hin12-8", name: "Kavitavali", nameHi: "कवितावली (उत्तर कांड से)" },
+                { id: "hin12-9", name: "Rubaaiyaan Gazal", nameHi: "रुबाइयाँ, गज़ल" },
+                { id: "hin12-10", name: "Chhota Mera Khet", nameHi: "छोटा मेरा खेत, बगुलों के पंख" },
+                { id: "hin12-11", name: "Bazar Darshan", nameHi: "बाज़ार दर्शन" },
+                { id: "hin12-12", name: "Kaale Megha Pani De", nameHi: "काले मेघा पानी दे" },
+                { id: "hin12-13", name: "Pahalwan Ki Dholak", nameHi: "पहलवान की ढोलक" },
+                { id: "hin12-14", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "hin12-15", name: "Namak", nameHi: "नमक" },
+                { id: "hin12-16", name: "Shram Vibhajan Aur Jati Pratha", nameHi: "श्रम-विभाजन और जाति-प्रथा" },
+              ]
+            },
+            {
+              id: "vitan-12",
+              name: "Vitan Bhag 2 (Supplementary)",
+              nameHi: "वितान भाग 2",
+              chapters: [
+                { id: "vit12-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vit12-2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vit12-3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vit12-4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+              ]
+            },
+          ]
+        },
+      ]
     },
-    {
-      id: "commerce",
-      name: "Commerce",
-      nameHi: "वाणिज्य",
-      subjects: []
-    },
-    {
-      id: "arts",
-      name: "Arts",
-      nameHi: "कला",
-      subjects: []
-    }
-  ]
-
-};
-export function getQuizQuestions() {
-  return []
-}
