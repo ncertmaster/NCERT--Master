@@ -139,8 +139,8 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
             <button
               key={subject.id}
               onClick={() => {
-                setSelectedChapter(subject.id)
-                setScreen(`${flow}-content`)
+                setSelectedSubject(subject.id)
+setScreen(`${flow}-book`)
               }}
               className="w-full flex items-center justify-between p-4 bg-card border rounded-xl hover:border-primary transition-colors"
             >
