@@ -1106,7 +1106,17 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     id: "physics-11-part-1",
     name: "Physics Part I",
     nameHi: "भौतिकी भाग 1",
-    chapters: []
+    chapters: [
+
+  { id: "phy11-1", name: "Physical World", nameHi: "भौतिक जगत" },
+  { id: "phy11-2", name: "Units and Measurements", nameHi: "इकाइयाँ एवं मापन" },
+  { id: "phy11-3", name: "Motion in a Straight Line", nameHi: "सरल रेखा में गति" },
+  { id: "phy11-4", name: "Motion in a Plane", nameHi: "समतल में गति" },
+  { id: "phy11-5", name: "Laws of Motion", nameHi: "गति के नियम" },
+  { id: "phy11-6", name: "Work, Energy and Power", nameHi: "कार्य, ऊर्जा और शक्ति" },
+  { id: "phy11-7", name: "System of Particles and Rotational Motion", nameHi: "कणों का तंत्र एवं घूर्णन गति" }
+
+]
   },
 
   {
