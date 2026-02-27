@@ -43,7 +43,9 @@ interface AppState {
   user: UserProfile | null
   language: Language
   selectedClass: ClassNumber | null
+  selectedStream: string | null
   selectedSubject: string | null
+  selectedBook: string | null
   selectedChapter: string | null
   quizMode: "chapter" | "full" | null
   quizScore: number
@@ -57,8 +59,10 @@ interface AppContextType extends AppState {
   setUser: (user: UserProfile) => void
   setLanguage: (lang: Language) => void
   setSelectedClass: (c: ClassNumber) => void
-  setSelectedSubject: (s: string) => void
-  setSelectedChapter: (ch: string) => void
+  setSelectedStream: (s: string | null) => void
+  setSelectedSubject: (s: string | null) => void
+  setSelectedBook: (b: string | null) => void
+  setSelectedChapter: (ch: string | null) => void
   setQuizMode: (m: "chapter" | "full") => void
   setQuizScore: (score: number, total: number) => void
   logout: () => void
@@ -72,7 +76,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     user: null,
     language: "en",
     selectedClass: null,
+    selectedStream: null,
     selectedSubject: null,
+    selectedBook: null,
     selectedChapter: null,
     quizMode: null,
     quizScore: 0,
@@ -131,11 +137,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState((prev) => ({ ...prev, selectedClass }))
   }, [])
 
-  const setSelectedSubject = useCallback((selectedSubject: string) => {
+  const setSelectedStream = useCallback((selectedStream: string | null) => {
+    setState((prev) => ({ ...prev, selectedStream }))
+  }, [])
+
+  const setSelectedSubject = useCallback((selectedSubject: string | null) => {
     setState((prev) => ({ ...prev, selectedSubject }))
   }, [])
 
-  const setSelectedChapter = useCallback((selectedChapter: string) => {
+  const setSelectedBook = useCallback((selectedBook: string | null) => {
+    setState((prev) => ({ ...prev, selectedBook }))
+  }, [])
+
+  const setSelectedChapter = useCallback((selectedChapter: string | null) => {
     setState((prev) => ({ ...prev, selectedChapter }))
   }, [])
 
@@ -154,7 +168,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       user: null,
       language: prev.language,
       selectedClass: null,
+      selectedStream: null,
       selectedSubject: null,
+      selectedBook: null,
       selectedChapter: null,
       quizMode: null,
       quizScore: 0,
@@ -171,7 +187,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setUser,
       setLanguage,
       setSelectedClass,
+      setSelectedStream,
       setSelectedSubject,
+      setSelectedBook,
       setSelectedChapter,
       setQuizMode,
       setQuizScore,
@@ -186,4 +204,4 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-                                             }
+    }
