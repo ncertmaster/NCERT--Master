@@ -1,5 +1,9 @@
-export default function NotesPage({ params }: { params: any }) {
-  const { class: className, subject, slug } = params || {}
+export default async function NotesPage({
+  params,
+}: {
+  params: Promise<any>
+}) {
+  const { class: className, subject, slug } = await params
 
   return (
     <div style={{ padding: "20px" }}>
