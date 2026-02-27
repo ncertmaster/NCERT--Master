@@ -139,12 +139,8 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
             <button
               key={subject.id}
               onClick={() => {
-                setSelectedSubject(subject.id)
-                if ((subject.books || []).length === 1) {
-                  setScreen(`${flow}-content`)
-                } else {
-                  setScreen(`${flow}-content`)
-                }
+                setSelectedChapter(subject.id)
+                setScreen(`${flow}-content`)
               }}
               className="w-full flex items-center justify-between p-4 bg-card border rounded-xl hover:border-primary transition-colors"
             >
