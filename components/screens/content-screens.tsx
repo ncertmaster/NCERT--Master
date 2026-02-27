@@ -64,7 +64,7 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
               key={stream.id}
               onClick={() => {
                 setSelectedSubject(stream.id)
-                setScreen(`${flow}-chapter`)
+                setScreen(`${flow}-subject`)
               }}
               className="w-full flex items-center justify-between p-4 bg-card border rounded-xl hover:border-primary transition-colors"
             >
