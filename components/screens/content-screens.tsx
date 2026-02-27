@@ -294,3 +294,14 @@ export function ContentScreen({ title }: { title: string }) {
     </div>
   )
           }
+export function BookContentScreen() {
+  return <ContentScreen title="Book Content" />
+}
+
+export function NotesContentScreen() {
+  return <ContentScreen title="Notes" />
+}
+
+export function IQContentScreen() {
+  return <ContentScreen title="Important Questions" />
+}
