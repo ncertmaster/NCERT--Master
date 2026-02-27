@@ -305,3 +305,10 @@ export function NotesContentScreen() {
 export function IQContentScreen() {
   return <ContentScreen title="Important Questions" />
 }
+export function QuizModeScreen() {
+  return <ContentScreen title="Quiz Mode" />
+}
+
+export function QuizPlayScreen() {
+  return <ContentScreen title="Quiz Play" />
+}
