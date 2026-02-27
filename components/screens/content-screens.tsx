@@ -2,13 +2,13 @@
 
 import React from "react"
 import { useApp } from "@/lib/app-context"
-import { ChevronLeft, ChevronRight, GraduationCap } from "lucide-react"
+import { ChevronLeft, ChevronRight, Book, GraduationCap } from "lucide-react"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { ClassNumber } from "@/lib/data"
 
-// ============================
-// 1. CLASS SCREEN
-// ============================
+// ===============================
+// 1️⃣ CLASS SELECT
+// ===============================
 
 export function ClassSelectScreen({ flow }: { flow: string }) {
   const { setScreen, setSelectedClass, goBack } = useApp()
@@ -17,13 +17,13 @@ export function ClassSelectScreen({ flow }: { flow: string }) {
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
+        <button onClick={goBack}>
+          <ChevronLeft />
         </button>
         <h1 className="ml-2 text-xl font-bold">Select Class</h1>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 p-4 space-y-3">
         {classes.map((cls) => (
           <button
             key={cls}
@@ -31,13 +31,10 @@ export function ClassSelectScreen({ flow }: { flow: string }) {
               setSelectedClass(cls as ClassNumber)
               setScreen(`${flow}-subject`)
             }}
-            className="w-full flex justify-between p-4 bg-card border rounded-xl"
+            className="w-full p-4 bg-card border rounded-xl flex justify-between"
           >
-            <div className="flex items-center">
-              <GraduationCap className="w-5 h-5 mr-3" />
-              <span>Class {cls}</span>
-            </div>
-            <ChevronRight className="w-5 h-5" />
+            <span>Class {cls}</span>
+            <ChevronRight />
           </button>
         ))}
       </div>
@@ -45,26 +42,27 @@ export function ClassSelectScreen({ flow }: { flow: string }) {
   )
 }
 
-// ============================
-// 2. SUBJECT / STREAM SCREEN
-// ============================
+// ===============================
+// 2️⃣ SUBJECT / STREAM SELECT
+// ===============================
 
 export function SubjectSelectScreen({ flow }: { flow: string }) {
-  const { setScreen, setSelectedSubject, selectedClass, goBack } = useApp()
+  const { selectedClass, setScreen, setSelectedSubject, goBack } = useApp()
 
+  // 11 & 12 → Streams
   if (selectedClass === 11 || selectedClass === 12) {
     const streams = streamsByClass[selectedClass] || []
 
     return (
       <div className="flex flex-col h-full bg-background">
         <div className="flex items-center p-4 border-b">
-          <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-            <ChevronLeft className="w-6 h-6" />
+          <button onClick={goBack}>
+            <ChevronLeft />
           </button>
           <h1 className="ml-2 text-xl font-bold">Select Stream</h1>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 p-4 space-y-3">
           {streams.map((stream) => (
             <button
               key={stream.id}
@@ -72,10 +70,10 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
                 setSelectedSubject(stream.id)
                 setScreen(`${flow}-chapter`)
               }}
-              className="w-full flex justify-between p-4 bg-card border rounded-xl"
+              className="w-full p-4 bg-card border rounded-xl flex justify-between"
             >
               <span>{stream.nameHi}</span>
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight />
             </button>
           ))}
         </div>
@@ -83,18 +81,19 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
     )
   }
 
+  // 6–10 → Subjects
   const subjects = subjectsByClass[selectedClass || 6] || []
 
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
+        <button onClick={goBack}>
+          <ChevronLeft />
         </button>
         <h1 className="ml-2 text-xl font-bold">Select Subject</h1>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 p-4 space-y-3">
         {subjects.map((subject) => (
           <button
             key={subject.id}
@@ -102,45 +101,52 @@ export function SubjectSelectScreen({ flow }: { flow: string }) {
               setSelectedSubject(subject.id)
               setScreen(`${flow}-chapter`)
             }}
-            className="w-full flex justify-between p-4 bg-card border rounded-xl"
+            className="w-full p-4 bg-card border rounded-xl flex justify-between"
           >
             <span>{subject.nameHi}</span>
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight />
           </button>
         ))}
       </div>
     </div>
   )
-}
-
-// ============================
-// 3. CHAPTER SCREEN
-// ============================
+    }
+// ===============================
+// 3️⃣ CHAPTER / BOOK SELECT
+// ===============================
 
 export function ChapterSelectScreen({ flow }: { flow: string }) {
   const {
-    setScreen,
-    setSelectedChapter,
     selectedClass,
     selectedSubject,
+    setSelectedSubject,
+    setSelectedChapter,
+    setScreen,
     goBack,
   } = useApp()
+
+  // ======================
+  // 11th & 12th Logic
+  // ======================
 
   if (selectedClass === 11 || selectedClass === 12) {
     const streams = streamsByClass[selectedClass] || []
 
+    // Step 1 → Stream match
     const stream = streams.find((s) => s.id === selectedSubject)
+
+    // अगर stream select हुआ है → subjects दिखाओ
     if (stream) {
       return (
         <div className="flex flex-col h-full bg-background">
           <div className="flex items-center p-4 border-b">
-            <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-              <ChevronLeft className="w-6 h-6" />
+            <button onClick={goBack}>
+              <ChevronLeft />
             </button>
             <h1 className="ml-2 text-xl font-bold">Select Subject</h1>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 p-4 space-y-3">
             {stream.subjects.map((subject) => (
               <button
                 key={subject.id}
@@ -148,10 +154,10 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
                   setSelectedSubject(subject.id)
                   setScreen(`${flow}-chapter`)
                 }}
-                className="w-full flex justify-between p-4 bg-card border rounded-xl"
+                className="w-full p-4 bg-card border rounded-xl flex justify-between"
               >
                 <span>{subject.nameHi}</span>
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight />
               </button>
             ))}
           </div>
@@ -159,19 +165,21 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
       )
     }
 
+    // Step 2 → Subject match (Books दिखाओ)
     for (const s of streams) {
       const subject = s.subjects.find((sub) => sub.id === selectedSubject)
+
       if (subject) {
         return (
           <div className="flex flex-col h-full bg-background">
             <div className="flex items-center p-4 border-b">
-              <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-                <ChevronLeft className="w-6 h-6" />
+              <button onClick={goBack}>
+                <ChevronLeft />
               </button>
               <h1 className="ml-2 text-xl font-bold">Select Book</h1>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 p-4 space-y-3">
               {subject.books.map((book) => (
                 <button
                   key={book.id}
@@ -179,10 +187,10 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
                     setSelectedChapter(book.id)
                     setScreen(`${flow}-content`)
                   }}
-                  className="w-full flex justify-between p-4 bg-card border rounded-xl"
+                  className="w-full p-4 bg-card border rounded-xl flex justify-between"
                 >
                   <span>{book.nameHi}</span>
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight />
                 </button>
               ))}
             </div>
@@ -190,94 +198,94 @@ export function ChapterSelectScreen({ flow }: { flow: string }) {
         )
       }
     }
+
+    return null
   }
+
+  // ======================
+  // 6th–10th Logic
+  // ======================
 
   const subjects = subjectsByClass[selectedClass || 6] || []
   const subject = subjects.find((s) => s.id === selectedSubject)
+
   if (!subject) return null
+
+  // Multiple books → Books दिखाओ
+  if (subject.books.length > 1) {
+    return (
+      <div className="flex flex-col h-full bg-background">
+        <div className="flex items-center p-4 border-b">
+          <button onClick={goBack}>
+            <ChevronLeft />
+          </button>
+          <h1 className="ml-2 text-xl font-bold">Select Book</h1>
+        </div>
+
+        <div className="flex-1 p-4 space-y-3">
+          {subject.books.map((book) => (
+            <button
+              key={book.id}
+              onClick={() => {
+                setSelectedChapter(book.id)
+                setScreen(`${flow}-content`)
+              }}
+              className="w-full p-4 bg-card border rounded-xl flex justify-between"
+            >
+              <span>{book.nameHi}</span>
+              <ChevronRight />
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // Single book → Chapters दिखाओ
+  const book = subject.books[0]
 
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
+        <button onClick={goBack}>
+          <ChevronLeft />
         </button>
         <h1 className="ml-2 text-xl font-bold">Chapters</h1>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {subject.books.flatMap((book) =>
-          book.chapters.map((chapter) => (
-            <button
-              key={chapter.id}
-              onClick={() => {
-                setSelectedChapter(chapter.id)
-                setScreen(`${flow}-content`)
-              }}
-              className="w-full flex justify-between p-4 bg-card border rounded-xl"
-            >
-              <span>{chapter.nameHi}</span>
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          ))
-        )}
+      <div className="flex-1 p-4 space-y-3">
+        {book.chapters.map((chapter) => (
+          <button
+            key={chapter.id}
+            onClick={() => {
+              setSelectedChapter(chapter.id)
+              setScreen(`${flow}-content`)
+            }}
+            className="w-full p-4 bg-card border rounded-xl flex justify-between"
+          >
+            <span>{chapter.nameHi}</span>
+            <ChevronRight />
+          </button>
+        ))}
       </div>
     </div>
   )
 }
 
-// ============================
-// 4. CONTENT SCREENS
-// ============================
+// ===============================
+// 4️⃣ CONTENT SCREEN
+// ===============================
 
-export function BookContentScreen() {
+export function ContentScreen({ title }: { title: string }) {
   const { goBack } = useApp()
 
   return (
     <div className="flex flex-col h-full bg-background">
       <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
+        <button onClick={goBack}>
+          <ChevronLeft />
         </button>
-        <h1 className="ml-2 text-lg font-bold">Book Content</h1>
-      </div>
-
-      <div className="flex-1 flex items-center justify-center text-muted-foreground">
-        Coming Soon...
-      </div>
-    </div>
-  )
-}
-
-export function NotesContentScreen() {
-  const { goBack } = useApp()
-
-  return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <h1 className="ml-2 text-lg font-bold">Notes</h1>
-      </div>
-
-      <div className="flex-1 flex items-center justify-center text-muted-foreground">
-        Coming Soon...
-      </div>
-    </div>
-  )
-}
-
-export function IQContentScreen() {
-  const { goBack } = useApp()
-
-  return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="flex items-center p-4 border-b">
-        <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <h1 className="ml-2 text-lg font-bold">Important Questions</h1>
+        <h1 className="ml-2 text-lg font-bold">{title}</h1>
       </div>
 
       <div className="flex-1 flex items-center justify-center text-muted-foreground">
