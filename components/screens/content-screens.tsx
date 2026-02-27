@@ -367,4 +367,4 @@ export function QuizModeScreen() {
 }
 export function QuizPlayScreen() {
   return <ContentScreen title="Quiz Play" />
-                  }
+}
