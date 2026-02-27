@@ -1,8 +1,12 @@
-export default function NotesPage({ params }: any) {
+export default function NotesPage({ params }: { params: any }) {
+  const { class: className, subject, slug } = params || {}
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Notes Page</h1>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
+      <p>Class: {className}</p>
+      <p>Subject: {subject}</p>
+      <p>Slug: {JSON.stringify(slug)}</p>
     </div>
   )
 }
