@@ -346,8 +346,11 @@ export function ContentScreen({ title }: { title: string }) {
         <h1 className="ml-2 text-lg font-bold">{title}</h1>
       </div>
 
-      <div className="flex-1 flex items-center justify-center text-muted-foreground">
-        Coming Soon...
+      <div className="flex-1 p-4 overflow-y-auto">
+  <div className="prose dark:prose-invert max-w-none">
+    Content Load Ho Raha Hai...
+  </div>
+</div>
       </div>
     </div>
   )
