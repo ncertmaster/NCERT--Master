@@ -1936,3 +1936,225 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
         },
       ]
     },
+{
+      id: "commerce",
+      name: "Commerce",
+      nameHi: "वाणिज्य",
+      subjects: [
+        {
+          id: "accountancy-12",
+          name: "Accountancy",
+          nameHi: "लेखाशास्त्र",
+          icon: "book",
+          books: [
+            {
+              id: "accountancy-12-part-1",
+              name: "Accountancy Part I",
+              nameHi: "लेखाशास्त्र भाग 1",
+              chapters: [
+                { id: "acc12-1", name: "Accounting for Partnership: Basic Concepts", nameHi: "साझेदारी लेखांकन: आधारभूत अवधारणाएँ" },
+                { id: "acc12-2", name: "Reconstitution of Partnership: Admission of Partner", nameHi: "साझेदारी फर्म का पुनर्गठन: साझेदार का प्रवेश" },
+                { id: "acc12-3", name: "Reconstitution of Partnership: Retirement and Death", nameHi: "साझेदारी फर्म का पुनर्गठन: साझेदार की सेवानिवृत्ति एवं मृत्यु" },
+                { id: "acc12-4", name: "Dissolution of Partnership Firm", nameHi: "साझेदारी फर्म का विघटन" },
+              ]
+            },
+            {
+              id: "accountancy-12-part-2",
+              name: "Accountancy Part II",
+              nameHi: "लेखाशास्त्र भाग 2",
+              chapters: [
+                { id: "acc12-5", name: "Accounting for Share Capital", nameHi: "अंश पूँजी के लिए लेखांकन" },
+                { id: "acc12-6", name: "Issue and Redemption of Debentures", nameHi: "ऋणपत्रों का निर्गमन एवं मोचन" },
+                { id: "acc12-7", name: "Financial Statements of a Company", nameHi: "कंपनी के वित्तीय विवरण" },
+                { id: "acc12-8", name: "Analysis of Financial Statements", nameHi: "वित्तीय विवरणों का विश्लेषण" },
+                { id: "acc12-9", name: "Accounting Ratios", nameHi: "लेखांकन अनुपात" },
+                { id: "acc12-10", name: "Cash Flow Statement", nameHi: "रोकड़ प्रवाह विवरण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "business-studies-12",
+          name: "Business Studies",
+          nameHi: "व्यवसाय अध्ययन",
+          icon: "briefcase",
+          books: [
+            {
+              id: "business-12-part-1",
+              name: "Business Studies Part I",
+              nameHi: "व्यवसाय अध्ययन भाग 1",
+              chapters: [
+                { id: "bst12-1", name: "Nature and Significance of Management", nameHi: "प्रबंध की प्रकृति एवं महत्व" },
+                { id: "bst12-2", name: "Principles of Management", nameHi: "प्रबंध के सिद्धांत" },
+                { id: "bst12-3", name: "Business Environment", nameHi: "व्यावसायिक पर्यावरण" },
+                { id: "bst12-4", name: "Planning", nameHi: "नियोजन" },
+                { id: "bst12-5", name: "Organising", nameHi: "संगठन" },
+                { id: "bst12-6", name: "Staffing", nameHi: "नियुक्तिकरण" },
+              ]
+            },
+                 {
+              id: "business-12-part-2",
+              name: "Business Studies Part II",
+              nameHi: "व्यवसाय अध्ययन भाग 2",
+              chapters: [
+                { id: "bst12-7", name: "Directing", nameHi: "निर्देशन" },
+                { id: "bst12-8", name: "Controlling", nameHi: "नियंत्रण" },
+                { id: "bst12-9", name: "Financial Management", nameHi: "वित्तीय प्रबंध" },
+                { id: "bst12-10", name: "Financial Markets", nameHi: "वित्तीय बाज़ार" },
+                { id: "bst12-11", name: "Marketing Management", nameHi: "विपणन प्रबंधन" },
+                { id: "bst12-12", name: "Consumer Protection", nameHi: "उपभोक्ता संरक्षण" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "economics-12-com",
+          name: "Economics",
+          nameHi: "अर्थशास्त्र",
+          icon: "trending-up",
+          books: [
+            {
+              id: "micro-economics-12",
+              name: "Introductory Microeconomics",
+              nameHi: "व्यष्टि अर्थशास्त्र एक परिचय",
+              chapters: [
+                { id: "mic12-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "mic12-2", name: "Theory of Consumer Behaviour", nameHi: "उपभोक्ता के व्यवहार का सिद्धांत" },
+                { id: "mic12-3", name: "Production and Costs", nameHi: "उत्पादन तथा लागत" },
+                { id: "mic12-4", name: "The Theory of the Firm under Perfect Competition", nameHi: "पूर्ण प्रतिस्पर्धा की स्थिति में फर्म का सिद्धांत" },
+                { id: "mic12-5", name: "Market Equilibrium", nameHi: "बाज़ार संतुलन" },
+                { id: "mic12-6", name: "Non-Competitive Markets", nameHi: "प्रतिस्पर्धारहित बाज़ार" },
+              ]
+            },
+            {
+              id: "macro-economics-12",
+              name: "Introductory Macroeconomics",
+              nameHi: "समष्टि अर्थशास्त्र एक परिचय",
+              chapters: [
+                { id: "mac12-1", name: "Introduction", nameHi: "परिचय" },
+                { id: "mac12-2", name: "National Income Accounting", nameHi: "राष्ट्रीय आय का लेखांकन" },
+                { id: "mac12-3", name: "Money and Banking", nameHi: "मुद्रा और बैंकिंग" },
+                { id: "mac12-4", name: "Determination of Income and Employment", nameHi: "आय और रोजगार का निर्धारण" },
+                { id: "mac12-5", name: "Government Budget and the Economy", nameHi: "सरकारी बजट एवं अर्थव्यवस्था" },
+                { id: "mac12-6", name: "Open Economy Macroeconomics", nameHi: "खुली अर्थव्यवस्था: समष्टि अर्थशास्त्र" },
+              ]
+            },
+          ]
+        },
+         {
+          id: "mathematics-12-com",
+          name: "Mathematics",
+          nameHi: "गणित",
+          icon: "calculator",
+          books: [
+            {
+              id: "mathematics-12-com-part-1",
+              name: "Mathematics Part I",
+              nameHi: "गणित भाग 1",
+              chapters: [
+                { id: "mat12c-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
+                { id: "mat12c-2", name: "Inverse Trigonometric Functions", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
+                { id: "mat12c-3", name: "Matrices", nameHi: "आव्यूह" },
+                { id: "mat12c-4", name: "Determinants", nameHi: "सारणिक" },
+                { id: "mat12c-5", name: "Continuity and Differentiability", nameHi: "सांतत्य तथा अवकलनीयता" },
+                { id: "mat12c-6", name: "Application of Derivatives", nameHi: "अवकलज के अनुप्रयोग" },
+              ]
+            },
+            {
+              id: "mathematics-12-com-part-2",
+              name: "Mathematics Part II",
+              nameHi: "गणित भाग 2",
+              chapters: [
+                { id: "mat12c-7", name: "Integrals", nameHi: "समाकलन" },
+                { id: "mat12c-8", name: "Application of Integrals", nameHi: "समाकलनों के अनुप्रयोग" },
+                { id: "mat12c-9", name: "Differential Equations", nameHi: "अवकल समीकरण" },
+                { id: "mat12c-10", name: "Vector Algebra", nameHi: "सदिश बीजगणित" },
+                { id: "mat12c-11", name: "Three Dimensional Geometry", nameHi: "त्रिविमीय ज्यामिति" },
+                { id: "mat12c-12", name: "Linear Programming", nameHi: "रैखिक प्रोग्रामन" },
+                { id: "mat12c-13", name: "Probability", nameHi: "प्रायिकता" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "english-core-12-com",
+          name: "English (Core)",
+          nameHi: "अंग्रेज़ी (कोर)",
+          icon: "book-open",
+          books: [
+            {
+              id: "flamingo-12-com",
+              name: "Flamingo",
+              nameHi: "Flamingo",
+              chapters: [
+                { id: "eng12c-1", name: "The Last Lesson", nameHi: "The Last Lesson" },
+                { id: "eng12c-2", name: "Lost Spring", nameHi: "Lost Spring" },
+                { id: "eng12c-3", name: "Deep Water", nameHi: "Deep Water" },
+                { id: "eng12c-4", name: "The Rattrap", nameHi: "The Rattrap" },
+                { id: "eng12c-5", name: "Indigo", nameHi: "Indigo" },
+                { id: "eng12c-6", name: "Poets and Pancakes", nameHi: "Poets and Pancakes" },
+                { id: "eng12c-7", name: "The Interview", nameHi: "The Interview" },
+                { id: "eng12c-8", name: "Going Places", nameHi: "Going Places" },
+              ]
+            },
+            {
+              id: "vistas-12-com",
+              name: "Vistas (Supplementary)",
+              nameHi: "Vistas",
+              chapters: [
+                { id: "vis12c-1", name: "The Third Level", nameHi: "The Third Level" },
+                { id: "vis12c-2", name: "The Tiger King", nameHi: "The Tiger King" },
+                { id: "vis12c-3", name: "Journey to the End of the Earth", nameHi: "Journey to the End of the Earth" },
+                { id: "vis12c-4", name: "The Enemy", nameHi: "The Enemy" },
+                { id: "vis12c-5", name: "Should Wizard Hit Mommy", nameHi: "Should Wizard Hit Mommy" },
+                { id: "vis12c-6", name: "On the Face of It", nameHi: "On the Face of It" },
+                { id: "vis12c-7", name: "Evans Tries an O-Level", nameHi: "Evans Tries an O-Level" },
+                { id: "vis12c-8", name: "Memories of Childhood", nameHi: "Memories of Childhood" },
+              ]
+            },
+          ]
+        },
+        {
+          id: "hindi-core-12-com",
+          name: "Hindi (Core)",
+          nameHi: "हिंदी (कोर)",
+          icon: "book",
+          books: [
+            {
+              id: "aroh-12-com",
+              name: "Aroh Bhag 2",
+              nameHi: "आरोह भाग 2",
+              chapters: [
+                { id: "hin12c-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
+                { id: "hin12c-2", name: "Patang", nameHi: "पतंग" },
+                { id: "hin12c-3", name: "Kavita Ke Bahane", nameHi: "कविता के बहाने" },
+                { id: "hin12c-4", name: "Baat Seedhi Thi Par", nameHi: "बात सीधी थी पर" },
+                { id: "hin12c-5", name: "Camera Mein Band Apahij", nameHi: "कैमरे में बंद अपाहिज" },
+                { id: "hin12c-6", name: "Saharse Sweekaara Hai", nameHi: "सहर्ष स्वीकारा है" },
+                { id: "hin12c-7", name: "Usha", nameHi: "उषा" },
+                { id: "hin12c-8", name: "Kavitavali", nameHi: "कवितावली (उत्तर कांड से)" },
+                { id: "hin12c-9", name: "Rubaaiyaan Gazal", nameHi: "रुबाइयाँ, गज़ल" },
+                { id: "hin12c-10", name: "Chhota Mera Khet", nameHi: "छोटा मेरा खेत, बगुलों के पंख" },
+                { id: "hin12c-11", name: "Bazar Darshan", nameHi: "बाज़ार दर्शन" },
+                { id: "hin12c-12", name: "Kaale Megha Pani De", nameHi: "काले मेघा पानी दे" },
+                { id: "hin12c-13", name: "Pahalwan Ki Dholak", nameHi: "पहलवान की ढोलक" },
+                { id: "hin12c-14", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "hin12c-15", name: "Namak", nameHi: "नमक" },
+                { id: "hin12c-16", name: "Shram Vibhajan Aur Jati Pratha", nameHi: "श्रम-विभाजन और जाति-प्रथा" },
+              ]
+            },
+            {
+              id: "vitan-12-com",
+              name: "Vitan Bhag 2 (Supplementary)",
+              nameHi: "वितान भाग 2",
+              chapters: [
+                { id: "vit12c-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
+                { id: "vit12c-2", name: "Jujh", nameHi: "जूझ" },
+                { id: "vit12c-3", name: "Ateet Mein Dabe Paon", nameHi: "अतीत में दबे पाँव" },
+                { id: "vit12c-4", name: "Diary Ke Panne", nameHi: "डायरी के पन्ने" },
+              ]
+            },
+          ]
+        },
+      ]
+    },
