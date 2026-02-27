@@ -1147,12 +1147,17 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   icon: "flask",
   books: [
 
-    {
-      id: "chemistry-11-part-1",
-      name: "Chemistry Part I",
-      nameHi: "रसायन विज्ञान भाग 1",
-      chapters: []
-    },
+    chapters: [
+
+  { id: "chem11-1", name: "Some Basic Concepts of Chemistry", nameHi: "रसायन विज्ञान के कुछ मूल सिद्धांत" },
+  { id: "chem11-2", name: "Structure of Atom", nameHi: "परमाणु की संरचना" },
+  { id: "chem11-3", name: "Classification of Elements and Periodicity in Properties", nameHi: "तत्वों का वर्गीकरण और गुणों में आवर्तिता" },
+  { id: "chem11-4", name: "Chemical Bonding and Molecular Structure", nameHi: "रासायनिक बंधन और आणविक संरचना" },
+  { id: "chem11-5", name: "States of Matter", nameHi: "पदार्थ की अवस्थाएँ" },
+  { id: "chem11-6", name: "Thermodynamics", nameHi: "ऊष्मागतिकी" },
+  { id: "chem11-7", name: "Equilibrium", nameHi: "साम्यावस्था" }
+
+]
 
     {
       id: "chemistry-11-part-2",
