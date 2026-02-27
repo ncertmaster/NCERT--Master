@@ -1100,7 +1100,23 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
     name: "Physics",
     nameHi: "भौतिकी",
     icon: "atom",
-    books: []
+    books: [
+
+  {
+    id: "physics-11-part-1",
+    name: "Physics Part I",
+    nameHi: "भौतिकी भाग 1",
+    chapters: []
+  },
+
+  {
+    id: "physics-11-part-2",
+    name: "Physics Part II",
+    nameHi: "भौतिकी भाग 2",
+    chapters: []
+  }
+
+]
   },
 
   {
