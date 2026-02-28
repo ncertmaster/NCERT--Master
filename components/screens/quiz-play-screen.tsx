@@ -17,12 +17,39 @@ export function QuizPlayScreen() {
     setScreen,
   } = useApp()
 
-  const questions = getQuizQuestions(selectedSubject || "", quizMode === "chapter" ? selectedChapter || undefined : undefined)
+  const questions = getQuizQuestions(
+    selectedSubject || "",
+    quizMode === "chapter" ? selectedChapter || undefined : undefined
+  )
+
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [isAnswered, setIsAnswered] = useState(false)
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
+
+  // ✅ Empty state — crash fix
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        <ScreenHeader title="Quiz" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
+          <Trophy className="h-16 w-16 text-muted-foreground/30" />
+          <p className="text-base font-semibold text-muted-foreground">
+            {language === "hi"
+              ? "इस अध्याय के लिए अभी कोई प्रश्न उपलब्ध नहीं हैं।"
+              : "No questions available for this chapter yet."}
+          </p>
+          <button
+            onClick={() => setScreen("dashboard")}
+            className="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            {getText("backToDashboard", language)}
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const currentQuestion = questions[currentIndex]
 
@@ -40,15 +67,14 @@ export function QuizPlayScreen() {
 
   const handleNext = useCallback(() => {
     if (currentIndex + 1 >= questions.length) {
-      const finalScore = selectedOption === currentQuestion.correctIndex ? score + 0 : score
-      setQuizScore(finalScore, questions.length)
+      setQuizScore(score, questions.length)
       setShowResult(true)
     } else {
       setCurrentIndex((i) => i + 1)
       setSelectedOption(null)
       setIsAnswered(false)
     }
-  }, [currentIndex, questions.length, selectedOption, currentQuestion, score, setQuizScore])
+  }, [currentIndex, questions.length, score, setQuizScore])
 
   if (showResult) {
     const percentage = Math.round((score / questions.length) * 100)
@@ -102,26 +128,20 @@ export function QuizPlayScreen() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+     <div className="flex min-h-screen flex-col bg-background">
       <ScreenHeader title={`${getText("question", language)} ${currentIndex + 1} ${getText("of", language)} ${questions.length}`} />
-
       <div className="mx-auto w-full max-w-md flex-1 px-4 py-5">
-        {/* Progress */}
         <div className="mb-5 h-1.5 overflow-hidden rounded-full bg-secondary">
           <div
             className="h-full rounded-full bg-primary transition-all duration-300"
             style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
           />
         </div>
-
-        {/* Question */}
         <div className="animate-fade-in rounded-2xl border border-border bg-card p-5 shadow-sm">
           <p className="text-base font-semibold leading-relaxed text-card-foreground">
             {currentQuestion.question}
           </p>
         </div>
-
-        {/* Options */}
         <div className="mt-4 flex flex-col gap-2.5">
           {currentQuestion.options.map((option, idx) => {
             let optionStyle = "border-border bg-card text-card-foreground"
@@ -134,7 +154,6 @@ export function QuizPlayScreen() {
             } else if (idx === selectedOption) {
               optionStyle = "border-primary bg-primary/10 text-primary"
             }
-
             return (
               <button
                 key={idx}
@@ -156,8 +175,6 @@ export function QuizPlayScreen() {
             )
           })}
         </div>
-
-        {/* Feedback + Next */}
         {isAnswered && (
           <div className="mt-5 animate-fade-in">
             <div className={`mb-4 rounded-xl p-3 text-center text-sm font-semibold ${
@@ -167,7 +184,7 @@ export function QuizPlayScreen() {
             }`}>
               {selectedOption === currentQuestion.correctIndex
                 ? getText("correct", language)
-                : `${getText("wrong", language)} ${getText("correctAnswer", language)}: ${currentQuestion.options[currentQuestion.correctIndex]}`}
+                : `${getText("wrong", language)} — ${getText("correctAnswer", language)}: ${currentQuestion.options[currentQuestion.correctIndex]}`}
             </div>
             <button
               onClick={handleNext}
@@ -182,4 +199,4 @@ export function QuizPlayScreen() {
       </div>
     </div>
   )
-}
+              }
