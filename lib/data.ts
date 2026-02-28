@@ -2413,8 +2413,13 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
 export function getQuizQuestions(
   subject?: string,
   chapter?: string
-) {
-  return []
+): Array<{
+  id: number;
+  question: string;
+  options: string[];
+  correctIndex: number;
+}> {
+  return [];
 }
 export function getNotesContent(
   classNum: string,
