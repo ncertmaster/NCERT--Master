@@ -1084,8 +1084,13 @@ chapters: [
     }
   ]        // books close
 }          // subject close
-]          // class 10 close
-};         // subjectsByClass object close
+],          // class 10 close
+  // subjectsByClass object close
+  
+11: [],
+12: [],
+  };
+
 export const streamsByClass: Record<ClassNumber, Stream[]> = {
 
   11: [
