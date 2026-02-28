@@ -2413,3 +2413,27 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
 export function getQuizQuestions() {
   return []
 }
+export function getNotesContent(
+  classNum: string,
+  subject: string,
+  chapter: string
+) {
+  return {
+    title: chapter,
+    content: "Content coming soon...",
+  }
+}
+
+export function getImportantQuestions(
+  classNum: string,
+  subject: string,
+  chapter: string
+) {
+  return [
+    {
+      id: 1,
+      question: "Important questions coming soon...",
+      answer: "",
+    },
+  ]
+}
