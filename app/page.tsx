@@ -1,7 +1,10 @@
+import { AppProvider } from "@/lib/app-context"
+import { AppShell } from "@/components/app-shell"
+
 export default function Page() {
   return (
-    <div style={{ padding: 20 }}>
-      Home Working ✅
-    </div>
+    <AppProvider>
+      <AppShell />
+    </AppProvider>
   )
 }
