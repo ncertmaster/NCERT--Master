@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
+  experimental: {
+    optimizeCss: false, // ← Tailwind v4 + Vercel combo mein yeh ZAROOR chahiye
   },
+  // Agar images external source se hain toh
   images: {
-    unoptimized: true,
+    unoptimized: false,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
