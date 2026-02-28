@@ -2410,7 +2410,10 @@ export const streamsByClass: Record<ClassNumber, Stream[]> = {
   ],
 }
 
-export function getQuizQuestions() {
+export function getQuizQuestions(
+  subject?: string,
+  chapter?: string
+) {
   return []
 }
 export function getNotesContent(
