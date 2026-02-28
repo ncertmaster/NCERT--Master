@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 export default function Page({ params }: any) {
   return (
     <div style={{ padding: 20 }}>
