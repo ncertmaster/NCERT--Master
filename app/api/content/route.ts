@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Sheet1`
 
   try {
-    const res = await fetch(url, { cache: "no-store" })
+    const res = await fetch(url, { next: { revalidate: 300 } })
     const csv = await res.text()
 
     // CSV को सही तरीके से parse करो (multi-line cells handle करो)
