@@ -13,17 +13,50 @@ export async function GET(request: Request) {
     const res = await fetch(url, { cache: "no-store" })
     const csv = await res.text()
 
-    const rows = csv.split("\n").slice(1)
-    
+    // CSV को सही तरीके से parse करो (multi-line cells handle करो)
+    const parseCSV = (text: string) => {
+      const results: string[][] = []
+      let row: string[] = []
+      let cell = ""
+      let inQuotes = false
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i]
+        const next = text[i + 1]
+
+        if (char === '"' && inQuotes && next === '"') {
+          cell += '"'
+          i++
+        } else if (char === '"') {
+          inQuotes = !inQuotes
+        } else if (char === ',' && !inQuotes) {
+          row.push(cell.trim())
+          cell = ""
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (char === '\r' && next === '\n') i++
+          row.push(cell.trim())
+          results.push(row)
+          row = []
+          cell = ""
+        } else {
+          cell += char
+        }
+      }
+      if (cell || row.length) {
+        row.push(cell.trim())
+        results.push(row)
+      }
+      return results
+    }
+
+    const rows = parseCSV(csv).slice(1) // header skip
+
     const data = rows
-      .map((row) => {
-        const cols = row.split(",")
-        const chapter_id = cols[0]?.replace(/"/g, "").trim()
-        const tabVal = cols[1]?.replace(/"/g, "").trim()
-        // Content में commas हो सकते हैं इसलिए बाकी सब join करो
-        const content = cols.slice(2).join(",").replace(/"/g, "").trim()
-        return { chapter_id, tab: tabVal, content }
-      })
+      .map((cols) => ({
+        chapter_id: cols[0] || "",
+        tab: cols[1] || "",
+        content: cols[2] || "",
+      }))
       .filter((r) => {
         if (!r.chapter_id) return false
         if (chapterId && r.chapter_id !== chapterId) return false
@@ -35,4 +68,4 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json({ error: "Sheet fetch failed" }, { status: 500 })
   }
-}
+      }
