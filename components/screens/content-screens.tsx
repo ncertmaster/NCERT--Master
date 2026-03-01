@@ -1,5 +1,5 @@
 "use client"
-
+import { useSheetContent } from "@/hooks/use-sheet-content"
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
@@ -356,38 +356,77 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 // ===============================
 // 4️⃣ CONTENT SCREENS
 // ===============================
-export function BookContentScreen() {
-  const { language, selectedChapter } = useApp()
-  return (
-    <div className="flex min-h-screen flex-col bg-background pb-6">
-      <ScreenHeader title={getText("books", language)} />
-      <div className="flex flex-1 items-center justify-center text-muted-foreground">
-        Coming Soon...
-      </div>
-    </div>
-  )
-}
-
 export function NotesContentScreen() {
-  const { language } = useApp()
+  const { language, selectedChapter } = useApp()
+  const { content, loading, error } = useSheetContent(selectedChapter, "notes")
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("notes", language)} />
-      <div className="flex flex-1 items-center justify-center text-muted-foreground">
-        Coming Soon...
+      <div className="mx-auto w-full max-w-md px-4 py-4">
+        {loading && (
+          <div className="flex justify-center py-10">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        )}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!loading && !error && (
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            {content.split("\n").map((para, i) => (
+              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
 export function IQContentScreen() {
-  const { language } = useApp()
+  const { language, selectedChapter } = useApp()
+  const { content, loading, error } = useSheetContent(selectedChapter, "iq")
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("importantQuestions", language)} />
-      <div className="flex flex-1 items-center justify-center text-muted-foreground">
-        Coming Soon...
+      <div className="mx-auto w-full max-w-md px-4 py-4">
+        {loading && (
+          <div className="flex justify-center py-10">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        )}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!loading && !error && (
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            {content.split("\n").map((para, i) => (
+              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
-                }
+}
+
+export function BookContentScreen() {
+  const { language, selectedChapter } = useApp()
+  const { content, loading, error } = useSheetContent(selectedChapter, "books")
+  return (
+    <div className="flex min-h-screen flex-col bg-background pb-6">
+      <ScreenHeader title={getText("books", language)} />
+      <div className="mx-auto w-full max-w-md px-4 py-4">
+        {loading && (
+          <div className="flex justify-center py-10">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        )}
+        {error && <p className="text-center text-red-500">{error}</p>}
+        {!loading && !error && (
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+            {content.split("\n").map((para, i) => (
+              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+                                      }
