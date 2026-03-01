@@ -7,21 +7,22 @@ export async function GET(request: Request) {
   const chapterId = searchParams.get("chapter_id")
   const tab = searchParams.get("tab")
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Sheet1`
 
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } })
+    const res = await fetch(url, { cache: "no-store" })
     const csv = await res.text()
 
     const rows = csv.split("\n").slice(1)
+    
     const data = rows
       .map((row) => {
-        const cols = row.match(/(".*?"|[^",\n]+)/g) || []
-        return {
-          chapter_id: cols[0]?.replace(/"/g, "").trim(),
-          tab: cols[1]?.replace(/"/g, "").trim(),
-          content: cols[2]?.replace(/"/g, "").trim(),
-        }
+        const cols = row.split(",")
+        const chapter_id = cols[0]?.replace(/"/g, "").trim()
+        const tabVal = cols[1]?.replace(/"/g, "").trim()
+        // Content में commas हो सकते हैं इसलिए बाकी सब join करो
+        const content = cols.slice(2).join(",").replace(/"/g, "").trim()
+        return { chapter_id, tab: tabVal, content }
       })
       .filter((r) => {
         if (!r.chapter_id) return false
