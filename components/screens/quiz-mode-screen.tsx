@@ -41,8 +41,8 @@ export function QuizModeScreen() {
             }}
             className="animate-fade-in flex items-center gap-4 rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-              <Layers className="h-6 w-6 text-accent" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+  <Layers className="h-6 w-6 text-primary" />
             </div>
             <div>
               <p className="text-base font-semibold text-card-foreground">
