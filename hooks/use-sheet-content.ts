@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 
 export function useSheetContent(chapterId: string | null, tab: "notes" | "iq" | "books") {
   const [content, setContent] = useState<string>("")
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
