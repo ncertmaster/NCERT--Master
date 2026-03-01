@@ -122,7 +122,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
     })
   }, [])
-
+useEffect(() => {
+    const handlePopState = () => {
+      setState((prev) => {
+        const history = [...prev.screenHistory]
+        const previousScreen = history.pop() || "dashboard"
+        return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
+      })
+    }
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
   const setUser = useCallback((user: UserProfile) => {
     try { localStorage.setItem("ncert_user", JSON.stringify(user)) } catch {}
     setState((prev) => ({ ...prev, user }))
