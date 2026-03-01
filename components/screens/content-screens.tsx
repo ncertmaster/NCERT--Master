@@ -371,9 +371,16 @@ export function NotesContentScreen() {
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => (
-              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
-            ))}
+            {content.split("\n").map((para, i) => {
+  if (!para.trim()) return <div key={i} className="mb-2" />
+  const isBold = para.startsWith("**") && para.includes("**", 2)
+  const text = isBold ? para.replace(/\*\*/g, "") : para
+  return isBold ? (
+    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+  ) : (
+    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+  )
+})}
           </div>
         )}
       </div>
@@ -396,9 +403,16 @@ export function IQContentScreen() {
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => (
-              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
-            ))}
+            {content.split("\n").map((para, i) => {
+  if (!para.trim()) return <div key={i} className="mb-2" />
+  const isBold = para.startsWith("**") && para.includes("**", 2)
+  const text = isBold ? para.replace(/\*\*/g, "") : para
+  return isBold ? (
+    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+  ) : (
+    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+  )
+})}
           </div>
         )}
       </div>
@@ -421,9 +435,16 @@ export function BookContentScreen() {
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => (
-              <p key={i} className="mb-3 leading-relaxed text-card-foreground">{para}</p>
-            ))}
+            {content.split("\n").map((para, i) => {
+  if (!para.trim()) return <div key={i} className="mb-2" />
+  const isBold = para.startsWith("**") && para.includes("**", 2)
+  const text = isBold ? para.replace(/\*\*/g, "") : para
+  return isBold ? (
+    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+  ) : (
+    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+  )
+})}
           </div>
         )}
       </div>
