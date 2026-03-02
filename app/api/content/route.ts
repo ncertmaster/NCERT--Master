@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-const SHEET_ID = "1vkT8GN7IPe3pMfQA8BV6gAo04rEbUkbsR4sbAO4-dHQ"
+const SHEET_ID = "1g69GuccPRSVzoHQGvmaCXmMNBZXYv3NrKPVAMosSGHg"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
