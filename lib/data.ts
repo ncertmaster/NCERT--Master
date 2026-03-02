@@ -46,6 +46,7 @@ books: [{
 id: "math-6",
 name: "Mathematics",
 nameHi: "गणित",
+booksOnly: true,
 chapters: [
 { id: "m6-ch1", name: "Knowing Our Numbers", nameHi: "अपनी संख्याओं की जानकारी" },
 { id: "m6-ch2", name: "Whole Numbers", nameHi: "पूर्ण संख्याएँ" },
@@ -73,6 +74,7 @@ chapters: [
     id: "kb-6",
     name: "Kaushal Bodh",
     nameHi: "कौशल बोध",
+    booksOnly: true,
     chapters: [
       { id: "kb6-ch1", name: "Vidyalayi Rasoi Udyan", nameHi: "विद्यालयी रसोई उद्यान" },
       { id: "kb6-ch2", name: "Jaiv Vividhata Vivaranika", nameHi: "जैव विविधता विवरणिका" },
@@ -93,6 +95,7 @@ chapters: [
     id: "ky-6",
     name: "Khel Yatra",
     nameHi: "खेल यात्रा",
+    booksOnly: true,
     chapters: [
       { id: "ky6-ch1", name: "Sharirik Shiksha Aur Aarogya Ka Mahatv", nameHi: "शारीरिक शिक्षा और आरोग्य का महत्व" },
       { id: "ky6-ch2", name: "Gamak Dakshata", nameHi: "गामक दक्षता" },
@@ -111,6 +114,7 @@ chapters: [
     id: "kriti-6",
     name: "Kriti",
     nameHi: "कृति",
+    booksOnly: true,
     chapters: [
       { id: "kr6-ch1", name: "Vastu Chitran", nameHi: "वस्तु-चित्रण" },
       { id: "kr6-ch2", name: "Prarooopi Chitra Mein Badlaav", nameHi: "प्रारूपी चित्र में बदलाव" },
@@ -268,6 +272,7 @@ books: [
 id: "vasant-6",
 name: "Vasant Bhag 1",
 nameHi: "वसंत भाग 1",
+booksOnly: true,
 chapters: [
 { id: "va6-ch1", name: "Vah Chidiya Jo", nameHi: "वह चिड़िया जो" },
 { id: "va6-ch2", name: "Bachpan", nameHi: "बचपन" },
@@ -290,6 +295,7 @@ chapters: [
   id: "balramkatha-6",
 name: "Bal Ramkatha",
 nameHi: "बाल रामकथा",
+booksOnly: true,
 chapters: [
 { id: "br6-ch1", name: "Avadhpuri Mein Ram", nameHi: "अवधपुरी में राम" },
 { id: "br6-ch2", name: "Ram Ka Van Gaman", nameHi: "राम का वन गमन" },
@@ -316,6 +322,7 @@ books: [{
 id: "math-7",
 name: "Mathematics",
 nameHi: "गणित",
+booksOnly: true,
 chapters: [
 { id: "m7-ch1", name: "Integers", nameHi: "पूर्णांक" },
 { id: "m7-ch2", name: "Fractions and Decimals", nameHi: "भिन्न एवं दशमलव" },
