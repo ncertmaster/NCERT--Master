@@ -474,7 +474,7 @@ books: [
 id: "vasant-7",
 name: "Vasant Bhag 2",
 nameHi: "वसंत भाग 2",
-booksOnly: true
+booksOnly: true,
 chapters: [
 { id: "va7-ch1", name: "Hum Panchhi Unmukt Gagan Ke", nameHi: "हम पंछी उन्मुक्त गगन के" },
 { id: "va7-ch2", name: "Daadi Maa", nameHi: "दादी माँ" },
