@@ -101,7 +101,43 @@ chapters: [
       { id: "ky6-ch5", name: "Yog", nameHi: "योग" },
     ]
   }]
-}, 
+},
+{
+  id: "kriti",
+  name: "Kriti",
+  nameHi: "कृति",
+  icon: "book-open",
+  books: [{
+    id: "kriti-6",
+    name: "Kriti",
+    nameHi: "कृति",
+    chapters: [
+      { id: "kr6-ch1", name: "Vastu Chitran", nameHi: "वस्तु-चित्रण" },
+      { id: "kr6-ch2", name: "Prarooopi Chitra Mein Badlaav", nameHi: "प्रारूपी चित्र में बदलाव" },
+      { id: "kr6-ch3", name: "Vyakti Chitran", nameHi: "व्यक्ति-चित्रण" },
+      { id: "kr6-ch4", name: "Kagaj Ke Shilp", nameHi: "कागज के शिल्प" },
+      { id: "kr6-ch5", name: "Muhar Se Chhapaai Tak", nameHi: "मुहर से छपाई तक" },
+      { id: "kr6-ch6", name: "Sangeet Evam Bhaav", nameHi: "संगीत एवं भाव" },
+      { id: "kr6-ch7", name: "Vaadyayantra", nameHi: "वाद्ययंत्र" },
+      { id: "kr6-ch8", name: "Taal Ya Taalam Aur Raag Ya Raagam", nameHi: "ताल या तालम और राग या रागम" },
+      { id: "kr6-ch9", name: "Bharatiya Sangeet Mein Vividhata", nameHi: "भारतीय संगीत में विविधता" },
+      { id: "kr6-ch10", name: "Geet Lekhan", nameHi: "गीत लेखन" },
+      { id: "kr6-ch11", name: "Sangeet Aur Samaaj", nameHi: "संगीत और समाज" },
+      { id: "kr6-ch12", name: "Mera Sharirik Sanchalan", nameHi: "मेरा शारीरिक संचलन" },
+      { id: "kr6-ch13", name: "Nritya Ke Madhyam Se Avrodhon Ko Todna", nameHi: "नृत्य के माध्यम से अवरोधकों को तोड़ना" },
+      { id: "kr6-ch14", name: "Sanchalan Mein Saamanjasy", nameHi: "संचलन में सामंजस्य" },
+      { id: "kr6-ch15", name: "Bharatiya Nritya", nameHi: "भारतीय नृत्य" },
+      { id: "kr6-ch16", name: "Bhaavon Ka Anaavaran", nameHi: "भावों का अनावरण" },
+      { id: "kr6-ch17", name: "Aaiye Design Banayen", nameHi: "आइए डिजाइन बनाएँ" },
+      { id: "kr6-ch18", name: "Company Theatre Mein", nameHi: "'कंपनी थिएटर' में" },
+      { id: "kr6-ch19", name: "Chhaaya Aur Kathputaliyon Ki Kahaniyaan", nameHi: "छाया और कठपुतलियों की कहानियाँ" },
+      { id: "kr6-ch20", name: "Bhavy Samaapan", nameHi: "भव्य समापन" },
+      { id: "kr6-ch21", name: "Kala Roopon Ka Ekikaran", nameHi: "कला रूपों का एकीकरण" },
+      { id: "kr6-ch22", name: "Moolyaankan", nameHi: "मूल्यांकन" },
+    ]
+  }]
+},
+  
 {
 id: "science",
 name: "Science",
