@@ -380,10 +380,11 @@ export function NotesContentScreen() {
       <ScreenHeader title={getText("notes", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {loading && (
-          <div className="flex justify-center py-10">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          </div>
-        )}
+  <div className="flex flex-col items-center justify-center py-10 gap-3">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+    <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
+  </div>
+)}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
