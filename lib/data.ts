@@ -47,7 +47,6 @@ books: [{
 id: "math-6",
 name: "Mathematics",
 nameHi: "गणित",
-booksOnly: true,
 chapters: [
 { id: "m6-ch1", name: "Knowing Our Numbers", nameHi: "अपनी संख्याओं की जानकारी" },
 { id: "m6-ch2", name: "Whole Numbers", nameHi: "पूर्ण संख्याएँ" },
@@ -323,7 +322,6 @@ books: [{
 id: "math-7",
 name: "Mathematics",
 nameHi: "गणित",
-booksOnly: true,
 chapters: [
 { id: "m7-ch1", name: "Integers", nameHi: "पूर्णांक" },
 { id: "m7-ch2", name: "Fractions and Decimals", nameHi: "भिन्न एवं दशमलव" },
@@ -476,6 +474,7 @@ books: [
 id: "vasant-7",
 name: "Vasant Bhag 2",
 nameHi: "वसंत भाग 2",
+booksOnly: true
 chapters: [
 { id: "va7-ch1", name: "Hum Panchhi Unmukt Gagan Ke", nameHi: "हम पंछी उन्मुक्त गगन के" },
 { id: "va7-ch2", name: "Daadi Maa", nameHi: "दादी माँ" },
@@ -498,6 +497,7 @@ chapters: [
     id: "bal-mahabharat-7",
 name: "Bal Mahabharat Katha",
 nameHi: "बाल महाभारत कथा",
+booksOnly: true,
 chapters: [
 { id: "bm7-ch1", name: "Adi Parv", nameHi: "आदि पर्व" },
 { id: "bm7-ch2", name: "Sabha Parv", nameHi: "सभा पर्व" },
@@ -524,7 +524,6 @@ books: [{
 id: "math-8",
 name: "Mathematics",
 nameHi: "गणित",
-booksOnly: true,
 chapters: [
 { id: "m8-ch1", name: "Rational Numbers", nameHi: "परिमेय संख्याएँ" },
 { id: "m8-ch2", name: "Linear Equations in One Variable", nameHi: "एक चर वाले रैखिक समीकरण" },
@@ -731,7 +730,6 @@ books: [{
 id: "math-9",
 name: "Mathematics",
 nameHi: "गणित",
-booksOnly: true,
 chapters: [
 { id: "m9-ch1", name: "Number Systems", nameHi: "संख्या पद्धति" },
 { id: "m9-ch2", name: "Polynomials", nameHi: "बहुपद" },
@@ -931,7 +929,6 @@ books: [{
 id: "math-10",
 name: "Mathematics",
 nameHi: "गणित",
-booksOnly: true,
 chapters: [
 { id: "m10-ch1", name: "Real Numbers", nameHi: "वास्तविक संख्याएँ" },
 { id: "m10-ch2", name: "Polynomials", nameHi: "बहुपद" },
@@ -1196,7 +1193,6 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
     name: "Physics Part I",
     nameHi: "भौतिकी भाग 1",
     chapters: [
-
   { id: "phy11-1", name: "Physical World", nameHi: "भौतिक जगत" },
   { id: "phy11-2", name: "Units and Measurements", nameHi: "इकाइयाँ एवं मापन" },
   { id: "phy11-3", name: "Motion in a Straight Line", nameHi: "सरल रेखा में गति" },
@@ -1213,7 +1209,6 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
   name: "Physics Part II",
   nameHi: "भौतिकी भाग 2",
   chapters: [
-
     { id: "phy11-8",  name: "Gravitation", nameHi: "गुरुत्वाकर्षण" },
     { id: "phy11-9",  name: "Mechanical Properties of Solids", nameHi: "ठोसों के यांत्रिक गुण" },
     { id: "phy11-10", name: "Mechanical Properties of Fluids", nameHi: "द्रवों के यांत्रिक गुण" },
@@ -1306,7 +1301,6 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-11-book",
               name: "Mathematics",
               nameHi: "गणित",
-              booksOnly: true,
               chapters: [
                 { id: "math11-1", name: "Sets", nameHi: "समुच्चय" },
                 { id: "math11-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
@@ -1374,6 +1368,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-11",
               name: "Aroh Bhag 1",
               nameHi: "आरोह भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "hin11-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
                 { id: "hin11-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
@@ -1393,6 +1388,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-11",
               name: "Vitan Bhag 1 (Supplementary)",
               nameHi: "वितान भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "vit11-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
                 { id: "vit11-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
@@ -1556,6 +1552,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-11-com",
               name: "Aroh Bhag 1",
               nameHi: "आरोह भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "hin11c-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
                 { id: "hin11c-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
@@ -1575,6 +1572,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-11-com",
               name: "Vitan Bhag 1 (Supplementary)",
               nameHi: "वितान भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "vit11c-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
                 { id: "vit11c-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
@@ -1774,6 +1772,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-11-arts",
               name: "Aroh Bhag 1",
               nameHi: "आरोह भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "hin11a-1", name: "Hum To Ek Ek Kar Jaanate Hain", nameHi: "हम तो एक एक करि जाना" },
                 { id: "hin11a-2", name: "Meera Ke Pad", nameHi: "मीरा के पद" },
@@ -1793,6 +1792,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-11-arts",
               name: "Vitan Bhag 1 (Supplementary)",
               nameHi: "वितान भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "vit11a-1", name: "Bhaarat Mein Nritya", nameHi: "भारतीय गायिकाओं में बेजोड़: लता मंगेशकर" },
                 { id: "vit11a-2", name: "Rajanigandha", nameHi: "राजस्थान की रजत बूँदें" },
@@ -1919,7 +1919,6 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-12-part-1",
               name: "Mathematics Part I",
               nameHi: "गणित भाग 1",
-              booksOnly: true,
               chapters: [
                 { id: "math12-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
                 { id: "math12-2", name: "Inverse Trigonometric Functions", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
@@ -1933,7 +1932,6 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-12-part-2",
               name: "Mathematics Part II",
               nameHi: "गणित भाग 2",
-              booksOnly: true,
               chapters: [
                 { id: "math12-7", name: "Integrals", nameHi: "समाकलन" },
                 { id: "math12-8", name: "Application of Integrals", nameHi: "समाकलनों के अनुप्रयोग" },
@@ -1971,6 +1969,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vistas-12",
               name: "Vistas (Supplementary)",
               nameHi: "Vistas",
+              booksOnly: true,
               chapters: [
                 { id: "vis12-1", name: "The Third Level", nameHi: "The Third Level" },
                 { id: "vis12-2", name: "The Tiger King", nameHi: "The Tiger King" },
@@ -1994,6 +1993,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-12",
               name: "Aroh Bhag 2",
               nameHi: "आरोह भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "hin12-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
                 { id: "hin12-2", name: "Patang", nameHi: "पतंग" },
@@ -2017,6 +2017,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-12",
               name: "Vitan Bhag 2 (Supplementary)",
               nameHi: "वितान भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "vit12-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
                 { id: "vit12-2", name: "Jujh", nameHi: "जूझ" },
@@ -2193,6 +2194,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vistas-12-com",
               name: "Vistas (Supplementary)",
               nameHi: "Vistas",
+              booksOnly: true,
               chapters: [
                 { id: "vis12c-1", name: "The Third Level", nameHi: "The Third Level" },
                 { id: "vis12c-2", name: "The Tiger King", nameHi: "The Tiger King" },
@@ -2216,6 +2218,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-12-com",
               name: "Aroh Bhag 2",
               nameHi: "आरोह भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "hin12c-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
                 { id: "hin12c-2", name: "Patang", nameHi: "पतंग" },
@@ -2239,6 +2242,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-12-com",
               name: "Vitan Bhag 2 (Supplementary)",
               nameHi: "वितान भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "vit12c-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
                 { id: "vit12c-2", name: "Jujh", nameHi: "जूझ" },
@@ -2442,6 +2446,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vistas-12-arts",
               name: "Vistas (Supplementary)",
               nameHi: "Vistas",
+              booksOnly: true,
               chapters: [
                 { id: "vis12a-1", name: "The Third Level", nameHi: "The Third Level" },
                 { id: "vis12a-2", name: "The Tiger King", nameHi: "The Tiger King" },
@@ -2465,6 +2470,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "aroh-12-arts",
               name: "Aroh Bhag 2",
               nameHi: "आरोह भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "hin12a-1", name: "Aatmaparichay", nameHi: "आत्मपरिचय, एक गीत" },
                 { id: "hin12a-2", name: "Patang", nameHi: "पतंग" },
@@ -2488,6 +2494,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "vitan-12-arts",
               name: "Vitan Bhag 2 (Supplementary)",
               nameHi: "वितान भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "vit12a-1", name: "Silver Wedding", nameHi: "सिल्वर वेडिंग" },
                 { id: "vit12a-2", name: "Jujh", nameHi: "जूझ" },
