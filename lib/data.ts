@@ -39,32 +39,67 @@ correctIndex: number
 export const subjectsByClass: Record<ClassNumber, Subject[]> = {
 6: [
 {
-id: "math",
-name: "Mathematics",
-nameHi: "गणित",
-icon: "calculator",
-books: [{
-id: "math-6",
-name: "Mathematics",
-nameHi: "गणित",
-chapters: [
-{ id: "m6-ch1", name: "Knowing Our Numbers", nameHi: "अपनी संख्याओं की जानकारी" },
-{ id: "m6-ch2", name: "Whole Numbers", nameHi: "पूर्ण संख्याएँ" },
-{ id: "m6-ch3", name: "Playing with Numbers", nameHi: "संख्याओं के साथ खेलना" },
-{ id: "m6-ch4", name: "Basic Geometrical Ideas", nameHi: "आधारभूत ज्यामितीय अवधारणाएँ" },
-{ id: "m6-ch5", name: "Understanding Elementary Shapes", nameHi: "प्रारंभिक आकारों को समझना" },
-{ id: "m6-ch6", name: "Integers", nameHi: "पूर्णांक" },
-{ id: "m6-ch7", name: "Fractions", nameHi: "भिन्न" },
-{ id: "m6-ch8", name: "Decimals", nameHi: "दशमलव" },
-{ id: "m6-ch9", name: "Data Handling", nameHi: "आँकड़ों का प्रबंधन" },
-{ id: "m6-ch10", name: "Mensuration", nameHi: "क्षेत्रमिति" },
-{ id: "m6-ch11", name: "Algebra", nameHi: "बीजगणित" },
-{ id: "m6-ch12", name: "Ratio and Proportion", nameHi: "अनुपात और समानुपात" },
-{ id: "m6-ch13", name: "Symmetry", nameHi: "सममिति" },
-{ id: "m6-ch14", name: "Practical Geometry", nameHi: "प्रायोगिक ज्यामिति" }
-]
-}]
+  id: "math",
+  name: "Mathematics",
+  nameHi: "गणित",
+  icon: "calculator",
+  books: [
+    {
+      id: "math-6",
+      name: "Mathematics Part 1",
+      nameHi: "गणित भाग 1",
+      chapters: [
+        { id: "m6-ch1", name: "Knowing Our Numbers", nameHi: "अपनी संख्याओं की जानकारी" },
+        { id: "m6-ch2", name: "Whole Numbers", nameHi: "पूर्ण संख्याएँ" },
+        { id: "m6-ch3", name: "Playing with Numbers", nameHi: "संख्याओं के साथ खेलना" },
+        { id: "m6-ch4", name: "Basic Geometrical Ideas", nameHi: "आधारभूत ज्यामितीय अवधारणाएँ" },
+        { id: "m6-ch5", name: "Understanding Elementary Shapes", nameHi: "प्रारंभिक आकारों को समझना" },
+        { id: "m6-ch6", name: "Integers", nameHi: "पूर्णांक" },
+        { id: "m6-ch7", name: "Fractions", nameHi: "भिन्न" },
+        { id: "m6-ch8", name: "Decimals", nameHi: "दशमलव" },
+        { id: "m6-ch9", name: "Data Handling", nameHi: "आँकड़ों का प्रबंधन" },
+        { id: "m6-ch10", name: "Mensuration", nameHi: "क्षेत्रमिति" },
+        { id: "m6-ch11", name: "Algebra", nameHi: "बीजगणित" },
+        { id: "m6-ch12", name: "Ratio and Proportion", nameHi: "अनुपात और समानुपात" },
+        { id: "m6-ch13", name: "Symmetry", nameHi: "सममिति" },
+        { id: "m6-ch14", name: "Practical Geometry", nameHi: "प्रायोगिक ज्यामिति" },
+      ]
+    },
+    {
+      id: "ganita-prakash-6",
+      name: "Ganita Prakash (Part 2)",
+      nameHi: "गणित प्रकाश (भाग 2)",
+      chapters: [
+        { id: "gp6-ch1", name: "Patterns in Mathematics", nameHi: "गणित में पैटर्न" },
+        { id: "gp6-ch2", name: "Lines and Angles", nameHi: "रेखाएँ और कोण" },
+        { id: "gp6-ch3", name: "Number Play", nameHi: "संख्याओं का खेल" },
+        { id: "gp6-ch4", name: "Data Handling and Presentation", nameHi: "आंकड़ों का प्रबंधन और प्रस्तुति" },
+        { id: "gp6-ch5", name: "Prime Time", nameHi: "प्राइम टाइम" },
+        { id: "gp6-ch6", name: "Perimeter and Area", nameHi: "परिमाप और क्षेत्रफल" },
+        { id: "gp6-ch7", name: "Fractions", nameHi: "भिन्न" },
+        { id: "gp6-ch8", name: "Playing with Constructions", nameHi: "निर्माण के साथ खेलना" },
+        { id: "gp6-ch9", name: "Symmetry", nameHi: "समरूपता" },
+        { id: "gp6-ch10", name: "The Other Side of Zero", nameHi: "शून्य का दूसरा पक्ष" },
+      ]
+    }
+  ]
 },
+{
+  id: "ganita-prashn-pradarshika-6",
+  name: "Ganita Prashn Pradarshika (Part 3)",
+  nameHi: "गणित प्रश्न प्रदर्शिका (भाग 3)",
+  chapters: [
+    { id: "gpp6-u1", name: "Sankhya Pranali", nameHi: "संख्या प्रणाली" },
+    { id: "gpp6-u2", name: "Jyamiti", nameHi: "ज्यामिति" },
+    { id: "gpp6-u3", name: "Purnak", nameHi: "पूर्णांक" },
+    { id: "gpp6-u4", name: "Bhinn Aur Dashamlav", nameHi: "भिन्न और दशमलव" },
+    { id: "gpp6-u5", name: "Aakdon Ka Prabandhan", nameHi: "आकड़ो का प्रबंधन" },
+    { id: "gpp6-u6", name: "Kshetramiti", nameHi: "क्षेत्रमिति" },
+    { id: "gpp6-u7", name: "Beejganit", nameHi: "बीजगणित" },
+    { id: "gpp6-u8", name: "Anupat Aur Samanupat", nameHi: "अनुपात और समानुपात" },
+    { id: "gpp6-u9", name: "Samamiti Aur Prayogik Jyamiti", nameHi: "समिमित और प्रायोगिक ज्यामिति" },
+  ]
+}, 
 {
   id: "kaushal-bodh",
   name: "Kaushal Bodh",
