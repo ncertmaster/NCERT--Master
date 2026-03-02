@@ -524,6 +524,7 @@ books: [{
 id: "math-8",
 name: "Mathematics",
 nameHi: "गणित",
+booksOnly: true,
 chapters: [
 { id: "m8-ch1", name: "Rational Numbers", nameHi: "परिमेय संख्याएँ" },
 { id: "m8-ch2", name: "Linear Equations in One Variable", nameHi: "एक चर वाले रैखिक समीकरण" },
@@ -730,6 +731,7 @@ books: [{
 id: "math-9",
 name: "Mathematics",
 nameHi: "गणित",
+booksOnly: true,
 chapters: [
 { id: "m9-ch1", name: "Number Systems", nameHi: "संख्या पद्धति" },
 { id: "m9-ch2", name: "Polynomials", nameHi: "बहुपद" },
@@ -929,6 +931,7 @@ books: [{
 id: "math-10",
 name: "Mathematics",
 nameHi: "गणित",
+booksOnly: true,
 chapters: [
 { id: "m10-ch1", name: "Real Numbers", nameHi: "वास्तविक संख्याएँ" },
 { id: "m10-ch2", name: "Polynomials", nameHi: "बहुपद" },
@@ -1303,6 +1306,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-11-book",
               name: "Mathematics",
               nameHi: "गणित",
+              booksOnly: true,
               chapters: [
                 { id: "math11-1", name: "Sets", nameHi: "समुच्चय" },
                 { id: "math11-2", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
@@ -1915,6 +1919,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-12-part-1",
               name: "Mathematics Part I",
               nameHi: "गणित भाग 1",
+              booksOnly: true,
               chapters: [
                 { id: "math12-1", name: "Relations and Functions", nameHi: "संबंध एवं फलन" },
                 { id: "math12-2", name: "Inverse Trigonometric Functions", nameHi: "प्रतिलोम त्रिकोणमितीय फलन" },
@@ -1928,6 +1933,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
               id: "mathematics-12-part-2",
               name: "Mathematics Part II",
               nameHi: "गणित भाग 2",
+              booksOnly: true,
               chapters: [
                 { id: "math12-7", name: "Integrals", nameHi: "समाकलन" },
                 { id: "math12-8", name: "Application of Integrals", nameHi: "समाकलनों के अनुप्रयोग" },
@@ -2420,7 +2426,7 @@ export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
             {
               id: "flamingo-12-arts",
               name: "Flamingo",
-              nameHi: "Flamingo",
+              nameHi: "Flamingo",      
               chapters: [
                 { id: "eng12a-1", name: "The Last Lesson", nameHi: "The Last Lesson" },
                 { id: "eng12a-2", name: "Lost Spring", nameHi: "Lost Spring" },
