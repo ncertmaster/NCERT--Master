@@ -130,12 +130,15 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
   // Class 6–10 → Subjects
   const subjects = selectedClass ? (subjectsByClass[selectedClass] || []) : []
+  const filteredSubjects = flow === "books"
+  ? subjects
+  : subjects.filter((s) => !s.books.every((b) => b.booksOnly))
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={`${getText("class", language)} ${selectedClass} - ${getText("selectSubject", language)}`} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         <div className="flex flex-col gap-3">
-          {subjects.map((subject) => {
+          {filteredSubjects.map((subject) => {
             const Icon = iconMap[subject.icon] || BookOpen
             return (
               <button
