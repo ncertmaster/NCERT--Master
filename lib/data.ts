@@ -10,6 +10,7 @@ export interface Book {
 id: string
 name: string
 nameHi: string
+booksOnly?: boolean
 chapters: Chapter[]
 }
 
