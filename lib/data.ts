@@ -64,7 +64,28 @@ chapters: [
 ]
 }]
 },
-
+{
+  id: "kaushal-bodh",
+  name: "Kaushal Bodh",
+  nameHi: "कौशल बोध",
+  icon: "briefcase",
+  books: [{
+    id: "kb-6",
+    name: "Kaushal Bodh",
+    nameHi: "कौशल बोध",
+    chapters: [
+      { id: "kb6-ch0", name: "Prastavana", nameHi: "प्रस्तावना" },
+      { id: "kb6-ch1", name: "Vidyalayi Rasoi Udyan", nameHi: "विद्यालयी रसोई उद्यान" },
+      { id: "kb6-ch2", name: "Jaiv Vividhata Vivaranika", nameHi: "जैव विविधता विवरणिका" },
+      { id: "kb6-ch3", name: "Nirmata Kaushal", nameHi: "निर्माता कौशल" },
+      { id: "kb6-ch4", name: "Animation Aur Khel", nameHi: "एनिमेशन और खेल" },
+      { id: "kb6-ch5", name: "Vidyalayi Sangrahalaya", nameHi: "विद्यालयी संग्रहालय" },
+      { id: "kb6-ch6", name: "Aag Ke Bina Khana Banana", nameHi: "आग के बिना खाना बनाना" },
+      { id: "kb6-ch7", name: "Parishisht", nameHi: "परिशिष्ट" },
+    ]
+  }]
+},
+  
 {
 id: "science",
 name: "Science",
