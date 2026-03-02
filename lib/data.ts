@@ -99,7 +99,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     { id: "gpp6-u8", name: "Anupat Aur Samanupat", nameHi: "अनुपात और समानुपात" },
     { id: "gpp6-u9", name: "Samamiti Aur Prayogik Jyamiti", nameHi: "समिमित और प्रायोगिक ज्यामिति" },
   ]
-}, 
+},
 {
   id: "kaushal-bodh",
   name: "Kaushal Bodh",
