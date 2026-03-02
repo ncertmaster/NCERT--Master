@@ -74,7 +74,6 @@ chapters: [
     name: "Kaushal Bodh",
     nameHi: "कौशल बोध",
     chapters: [
-      { id: "kb6-ch0", name: "Prastavana", nameHi: "प्रस्तावना" },
       { id: "kb6-ch1", name: "Vidyalayi Rasoi Udyan", nameHi: "विद्यालयी रसोई उद्यान" },
       { id: "kb6-ch2", name: "Jaiv Vividhata Vivaranika", nameHi: "जैव विविधता विवरणिका" },
       { id: "kb6-ch3", name: "Nirmata Kaushal", nameHi: "निर्माता कौशल" },
@@ -85,7 +84,24 @@ chapters: [
     ]
   }]
 },
-  
+ {
+  id: "khel-yatra",
+  name: "Khel Yatra",
+  nameHi: "खेल यात्रा",
+  icon: "users",
+  books: [{
+    id: "ky-6",
+    name: "Khel Yatra",
+    nameHi: "खेल यात्रा",
+    chapters: [
+      { id: "ky6-ch1", name: "Sharirik Shiksha Aur Aarogya Ka Mahatv", nameHi: "शारीरिक शिक्षा और आरोग्य का महत्व" },
+      { id: "ky6-ch2", name: "Gamak Dakshata", nameHi: "गामक दक्षता" },
+      { id: "ky6-ch3", name: "Kho-Kho Ke Adharabhoot Kaushal", nameHi: "खो-खो के आधारभूत कौशल" },
+      { id: "ky6-ch4", name: "Handball Ke Adharabhoot Kaushal", nameHi: "हैंडबॉल के आधारभूत कौशल" },
+      { id: "ky6-ch5", name: "Yog", nameHi: "योग" },
+    ]
+  }]
+}, 
 {
 id: "science",
 name: "Science",
