@@ -317,6 +317,19 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       </div>
     )
 }
+  const availableBooks = flow === "books" 
+  ? subject.books 
+  : subject.books.filter((b) => !b.booksOnly)
+
+if (availableBooks.length === 0) return (
+  <div className="flex min-h-screen flex-col bg-background pb-20">
+    <ScreenHeader title={subject.nameHi} />
+    <div className="flex flex-1 items-center justify-center text-muted-foreground p-4 text-center">
+      इस विषय का content Books tab में उपलब्ध है।
+    </div>
+    <BottomTabs activeTab={tabKey[flow]} />
+  </div>
+)
     const book = subject.books.length === 1
     ? subject.books[0]
     : subject.books.find((b) => b.id === selectedBook)
