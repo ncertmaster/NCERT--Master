@@ -284,8 +284,8 @@ chapters: [
 },
 {
   id: "india-beyond-6",
-  name: "Social Studies: India and Beyond
-  nameHi: "समाज का अध्ययन: भारत और उसके आगे
+  name: "Social Studies - India and Beyond",
+  nameHi: "समाज का अध्ययन: भारत और उसके आगे",
   chapters: [
     { id: "ib6-ch1", name: "Locating Places on the Earth", nameHi: "पृथ्वी पर स्थानों की स्थिति" },
     { id: "ib6-ch2", name: "Oceans and Continents", nameHi: "महासागर एवं महाद्वीप" },
