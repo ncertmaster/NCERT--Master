@@ -279,13 +279,11 @@ chapters: [
 { id: "c6-ch8", name: "Rural Livelihoods", nameHi: "ग्रामीण क्षेत्र में आजीविका" },
 { id: "c6-ch9", name: "Urban Livelihoods", nameHi: "शहरी क्षेत्र में आजीविका" }
 ]
-}
-]
 },
 {
   id: "india-beyond-6",
   name: "Social Studies - India and Beyond",
-  nameHi: "समाज का अध्ययन: भारत और उसके आगे",
+  nameHi: "समाज का अध्ययन - भारत और उसके आगे",
   chapters: [
     { id: "ib6-ch1", name: "Locating Places on the Earth", nameHi: "पृथ्वी पर स्थानों की स्थिति" },
     { id: "ib6-ch2", name: "Oceans and Continents", nameHi: "महासागर एवं महाद्वीप" },
@@ -294,14 +292,16 @@ chapters: [
     { id: "ib6-ch5", name: "India, That is Bharat", nameHi: "भारत, अर्थात इंडिया" },
     { id: "ib6-ch6", name: "The Beginning of Indian Civilization", nameHi: "भारतीय सभ्यता का प्रारंभ" },
     { id: "ib6-ch7", name: "Cultural Roots of India", nameHi: "भारत की सांस्कृतिक जड़ें" },
-    { id: "ib6-ch8", name: "Unity in Diversity or Many in One", nameHi: "विविधता में एकता या 'एक में अनेक'" },
+    { id: "ib6-ch8", name: "Unity in Diversity or Many in One", nameHi: "विविधता में एकता या एक में अनेक" },
     { id: "ib6-ch9", name: "Family and Community", nameHi: "परिवार एवं समुदाय" },
-    { id: "ib6-ch10", name: "Grassroots Democracy Part 1: Governance", nameHi: "आधारभूत लोकतंत्र – भाग 1: शासन" },
-    { id: "ib6-ch11", name: "Grassroots Democracy Part 2: Local Government in Rural Areas", nameHi: "आधारभूत लोकतंत्र – भाग 2: ग्रामीण क्षेत्रों में स्थानीय सरकार" },
-    { id: "ib6-ch12", name: "Grassroots Democracy Part 3: Local Government in Urban Areas", nameHi: "आधारभूत लोकतंत्र – भाग 3: नगरीय क्षेत्रों में स्थानीय सरकार" },
+    { id: "ib6-ch10", name: "Grassroots Democracy Part 1 Governance", nameHi: "आधारभूत लोकतंत्र भाग 1 शासन" },
+    { id: "ib6-ch11", name: "Grassroots Democracy Part 2 Rural", nameHi: "आधारभूत लोकतंत्र भाग 2 ग्रामीण" },
+    { id: "ib6-ch12", name: "Grassroots Democracy Part 3 Urban", nameHi: "आधारभूत लोकतंत्र भाग 3 नगरीय" },
     { id: "ib6-ch13", name: "The Importance of Work", nameHi: "कार्य का महत्व" },
     { id: "ib6-ch14", name: "Economic Activities Around Us", nameHi: "हमारे आस-पास की आर्थिक गतिविधियाँ" },
   ]
+}
+]
 },
 {
 id: "english",
