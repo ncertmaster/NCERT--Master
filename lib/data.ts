@@ -176,50 +176,58 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     ]
   }]
 },
- {
-    id: "science-part-1",
+{
+    id: "science",
     name: "Science",
     nameHi: "विज्ञान",
-    part: 1,
-    chapters: [
-      { id: "ch1", name: "Food: Where Does It Come From?", nameHi: "भोजन: यह कहाँ से आता है?" },
-      { id: "ch2", name: "Components of Food", nameHi: "भोजन के घटक" },
-      { id: "ch3", name: "Fibre to Fabric", nameHi: "तंतु से कपड़ा" },
-      { id: "ch4", name: "Sorting Materials Into Groups", nameHi: "वस्तुओं के समूह बनाना" },
-      { id: "ch5", name: "Separation of Substances", nameHi: "पदार्थों के गुण" },
-      { id: "ch6", name: "Changes Around Us", nameHi: "परिवर्तन हमारे चारों ओर" },
-      { id: "ch7", name: "Getting to Know Plants", nameHi: "जीवित प्राणियों के भाग और उनके कार्य" },
-      { id: "ch8", name: "Body Movements", nameHi: "शारीरिक गतिविधियाँ और अंग-प्रत्यंग" },
-      { id: "ch9", name: "The Living Organisms and Their Surroundings", nameHi: "जीवित प्राणी: विशेषताएँ और आवास" },
-      { id: "ch10", name: "Motion and Measurement of Distances", nameHi: "गति और दूरी माप" },
-      { id: "ch11", name: "Light, Shadows and Reflections", nameHi: "प्रकाश, छाया और परावर्तन" },
-      { id: "ch12", name: "Electricity and Circuits", nameHi: "विद्युत धारा और उसके प्रभाव" },
-      { id: "ch13", name: "Fun with Magnets", nameHi: "चुंबक" },
-      { id: "ch14", name: "Water", nameHi: "जल" },
-      { id: "ch15", name: "Air Around Us", nameHi: "वायु हमारे चारों ओर" },
-      { id: "ch16", name: "Garbage In, Garbage Out", nameHi: "कचरा" }
+    icon: "flask",
+    books: [
+      {
+        id: "science-part-1",
+        name: "Science",
+        nameHi: "विज्ञान",
+        part: 1,
+        chapters: [
+          { id: "ch1", name: "Food: Where Does It Come From?", nameHi: "भोजन: यह कहाँ से आता है?" },
+          { id: "ch2", name: "Components of Food", nameHi: "भोजन के घटक" },
+          { id: "ch3", name: "Fibre to Fabric", nameHi: "तंतु से कपड़ा" },
+          { id: "ch4", name: "Sorting Materials Into Groups", nameHi: "वस्तुओं के समूह बनाना" },
+          { id: "ch5", name: "Separation of Substances", nameHi: "पदार्थों के गुण" },
+          { id: "ch6", name: "Changes Around Us", nameHi: "परिवर्तन हमारे चारों ओर" },
+          { id: "ch7", name: "Getting to Know Plants", nameHi: "जीवित प्राणियों के भाग और उनके कार्य" },
+          { id: "ch8", name: "Body Movements", nameHi: "शारीरिक गतिविधियाँ और अंग-प्रत्यंग" },
+          { id: "ch9", name: "The Living Organisms and Their Surroundings", nameHi: "जीवित प्राणी: विशेषताएँ और आवास" },
+          { id: "ch10", name: "Motion and Measurement of Distances", nameHi: "गति और दूरी माप" },
+          { id: "ch11", name: "Light, Shadows and Reflections", nameHi: "प्रकाश, छाया और परावर्तन" },
+          { id: "ch12", name: "Electricity and Circuits", nameHi: "विद्युत धारा और उसके प्रभाव" },
+          { id: "ch13", name: "Fun with Magnets", nameHi: "चुंबक" },
+          { id: "ch14", name: "Water", nameHi: "जल" },
+          { id: "ch15", name: "Air Around Us", nameHi: "वायु हमारे चारों ओर" },
+          { id: "ch16", name: "Garbage In, Garbage Out", nameHi: "कचरा" }
+        ]
+      },
+      {
+        id: "science-part-2",
+        name: "Curiosity",
+        nameHi: "विज्ञान और जिज्ञासा",
+        part: 2,
+        chapters: [
+          { id: "ch1", name: "The Wonderful World of Science", nameHi: "विज्ञान का अनूठा संसार" },
+          { id: "ch2", name: "Diversity in the Living World", nameHi: "सजीव जगत में विविधता" },
+          { id: "ch3", name: "Mindful Eating: A Path to a Healthy Body", nameHi: "उचित आहार—स्वस्थ शरीर का आधार" },
+          { id: "ch4", name: "Exploring Magnets", nameHi: "चुम्बकों को जानें" },
+          { id: "ch5", name: "Measurement of Length and Motion", nameHi: "लम्बाई एवं गति का मापन" },
+          { id: "ch6", name: "Materials Around Us", nameHi: "हमारे आस-पास की सामग्रि" },
+          { id: "ch7", name: "Temperature and its Measurement", nameHi: "ताप एवं उसका मापन" },
+          { id: "ch8", name: "A Journey through States of Water", nameHi: "जल की विविध अवस्थाओं की यात्रा" },
+          { id: "ch9", name: "Methods of Separation in Everyday Life", nameHi: "दैनिक जीवन में पृथक्करण विधियाँ" },
+          { id: "ch10", name: "Living Creatures: Exploring their Characteristics", nameHi: "सजीव—विशेषताओं का अन्वेषण" },
+          { id: "ch11", name: "Nature’s Treasures", nameHi: "प्रकृति की अमूल्य संपदा" },
+          { id: "ch12", name: "Beyond Earth", nameHi: "पृथ्वी से परे" }
+        ]
+      }
     ]
   },
-  {
-    id: "science-part-2",
-    name: "Curiosity",
-    nameHi: "विज्ञान और जिज्ञासा",
-    part: 2,
-    chapters: [
-      { id: "ch1", name: "The Wonderful World of Science", nameHi: "विज्ञान का अनूठा संसार" },
-      { id: "ch2", name: "Diversity in the Living World", nameHi: "सजीव जगत में विविधता" },
-      { id: "ch3", name: "Mindful Eating: A Path to a Healthy Body", nameHi: "उचित आहार—स्वस्थ शरीर का आधार" },
-      { id: "ch4", name: "Exploring Magnets", nameHi: "चुम्बकों को जानें" },
-      { id: "ch5", name: "Measurement of Length and Motion", nameHi: "लम्बाई एवं गति का मापन" },
-      { id: "ch6", name: "Materials Around Us", nameHi: "हमारे आस-पास की सामग्रि" },
-      { id: "ch7", name: "Temperature and its Measurement", nameHi: "ताप एवं उसका मापन" },
-      { id: "ch8", name: "A Journey through States of Water", nameHi: "जल की विविध अवस्थाओं की यात्रा" },
-      { id: "ch9", name: "Methods of Separation in Everyday Life", nameHi: "दैनिक जीवन में पृथक्करण विधियाँ" },
-      { id: "ch10", name: "Living Creatures: Exploring their Characteristics", nameHi: "सजीव—विशेषताओं का अन्वेषण" },
-      { id: "ch11", name: "Nature’s Treasures", nameHi: "प्रकृति की अमूल्य संपदा" },
-      { id: "ch12", name: "Beyond Earth", nameHi: "पृथ्वी से परे" }
-   ]
-},
 {
 id: "social-studies",
 name: "Social Studies",
