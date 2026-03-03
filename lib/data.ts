@@ -99,7 +99,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
       ]
     }
   ]
-}
+},
 {
   id: "kaushal-bodh",
   name: "Kaushal Bodh",
