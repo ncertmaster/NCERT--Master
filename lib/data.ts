@@ -218,9 +218,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
       { id: "ch10", name: "Living Creatures: Exploring their Characteristics", nameHi: "सजीव—विशेषताओं का अन्वेषण" },
       { id: "ch11", name: "Nature’s Treasures", nameHi: "प्रकृति की अमूल्य संपदा" },
       { id: "ch12", name: "Beyond Earth", nameHi: "पृथ्वी से परे" }
-    ]
-  }
-]
+   ]
+},
 {
 id: "social-studies",
 name: "Social Studies",
