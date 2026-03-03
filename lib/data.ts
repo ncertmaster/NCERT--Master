@@ -62,7 +62,7 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         { id: "m6-ch11", name: "Algebra", nameHi: "बीजगणित" },
         { id: "m6-ch12", name: "Ratio and Proportion", nameHi: "अनुपात और समानुपात" },
         { id: "m6-ch13", name: "Symmetry", nameHi: "सममिति" },
-        { id: "m6-ch14", name: "Practical Geometry", nameHi: "प्रायोगिक ज्यामिति" },
+        { id: "m6-ch14", name: "Practical Geometry", nameHi: "प्रायोगिक ज्यामिति" }
       ]
     },
     {
@@ -79,27 +79,27 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
         { id: "gp6-ch7", name: "Fractions", nameHi: "भिन्न" },
         { id: "gp6-ch8", name: "Playing with Constructions", nameHi: "निर्माण के साथ खेलना" },
         { id: "gp6-ch9", name: "Symmetry", nameHi: "समरूपता" },
-        { id: "gp6-ch10", name: "The Other Side of Zero", nameHi: "शून्य का दूसरा पक्ष" },
+        { id: "gp6-ch10", name: "The Other Side of Zero", nameHi: "शून्य का दूसरा पक्ष" }
+      ]
+    },
+    {
+      id: "ganita-prashn-pradarshika-6",
+      name: "Ganita Prashn Pradarshika (Part 3)",
+      nameHi: "गणित प्रश्न प्रदर्शिका (भाग 3)",
+      chapters: [
+        { id: "gpp6-u1", name: "Sankhya Pranali", nameHi: "संख्या प्रणाली" },
+        { id: "gpp6-u2", name: "Jyamiti", nameHi: "ज्यामिति" },
+        { id: "gpp6-u3", name: "Purnak", nameHi: "पूर्णांक" },
+        { id: "gpp6-u4", name: "Bhinn Aur Dashamlav", nameHi: "भिन्न और दशमलव" },
+        { id: "gpp6-u5", name: "Aakdon Ka Prabandhan", nameHi: "आकड़ो का प्रबंधन" },
+        { id: "gpp6-u6", name: "Kshetramiti", nameHi: "क्षेत्रमिति" },
+        { id: "gpp6-u7", name: "Beejganit", nameHi: "बीजगणित" },
+        { id: "gpp6-u8", name: "Anupat Aur Samanupat", nameHi: "अनुपात और समानुपात" },
+        { id: "gpp6-u9", name: "Samamiti Aur Prayogik Jyamiti", nameHi: "सममिति और प्रायोगिक ज्यामिति" }
       ]
     }
   ]
-},
-{
-  id: "ganita-prashn-pradarshika-6",
-  name: "Ganita Prashn Pradarshika (Part 3)",
-  nameHi: "गणित प्रश्न प्रदर्शिका (भाग 3)",
-  chapters: [
-    { id: "gpp6-u1", name: "Sankhya Pranali", nameHi: "संख्या प्रणाली" },
-    { id: "gpp6-u2", name: "Jyamiti", nameHi: "ज्यामिति" },
-    { id: "gpp6-u3", name: "Purnak", nameHi: "पूर्णांक" },
-    { id: "gpp6-u4", name: "Bhinn Aur Dashamlav", nameHi: "भिन्न और दशमलव" },
-    { id: "gpp6-u5", name: "Aakdon Ka Prabandhan", nameHi: "आकड़ो का प्रबंधन" },
-    { id: "gpp6-u6", name: "Kshetramiti", nameHi: "क्षेत्रमिति" },
-    { id: "gpp6-u7", name: "Beejganit", nameHi: "बीजगणित" },
-    { id: "gpp6-u8", name: "Anupat Aur Samanupat", nameHi: "अनुपात और समानुपात" },
-    { id: "gpp6-u9", name: "Samamiti Aur Prayogik Jyamiti", nameHi: "समिमित और प्रायोगिक ज्यामिति" },
-  ]
-},
+}
 {
   id: "kaushal-bodh",
   name: "Kaushal Bodh",
