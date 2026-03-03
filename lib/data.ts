@@ -340,7 +340,64 @@ chapters: [
 }
 ]
 },
-
+{
+  id: "english",
+  name: "English",
+  nameHi: "अंग्रेज़ी",
+  icon: "book",
+  books: [
+    {
+      id: "poorvi-u1",
+      name: "Unit 1 - Fables and Folk Tales",
+      nameHi: "यूनिट 1 - फेबल्स और लोक कथाएँ",
+      chapters: [
+        { id: "pv6-u1-ch1", name: "A Bottle of Dew", nameHi: "ओस की बोतल" },
+        { id: "pv6-u1-ch2", name: "The Raven and the Fox", nameHi: "कौआ और लोमड़ी" },
+        { id: "pv6-u1-ch3", name: "Rama to the Rescue", nameHi: "रामा की मदद" },
+      ]
+    },
+    {
+      id: "poorvi-u2",
+      name: "Unit 2 - Friendship",
+      nameHi: "यूनिट 2 - मित्रता",
+      chapters: [
+        { id: "pv6-u2-ch1", name: "The Unlikely Best Friends", nameHi: "असंभावित सबसे अच्छे दोस्त" },
+        { id: "pv6-u2-ch2", name: "A Friend's Prayer", nameHi: "एक दोस्त की प्रार्थना" },
+        { id: "pv6-u2-ch3", name: "The Chair", nameHi: "कुर्सी" },
+      ]
+    },
+    {
+      id: "poorvi-u3",
+      name: "Unit 3 - Nurturing Nature",
+      nameHi: "यूनिट 3 - प्रकृति की देखभाल",
+      chapters: [
+        { id: "pv6-u3-ch1", name: "Neem Baba", nameHi: "नीम बाबा" },
+        { id: "pv6-u3-ch2", name: "What a Bird Thought", nameHi: "एक पक्षी ने क्या सोचा" },
+        { id: "pv6-u3-ch3", name: "Spices that Heal Us", nameHi: "मसाले जो हमें ठीक करते हैं" },
+      ]
+    },
+    {
+      id: "poorvi-u4",
+      name: "Unit 4 - Sports and Wellness",
+      nameHi: "यूनिट 4 - खेल और स्वास्थ्य",
+      chapters: [
+        { id: "pv6-u4-ch1", name: "Change of Heart", nameHi: "दिल का बदलाव" },
+        { id: "pv6-u4-ch2", name: "The Winner", nameHi: "विजेता" },
+        { id: "pv6-u4-ch3", name: "Yoga - A Way of Life", nameHi: "योग - जीवन का एक तरीका" },
+      ]
+    },
+    {
+      id: "poorvi-u5",
+      name: "Unit 5 - Culture and Tradition",
+      nameHi: "यूनिट 5 - संस्कृति और परंपरा",
+      chapters: [
+        { id: "pv6-u5-ch1", name: "Hamara Bharat - Incredible India!", nameHi: "हमारा भारत - अद्भुत भारत!" },
+        { id: "pv6-u5-ch2", name: "The Kites", nameHi: "पतंगें" },
+        { id: "pv6-u5-ch3", name: "Ila Sachani - Embroidering Dreams with her Feet", nameHi: "इला सचानी - पैरों से सपनों की कढ़ाई" },
+      ]
+    },
+  ]
+},
 {
 id: "hindi",
 name: "Hindi",
