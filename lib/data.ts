@@ -46,8 +46,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
   books: [
     {
       id: "math-6",
-      name: "Mathematics Part 1",
-      nameHi: "गणित भाग 1",
+      name: "Mathematics",
+      nameHi: "गणित",
       chapters: [
         { id: "m6-ch1", name: "Knowing Our Numbers", nameHi: "अपनी संख्याओं की जानकारी" },
         { id: "m6-ch2", name: "Whole Numbers", nameHi: "पूर्ण संख्याएँ" },
@@ -67,8 +67,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     },
     {
       id: "ganita-prakash-6",
-      name: "Ganita Prakash (Part 2)",
-      nameHi: "गणित प्रकाश (भाग 2)",
+      name: "Ganita Prakash",
+      nameHi: "गणित प्रकाश",
       chapters: [
         { id: "gp6-ch1", name: "Patterns in Mathematics", nameHi: "गणित में पैटर्न" },
         { id: "gp6-ch2", name: "Lines and Angles", nameHi: "रेखाएँ और कोण" },
@@ -84,8 +84,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     },
     {
       id: "ganita-prashn-pradarshika-6",
-      name: "Ganita Prashn Pradarshika (Part 3)",
-      nameHi: "गणित प्रश्न प्रदर्शिका (भाग 3)",
+      name: "Ganita Prashn Pradarshika",
+      nameHi: "गणित प्रश्न प्रदर्शिका",
       chapters: [
         { id: "gpp6-u1", name: "Sankhya Pranali", nameHi: "संख्या प्रणाली" },
         { id: "gpp6-u2", name: "Jyamiti", nameHi: "ज्यामिति" },
@@ -184,8 +184,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
   books: [
     {
       id: "science-6",
-      name: "Science (Part 1 - Old)",
-      nameHi: "विज्ञान (भाग 1 - पुरानी)",
+      name: "Science (Old)",
+      nameHi: "विज्ञान (पुरानी)",
       booksOnly: true,
       chapters: [
         { id: "s6-ch1", name: "Food: Where Does It Come From?", nameHi: "भोजन: यह कहाँ से आता है?" },
@@ -208,8 +208,8 @@ export const subjectsByClass: Record<ClassNumber, Subject[]> = {
     },
     {
       id: "curiosity-6",
-      name: "Curiosity (Part 2 - New)",
-      nameHi: "विज्ञान और जिज्ञासा (भाग 2 - नई)",
+      name: "Curiosity (New)",
+      nameHi: "विज्ञान और जिज्ञासा (नई)",
       chapters: [
         { id: "cur6-ch1", name: "The Wonderful World of Science", nameHi: "विज्ञान का अनूठा संसार" },
         { id: "cur6-ch2", name: "Diversity in the Living World", nameHi: "सजीव जगत में विविधता" },
