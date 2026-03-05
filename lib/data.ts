@@ -1326,7 +1326,7 @@ chapters: [
   
 11: [],
 12: [],
-  },
+  }
 
 export const streamsByClass: Partial<Record<ClassNumber, Stream[]>> = {
 
