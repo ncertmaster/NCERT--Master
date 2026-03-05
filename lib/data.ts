@@ -410,8 +410,6 @@ chapters: [
 { id: "br6-ch9", name: "Lanka Vijay", nameHi: "लंका विजय" },
 { id: "br6-ch10", name: "Ram Ka Rajyabhishek", nameHi: "राम का राज्याभिषेक" }
 ]
-}
-]
 },
 {
   id: "malhaar-6",
