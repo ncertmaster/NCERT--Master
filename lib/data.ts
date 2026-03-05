@@ -304,64 +304,66 @@ chapters: [
 ]
 },
 {
-id: "english",
-name: "English",
-nameHi: "English",
-icon: "book-open",
-books: [
-{
-id: "honeysuckle-6",
-name: "Honeysuckle",
-nameHi: "Honeysuckle",
-chapters: [
-{ id: "hs6-ch1", name: "Who Did Patrick's Homework?", nameHi: "Who Did Patrick's Homework?" },
-{ id: "hs6-ch2", name: "How the Dog Found Himself a New Master!", nameHi: "How the Dog Found Himself a New Master!" },
-{ id: "hs6-ch3", name: "Taro's Reward", nameHi: "Taro's Reward" },
-{ id: "hs6-ch4", name: "An Indian-American Woman in Space", nameHi: "An Indian-American Woman in Space" },
-{ id: "hs6-ch5", name: "A Different Kind of School", nameHi: "A Different Kind of School" },
-{ id: "hs6-ch6", name: "Who I Am", nameHi: "Who I Am" },
-{ id: "hs6-ch7", name: "Fair Play", nameHi: "Fair Play" },
-{ id: "hs6-ch8", name: "The Banyan Tree", nameHi: "The Banyan Tree" }
-]
-},
-{
-id: "pact-sun-6",
-name: "A Pact with the Sun",
-nameHi: "A Pact with the Sun",
-chapters: [
-{ id: "ps6-ch1", name: "A Tale of Two Birds", nameHi: "A Tale of Two Birds" },
-{ id: "ps6-ch2", name: "The Friendly Mongoose", nameHi: "The Friendly Mongoose" },
-{ id: "ps6-ch3", name: "The Shepherd's Treasure", nameHi: "The Shepherd's Treasure" },
-{ id: "ps6-ch4", name: "Tansen", nameHi: "Tansen" },
-{ id: "ps6-ch5", name: "The Monkey and the Crocodile", nameHi: "The Monkey and the Crocodile" },
-{ id: "ps6-ch6", name: "The Wonder Called Sleep", nameHi: "The Wonder Called Sleep" },
-{ id: "ps6-ch7", name: "A Pact with the Sun", nameHi: "A Pact with the Sun" }
-]
-}
-]
-}, 
-{
-  id: "poorvi-6",
-  name: "Poorvi",
-  nameHi: "पूर्वी",
-  chapters: [
-    { id: "pv6-ch1", name: "A Bottle of Dew", nameHi: "ओस की बोतल" },
-    { id: "pv6-ch2", name: "The Raven and the Fox", nameHi: "कौआ और लोमड़ी" },
-    { id: "pv6-ch3", name: "Rama to the Rescue", nameHi: "रामा की मदद" },
-    { id: "pv6-ch4", name: "The Unlikely Best Friends", nameHi: "असंभावित सबसे अच्छे दोस्त" },
-    { id: "pv6-ch5", name: "A Friend's Prayer", nameHi: "एक दोस्त की प्रार्थना" },
-    { id: "pv6-ch6", name: "The Chair", nameHi: "कुर्सी" },
-    { id: "pv6-ch7", name: "Neem Baba", nameHi: "नीम बाबा" },
-    { id: "pv6-ch8", name: "What a Bird Thought", nameHi: "एक पक्षी ने क्या सोचा" },
-    { id: "pv6-ch9", name: "Spices that Heal Us", nameHi: "मसाले जो हमें ठीक करते हैं" },
-    { id: "pv6-ch10", name: "Change of Heart", nameHi: "दिल का बदलाव" },
-    { id: "pv6-ch11", name: "The Winner", nameHi: "विजेता" },
-    { id: "pv6-ch12", name: "Yoga - A Way of Life", nameHi: "योग - जीवन का एक तरीका" },
-    { id: "pv6-ch13", name: "Hamara Bharat - Incredible India!", nameHi: "हमारा भारत - अद्भुत भारत!" },
-    { id: "pv6-ch14", name: "The Kites", nameHi: "पतंगें" },
-    { id: "pv6-ch15", name: "Ila Sachani - Embroidering Dreams with her Feet", nameHi: "इला सचानी - पैरों से सपनों की कढ़ाई" },
+  id: "english",
+  name: "English",
+  nameHi: "English",
+  icon: "book-open",
+  books: [
+    {
+      id: "honeysuckle-6",
+      name: "Honeysuckle",
+      nameHi: "Honeysuckle",
+      booksOnly: true,
+      chapters: [
+        { id: "hs6-ch1", name: "Who Did Patrick's Homework?", nameHi: "Who Did Patrick's Homework?" },
+        { id: "hs6-ch2", name: "How the Dog Found Himself a New Master!", nameHi: "How the Dog Found Himself a New Master!" },
+        { id: "hs6-ch3", name: "Taro's Reward", nameHi: "Taro's Reward" },
+        { id: "hs6-ch4", name: "An Indian-American Woman in Space", nameHi: "An Indian-American Woman in Space" },
+        { id: "hs6-ch5", name: "A Different Kind of School", nameHi: "A Different Kind of School" },
+        { id: "hs6-ch6", name: "Who I Am", nameHi: "Who I Am" },
+        { id: "hs6-ch7", name: "Fair Play", nameHi: "Fair Play" },
+        { id: "hs6-ch8", name: "The Banyan Tree", nameHi: "The Banyan Tree" },
+      ]
+    },
+    {
+      id: "pact-sun-6",
+      name: "A Pact with the Sun",
+      nameHi: "A Pact with the Sun",
+      booksOnly: true,
+      chapters: [
+        { id: "ps6-ch1", name: "A Tale of Two Birds", nameHi: "A Tale of Two Birds" },
+        { id: "ps6-ch2", name: "The Friendly Mongoose", nameHi: "The Friendly Mongoose" },
+        { id: "ps6-ch3", name: "The Shepherd's Treasure", nameHi: "The Shepherd's Treasure" },
+        { id: "ps6-ch4", name: "Tansen", nameHi: "Tansen" },
+        { id: "ps6-ch5", name: "The Monkey and the Crocodile", nameHi: "The Monkey and the Crocodile" },
+        { id: "ps6-ch6", name: "The Wonder Called Sleep", nameHi: "The Wonder Called Sleep" },
+        { id: "ps6-ch7", name: "A Pact with the Sun", nameHi: "A Pact with the Sun" },
+      ]
+    },
+    {
+      id: "poorvi-6",
+      name: "Poorvi",
+      nameHi: "पूर्वी",
+      chapters: [
+        { id: "pv6-ch1", name: "A Bottle of Dew", nameHi: "ओस की बोतल" },
+        { id: "pv6-ch2", name: "The Raven and the Fox", nameHi: "कौआ और लोमड़ी" },
+        { id: "pv6-ch3", name: "Rama to the Rescue", nameHi: "रामा की मदद" },
+        { id: "pv6-ch4", name: "The Unlikely Best Friends", nameHi: "असंभावित सबसे अच्छे दोस्त" },
+        { id: "pv6-ch5", name: "A Friend's Prayer", nameHi: "एक दोस्त की प्रार्थना" },
+        { id: "pv6-ch6", name: "The Chair", nameHi: "कुर्सी" },
+        { id: "pv6-ch7", name: "Neem Baba", nameHi: "नीम बाबा" },
+        { id: "pv6-ch8", name: "What a Bird Thought", nameHi: "एक पक्षी ने क्या सोचा" },
+        { id: "pv6-ch9", name: "Spices that Heal Us", nameHi: "मसाले जो हमें ठीक करते हैं" },
+        { id: "pv6-ch10", name: "Change of Heart", nameHi: "दिल का बदलाव" },
+        { id: "pv6-ch11", name: "The Winner", nameHi: "विजेता" },
+        { id: "pv6-ch12", name: "Yoga - A Way of Life", nameHi: "योग - जीवन का एक तरीका" },
+        { id: "pv6-ch13", name: "Hamara Bharat - Incredible India!", nameHi: "हमारा भारत - अद्भुत भारत!" },
+        { id: "pv6-ch14", name: "The Kites", nameHi: "पतंगें" },
+        { id: "pv6-ch15", name: "Ila Sachani - Embroidering Dreams with her Feet", nameHi: "इला सचानी - पैरों से सपनों की कढ़ाई" },
+      ]
+    },
   ]
-},  
+},
 {
 id: "hindi",
 name: "Hindi",
