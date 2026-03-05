@@ -361,8 +361,6 @@ chapters: [
     { id: "pv6-ch14", name: "The Kites", nameHi: "पतंगें" },
     { id: "pv6-ch15", name: "Ila Sachani - Embroidering Dreams with her Feet", nameHi: "इला सचानी - पैरों से सपनों की कढ़ाई" },
   ]
-}
-]
 },  
 {
 id: "hindi",
