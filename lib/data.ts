@@ -414,6 +414,27 @@ chapters: [
 ]
 }
 ],
+{
+  id: "malhaar-6",
+  name: "Malhaar",
+  nameHi: "मल्हार",
+  chapters: [
+    { id: "ml6-ch1", name: "Matrubhoomi", nameHi: "मातृभूमि" },
+    { id: "ml6-ch2", name: "Goal", nameHi: "गोल" },
+    { id: "ml6-ch3", name: "Pahli Bund", nameHi: "पहली बूँद" },
+    { id: "ml6-ch4", name: "Haar Ki Jeet", nameHi: "हार की जीत" },
+    { id: "ml6-ch5", name: "Rahim Ke Dohe", nameHi: "रहीम के दोहे" },
+    { id: "ml6-ch6", name: "Meri Maa", nameHi: "मेरी माँ" },
+    { id: "ml6-ch7", name: "Jalate Chalo", nameHi: "जलाते चलो" },
+    { id: "ml6-ch8", name: "Satriya Aur Bihu Nritya", nameHi: "सत्रिया और बिहू नृत्य" },
+    { id: "ml6-ch9", name: "Maiya Main Nahin Makhan Khayo", nameHi: "मैया मैं नहिं माखन खायो" },
+    { id: "ml6-ch10", name: "Pariksha", nameHi: "परीक्षा" },
+    { id: "ml6-ch11", name: "Chetak Ki Veerta", nameHi: "चेतक की वीरता" },
+    { id: "ml6-ch12", name: "Hind Mahasagar Mein Chhota Sa Hindustan", nameHi: "हिंद महासागर में छोटा-सा हिंदुस्तान" },
+    { id: "ml6-ch13", name: "Ped Ki Baat", nameHi: "पेड़ की बात" },
+  ]
+},
+
 7: [
 {
 id: "math",
