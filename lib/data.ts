@@ -433,7 +433,42 @@ chapters: [
     { id: "ml6-ch13", name: "Ped Ki Baat", nameHi: "पेड़ की बात" },
   ]
 },
-
+{
+  id: "durva-6",
+  name: "Durva Bhag 1",
+  nameHi: "दूर्वा भाग 1",
+  booksOnly: true,
+  chapters: [
+    { id: "du6-ch1", name: "Kalam", nameHi: "कलम" },
+    { id: "du6-ch2", name: "Kitaab", nameHi: "किताब" },
+    { id: "du6-ch3", name: "Ghar", nameHi: "घर" },
+    { id: "du6-ch4", name: "Patang", nameHi: "पतंग" },
+    { id: "du6-ch5", name: "Bhalu", nameHi: "भालू" },
+    { id: "du6-ch6", name: "Jharna", nameHi: "झरना" },
+    { id: "du6-ch7", name: "Dhanush", nameHi: "धनुष" },
+    { id: "du6-ch8", name: "Rumal", nameHi: "रुमाल" },
+    { id: "du6-ch9", name: "Kaksha", nameHi: "कक्षा" },
+    { id: "du6-ch10", name: "Gubbara", nameHi: "गुब्बारा" },
+    { id: "du6-ch11", name: "Parvat", nameHi: "पर्वत" },
+    { id: "du6-ch12", name: "Humara Ghar", nameHi: "हमारा घर" },
+    { id: "du6-ch13", name: "Kapde ki Dukaan Mein", nameHi: "कपड़े की दुकान में" },
+    { id: "du6-ch14", name: "Phool", nameHi: "फूल" },
+    { id: "du6-ch15", name: "Baatchit", nameHi: "बातचीत" },
+    { id: "du6-ch16", name: "Shillong se Phone", nameHi: "शिलांग से फ़ोन" },
+    { id: "du6-ch17", name: "Titli", nameHi: "तितली" },
+    { id: "du6-ch18", name: "Ishwarchandra Vidyasagar", nameHi: "ईश्वरचंद्र विद्यासागर" },
+    { id: "du6-ch19", name: "Pradarshani", nameHi: "प्रदर्शनी" },
+    { id: "du6-ch20", name: "Chitti", nameHi: "चिट्ठी" },
+    { id: "du6-ch21", name: "Angulimal", nameHi: "अंगुलिमाल" },
+    { id: "du6-ch22", name: "Yatra ki Taiyari", nameHi: "यात्रा की तैयारी" },
+    { id: "du6-ch23", name: "Haathi", nameHi: "हाथी" },
+    { id: "du6-ch24", name: "Doctor", nameHi: "डॉक्टर" },
+    { id: "du6-ch25", name: "Jaipur se Patra", nameHi: "जयपुर से पत्र" },
+    { id: "du6-ch26", name: "Badhe Chalo", nameHi: "बढ़े चलो" },
+    { id: "du6-ch27", name: "Vyarth ki Shanka", nameHi: "व्यर्थ की शंका" },
+    { id: "du6-ch28", name: "Gadha aur Siyar", nameHi: "गधा और सियार" },
+  ]
+},
 7: [
 {
 id: "math",
