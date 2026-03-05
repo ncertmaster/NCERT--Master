@@ -412,8 +412,7 @@ chapters: [
 ]
 }
 ]
-}
-],
+},
 {
   id: "malhaar-6",
   name: "Malhaar",
