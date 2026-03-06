@@ -467,7 +467,6 @@ chapters: [
     { id: "du6-ch28", name: "Gadha aur Siyar", nameHi: "गधा और सियार" },
   ]
 },
-],
 7: [
 {
 id: "math",
