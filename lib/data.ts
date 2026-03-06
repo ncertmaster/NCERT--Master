@@ -1320,7 +1320,7 @@ chapters: [
       ]
     }
   ]        // books close
-}          // subject close
+},          // subject close
 ],          // class 10 close
   // subjectsByClass object close
   
