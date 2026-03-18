@@ -132,7 +132,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   const subjects = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const filteredSubjects = flow === "books"
   ? subjects
-  : subjects.filter((s) => !s.books.every((b) => b.booksOnly))
+  : subjects.filter((s) => !s.books.every((b: any) => b.booksOnly))
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={`${getText("class", language)} ${selectedClass} - ${getText("selectSubject", language)}`} />
