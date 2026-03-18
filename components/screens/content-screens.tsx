@@ -1,12 +1,13 @@
 "use client"
+
 import { useSheetContent } from "@/hooks/use-sheet-content"
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
 import { BottomTabs } from "@/components/bottom-tabs"
 import { ChevronRight } from "lucide-react"
-import type { ClassNumber } from "@/lib/data"
-import { subjectsByClass, streamsByClass, getNotesContent, getImportantQuestions } from "@/lib/data"
+import type { ClassNumber, Subject, Stream, Book, Chapter } from "@/lib/data"
+import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { AppScreen } from "@/lib/app-context"
 import {
   FlaskConical, Calculator, BookOpen, Languages, Globe, Atom, Leaf, Briefcase, TrendingUp, Landmark, Map, Users
@@ -99,13 +100,13 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
   // Class 11 & 12 → Streams
   if (selectedClass === 11 || selectedClass === 12) {
-    const streams = streamsByClass[selectedClass] || []
+    const streams: Stream[] = streamsByClass[selectedClass] || []
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
         <ScreenHeader title={`${getText("class", language)} ${selectedClass} - Stream`} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-3">
-            {streams.map((stream) => (
+            {streams.map((stream: Stream) => (
               <button
                 key={stream.id}
                 onClick={() => {
@@ -129,16 +130,13 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   }
 
   // Class 6–10 → Subjects
-  const subjects = selectedClass ? (subjectsByClass[selectedClass] || []) : []
-  const filteredSubjects = flow === "books"
-  ? subjects
-  : subjects.filter((s) => !s.books.every((b: any) => b.booksOnly))
+  const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={`${getText("class", language)} ${selectedClass} - ${getText("selectSubject", language)}`} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         <div className="flex flex-col gap-3">
-          {filteredSubjects.map((subject) => {
+          {subjects.map((subject: Subject) => {
             const Icon = iconMap[subject.icon] || BookOpen
             return (
               <button
@@ -167,14 +165,15 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       <BottomTabs activeTab={tabKey[flow]} />
     </div>
   )
-                  }
+}
+
 // ===============================
 // 3️⃣ CHAPTER SELECT
 // ===============================
 export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "quiz" }) {
   const {
     language, selectedClass, selectedStream, selectedSubject, selectedBook,
-    setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen, goBack
+    setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen,
   } = useApp()
 
   const tabKey: Record<string, string> = {
@@ -187,8 +186,8 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
   // ── Class 11 & 12 ──
   if (selectedClass === 11 || selectedClass === 12) {
-    const streams = streamsByClass[selectedClass] || []
-    const stream = streams.find((s) => s.id === selectedStream)
+    const streams: Stream[] = streamsByClass[selectedClass] || []
+    const stream = streams.find((s: Stream) => s.id === selectedStream)
     if (!stream) return null
 
     // Step 1: Show subjects
@@ -198,7 +197,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
           <ScreenHeader title={`${stream.nameHi} - ${getText("selectSubject", language)}`} />
           <div className="mx-auto w-full max-w-md px-4 py-4">
             <div className="flex flex-col gap-3">
-              {stream.subjects.map((subject: any) => {
+              {stream.subjects.map((subject: Subject) => {
                 const Icon = iconMap[subject.icon] || BookOpen
                 return (
                   <button
@@ -224,7 +223,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       )
     }
 
-    const subject = stream.subjects.find((s) => s.id === selectedSubject)
+    const subject = stream.subjects.find((s: Subject) => s.id === selectedSubject)
     if (!subject) return null
 
     // Step 2: Show books
@@ -234,7 +233,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
           <ScreenHeader title={`${subject.nameHi} - Book`} />
           <div className="mx-auto w-full max-w-md px-4 py-4">
             <div className="flex flex-col gap-3">
-              {subject.books.map((book) => (
+              {subject.books.map((book: Book) => (
                 <button
                   key={book.id}
                   onClick={() => setSelectedBook(book.id)}
@@ -255,7 +254,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
 
     // Step 3: Show chapters
-    const book = subject.books.find((b) => b.id === selectedBook)
+    const book = subject.books.find((b: Book) => b.id === selectedBook)
     if (!book) return null
 
     return (
@@ -263,7 +262,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         <ScreenHeader title={book.nameHi} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-2.5">
-            {book.chapters.map((ch, idx) => (
+            {book.chapters.map((ch: Chapter, idx: number) => (
               <button
                 key={ch.id}
                 onClick={() => {
@@ -290,8 +289,8 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   }
 
   // ── Class 6–10 ──
-  const subjects = selectedClass ? (subjectsByClass[selectedClass] || []) : []
-  const subject = subjects.find((s) => s.id === selectedSubject)
+  const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
+  const subject = subjects.find((s: Subject) => s.id === selectedSubject)
   if (!subject) return null
 
   // Show books if multiple
@@ -301,7 +300,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         <ScreenHeader title={`${subject.nameHi} - Book`} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-3">
-            {subject.books.map((book) => (
+            {subject.books.map((book: Book) => (
               <button
                 key={book.id}
                 onClick={() => setSelectedBook(book.id)}
@@ -319,23 +318,11 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         <BottomTabs activeTab={tabKey[flow]} />
       </div>
     )
-}
-  const availableBooks = flow === "books" 
-  ? subject.books 
-  : subject.books.filter((b) => !b.booksOnly)
+  }
 
-if (availableBooks.length === 0) return (
-  <div className="flex min-h-screen flex-col bg-background pb-20">
-    <ScreenHeader title={subject.nameHi} />
-    <div className="flex flex-1 items-center justify-center text-muted-foreground p-4 text-center">
-      इस विषय का content Books tab में उपलब्ध है।
-    </div>
-    <BottomTabs activeTab={tabKey[flow]} />
-  </div>
-)
-    const book = subject.books.length === 1
+  const book = subject.books.length === 1
     ? subject.books[0]
-    : subject.books.find((b) => b.id === selectedBook)
+    : subject.books.find((b: Book) => b.id === selectedBook)
   if (!book) return null
 
   return (
@@ -343,7 +330,7 @@ if (availableBooks.length === 0) return (
       <ScreenHeader title={`${subject.name} - ${getText("selectChapter", language)}`} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         <div className="flex flex-col gap-2.5">
-          {book.chapters.map((ch, idx) => (
+          {book.chapters.map((ch: Chapter, idx: number) => (
             <button
               key={ch.id}
               onClick={() => {
@@ -367,37 +354,37 @@ if (availableBooks.length === 0) return (
       <BottomTabs activeTab={tabKey[flow]} />
     </div>
   )
-}
-
+    }
 // ===============================
 // 4️⃣ CONTENT SCREENS
 // ===============================
 export function NotesContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "notes")
+
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("notes", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {loading && (
-  <div className="flex flex-col items-center justify-center py-10 gap-3">
-    <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-    <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
-  </div>
-)}
+          <div className="flex flex-col items-center justify-center py-10 gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
+          </div>
+        )}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => {
-  if (!para.trim()) return <div key={i} className="mb-2" />
-  const isBold = para.startsWith("**") && para.includes("**", 2)
-  const text = isBold ? para.replace(/\*\*/g, "") : para
-  return isBold ? (
-    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-  ) : (
-    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-  )
-})}
+            {content.split("\n").map((para: string, i: number) => {
+              if (!para.trim()) return <div key={i} className="mb-2" />
+              const isBold = para.startsWith("**") && para.includes("**", 2)
+              const text = isBold ? para.replace(/\*\*/g, "") : para
+              return isBold ? (
+                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+              ) : (
+                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+              )
+            })}
           </div>
         )}
       </div>
@@ -408,28 +395,30 @@ export function NotesContentScreen() {
 export function IQContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "iq")
+
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("importantQuestions", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {loading && (
-          <div className="flex justify-center py-10">
+          <div className="flex flex-col items-center justify-center py-10 gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
           </div>
         )}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => {
-  if (!para.trim()) return <div key={i} className="mb-2" />
-  const isBold = para.startsWith("**") && para.includes("**", 2)
-  const text = isBold ? para.replace(/\*\*/g, "") : para
-  return isBold ? (
-    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-  ) : (
-    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-  )
-})}
+            {content.split("\n").map((para: string, i: number) => {
+              if (!para.trim()) return <div key={i} className="mb-2" />
+              const isBold = para.startsWith("**") && para.includes("**", 2)
+              const text = isBold ? para.replace(/\*\*/g, "") : para
+              return isBold ? (
+                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+              ) : (
+                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+              )
+            })}
           </div>
         )}
       </div>
@@ -440,31 +429,33 @@ export function IQContentScreen() {
 export function BookContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "books")
+
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("books", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {loading && (
-          <div className="flex justify-center py-10">
+          <div className="flex flex-col items-center justify-center py-10 gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
           </div>
         )}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
           <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para, i) => {
-  if (!para.trim()) return <div key={i} className="mb-2" />
-  const isBold = para.startsWith("**") && para.includes("**", 2)
-  const text = isBold ? para.replace(/\*\*/g, "") : para
-  return isBold ? (
-    <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-  ) : (
-    <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-  )
-})}
+            {content.split("\n").map((para: string, i: number) => {
+              if (!para.trim()) return <div key={i} className="mb-2" />
+              const isBold = para.startsWith("**") && para.includes("**", 2)
+              const text = isBold ? para.replace(/\*\*/g, "") : para
+              return isBold ? (
+                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
+              ) : (
+                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
+              )
+            })}
           </div>
         )}
       </div>
     </div>
   )
-                                      }
+                }
