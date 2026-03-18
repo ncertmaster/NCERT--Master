@@ -2,33 +2,43 @@
 
 import { useState, useEffect } from "react"
 
-export function useSheetContent(chapterId: string | null, tab: "notes" | "iq" | "books") {
-  const [content, setContent] = useState<string>("")
+const SHEET_ID = "1g69GuccPRSVzoHQGvmaCXmMNBZXYv3NrKPVAMosSGHg"
+const SHEET_NAME = "Sheet1"
+
+export function useSheetContent(chapterId: string | null, tab: string) {
+  const [content, setContent] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!chapterId) {
-      setContent("Chapter not found")
       setLoading(false)
       return
     }
 
-    setLoading(true)
-    setError(null)
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`
 
-    fetch(`/api/content?chapter_id=${chapterId}&tab=${tab}`)
-      .then((r) => r.json())
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setContent(data[0].content)
+    fetch(url)
+      .then((res) => res.text())
+      .then((text) => {
+        const json = JSON.parse(text.substring(47).slice(0, -2))
+        const rows = json.table.rows
+
+        const match = rows.find(
+          (row: any) =>
+            row.c[0]?.v === chapterId &&
+            row.c[1]?.v === tab
+        )
+
+        if (match && match.c[2]?.v) {
+          setContent(match.c[2].v)
         } else {
-          setContent("Content जल्द आएगा... 🚀")
+          setContent("")
         }
         setLoading(false)
       })
       .catch(() => {
-        setError("Content load नहीं हुआ। दोबारा try करें।")
+        setError("Content load नहीं हो सका।")
         setLoading(false)
       })
   }, [chapterId, tab])
