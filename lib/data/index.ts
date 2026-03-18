@@ -23,7 +23,13 @@ export const streamsByClass: Record<number, any[]> = {
   12: class12Streams,
 }
 
-export function getQuizQuestions(subjectId: string, chapterId?: string) {
+export type QuizQuestion = {
+  question: string
+  options: string[]
+  correctIndex: number
+}
+
+export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
   return []
 }
 
