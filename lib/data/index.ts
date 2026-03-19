@@ -7,8 +7,12 @@ import { class7Subjects } from "./classes/class-7"
 import { class8Subjects } from "./classes/class-8"
 import { class9Subjects } from "./classes/class-9"
 import { class10Subjects } from "./classes/class-10"
-import { class11Streams } from "./streams/class-11"
-import { class12Streams } from "./streams/class-12"
+import { class11ScienceStream } from "./streams/class-11-science"
+import { class11CommerceStream } from "./streams/class-11-commerce"
+import { class11ArtsStream } from "./streams/class-11-arts"
+import { class12ScienceStream } from "./streams/class-12-science"
+import { class12CommerceStream } from "./streams/class-12-commerce"
+import { class12ArtsStream } from "./streams/class-12-arts"
 
 export const subjectsByClass: Record<number, any[]> = {
   6: class6Subjects,
@@ -19,8 +23,8 @@ export const subjectsByClass: Record<number, any[]> = {
 }
 
 export const streamsByClass: Record<number, any[]> = {
-  11: class11Streams,
-  12: class12Streams,
+  11: [class11ScienceStream, class11CommerceStream, class11ArtsStream],
+  12: [class12ScienceStream, class12CommerceStream, class12ArtsStream],
 }
 
 export type QuizQuestion = {
