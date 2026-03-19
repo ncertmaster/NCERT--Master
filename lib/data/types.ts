@@ -19,6 +19,7 @@ export type Subject = {
   nameHi: string
   icon: string
   books: Book[]
+  tabs: ("books" | "notes" | "iq" | "quiz")[]
 }
 
 export type Stream = {
