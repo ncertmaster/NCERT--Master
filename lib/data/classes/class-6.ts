@@ -4,11 +4,13 @@ export const class6Subjects: Subject[] = [
   // ══════════════════════════════
   // गणित
   // ══════════════════════════════
+
   {
     id: "math-6",
     name: "Mathematics",
     nameHi: "गणित",
     icon: "calculator",
+    tabs: ["books", "quiz"],
     books: [
       {
         id: "math-6-ganit",
@@ -73,6 +75,7 @@ export const class6Subjects: Subject[] = [
     name: "Science",
     nameHi: "विज्ञान",
     icon: "flask",
+    tabs: ["books", "notes", "iq", "quiz"],
     books: [
       {
         id: "science-6-jigyasa",
@@ -121,6 +124,7 @@ export const class6Subjects: Subject[] = [
     name: "Social Science",
     nameHi: "सामाजिक विज्ञान",
     icon: "globe",
+    tabs: ["books", "notes", "iq", "quiz"],
     books: [
       {
         id: "social-6-ateet",
@@ -191,6 +195,7 @@ export const class6Subjects: Subject[] = [
     name: "Hindi",
     nameHi: "हिंदी",
     icon: "book",
+    tabs: ["books"],
     books: [
       {
         id: "hindi-6-malhar",
@@ -296,6 +301,7 @@ export const class6Subjects: Subject[] = [
     name: "Sanskrit",
     nameHi: "संस्कृत",
     icon: "book",
+    tabs: ["books"],
     books: [
       {
         id: "sanskrit-6-ruchira",
@@ -350,6 +356,7 @@ export const class6Subjects: Subject[] = [
     name: "English",
     nameHi: "अंग्रेजी",
     icon: "book-open",
+    tabs: ["books", "notes"],
     books: [
       {
         id: "english-6-poorvi",
@@ -411,6 +418,7 @@ export const class6Subjects: Subject[] = [
     name: "Arts",
     nameHi: "कला",
     icon: "book",
+    tabs: ["books"],
     books: [
       {
         id: "arts-6-kriti",
@@ -440,6 +448,7 @@ export const class6Subjects: Subject[] = [
     name: "Physical Education",
     nameHi: "शारीरिक शिक्षा",
     icon: "users",
+    tabs: ["books"],
     books: [
       {
         id: "pe-6-khelyatra",
@@ -469,6 +478,7 @@ export const class6Subjects: Subject[] = [
     name: "Vocational Education",
     nameHi: "व्यावसायिक शिक्षा",
     icon: "briefcase",
+    tabs: ["books"],
     books: [
       {
         id: "vocational-6-kaushal",
