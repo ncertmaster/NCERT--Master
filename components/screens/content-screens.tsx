@@ -199,7 +199,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
           <ScreenHeader title={`${stream.nameHi} - ${getText("selectSubject", language)}`} />
           <div className="mx-auto w-full max-w-md px-4 py-4">
             <div className="flex flex-col gap-3">
-              {stream.subjects.map((subject: Subject) => {
+              {stream.subjects.filter((subject: Subject) => subject.tabs.includes(flow)).map((subject: Subject) => {
                 const Icon = iconMap[subject.icon] || BookOpen
                 return (
                   <button
