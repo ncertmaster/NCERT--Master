@@ -213,7 +213,7 @@ const hindi11com: Subject = {
 }
 
 export const class11CommerceStream: Stream = {
-  id: "commerce",
+  id: "commerce-11",
   name: "Commerce",
   nameHi: "वाणिज्य",
   subjects: [
