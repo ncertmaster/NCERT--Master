@@ -175,7 +175,7 @@ return (
 export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "quiz" }) {
   const {
     language, selectedClass, selectedStream, selectedSubject, selectedBook,
-    setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen,
+    setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen,
   } = useApp()
 
   const tabKey: Record<string, string> = {
