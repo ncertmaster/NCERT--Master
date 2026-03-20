@@ -1,4 +1,4 @@
- type { Stream, Subject } from "../types"
+import type { Stream, Subject } from "../types"
 
 const physics12: Subject = {
   id: "physics-12",
