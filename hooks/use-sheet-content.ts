@@ -16,28 +16,37 @@ export function useSheetContent(chapterId: string | null, tab: string) {
       return
     }
 
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&headers=1`
 
     fetch(url)
       .then((res) => res.text())
       .then((text) => {
-        const json = JSON.parse(text.substring(47).slice(0, -2))
+        // Remove Google's wrapper
+        const cleanText = text.replace(/^[^{]*/, "").replace(/[^}]*$/, "")
+        const json = JSON.parse(cleanText)
         const rows = json.table.rows
+
+        if (!rows || rows.length === 0) {
+          setContent("")
+          setLoading(false)
+          return
+        }
 
         const match = rows.find(
           (row: any) =>
-            row.c[0]?.v === chapterId &&
-            row.c[1]?.v === tab
+            row.c?.[0]?.v?.toString().trim() === chapterId.trim() &&
+            row.c?.[1]?.v?.toString().trim().toLowerCase() === tab.trim().toLowerCase()
         )
 
-        if (match && match.c[2]?.v) {
-          setContent(match.c[2].v)
+        if (match && match.c?.[2]?.v) {
+          setContent(match.c[2].v.toString())
         } else {
           setContent("")
         }
         setLoading(false)
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("Sheet fetch error:", err)
         setError("Content load नहीं हो सका।")
         setLoading(false)
       })
