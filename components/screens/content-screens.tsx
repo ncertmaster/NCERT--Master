@@ -1,5 +1,5 @@
 "use client"
-
+import React, { useEffect } from "react"
 import { useSheetContent } from "@/hooks/use-sheet-content"
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
@@ -186,6 +186,22 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     books: "books-content", notes: "notes-content", iq: "iq-content", quiz: "quiz-play",
   }
 
+  const backScreen: AppScreen =
+    flow === "books" ? "books-subject" :
+    flow === "notes" ? "notes-subject" :
+    flow === "iq" ? "iq-subject" : "quiz-subject"
+
+  const is1112 = selectedClass === 11 || selectedClass === 12
+  const streams1112: Stream[] = is1112 ? (streamsByClass[selectedClass!] || []) : []
+  const matchedStream = is1112 ? streams1112.find((s: Stream) => s.id === selectedStream) : null
+
+  React.useEffect(() => {
+    if (is1112 && selectedStream && !matchedStream) {
+      setSelectedStream(null)
+      setScreen(backScreen)
+    }
+  }, [selectedStream, selectedClass])
+  
   // ── Class 11 & 12 ──
   if (selectedClass === 11 || selectedClass === 12) {
     const streams: Stream[] = streamsByClass[selectedClass] || []
