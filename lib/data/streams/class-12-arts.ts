@@ -284,7 +284,57 @@ const hindi12arts: Subject = {
     },
   ]
 }
+const homeScience12: Subject = {
+  id: "home-science-12",
+  name: "Home Science",
+  nameHi: "गृह विज्ञान",
+  icon: "book",
+  tabs: ["books", "notes", "iq"],
+  books: [
+    {
+      id: "home-science-12-book",
+      name: "Home Science",
+      nameHi: "गृह विज्ञान",
+      chapters: [
+        { id: "hs12-ch1", name: "Work, Livelihood and Career", nameHi: "कार्य, आजीविका तथा जीविका" },
+        { id: "hs12-ch2", name: "Clinical Nutrition and Dietetics", nameHi: "नैदानिक पोषण और आहारिकी" },
+        { id: "hs12-ch3", name: "Public Health and Nutrition", nameHi: "जनस्वास्थ्य और पोषण" },
+        { id: "hs12-ch4", name: "Food Processing and Technology", nameHi: "खाद्य प्रसंस्करण और प्रौद्योगिकी" },
+        { id: "hs12-ch5", name: "Food Quality and Food Safety", nameHi: "खाद्य गुणवत्ता और खाद्य सुरक्षा" },
+        { id: "hs12-ch6", name: "Early Childhood Care and Education (ECCE)", nameHi: "प्रारंभिक बाल्यावस्था देखभाल और शिक्षा" },
+        { id: "hs12-ch7", name: "Special Education and Support Services", nameHi: "विशेष शिक्षा और सहायक सेवाएँ" },
+        { id: "hs12-ch8", name: "Support Services for Children, Youth and Elderly", nameHi: "बच्चों, युवाओं और वृद्धों के लिए सहायक सेवाएँ" },
+        { id: "hs12-ch9", name: "Design for Textiles and Apparel", nameHi: "वस्त्र एवं परिधान के लिए डिज़ाइन" },
+        { id: "hs12-ch10", name: "Fashion Design and Business", nameHi: "फैशन डिज़ाइन और व्यापार" },
+        { id: "hs12-ch11", name: "Development Communication and Journalism", nameHi: "विकास संचार और पत्रकारिता" },
+      ]
+    },
+  ]
+}
 
+const legalStudies12: Subject = {
+  id: "legal-studies-12",
+  name: "Legal Studies",
+  nameHi: "विधिक अध्ययन",
+  icon: "landmark",
+  tabs: ["books", "notes", "iq"],
+  books: [
+    {
+      id: "legal-studies-12-book",
+      name: "Legal Studies",
+      nameHi: "विधिक अध्ययन",
+      chapters: [
+        { id: "ls12-ch1", name: "Judiciary", nameHi: "न्यायपालिका" },
+        { id: "ls12-ch2", name: "Alternative Dispute Resolution (ADR)", nameHi: "विवाद समाधान के वैकल्पिक साधन" },
+        { id: "ls12-ch3", name: "Topics of Law in India", nameHi: "भारत में कानून के विषय" },
+        { id: "ls12-ch4", name: "Human Rights in India", nameHi: "मानवाधिकार" },
+        { id: "ls12-ch5", name: "Legal Services", nameHi: "कानूनी सेवाएँ" },
+        { id: "ls12-ch6", name: "International Context", nameHi: "अंतर्राष्ट्रीय संदर्भ" },
+        { id: "ls12-ch7", name: "Legal Profession in India", nameHi: "कानूनी पेशा" },
+      ]
+    },
+  ]
+        }
 export const class12ArtsStream: Stream = {
   id: "arts",
   name: "Arts",
@@ -297,5 +347,7 @@ export const class12ArtsStream: Stream = {
     psychology12,
     english12arts,
     hindi12arts,
+    homeScience12,
+    legalStudies12,
   ]
-          }
+}
