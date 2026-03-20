@@ -90,10 +90,18 @@ export function ClassSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "
 export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "quiz" }) {
   const { language, selectedClass, setScreen, setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter } = useApp()
 
+  // Har baar is screen par aane par state clean karo
+  React.useEffect(() => {
+    setSelectedStream(null)
+    setSelectedSubject(null)
+    setSelectedBook(null)
+    setSelectedChapter(null)
+  }, [])
+
   const tabKey: Record<string, string> = {
     books: "books", notes: "notes", iq: "importantQuestions", quiz: "quiz",
   }
-
+  
   const nextScreen: Record<string, AppScreen> = {
     books: "books-chapter", notes: "notes-chapter", iq: "iq-chapter", quiz: "quiz-mode",
   }
