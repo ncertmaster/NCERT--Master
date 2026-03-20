@@ -190,7 +190,15 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   if (selectedClass === 11 || selectedClass === 12) {
     const streams: Stream[] = streamsByClass[selectedClass] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
-    if (!stream) return null
+    if (!stream) return (
+      <div className="flex min-h-screen flex-col bg-background pb-20">
+        <ScreenHeader title={getText("selectSubject", language)} />
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <p className="text-center text-sm text-muted-foreground py-10">Stream select karein</p>
+        </div>
+        <BottomTabs activeTab={tabKey[flow]} />
+      </div>
+    )
 
     // Step 1: Show subjects
     if (!selectedSubject) {
@@ -199,7 +207,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
           <ScreenHeader title={`${stream.nameHi} - ${getText("selectSubject", language)}`} />
           <div className="mx-auto w-full max-w-md px-4 py-4">
             <div className="flex flex-col gap-3">
-              {stream.subjects.filter((subject: Subject) => subject.tabs.includes(flow)).map((subject: Subject) => {
+              {stream.subjects.filter((subject: Subject) => Array.isArray(subject.tabs) && subject.tabs.includes(flow)).map((subject: Subject) => {
                 const Icon = iconMap[subject.icon] || BookOpen
                 return (
                   <button
@@ -226,7 +234,15 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
 
     const subject = stream.subjects.find((s: Subject) => s.id === selectedSubject)
-    if (!subject) return null
+    if (!subject) return (
+      <div className="flex min-h-screen flex-col bg-background pb-20">
+        <ScreenHeader title={getText("selectSubject", language)} />
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <p className="text-center text-sm text-muted-foreground py-10">Subject select karein</p>
+        </div>
+        <BottomTabs activeTab={tabKey[flow]} />
+      </div>
+    )
 
     // Step 2: Show books
     if (!selectedBook) {
@@ -257,7 +273,15 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
     // Step 3: Show chapters
     const book = subject.books.find((b: Book) => b.id === selectedBook)
-    if (!book) return null
+    if (!book) return (
+      <div className="flex min-h-screen flex-col bg-background pb-20">
+        <ScreenHeader title={getText("selectSubject", language)} />
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <p className="text-center text-sm text-muted-foreground py-10">Book select karein</p>
+        </div>
+        <BottomTabs activeTab={tabKey[flow]} />
+      </div>
+    )
 
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
