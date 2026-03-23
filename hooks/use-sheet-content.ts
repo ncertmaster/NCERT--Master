@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useApp } from "@/lib/app-context"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { Subject, Book, Chapter, Stream } from "@/lib/data"
@@ -16,7 +16,6 @@ function readCache(key: string): string | null {
     const raw = localStorage.getItem(key)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    // Cache expires in 7 days
     if (Date.now() - parsed.ts > 7 * 24 * 60 * 60 * 1000) {
       localStorage.removeItem(key)
       return null
@@ -32,14 +31,13 @@ function writeCache(key: string, content: string): void {
   try {
     localStorage.setItem(key, JSON.stringify({ content, ts: Date.now() }))
   } catch {
-    // Storage full — clear old ncert cache entries and retry
     try {
       Object.keys(localStorage)
         .filter((k) => k.startsWith("ncert_cache__"))
         .forEach((k) => localStorage.removeItem(k))
       localStorage.setItem(key, JSON.stringify({ content, ts: Date.now() }))
     } catch {
-      // Silently fail — app still works, just no cache
+      // Silently fail
     }
   }
 }
@@ -80,13 +78,18 @@ function getChapterInfo(
   return null
 }
 
-// ─── Fetch with retry ─────────────────────────────────────────────────────────
-async function fetchWithRetry(url: string, retries = 3, delayMs = 1500): Promise<any> {
+// ─── Fetch with retry + AbortController timeout ───────────────────────────────
+async function fetchWithRetry(
+  url: string,
+  signal: AbortSignal,
+  retries = 3,
+  delayMs = 2000
+): Promise<any> {
   for (let attempt = 1; attempt <= retries; attempt++) {
+    if (signal.aborted) throw new Error("aborted")
     try {
-      const res = await fetch(url)
+      const res = await fetch(url, { signal })
       if (!res.ok) {
-        // Rate limit — wait longer
         if (res.status === 429) {
           await new Promise((r) => setTimeout(r, delayMs * attempt * 2))
           continue
@@ -94,9 +97,9 @@ async function fetchWithRetry(url: string, retries = 3, delayMs = 1500): Promise
         throw new Error(`HTTP ${res.status}`)
       }
       return await res.json()
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.name === "AbortError" || signal.aborted) throw new Error("aborted")
       if (attempt === retries) throw err
-      // Wait before retry
       await new Promise((r) => setTimeout(r, delayMs * attempt))
     }
   }
@@ -110,9 +113,19 @@ export function useSheetContent(chapterId: string | null, tab: string) {
   const [error, setError] = useState<string | null>(null)
   const [fromCache, setFromCache] = useState(false)
 
+  // Keep a ref to abort any in-flight request when deps change
+  const abortRef = useRef<AbortController | null>(null)
+
   useEffect(() => {
+    // Abort previous request if still running
+    if (abortRef.current) {
+      abortRef.current.abort()
+    }
+
     if (!chapterId) {
       setLoading(false)
+      setContent("")
+      setError(null)
       return
     }
 
@@ -121,7 +134,13 @@ export function useSheetContent(chapterId: string | null, tab: string) {
     setError(null)
     setFromCache(false)
 
-    const info = getChapterInfo(chapterId, selectedClass, selectedStream, selectedSubject, selectedBook)
+    const info = getChapterInfo(
+      chapterId,
+      selectedClass,
+      selectedStream,
+      selectedSubject,
+      selectedBook
+    )
 
     if (!info) {
       setError("Chapter info नहीं मिली। वापस जाएं और दोबारा try करें।")
@@ -139,7 +158,13 @@ export function useSheetContent(chapterId: string | null, tab: string) {
       return
     }
 
-    // ── Not in cache — fetch from API with retry ──
+    // ── Not in cache — fetch from API ──
+    const controller = new AbortController()
+    abortRef.current = controller
+
+    // 55 second timeout (Vercel Pro allows 60s)
+    const timeoutId = setTimeout(() => controller.abort(), 55000)
+
     const params = new URLSearchParams({
       chapter_id: chapterId,
       chapter_name: info.chapterName,
@@ -149,25 +174,33 @@ export function useSheetContent(chapterId: string | null, tab: string) {
       tab,
     })
 
-    fetchWithRetry(`/api/content?${params}`, 3, 1500)
+    fetchWithRetry(`/api/content?${params}`, controller.signal, 2, 2000)
       .then((data) => {
-        if (data.error) {
+        clearTimeout(timeoutId)
+        if (data?.error) {
           setError(`Error: ${data.error} — वापस जाएं और दोबारा try करें।`)
-        } else if (!data.content) {
+        } else if (!data?.content) {
           setError("Content नहीं मिला। दोबारा try करें।")
         } else {
           setContent(data.content)
-          // Save to cache so next time instant load hoga
           writeCache(cacheKey, data.content)
         }
         setLoading(false)
       })
-      .catch(() => {
+      .catch((err) => {
+        clearTimeout(timeoutId)
+        if (err?.message === "aborted") return // Component unmounted or deps changed — ignore
         setError("Internet connection check करें और दोबारा try करें।")
         setLoading(false)
       })
-  }, [chapterId, tab])
+
+    return () => {
+      clearTimeout(timeoutId)
+      controller.abort()
+    }
+    // ✅ FIX: All context deps included so re-fetch happens correctly on navigation
+  }, [chapterId, tab, selectedClass, selectedStream, selectedSubject, selectedBook])
 
   return { content, loading, error, fromCache }
-                                              }
-      
+        }
+          
