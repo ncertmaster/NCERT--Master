@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_API_KEY}`
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=${GEMINI_API_KEY}`
 
 function getPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string, tab: string): string {
   const context = `NCERT Class ${classNum} ${subject} - Chapter: ${chapterName} (${chapterNameHi})`
@@ -56,4 +56,4 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
-    }
+}
