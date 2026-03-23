@@ -495,6 +495,7 @@ function renderContent(content: string) {
           )
         }
 
+        
         // Normal paragraph
         return (
           <p key={i} className="text-sm leading-relaxed text-card-foreground">
