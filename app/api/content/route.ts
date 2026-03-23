@@ -21,79 +21,133 @@ async function callGroq(prompt: string): Promise<string> {
   return data?.choices?.[0]?.message?.content || ""
 }
 
-function getNotesPrompt(context: string): string {
-  return `Tu ek expert NCERT teacher hai jo UPSC, RAS aur government exams ki preparation karata hai.
+function getNotesPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string): string {
+  const cls = parseInt(classNum)
+  let lengthGuide = "250-300 words"
+  if (cls >= 9 && cls <= 10) lengthGuide = "300-500 words"
+  if (cls >= 11) lengthGuide = "500-700 words"
 
-Chapter: ${context}
+  return `Tu ek expert NCERT teacher hai. Tera kaam hai bahut saral, sundar aur samjhne mein aasaan notes likhna.
 
-Is chapter ke comprehensive Hindi notes banao. Format exactly aisa hona chahiye:
+Chapter: NCERT Class ${classNum} ${subject} - ${chapterName} (${chapterNameHi})
 
-## [Main Topic Heading]
-[Topic ki explanation 2-3 lines mein]
+NOTES LIKHNE KE NIYAM:
+- Bhasha: Saral Hindi jo koi bhi bachcha samajh sake
+- Length: ${lengthGuide} (chapter ki importance ke hisab se badha sakte ho)
+- Har chote bade topic ko cover karo
+- UPSC foundation ke liye important points zaroor daalo
+- Jahan process, cycle, structure ya comparison samjhana ho — wahan TEXT DIAGRAM ya EMOJI DIAGRAM zaroor banao
+- Dikhne mein pyara aur organized hona chahiye
+
+FORMAT (exactly isi tarah likho):
+
+## [Chapter ka naam - ek line overview]
+[2-3 line mein chapter ka saral parichay]
+
+## [Pehla Main Topic]
+[3-4 lines mein saral explanation]
 
 **[Sub Topic]**
-[Sub topic ki explanation]
+[2-3 lines]
 
-(i) [Point 1]
-(ii) [Point 2]
-(iii) [Point 3]
+(i) [Important point]
+(ii) [Important point]
+(iii) [Important point]
 
-Rules:
-- ## se red bold heading banegi
-- ** se bold subheading banegi
-- (i)(ii)(iii) se numbered points
-- UPSC/government exam ke important points zaroor include karo
-- Hindi mein likho, technical terms English mein rakh sakte ho
-- Minimum 400 words ka content do`
+[Agar koi process/cycle/flow ho toh TEXT DIAGRAM banao, jaise:]
+🌧️ Baadal → ⬇️ Varsha → 🏞️ Nadi → 🌊 Sagar → ☀️ Vashpikaran → 🌧️ Baadal
+
+[Agar koi structure/parts hon toh:]
+         🌍 Prithvi
+        /    |    \\
+   🏔️ Bhumi 🌊 Jal 💨 Vayu
+
+[Agar comparison ho toh TABLE banao:]
+| Cheez 1 | Cheez 2 |
+|---------|---------|
+| Point   | Point   |
+
+## [Doosra Main Topic]
+[Explanation + diagram agar zaroorat ho]
+
+## Yaad Rakhne Wali Baatein ⭐
+(i) [Most important point]
+(ii) [Important point]
+(iii) [UPSC ke liye important]
+
+FORMATTING RULES:
+- ## = laal bold heading
+- ** = kala bold  
+- (i)(ii)(iii) = numbered points
+- Diagrams se concept zyada clear hota hai — zaroor use karo
+- Tables se comparison zyada clear hoti hai`
 }
 
-function getIQPrompt(context: string): string {
-  return `Tu ek expert NCERT teacher hai jo UPSC, RAS aur government exams ki preparation karata hai.
+function getIQPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string): string {
+  const cls = parseInt(classNum)
+  let mcqCount = "10", shortCount = "15", essayCount = "10"
+  if (cls >= 9 && cls <= 10) { mcqCount = "12"; shortCount = "17"; essayCount = "12" }
+  if (cls >= 11) { mcqCount = "15"; shortCount = "20"; essayCount = "15" }
 
-Chapter: ${context}
+  return `Tu ek expert NCERT teacher hai jo UPSC foundation ke liye questions banata hai.
 
-Is chapter ke important questions aur unke answers Hindi mein banao. Format:
+Chapter: NCERT Class ${classNum} ${subject} - ${chapterName} (${chapterNameHi})
 
-## महत्वपूर्ण प्रश्न
+Bilkul saral aur sundar format mein questions banao jo pure chapter aur UPSC foundation cover kare.
 
-**प्रश्न 1: [Question]**
-उत्तर: [2-3 line detailed answer]
+FORMAT:
 
-**प्रश्न 2: [Question]**
-उत्तर: [Answer]
+## बहुविकल्पीय प्रश्न (MCQ) 🎯
+[${mcqCount} MCQ questions]
 
-## UPSC/RAS स्तर के प्रश्न
+**प्रश्न 1.** [Question text]
+(A) [Option]  (B) [Option]  (C) [Option]  (D) [Option]
+✅ सही उत्तर: [Letter] - [Option text]
 
-**प्रश्न: [Higher order question]**
-उत्तर: [Detailed answer]
+## लघु उत्तरीय प्रश्न ✍️
+[${shortCount} short questions - 2-3 line answer]
 
-Rules:
-- Minimum 10 questions do
-- UPSC previous year related questions zaroor include karo
-- Hindi mein likho`
+**प्रश्न 1.** [Question]
+**उत्तर:** [2-3 line simple answer]
+
+## दीर्घ उत्तरीय प्रश्न 📝
+[${essayCount} essay questions - 5-7 line answer]
+
+**प्रश्न 1.** [Question]
+**उत्तर:** [5-7 line detailed answer]
+
+## UPSC स्तर के प्रश्न 🏆
+[5 UPSC style questions with answers]
+
+**प्रश्न 1.** [Higher order question]
+**उत्तर:** [Detailed answer]
+
+RULES:
+- Bhasha saral Hindi mein
+- Pure chapter cover karo
+- UPSC foundation important hai`
 }
 
-function getQuizPrompt(scope: string, batchNum: number, topicsHint: string): string {
-  return `Create exactly 10 unique MCQ questions for ${scope}.
-This is batch ${batchNum} - create DIFFERENT questions from previous batches.
-Focus on: ${topicsHint}
+function getQuizPrompt(scope: string, batchNum: number, topicHint: string, classNum: string): string {
+  return `Tu ek expert NCERT quiz maker hai.
 
-Return ONLY a valid JSON array, no extra text, no markdown:
+Quiz ke liye: ${scope}
+Batch: ${batchNum}
+Topic focus: ${topicHint}
+
+Bilkul alag 10 MCQ questions banao jo is batch mein unique hon.
+Class ${classNum} level ke hisab se difficulty rakho.
+UPSC foundation cover karo.
+
+SIRF JSON array return karo, kuch aur mat likho:
 [
   {
-    "question": "Question text in Hindi",
+    "question": "Saral Hindi mein question",
     "options": ["Option A", "Option B", "Option C", "Option D"],
     "correctIndex": 0,
-    "explanation": "Ek line mein explanation Hindi mein"
+    "explanation": "Ek line mein saral explanation"
   }
-]
-
-Rules:
-- Questions Hindi mein
-- Mix of easy, medium, hard
-- UPSC/government exam style
-- correctIndex is 0-based index
-- All 10 questions must be unique and different`
+]`
 }
 
 function parseQuizJSON(text: string): any[] {
@@ -114,7 +168,7 @@ export async function GET(request: Request) {
   const chapterName = searchParams.get("chapter_name") || ""
   const chapterNameHi = searchParams.get("chapter_name_hi") || ""
   const subject = searchParams.get("subject") || ""
-  const classNum = searchParams.get("class") || ""
+  const classNum = searchParams.get("class") || "6"
   const tab = searchParams.get("tab") || "notes"
   const quizMode = searchParams.get("quiz_mode") || "chapter"
 
@@ -122,86 +176,67 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing chapter_name" }, { status: 400 })
   }
 
-  const context = `NCERT Class ${classNum} ${subject} - Chapter: ${chapterName} (${chapterNameHi})`
-
   try {
-    // Notes aur IQ — single call
     if (tab === "notes") {
-      const content = await callGroq(getNotesPrompt(context))
+      const content = await callGroq(getNotesPrompt(chapterName, chapterNameHi, subject, classNum))
       return NextResponse.json({ content, chapterId, tab })
     }
 
     if (tab === "iq") {
-      const content = await callGroq(getIQPrompt(context))
+      const content = await callGroq(getIQPrompt(chapterName, chapterNameHi, subject, classNum))
       return NextResponse.json({ content, chapterId, tab })
     }
 
-    // Quiz — multiple calls
     if (tab === "quiz") {
-      const classNumber = parseInt(classNum) || 6
-
-      // Chapter wise: 2 batches = 20 questions
-      // Subject wise: class ke hisaab se batches
+      const cls = parseInt(classNum)
       let totalBatches = 2
       if (quizMode === "full") {
-        if (classNumber <= 8) totalBatches = 10       // ~100 questions
-        else if (classNumber <= 10) totalBatches = 15  // ~150 questions
-        else totalBatches = 20                          // ~200 questions
+        if (cls <= 8) totalBatches = 5
+        else if (cls <= 10) totalBatches = 7
+        else totalBatches = 10
+      } else {
+        if (cls <= 8) totalBatches = 2
+        else if (cls <= 10) totalBatches = 3
+        else totalBatches = 5
       }
 
       const scope = quizMode === "full"
-        ? `NCERT Class ${classNum} ${subject} (pure subject se)`
+        ? `NCERT Class ${classNum} ${subject} (pure subject)`
         : `NCERT Class ${classNum} ${subject} - Chapter: ${chapterName}`
 
       const topicHints = [
         "definitions, basic concepts, introduction",
-        "important facts, dates, key terms",
-        "processes, methods, how things work",
-        "comparisons, differences, similarities",
-        "causes and effects, reasons",
-        "examples, case studies, applications",
-        "diagrams, structures, parts",
-        "historical context, background",
-        "modern relevance, current affairs connection",
-        "UPSC previous year style questions",
-        "critical thinking, analysis based",
-        "map based, location based if applicable",
-        "numerical, data based if applicable",
-        "government schemes, policies related",
-        "environment, ecology related if applicable",
-        "social issues, human rights related",
-        "economic aspects",
-        "scientific principles",
-        "cultural aspects",
+        "important facts, key terms, dates",
+        "processes, causes and effects",
+        "comparisons, examples, applications",
+        "UPSC style - analytical questions",
+        "map based, data based if applicable",
+        "government schemes, policies",
+        "critical thinking based",
+        "current affairs connection",
         "miscellaneous important topics",
       ]
 
-      // Parallel calls karo — faster response
       const batchPromises = Array.from({ length: totalBatches }, (_, i) =>
-        callGroq(getQuizPrompt(scope, i + 1, topicHints[i % topicHints.length]))
+        callGroq(getQuizPrompt(scope, i + 1, topicHints[i % topicHints.length], classNum))
       )
 
-      const batchResults = await Promise.all(batchPromises)
-      const allQuestions = batchResults.flatMap(parseQuizJSON)
+      const results = await Promise.all(batchPromises)
+      const allQ = results.flatMap(parseQuizJSON)
 
-      // Duplicates hatao question text ke basis pe
       const seen = new Set<string>()
-      const uniqueQuestions = allQuestions.filter((q: any) => {
+      const unique = allQ.filter((q: any) => {
         if (!q?.question || seen.has(q.question)) return false
         seen.add(q.question)
         return true
       })
 
-      return NextResponse.json({
-        content: JSON.stringify(uniqueQuestions),
-        chapterId,
-        tab,
-        total: uniqueQuestions.length
-      })
+      return NextResponse.json({ content: JSON.stringify(unique), chapterId, tab, total: unique.length })
     }
 
     return NextResponse.json({ error: "Invalid tab" }, { status: 400 })
+
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
-      }
+}
