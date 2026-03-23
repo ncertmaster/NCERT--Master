@@ -434,35 +434,102 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   )
     }
 // ===============================
+// 4️⃣ CONTENT RENDERER HELPER
+// ===============================
+function renderContent(content: string) {
+  if (!content) return (
+    <p className="text-center text-sm text-muted-foreground py-10">अभी content उपलब्ध नहीं है।</p>
+  )
+  return (
+    <div className="space-y-1">
+      {content.split("\n").map((line: string, i: number) => {
+        if (!line.trim()) return <div key={i} className="h-2" />
+
+        // ## = Red bold heading
+        if (line.startsWith("##")) {
+          return (
+            <p key={i} className="mt-4 mb-1 text-sm font-bold text-red-500">
+              {line.replace(/^##\s*/, "")}
+            </p>
+          )
+        }
+
+        // === = Blue bold heading
+        if (line.startsWith("===")) {
+          return (
+            <p key={i} className="mt-4 mb-1 text-sm font-bold text-blue-500">
+              {line.replace(/^===\s*/, "")}
+            </p>
+          )
+        }
+
+        // **text** whole line = Bold black subheading
+        if (line.startsWith("**") && line.endsWith("**")) {
+          return (
+            <p key={i} className="mt-3 mb-1 text-sm font-bold text-card-foreground">
+              {line.replace(/\*\*/g, "")}
+            </p>
+          )
+        }
+
+        // (i), (ii), (iii) = indented point
+        if (/^\([ivxIVX\d]+\)/.test(line)) {
+          return (
+            <p key={i} className="text-sm leading-relaxed text-card-foreground pl-4">
+              {line}
+            </p>
+          )
+        }
+
+        // Inline **bold** inside sentence
+        if (line.includes("**")) {
+          const parts = line.split(/(\*\*[^*]+\*\*)/)
+          return (
+            <p key={i} className="text-sm leading-relaxed text-card-foreground">
+              {parts.map((part, j) =>
+                part.startsWith("**") && part.endsWith("**")
+                  ? <strong key={j}>{part.replace(/\*\*/g, "")}</strong>
+                  : part
+              )}
+            </p>
+          )
+        }
+
+        // Normal paragraph
+        return (
+          <p key={i} className="text-sm leading-relaxed text-card-foreground">
+            {line}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
+function ContentLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center py-10 gap-3">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
+    </div>
+  )
+}
+
+// ===============================
 // 4️⃣ CONTENT SCREENS
 // ===============================
 export function NotesContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "notes")
-
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("notes", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-10 gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
-          </div>
-        )}
+        {loading && <ContentLoader />}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para: string, i: number) => {
-              if (!para.trim()) return <div key={i} className="mb-2" />
-              const isBold = para.startsWith("**") && para.includes("**", 2)
-              const text = isBold ? para.replace(/\*\*/g, "") : para
-              return isBold ? (
-                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-              ) : (
-                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-              )
-            })}
+          <div className="rounded-xl border border-border bg-card px-4 py-4 shadow-sm">
+            {renderContent(content)}
           </div>
         )}
       </div>
@@ -473,30 +540,15 @@ export function NotesContentScreen() {
 export function IQContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "iq")
-
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("importantQuestions", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
-        {loading && (
-               <div className="flex flex-col items-center justify-center py-10 gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
-          </div>
-        )}
+        {loading && <ContentLoader />}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para: string, i: number) => {
-              if (!para.trim()) return <div key={i} className="mb-2" />
-              const isBold = para.startsWith("**") && para.includes("**", 2)
-              const text = isBold ? para.replace(/\*\*/g, "") : para
-              return isBold ? (
-                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-              ) : (
-                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-              )
-            })}
+          <div className="rounded-xl border border-border bg-card px-4 py-4 shadow-sm">
+            {renderContent(content)}
           </div>
         )}
       </div>
@@ -507,30 +559,15 @@ export function IQContentScreen() {
 export function BookContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "books")
-
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
       <ScreenHeader title={getText("books", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-10 gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
-          </div>
-        )}
+        {loading && <ContentLoader />}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && (
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-            {content.split("\n").map((para: string, i: number) => {
-              if (!para.trim()) return <div key={i} className="mb-2" />
-              const isBold = para.startsWith("**") && para.includes("**", 2)
-              const text = isBold ? para.replace(/\*\*/g, "") : para
-              return isBold ? (
-                <p key={i} className="mt-3 mb-1 font-bold text-sm text-card-foreground">{text}</p>
-              ) : (
-                <p key={i} className="mb-1 leading-snug text-card-foreground text-sm">{para}</p>
-              )
-            })}
+          <div className="rounded-xl border border-border bg-card px-4 py-4 shadow-sm">
+            {renderContent(content)}
           </div>
         )}
       </div>
