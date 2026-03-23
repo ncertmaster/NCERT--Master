@@ -111,7 +111,7 @@ export async function GET(request: Request) {
           maxOutputTokens: 2048,
         }
       }),
-      next: { revalidate: 86400 }
+      cache: "no-store"
     })
 
     const data = await res.json()
@@ -121,4 +121,5 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json({ error: "AI content load नहीं हो सका।" }, { status: 500 })
   }
-}
+                           }
+      
