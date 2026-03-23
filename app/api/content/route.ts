@@ -11,12 +11,12 @@ function getClassGroup(cls: number): "6-8" | "9-10" | "11-12" {
 }
 
 // ─── Groq caller ─────────────────────────────────────────────────────────────
-async function callGroq(prompt: string, maxTokens = 3000): Promise<string> {
+async function callGroq(prompt: string, maxTokens = 4000): Promise<string> {
   const res = await fetch(GROQ_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${GROQ_API_KEY}`
+      "Authorization": `Bearer ${GROQ_API_KEY}`,
     },
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
@@ -29,14 +29,21 @@ MANDATORY RULES — inn ko kabhi mat todo:
 2. Roman/English script mein KUCH BHI mat likho — headings, bullets, explanations sab Hindi mein
 3. Scientific/technical terms: Hindi mein likho + bracket mein English: जैसे "प्रकाश संश्लेषण (Photosynthesis)"
 4. Format aur structure bilkul waise rakho jaisa prompt mein bola gaya hai
-5. NCERT content se bahar bilkul mat jao`
+5. NCERT content se bahar bilkul mat jao
+6. Content COMPLETE karo — beech mein mat rokna, poora response bhejo`,
         },
-        { role: "user", content: prompt }
+        { role: "user", content: prompt },
       ],
-      temperature: 0.4,
+      temperature: 0.3,
       max_tokens: maxTokens,
-    })
+    }),
   })
+
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => "")
+    throw new Error(`Groq API error ${res.status}: ${errBody}`)
+  }
+
   const data = await res.json()
   return data?.choices?.[0]?.message?.content || ""
 }
@@ -54,60 +61,65 @@ function getNotesPrompt(
   const group = getClassGroup(cls)
 
   const lengthGuide =
-    group === "6-8"  ? "400–600 words" :
-    group === "9-10" ? "600–900 words" :
-                       "900–1400 words"
+    group === "6-8"  ? "500–700 words (saral bhasha, examples ke saath)" :
+    group === "9-10" ? "800–1100 words (detailed, formulas aur data ke saath)" :
+                       "1100–1600 words (comprehensive, UPSC level depth ke saath)"
+
+  const difficultyTip =
+    group === "6-8"  ? "Bahut saral bhasha use karo. Bacche ke liye samjhana hai." :
+    group === "9-10" ? "Thodi complexity theek hai. Board exam ke liye useful banao." :
+                       "University entry level. Analytical depth chahiye. UPSC connection strong ho."
 
   return `Tu ek expert NCERT teacher hai. Tera kaam hai bahut saral, sundar aur samjhne mein aasaan notes likhna.
 
 Chapter: NCERT Class ${classNum} ${subject} - ${chapterName} (${chapterNameHi})
+${difficultyTip}
 
 NOTES LIKHNE KE NIYAM:
 - Bhasha: Saral Hindi jo koi bhi bachcha samajh sake
-- Length: ${lengthGuide} (strictly follow karo)
-- Chapter ke 100% content ko cover karo — saare sub-topics, examples, diagrams (text mein describe karo), maps, tables, graphs, case studies — KUCH BHI MISS NAHI HONA CHAHIYE
+- Length: ${lengthGuide}
+- Chapter ke 100% content ko cover karo — saare sub-topics, examples, diagrams (text mein describe karo), maps, tables, graphs, case studies
 - Har NCERT fact, definition, date, naam, formula include karo
 - UPSC foundation ke liye important points zaroor daalo
-- Jahan process, cycle, structure ya comparison samjhana ho — wahan TEXT DIAGRAM ya EMOJI DIAGRAM zaroor banao
+- Jahan process, cycle, structure ya comparison samjhana ho — TEXT DIAGRAM ya EMOJI DIAGRAM banao
 - Dikhne mein pyara aur organized hona chahiye
 
 FORMAT (exactly isi tarah likho):
 
-## 📖 Parichay (Introduction)
+## 📖 परिचय (Introduction)
 [2-3 line mein chapter ka saral parichay aur mahatva]
 
-## 📌 Mukhya Vishay aur Sub-topics
+## 📌 मुख्य विषय एवं उप-विषय
 [Har sub-topic ke liye full bullet points. Har bullet 2-3 lines. Saare NCERT examples, data, figures text mein describe karo]
 
-[Agar koi process/cycle/flow ho toh TEXT DIAGRAM banao, jaise:]
-🌧️ Baadal → ⬇️ Varsha → 🏞️ Nadi → 🌊 Sagar → ☀️ Vashpikaran → 🌧️ Baadal
+[Agar koi process/cycle/flow ho toh TEXT DIAGRAM banao:
+🌧️ बादल → ⬇️ वर्षा → 🏞️ नदी → 🌊 सागर → ☀️ वाष्पीकरण → 🌧️ बादल]
 
-[Agar koi structure/parts hon toh visual banao]
+[Agar koi comparison ho toh TABLE banao:]
+| विषय | बिंदु 1 | बिंदु 2 |
+|------|---------|---------|
+| ... | ... | ... |
 
-[Agar comparison ho toh TABLE banao:]
-| Cheez 1 | Cheez 2 |
-|---------|---------|
-| Point   | Point   |
-
-## 📊 Mahatvapurn Tathya, Ankde aur Jaankari
+## 📊 महत्वपूर्ण तथ्य, आंकड़े एवं जानकारी
 [Saari tables, statistics, diagrams, maps bullet points mein]
 
-## 📝 Saar (Summary)
-[5-8 crisp bullet points mein poore chapter ka recap]
+## 📝 सार (Summary)
+[6-8 crisp bullet points mein poore chapter ka recap]
 
 ## 🏛️ UPSC Foundation Link
-[2-3 bullets: is chapter ke concepts ka UPSC Prelims/Mains se sambandh — specific topics, papers]
+[2-3 bullets: is chapter ke concepts ka UPSC Prelims/Mains se sambandh]
 
-## 🔑 Mukhya Shabdavali (Key Terms)
+## 🔑 मुख्य शब्दावली (Key Terms)
 [10-15 important terms with one-line definitions]
 
 FORMATTING RULES:
-- ## = bold heading
-- ** = bold text
+- ## = bold heading with emoji
+- **text** = bold text
 - Diagrams se concept zyada clear hota hai — zaroor use karo
 - Tables se comparison zyada clear hoti hai
 - Do NOT skip any NCERT sub-topic
-- Do NOT add content not in NCERT`
+- Do NOT add content not in NCERT
+- Response POORA complete karo, beech mein mat rokna`
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -122,72 +134,67 @@ function getIQPrompt(
   const cls = parseInt(classNum)
   const group = getClassGroup(cls)
 
-  // Question counts per class group
   const counts =
-    group === "6-8"  ? { short: 7,  long: 5,  analyze: 5,  total: 17 } :
-    group === "9-10" ? { short: 9,  long: 9,  analyze: 7,  total: 25 } :
-                       { short: 12, long: 14, analyze: 9,  total: 35 }
-
-  const rangeNote =
-    group === "6-8"  ? "15–20 questions" :
-    group === "9-10" ? "20–25+ questions" :
-                       "25–40+ questions"
+    group === "6-8"  ? { mcq: 5, short: 7,  long: 5,  analyze: 3 } :
+    group === "9-10" ? { mcq: 5, short: 9,  long: 9,  analyze: 6 } :
+                       { mcq: 5, short: 12, long: 14, analyze: 9 }
 
   return `Tu ek expert NCERT teacher hai jo UPSC foundation ke liye questions banata hai.
 
 Chapter: NCERT Class ${classNum} ${subject} - ${chapterName} (${chapterNameHi})
 
-TARGET: ${rangeNote} (${counts.total} questions generate karo)
-COVERAGE: Questions poore chapter ko cover karein — saare sub-topics, examples, case studies, data.
-
 QUESTION BREAKDOWN:
-- ${counts.short} Laghu Uttariya Prashn / Short Answer (1–2 marks, 2–3 line answer)
-- ${counts.long} Dirgha Uttariya Prashn / Long Answer (3–5 marks, paragraph answer)
-- ${counts.analyze} Vishleshan / Analyze Questions (5 marks, critical thinking)
+- ${counts.mcq} MCQ questions (easy to medium)
+- ${counts.short} Laghu Uttariya Prashn / Short Answer (2-3 lines)
+- ${counts.long} Dirgha Uttariya Prashn / Long Answer (5-6 lines)
+- ${counts.analyze} Vishleshan / Analytical Questions (UPSC-style)
 
-FORMAT:
+COVERAGE: Poore chapter ko cover karo — saare sub-topics, examples, case studies, data.
+
+FORMAT (exactly isi tarah likho):
 
 ## बहुविकल्पीय प्रश्न — MCQ 🎯
-[Pehle 5 MCQ questions — easy se medium difficulty]
 
 **प्रश्न 1.** [Question text]
 (A) [Option]  (B) [Option]  (C) [Option]  (D) [Option]
 ✅ सही उत्तर: ([Letter]) [Option text]
-🏛️ UPSC: [One line UPSC relevance ya "Direct connection nahi"]
+🏛️ UPSC: [One line UPSC relevance]
 
-## लघु उत्तरीय प्रश्न ✍️ (${counts.short} Questions)
+[Continue for all ${counts.mcq} MCQs]
 
-**प्रश्न 1.** [Question]
-- Marks: 2
-- 🏛️ UPSC Basic: [relevance]
-- 💡 Answer: [2-3 line answer]
+## लघु उत्तरीय प्रश्न ✍️
+
+**प्रश्न ${counts.mcq + 1}.** [Question]
+- अंक: 2
+- 🏛️ UPSC: [relevance]
+- 💡 उत्तर: [2-3 line answer]
 
 [Continue for all ${counts.short} short questions]
 
-## दीर्घ उत्तरीय प्रश्न 📝 (${counts.long} Questions)
+## दीर्घ उत्तरीय प्रश्न 📝
 
-**प्रश्न 1.** [Question]
-- Marks: 5
-- 🏛️ UPSC Basic: [relevance]
-- 💡 Answer: [5-6 line detailed answer]
+**प्रश्न [N].** [Question]
+- अंक: 5
+- 🏛️ UPSC: [relevance]
+- 💡 उत्तर: [5-6 line detailed answer]
 
 [Continue for all ${counts.long} long questions]
 
-## विश्लेषणात्मक प्रश्न 🧠 (${counts.analyze} Questions)
+## विश्लेषणात्मक प्रश्न 🧠
 
-**प्रश्न 1.** [Higher order / analytical question]
-- Marks: 5
-- 🏛️ UPSC Basic: [relevance — these should have strong UPSC link]
-- 💡 Answer: [Analytical answer 4-5 lines]
+**प्रश्न [N].** [Higher order / analytical question]
+- अंक: 5
+- 🏛️ UPSC: [Strong UPSC connection]
+- 💡 उत्तर: [Analytical answer 4-5 lines]
 
-[Continue for all ${counts.analyze} analyze questions]
+[Continue for all ${counts.analyze} analytical questions]
 
 RULES:
 - Saare questions actual NCERT content se hon
 - Factual, conceptual aur application-based questions mix karo
 - Class ${classNum} ke hisab se appropriate difficulty
-- Questions Q1 se Q${counts.total} tak continuously number karo
-- Koi bhi sub-topic miss mat karo`
+- Questions continuously number karo
+- Response POORA complete karo`
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -211,7 +218,7 @@ Class ${classNum} level ke hisab se difficulty rakho.
 UPSC foundation cover karo.
 Har batch mein ek Assertion-Reason question zaroor ho.
 
-SIRF JSON array return karo, kuch aur mat likho:
+SIRF valid JSON array return karo, kuch aur mat likho:
 [
   {
     "question": "Saral Hindi mein question",
@@ -230,27 +237,21 @@ SIRF JSON array return karo, kuch aur mat likho:
 function getQuizBatchCounts(cls: number, quizMode: string): number {
   const group = getClassGroup(cls)
   if (quizMode === "full") {
-    // Full subject mode — more batches
     return group === "6-8" ? 5 : group === "9-10" ? 7 : 10
-  } else {
-    // Chapter mode:
-    // 6-8  → target 15–20 MCQs → 2 batches (20 questions)
-    // 9-10 → target 20–25+ MCQs → 3 batches (30 questions)
-    // 11-12→ target 25–40+ MCQs → 4 batches (40 questions)
-    return group === "6-8" ? 2 : group === "9-10" ? 3 : 4
   }
+  return group === "6-8" ? 2 : group === "9-10" ? 3 : 4
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Max tokens per tab & class group
+// ✅ FIX: Increased max_tokens significantly so content doesn't truncate
 // ─────────────────────────────────────────────────────────────────────────────
 function getMaxTokens(tab: string, cls: number): number {
   const group = getClassGroup(cls)
   if (tab === "notes") {
-    return group === "6-8" ? 1800 : group === "9-10" ? 2500 : 3500
+    return group === "6-8" ? 3000 : group === "9-10" ? 4000 : 5000
   }
   if (tab === "iq") {
-    return group === "6-8" ? 2500 : group === "9-10" ? 3500 : 4500
+    return group === "6-8" ? 3500 : group === "9-10" ? 5000 : 6000
   }
   return 2048 // quiz per batch
 }
@@ -287,6 +288,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing chapter_name" }, { status: 400 })
   }
 
+  if (!GROQ_API_KEY) {
+    return NextResponse.json({ error: "GROQ_API_KEY not configured" }, { status: 500 })
+  }
+
   const cls = parseInt(classNum)
 
   try {
@@ -297,6 +302,7 @@ export async function GET(request: Request) {
         getNotesPrompt(chapterName, chapterNameHi, subject, classNum),
         maxTokens
       )
+      if (!content) throw new Error("Empty response from Groq")
       return NextResponse.json({ content, chapterId, tab })
     }
 
@@ -307,6 +313,7 @@ export async function GET(request: Request) {
         getIQPrompt(chapterName, chapterNameHi, subject, classNum),
         maxTokens
       )
+      if (!content) throw new Error("Empty response from Groq")
       return NextResponse.json({ content, chapterId, tab })
     }
 
@@ -341,7 +348,6 @@ export async function GET(request: Request) {
       const results = await Promise.all(batchPromises)
       const allQ = results.flatMap(parseQuizJSON)
 
-      // Deduplicate
       const seen = new Set<string>()
       const unique = allQ.filter((q: any) => {
         if (!q?.question || seen.has(q.question)) return false
@@ -349,7 +355,6 @@ export async function GET(request: Request) {
         return true
       })
 
-      // Add quiz footer metadata
       const group = getClassGroup(cls)
       const timeLimit = group === "6-8" ? "5 min" : group === "9-10" ? "6 min" : "7 min"
 
@@ -362,14 +367,21 @@ export async function GET(request: Request) {
           timeLimit,
           negativeMarking: "-1 per wrong answer",
           classGroup: group,
-        }
+        },
       })
     }
 
     return NextResponse.json({ error: "Invalid tab" }, { status: 400 })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Content API error:", error)
-    return NextResponse.json({ error: String(error) }, { status: 500 })
+    return NextResponse.json(
+      { error: error?.message || String(error) },
+      { status: 500 }
+    )
   }
 }
+
+// ✅ FIX: Extend Vercel function timeout to 60 seconds
+export const maxDuration = 60
+        
