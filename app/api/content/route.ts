@@ -1,72 +1,124 @@
 import { NextResponse } from "next/server"
 
-const SHEET_ID = "1FgrIlKKhP9vwIXV6hn0ok3IxpZxgQbuTlSfstG7m-sE"
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
+
+function getPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string, tab: string): string {
+  const context = `NCERT Class ${classNum} ${subject} - Chapter: ${chapterName} (${chapterNameHi})`
+
+  if (tab === "notes") {
+    return `Tu ek expert NCERT teacher hai jo UPSC, RAS aur government exams ki preparation karata hai.
+
+Chapter: ${context}
+
+Is chapter ke comprehensive Hindi notes banao. Format exactly aisa hona chahiye:
+
+## [Main Topic Heading]
+[Topic ki explanation 2-3 lines mein]
+
+**[Sub Topic]**
+[Sub topic ki explanation]
+
+(i) [Point 1]
+(ii) [Point 2]
+(iii) [Point 3]
+
+## [Agla Main Topic]
+
+Rules:
+- ## se red bold heading banegi
+- ** se bold subheading banegi
+- (i)(ii)(iii) se numbered points
+- Sabse pehle chapter ka ek line overview do
+- UPSC/government exam ke important points zaroor include karo
+- Hindi mein likho, technical terms English mein rakh sakte ho
+- Minimum 400 words ka content do`
+  }
+
+  if (tab === "iq") {
+    return `Tu ek expert NCERT teacher hai jo UPSC, RAS aur government exams ki preparation karata hai.
+
+Chapter: ${context}
+
+Is chapter ke important questions aur unke answers Hindi mein banao. Format:
+
+## महत्वपूर्ण प्रश्न
+
+**प्रश्न 1: [Question]**
+उत्तर: [2-3 line detailed answer]
+
+**प्रश्न 2: [Question]**
+उत्तर: [Answer]
+
+## UPSC/RAS स्तर के प्रश्न
+
+**प्रश्न: [Higher order question]**
+उत्तर: [Detailed answer]
+
+Rules:
+- Minimum 10 questions do
+- Mix of 1 mark, 3 mark aur 5 mark questions
+- UPSC previous year related questions zaroor include karo
+- Hindi mein likho`
+  }
+
+  if (tab === "quiz") {
+    return `Create exactly 10 MCQ questions for NCERT Class ${classNum} ${subject} - ${chapterName}.
+
+Return ONLY a valid JSON array, no extra text:
+[
+  {
+    "question": "Question text in Hindi",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctIndex": 0,
+    "explanation": "Why this answer is correct"
+  }
+]
+
+Rules:
+- Questions Hindi mein, options Hindi ya English
+- Mix of easy, medium, hard difficulty
+- UPSC/government exam style questions
+- correctIndex is 0-based index of correct option`
+  }
+
+  return ""
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const chapterId = searchParams.get("chapter_id")
-  const tab = searchParams.get("tab")
+  const chapterId = searchParams.get("chapter_id") || ""
+  const chapterName = searchParams.get("chapter_name") || ""
+  const chapterNameHi = searchParams.get("chapter_name_hi") || ""
+  const subject = searchParams.get("subject") || ""
+  const classNum = searchParams.get("class") || ""
+  const tab = searchParams.get("tab") || "notes"
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=Sheet1`
+  if (!chapterName || !tab) {
+    return NextResponse.json({ error: "Missing params" }, { status: 400 })
+  }
+
+  const prompt = getPrompt(chapterName, chapterNameHi, subject, classNum, tab)
 
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } })
-    const csv = await res.text()
-
-    // CSV को सही तरीके से parse करो (multi-line cells handle करो)
-    const parseCSV = (text: string) => {
-      const results: string[][] = []
-      let row: string[] = []
-      let cell = ""
-      let inQuotes = false
-
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i]
-        const next = text[i + 1]
-
-        if (char === '"' && inQuotes && next === '"') {
-          cell += '"'
-          i++
-        } else if (char === '"') {
-          inQuotes = !inQuotes
-        } else if (char === ',' && !inQuotes) {
-          row.push(cell.trim())
-          cell = ""
-        } else if ((char === '\n' || char === '\r') && !inQuotes) {
-          if (char === '\r' && next === '\n') i++
-          row.push(cell.trim())
-          results.push(row)
-          row = []
-          cell = ""
-        } else {
-          cell += char
+    const res = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2048,
         }
-      }
-      if (cell || row.length) {
-        row.push(cell.trim())
-        results.push(row)
-      }
-      return results
-    }
+      }),
+      next: { revalidate: 86400 }
+    })
 
-    const rows = parseCSV(csv).slice(1) // header skip
+    const data = await res.json()
+    const content = data?.candidates?.[0]?.content?.parts?.[0]?.text || ""
 
-    const data = rows
-      .map((cols) => ({
-        chapter_id: cols[0] || "",
-        tab: cols[1] || "",
-        content: cols[2] || "",
-      }))
-      .filter((r) => {
-        if (!r.chapter_id) return false
-        if (chapterId && r.chapter_id !== chapterId) return false
-        if (tab && r.tab !== tab) return false
-        return true
-      })
-
-    return NextResponse.json({ data })
+    return NextResponse.json({ content, chapterId, tab })
   } catch (error) {
-    return NextResponse.json({ error: "Sheet fetch failed" }, { status: 500 })
+    return NextResponse.json({ error: "AI content load नहीं हो सका।" }, { status: 500 })
   }
-          }
-      
+}
