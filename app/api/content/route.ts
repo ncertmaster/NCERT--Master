@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`
 
 function getPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string, tab: string): string {
   const context = `NCERT Class ${classNum} ${subject} - Chapter: ${chapterName} (${chapterNameHi})`
@@ -121,5 +121,4 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json({ error: "AI content load नहीं हो सका।" }, { status: 500 })
   }
-                           }
-      
+                                                           }
