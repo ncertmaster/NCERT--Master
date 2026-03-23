@@ -327,21 +327,29 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                   </div>
                 </div>
                 <div className="flex gap-2 px-3 pb-3">
-                  <button
-                    onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
-                    className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
-                  >
-                    ⬇ डाउनलोड करें
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSelectedChapter(ch.id)
-                      setScreen(nextScreen[flow])
-                    }}
-                    className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
-                  >
-                    📖 ऑनलाइन पढ़ें
-                  </button>
+                  {flow === "quiz" ? (
+                    <button
+                      onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
+                      className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                    >
+                      🧠 Quiz शुरू करें
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
+                        className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                      >
+                        ⬇ डाउनलोड करें
+                      </button>
+                      <button
+                        onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
+                        className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
+                      >
+                        📖 ऑनलाइन पढ़ें
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -409,21 +417,29 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                 </div>
               </div>
               <div className="flex gap-2 px-3 pb-3">
-                <button
-                  onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
-                  className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
-                >
-                  ⬇ डाउनलोड करें
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedChapter(ch.id)
-                    setScreen(nextScreen[flow])
-                  }}
-                  className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
-                >
-                  📖 ऑनलाइन पढ़ें
-                </button>
+                {flow === "quiz" ? (
+                  <button
+                    onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
+                    className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                  >
+                    🧠 Quiz शुरू करें
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
+                      className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                    >
+                      ⬇ डाउनलोड करें
+                    </button>
+                    <button
+                      onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
+                      className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
+                    >
+                      📖 ऑनलाइन पढ़ें
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -463,6 +479,7 @@ function renderContent(content: string) {
           )
         }
 
+      
         // **text** whole line = Bold black subheading
         if (line.startsWith("**") && line.endsWith("**")) {
           return (
@@ -495,7 +512,6 @@ function renderContent(content: string) {
           )
         }
 
-        
         // Normal paragraph
         return (
           <p key={i} className="text-sm leading-relaxed text-card-foreground">
