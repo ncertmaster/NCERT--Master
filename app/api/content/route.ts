@@ -20,7 +20,19 @@ async function callGroq(prompt: string, maxTokens = 3000): Promise<string> {
     },
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content: `Tu ek expert NCERT teacher hai jo SIRF DEVANAGARI HINDI mein likhta hai.
+MANDATORY RULES — inn ko kabhi mat todo:
+1. POORA content HINDI (Devanagari script) mein likhna hai
+2. Roman/English script mein KUCH BHI mat likho — headings, bullets, explanations sab Hindi mein
+3. Scientific/technical terms: Hindi mein likho + bracket mein English: जैसे "प्रकाश संश्लेषण (Photosynthesis)"
+4. Format aur structure bilkul waise rakho jaisa prompt mein bola gaya hai
+5. NCERT content se bahar bilkul mat jao`
+        },
+        { role: "user", content: prompt }
+      ],
       temperature: 0.4,
       max_tokens: maxTokens,
     })
@@ -360,5 +372,4 @@ export async function GET(request: Request) {
     console.error("Content API error:", error)
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
-    }
-      
+}
