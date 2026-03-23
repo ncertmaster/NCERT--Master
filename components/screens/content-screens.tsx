@@ -310,41 +310,37 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
         <ScreenHeader title={book.nameHi} />
-        <div className="mx-auto w-full max-w-md px-4 py-4">
-          <div className="flex flex-col gap-2.5">
+        <div className="mx-auto w-full max-w-md px-4 py-3">
+          <div className="flex flex-col gap-2">
             {book.chapters.map((ch: Chapter, idx: number) => (
               <div
                 key={ch.id}
-                className="animate-fade-in rounded-2xl border border-border bg-card shadow-sm"
+                className="animate-fade-in rounded-xl border border-border bg-card shadow-sm"
               >
-                {/* Chapter Name Row */}
-                <div className="flex items-center gap-3 p-4 pb-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-sm font-bold text-secondary-foreground">
+                <div className="flex items-center gap-3 px-3 pt-3 pb-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
                     {idx + 1}
-                  </div>
+                  </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-card-foreground">{ch.name}</p>
-                    <p className="text-xs text-muted-foreground">{ch.nameHi}</p>
+                    <p className="text-[13px] font-semibold leading-tight text-card-foreground">{ch.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                   </div>
                 </div>
-                {/* Buttons Row */}
-                <div className="flex gap-2 px-4 pb-4">
+                <div className="flex gap-2 px-3 pb-3">
                   <button
-                    onClick={() => {
-                      alert("डाउनलोड जल्द आ रहा है!")
-                    }}
-                    className="flex-1 rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white transition-all hover:bg-violet-700 active:scale-[0.97]"
+                    onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
+                    className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
                   >
-                    डाउनलोड करें
+                    ⬇ डाउनलोड करें
                   </button>
                   <button
                     onClick={() => {
                       setSelectedChapter(ch.id)
                       setScreen(nextScreen[flow])
                     }}
-                    className="flex-1 rounded-xl bg-orange-500 py-2.5 text-sm font-semibold text-white transition-all hover:bg-orange-600 active:scale-[0.97]"
+                    className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
                   >
-                    ऑनलाइन पढ़ें
+                    📖 ऑनलाइन पढ़ें
                   </button>
                 </div>
               </div>
@@ -396,42 +392,37 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={`${subject.name} - ${getText("selectChapter", language)}`} />
-      <div className="mx-auto w-full max-w-md px-4 py-4">
-        <div className="flex flex-col gap-2.5">
+      <div className="mx-auto w-full max-w-md px-4 py-3">
+        <div className="flex flex-col gap-2">
           {book.chapters.map((ch: Chapter, idx: number) => (
             <div
               key={ch.id}
-              className="animate-fade-in rounded-2xl border border-border bg-card shadow-sm"
+              className="animate-fade-in rounded-xl border border-border bg-card shadow-sm"
             >
-              {/* Chapter Name Row */}
-              <div className="flex items-center gap-3 p-4 pb-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-sm font-bold text-secondary-foreground">
+              <div className="flex items-center gap-3 px-3 pt-3 pb-2">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
                   {idx + 1}
-                </div>
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-card-foreground">{ch.name}</p>
-                  <p className="text-xs text-muted-foreground">{ch.nameHi}</p>
+                  <p className="text-[13px] font-semibold leading-tight text-card-foreground">{ch.name}</p>
+                  <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                 </div>
               </div>
-              {/* Buttons Row */}
-              <div className="flex gap-2 px-4 pb-4">
+              <div className="flex gap-2 px-3 pb-3">
                 <button
-                  onClick={() => {
-                    // Ads placeholder - baad mein lagayenge
-                    alert("डाउनलोड जल्द आ रहा है!")
-                  }}
-                  className="flex-1 rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white transition-all hover:bg-violet-700 active:scale-[0.97]"
+                  onClick={() => alert("डाउनलोड जल्द आ रहा है!")}
+                  className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
                 >
-                  डाउनलोड करें
+                  ⬇ डाउनलोड करें
                 </button>
                 <button
                   onClick={() => {
                     setSelectedChapter(ch.id)
                     setScreen(nextScreen[flow])
                   }}
-                  className="flex-1 rounded-xl bg-orange-500 py-2.5 text-sm font-semibold text-white transition-all hover:bg-orange-600 active:scale-[0.97]"
+                  className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
                 >
-                  ऑनलाइन पढ़ें
+                  📖 ऑनलाइन पढ़ें
                 </button>
               </div>
             </div>
@@ -478,6 +469,7 @@ export function NotesContentScreen() {
     </div>
   )
 }
+
 export function IQContentScreen() {
   const { language, selectedChapter } = useApp()
   const { content, loading, error } = useSheetContent(selectedChapter, "iq")
@@ -487,7 +479,7 @@ export function IQContentScreen() {
       <ScreenHeader title={getText("importantQuestions", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {loading && (
-          <div className="flex flex-col items-center justify-center py-10 gap-3">
+               <div className="flex flex-col items-center justify-center py-10 gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
           </div>
