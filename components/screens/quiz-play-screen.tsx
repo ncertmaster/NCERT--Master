@@ -1,44 +1,159 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
-import { getQuizQuestions } from "@/lib/data"
+import { subjectsByClass, streamsByClass } from "@/lib/data"
+import type { Subject, Chapter, Stream, Book } from "@/lib/data"
 import { CheckCircle2, XCircle, Trophy, RotateCcw } from "lucide-react"
+
+type QuizQuestion = {
+  question: string
+  options: string[]
+  correctIndex: number
+  explanation?: string
+}
+
+function getChapterAndSubjectInfo(
+  selectedClass: number | null,
+  selectedStream: string | null,
+  selectedSubject: string | null,
+  selectedBook: string | null,
+  selectedChapter: string | null,
+  quizMode: string | null
+) {
+  if (!selectedClass) return null
+
+  let subjects: Subject[] = []
+  if (selectedClass === 11 || selectedClass === 12) {
+    const streams: Stream[] = streamsByClass[selectedClass] || []
+    const stream = streams.find((s: Stream) => s.id === selectedStream)
+    subjects = stream?.subjects || []
+  } else {
+    subjects = subjectsByClass[selectedClass] || []
+  }
+
+  const subject = subjects.find((s: Subject) => s.id === selectedSubject)
+  if (!subject) return null
+
+  if (quizMode === "chapter" && selectedChapter) {
+    for (const book of subject.books) {
+      const chapter = book.chapters.find((ch: Chapter) => ch.id === selectedChapter)
+      if (chapter) {
+        return {
+          chapterName: chapter.name,
+          chapterNameHi: chapter.nameHi,
+          subjectName: subject.name,
+          className: String(selectedClass),
+          mode: "chapter"
+        }
+      }
+    }
+  }
+
+  if (quizMode === "full") {
+    return {
+      chapterName: "",
+      chapterNameHi: "",
+      subjectName: subject.name,
+      className: String(selectedClass),
+      mode: "full"
+    }
+  }
+
+  return null
+}
 
 export function QuizPlayScreen() {
   const {
     language,
+    selectedClass,
+    selectedStream,
     selectedSubject,
+    selectedBook,
     selectedChapter,
     quizMode,
     setQuizScore,
     setScreen,
   } = useApp()
 
-  const questions = getQuizQuestions(
-    selectedSubject || "",
-    quizMode === "chapter" ? selectedChapter || undefined : undefined
-  )
-
+  const [questions, setQuestions] = useState<QuizQuestion[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [isAnswered, setIsAnswered] = useState(false)
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
 
-  // ✅ Empty state — crash fix
-  if (!questions || questions.length === 0) {
+  useEffect(() => {
+    const info = getChapterAndSubjectInfo(
+      selectedClass, selectedStream, selectedSubject,
+      selectedBook, selectedChapter, quizMode
+    )
+
+    if (!info) {
+      setError("Chapter info नहीं मिली।")
+      setLoading(false)
+      return
+    }
+
+    const params = new URLSearchParams({
+      chapter_id: selectedChapter || "full",
+      chapter_name: info.chapterName || info.subjectName,
+      chapter_name_hi: info.chapterNameHi || "",
+      subject: info.subjectName,
+      class: info.className,
+      tab: "quiz",
+      quiz_mode: info.mode,
+    })
+
+    fetch(`/api/content?${params}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setError(data.error)
+          setLoading(false)
+          return
+        }
+        try {
+          const clean = data.content.replace(/```json|```/g, "").trim()
+          const parsed = JSON.parse(clean)
+          setQuestions(parsed)
+        } catch {
+          setError("Questions parse नहीं हो सके।")
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setError("Quiz load नहीं हो सका।")
+        setLoading(false)
+      })
+  }, [selectedChapter, selectedSubject, quizMode])
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        <ScreenHeader title="Quiz" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm text-muted-foreground">AI प्रश्न तैयार कर रहा है...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error || !questions || questions.length === 0) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
         <ScreenHeader title="Quiz" />
         <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
           <Trophy className="h-16 w-16 text-muted-foreground/30" />
           <p className="text-base font-semibold text-muted-foreground">
-            {language === "hi"
-              ? "इस अध्याय के लिए अभी कोई प्रश्न उपलब्ध नहीं हैं।"
-              : "No questions available for this chapter yet."}
+            {error || "इस अध्याय के लिए अभी कोई प्रश्न उपलब्ध नहीं हैं।"}
           </p>
           <button
             onClick={() => setScreen("dashboard")}
@@ -116,7 +231,7 @@ export function QuizPlayScreen() {
               </button>
               <button
                 onClick={() => setScreen("dashboard")}
-                className="glow-btn rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-[0.97]"
+                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:opacity-90 active:scale-[0.97]"
               >
                 {getText("backToDashboard", language)}
               </button>
@@ -128,7 +243,7 @@ export function QuizPlayScreen() {
   }
 
   return (
-     <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <ScreenHeader title={`${getText("question", language)} ${currentIndex + 1} ${getText("of", language)} ${questions.length}`} />
       <div className="mx-auto w-full max-w-md flex-1 px-4 py-5">
         <div className="mb-5 h-1.5 overflow-hidden rounded-full bg-secondary">
@@ -177,6 +292,11 @@ export function QuizPlayScreen() {
         </div>
         {isAnswered && (
           <div className="mt-5 animate-fade-in">
+            {currentQuestion.explanation && (
+              <div className="mb-3 rounded-xl border border-border bg-card/50 p-3">
+                <p className="text-xs text-muted-foreground">{currentQuestion.explanation}</p>
+              </div>
+            )}
             <div className={`mb-4 rounded-xl p-3 text-center text-sm font-semibold ${
               selectedOption === currentQuestion.correctIndex
                 ? "bg-success/10 text-success"
@@ -188,7 +308,7 @@ export function QuizPlayScreen() {
             </div>
             <button
               onClick={handleNext}
-              className="glow-btn w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
+              className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
             >
               {currentIndex + 1 >= questions.length
                 ? getText("score", language)
@@ -199,4 +319,4 @@ export function QuizPlayScreen() {
       </div>
     </div>
   )
-              }
+                       }
