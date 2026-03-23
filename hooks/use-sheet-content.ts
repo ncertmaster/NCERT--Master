@@ -1,11 +1,47 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useApp } from "@/lib/app-context"
+import { subjectsByClass, streamsByClass } from "@/lib/data"
+import type { Subject, Book, Chapter, Stream } from "@/lib/data"
 
-const SHEET_ID = "1FgrIlKKhP9vwIXV6hn0ok3IxpZxgQbuTlSfstG7m-sE"
-const SHEET_NAME = "Sheet1"
+function getChapterInfo(
+  chapterId: string | null,
+  selectedClass: number | null,
+  selectedStream: string | null,
+  selectedSubject: string | null,
+  selectedBook: string | null
+) {
+  if (!chapterId || !selectedClass) return null
+
+  let subjects: Subject[] = []
+
+  if (selectedClass === 11 || selectedClass === 12) {
+    const streams: Stream[] = streamsByClass[selectedClass] || []
+    const stream = streams.find((s: Stream) => s.id === selectedStream)
+    subjects = stream?.subjects || []
+  } else {
+    subjects = subjectsByClass[selectedClass] || []
+  }
+
+  for (const subject of subjects) {
+    for (const book of subject.books) {
+      const chapter = book.chapters.find((ch: Chapter) => ch.id === chapterId)
+      if (chapter) {
+        return {
+          chapterName: chapter.name,
+          chapterNameHi: chapter.nameHi,
+          subjectName: subject.name,
+          className: String(selectedClass),
+        }
+      }
+    }
+  }
+  return null
+}
 
 export function useSheetContent(chapterId: string | null, tab: string) {
+  const { selectedClass, selectedStream, selectedSubject, selectedBook } = useApp()
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,41 +52,43 @@ export function useSheetContent(chapterId: string | null, tab: string) {
       return
     }
 
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&headers=1`
+    setLoading(true)
+    setContent("")
+    setError(null)
 
-    fetch(url)
-      .then((res) => res.text())
-      .then((text) => {
-        // Remove Google's wrapper
-        const cleanText = text.replace(/^[^{]*/, "").replace(/[^}]*$/, "")
-        const json = JSON.parse(cleanText)
-        const rows = json.table.rows
+    const info = getChapterInfo(chapterId, selectedClass, selectedStream, selectedSubject, selectedBook)
 
-        if (!rows || rows.length === 0) {
-          setContent("")
-          setLoading(false)
-          return
-        }
+    if (!info) {
+      setError("Chapter info नहीं मिली।")
+      setLoading(false)
+      return
+    }
 
-        const match = rows.find(
-          (row: any) =>
-            row.c?.[0]?.v?.toString().trim() === chapterId.trim() &&
-            row.c?.[1]?.v?.toString().trim().toLowerCase() === tab.trim().toLowerCase()
-        )
+    const params = new URLSearchParams({
+      chapter_id: chapterId,
+      chapter_name: info.chapterName,
+      chapter_name_hi: info.chapterNameHi,
+      subject: info.subjectName,
+      class: info.className,
+      tab,
+    })
 
-        if (match && match.c?.[2]?.v) {
-          setContent(match.c[2].v.toString())
+    fetch(`/api/content?${params}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setError(data.error)
         } else {
-          setContent("")
+          setContent(data.content || "")
         }
         setLoading(false)
       })
-      .catch((err) => {
-        console.error("Sheet fetch error:", err)
+      .catch(() => {
         setError("Content load नहीं हो सका।")
         setLoading(false)
       })
   }, [chapterId, tab])
 
   return { content, loading, error }
-}
+          }
+        
