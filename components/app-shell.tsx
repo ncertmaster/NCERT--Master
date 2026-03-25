@@ -12,6 +12,7 @@ import {
   NotesContentScreen,
   IQContentScreen,
   BooksListScreen,
+  BooksReaderScreen,
 } from "@/components/screens/content-screens"
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
@@ -29,6 +30,7 @@ export function AppShell() {
       case "books-subject": return <SubjectSelectScreen flow="books" />
       case "books-chapter": return <ChapterSelectScreen flow="books" />
       case "books-list": return <BooksListScreen />
+      case "books-reader": return <BooksReaderScreen />
       case "books-content": return <BookContentScreen />
       case "notes-class": return <ClassSelectScreen flow="notes" />
       case "notes-subject": return <SubjectSelectScreen flow="notes" />
@@ -53,4 +55,4 @@ export function AppShell() {
       {renderScreen()}
     </main>
   )
-}
+        }
