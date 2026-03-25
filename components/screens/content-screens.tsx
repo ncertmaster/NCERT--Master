@@ -50,7 +50,9 @@ function readCache(key: string): string | null {
 }
 
 function triggerDownload(content: string, filename: string) {
-  const blob = new Blob([content], { type: "text/plain;charset=utf-8" })
+  // BOM (Byte Order Mark) add karo — Windows/Android me Hindi text sahi dikhega
+  const BOM = "\uFEFF"
+  const blob = new Blob([BOM + content], { type: "text/plain;charset=utf-8" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
@@ -196,7 +198,6 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   const { language, selectedClass, selectedStream, setScreen, setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter } = useApp()
 
   React.useEffect(() => {
-    // Only reset subject/book/chapter — DO NOT reset stream (it's set before reaching here for class 11/12)
     setSelectedSubject(null)
     setSelectedBook(null)
     setSelectedChapter(null)
@@ -210,9 +211,39 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     books: "books-list", notes: "notes-chapter", iq: "iq-chapter", quiz: "quiz-mode",
   }
 
-  // Class 11/12 with stream already selected — show subjects of that stream
-  if ((selectedClass === 11 || selectedClass === 12) && selectedStream) {
-    const streams: Stream[] = streamsByClass[selectedClass] || []
+  const is1112 = selectedClass === 11 || selectedClass === 12
+
+  // ── CASE 1: Class 11/12, stream NOT yet selected → show stream list
+  if (is1112 && !selectedStream) {
+    const streams: Stream[] = streamsByClass[selectedClass!] || []
+    return (
+      <div className="flex min-h-screen flex-col bg-background pb-20">
+        <ScreenHeader title={`${getText("class", language)} ${selectedClass} - Stream`} />
+        <div className="mx-auto w-full max-w-md px-4 py-4">
+          <div className="flex flex-col gap-3">
+            {streams.map((stream: Stream) => (
+              <button
+                key={stream.id}
+                onClick={() => setSelectedStream(stream.id)}
+                className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+              >
+                <div>
+                  <p className="text-base font-semibold text-card-foreground">{stream.nameHi}</p>
+                  <p className="text-xs text-muted-foreground">{stream.name}</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+        </div>
+        <BottomTabs activeTab={tabKey[flow]} />
+      </div>
+    )
+  }
+
+  // ── CASE 2: Class 11/12, stream selected → show subjects
+  if (is1112 && selectedStream) {
+    const streams: Stream[] = streamsByClass[selectedClass!] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
     const subjects = (stream?.subjects || []).filter((s: Subject) => Array.isArray(s.tabs) && s.tabs.includes(flow))
     return (
@@ -251,6 +282,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     )
   }
 
+  // ── CASE 3: Class 6–10 → show subjects directly
   const subjects: Subject[] = selectedClass
     ? (subjectsByClass[selectedClass] || []).filter((s: Subject) => s.tabs.includes(flow))
     : []
@@ -474,8 +506,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const subject = subjects.find((s: Subject) => s.id === selectedSubject)
   if (!subject) return null
-
-  if (!selectedBook && subject.books.length > 1) {
+if (!selectedBook && subject.books.length > 1) {
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
         <ScreenHeader title={`${subject.nameHi} - Book`} />
@@ -681,12 +712,8 @@ export function BookContentScreen() {
 // Generates official NCERT epathshala URL for any book
 // Uses the standard NCERT digital textbook URL pattern
 function getNcertUrl(classNum: number, bookId: string, bookName: string): string {
-  // NCERT epathshala — official govt platform, always legal & free
-  // URL pattern: https://epathshala.nic.in/e-pathshala-4/flip/?id=<code>
-  // Fallback: NCERT textbook page filtered by class
-  const classStr = classNum.toString().padStart(2, "0")
-  // Direct NCERT textbook listing page for the class — always works, no copyright issue
-  return `https://ncert.nic.in/textbook.php?class=${classNum}`
+  // epathshala.nic.in — official NCERT govt platform, allows embedding
+  return `https://epathshala.nic.in/e-pathshala-4/profile/?id=${classNum}`
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -758,11 +785,11 @@ export function BooksListScreen() {
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
                   >
                     <BookOpen className="h-3.5 w-3.5" />
-                    📖 ऐप में पढ़ें
+                    🌐 ऑनलाइन पढ़ें
                   </button>
                   <button
                     onClick={() => {
-                      const url = book.ncertUrl || `https://ncert.nic.in/textbook.php?class=${selectedClass}`
+                      const url = book.ncertUrl || `https://epathshala.nic.in/e-pathshala-4/profile/?id=${selectedClass}`
                       window.open(url, "_blank", "noopener,noreferrer")
                     }}
                     className="flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-all active:scale-[0.97]"
@@ -881,4 +908,4 @@ export function BooksReaderScreen() {
       />
     </div>
   )
-            }
+      }
