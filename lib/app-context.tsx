@@ -1,20 +1,11 @@
 "use client"
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
-import { createClient } from "@supabase/supabase-js"
 import type { Language } from "@/lib/translations"
 import type { ClassNumber } from "@/lib/data"
 
-// ─── Supabase client ──────────────────────────────────────────────────────────
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 export type AppScreen =
   | "splash"
-  | "login"
-  | "signup"
   | "setup"
   | "dashboard"
   | "books-class"
@@ -93,86 +84,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
-  // ─── On app load: check Supabase session OR localStorage ─────────────────
+  // ─── On app load: check localStorage only ────────────────────────────────
   useEffect(() => {
-    async function initSession() {
-      try {
-        const savedLanguage = localStorage.getItem("ncert_language") as Language | null
-
-        // 1. Check Supabase session first (Google OAuth / Phone OTP users)
-        const { data: { session } } = await supabase.auth.getSession()
-
-        if (session?.user) {
-          const supaUser = session.user
-          const savedMeta = localStorage.getItem("ncert_user")
-          let existingMeta: UserProfile | null = null
-          try { existingMeta = savedMeta ? JSON.parse(savedMeta) : null } catch {}
-
-          const user: UserProfile = {
-            name: existingMeta?.name || supaUser.user_metadata?.name || supaUser.email?.split("@")[0] || "Student",
-            email: supaUser.email || supaUser.phone || "",
-            classNumber: existingMeta?.classNumber || supaUser.user_metadata?.classNumber || 10,
-            aim: existingMeta?.aim || supaUser.user_metadata?.aim || "",
-            photo: supaUser.user_metadata?.avatar_url || null,
-          }
-
-          try { localStorage.setItem("ncert_user", JSON.stringify(user)) } catch {}
-
-          // If new Google user (no classNumber set), go to setup
-          const isNew = !existingMeta?.classNumber && !supaUser.user_metadata?.classNumber
-          setState(prev => ({
-            ...prev,
-            user,
-            screen: isNew ? "setup" : "dashboard",
-            language: savedLanguage || "en",
-          }))
-          return
-        }
-
-        // 2. Fallback: localStorage (email/password users who were already logged in)
-        const savedUser = localStorage.getItem("ncert_user")
-        if (savedUser) {
-          const user = JSON.parse(savedUser)
-          setState(prev => ({
-            ...prev,
-            user,
-            screen: "dashboard",
-            language: savedLanguage || "en",
-          }))
-          return
-        }
-
-        // 3. Not logged in
-        setState(prev => ({ ...prev, screen: "login" }))
-      } catch {
-        setState(prev => ({ ...prev, screen: "login" }))
-      }
-    }
-
-    initSession()
-
-    // Listen for Supabase auth changes (login/logout events)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (_event === "SIGNED_OUT") {
-        try { localStorage.removeItem("ncert_user") } catch {}
+    try {
+      const savedUser = localStorage.getItem("ncert_user")
+      const savedLanguage = localStorage.getItem("ncert_language") as Language | null
+      if (savedUser) {
+        const user = JSON.parse(savedUser)
         setState(prev => ({
-          screen: "login",
-          user: null,
-          language: prev.language,
-          selectedClass: null,
-          selectedStream: null,
-          selectedSubject: null,
-          selectedBook: null,
-          selectedChapter: null,
-          quizMode: null,
-          quizScore: 0,
-          quizTotal: 0,
-          screenHistory: [],
+          ...prev,
+          user,
+          screen: "dashboard",
+          language: savedLanguage || "en",
         }))
+      } else {
+        setState(prev => ({ ...prev, screen: "setup" }))
       }
-    })
-
-    return () => subscription.unsubscribe()
+    } catch {
+      setState(prev => ({ ...prev, screen: "setup" }))
+    }
   }, [])
 
   const setScreen = useCallback((screen: AppScreen) => {
@@ -242,13 +172,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState(prev => ({ ...prev, quizScore, quizTotal }))
   }, [])
 
-  const logout = useCallback(async () => {
-    try {
-      await supabase.auth.signOut()
-      localStorage.removeItem("ncert_user")
-    } catch {}
+  const logout = useCallback(() => {
+    try { localStorage.removeItem("ncert_user") } catch {}
     setState(prev => ({
-      screen: "login",
+      screen: "setup",
       user: null,
       language: prev.language,
       selectedClass: null,
