@@ -11,6 +11,7 @@ import {
   BookContentScreen,
   NotesContentScreen,
   IQContentScreen,
+  BooksListScreen,
 } from "@/components/screens/content-screens"
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
@@ -27,6 +28,7 @@ export function AppShell() {
       case "books-class": return <ClassSelectScreen flow="books" />
       case "books-subject": return <SubjectSelectScreen flow="books" />
       case "books-chapter": return <ChapterSelectScreen flow="books" />
+      case "books-list": return <BooksListScreen />
       case "books-content": return <BookContentScreen />
       case "notes-class": return <ClassSelectScreen flow="notes" />
       case "notes-subject": return <SubjectSelectScreen flow="notes" />
