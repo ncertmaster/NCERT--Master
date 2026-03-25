@@ -2,7 +2,6 @@
 import React from "react"
 import { useApp } from "@/lib/app-context"
 import { SplashScreen } from "@/components/screens/splash-screen"
-import { AuthScreen } from "@/components/screens/auth-screen"
 import { SetupScreen } from "@/components/screens/setup-screen"
 import { DashboardScreen } from "@/components/screens/dashboard-screen"
 import {
@@ -23,8 +22,6 @@ export function AppShell() {
   const renderScreen = () => {
     switch (screen) {
       case "splash": return <SplashScreen />
-      case "login": return <AuthScreen />
-      case "signup": return <AuthScreen />
       case "setup": return <SetupScreen />
       case "dashboard": return <DashboardScreen />
       case "books-class": return <ClassSelectScreen flow="books" />
