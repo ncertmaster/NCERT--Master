@@ -2,12 +2,10 @@
 
 import React from "react"
 import { useApp } from "@/lib/app-context"
-import { ChevronLeft, LogOut, Globe, Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import { ChevronLeft, LogOut } from "lucide-react"
 
 export function SettingsScreen() {
-  const { goBack, logout, setScreen, language, setLanguage } = useApp()
-  const { theme, setTheme } = useTheme()
+  const { goBack, logout, setScreen } = useApp()
 
   const handleLogout = () => {
     logout()
@@ -23,54 +21,6 @@ export function SettingsScreen() {
         <h1 className="ml-2 text-xl font-bold">Settings</h1>
       </div>
       <div className="flex-1 p-4 space-y-6">
-        <div className="p-4 bg-card border rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Globe className="w-5 h-5 text-primary" />
-              <span className="font-medium">Language</span>
-            </div>
-            <div className="flex bg-muted rounded-lg p-1">
-              <button
-                onClick={() => setLanguage("en")}
-                className={`px-4 py-1 rounded-md text-sm transition-all ${language === "en" ? "bg-background shadow-sm font-bold" : ""}`}
-              >
-                English
-              </button>
-              <button
-                onClick={() => setLanguage("hi")}
-                className={`px-4 py-1 rounded-md text-sm transition-all ${language === "hi" ? "bg-background shadow-sm font-bold" : ""}`}
-              >
-                Hindi
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 bg-card border rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {theme === "dark" ? (
-                <Moon className="w-5 h-5 text-primary" />
-              ) : (
-                <Sun className="w-5 h-5 text-primary" />
-              )}
-              <span className="font-medium">Theme</span>
-            </div>
-            <div className="flex bg-muted rounded-lg p-1">
-              <button
-                onClick={() => setTheme("light")}
-                className={`px-4 py-1 rounded-md text-sm transition-all ${theme === "light" ? "bg-background shadow-sm font-bold" : ""}`}
-              >
-                Light
-              </button>
-              <button
-                onClick={() => setTheme("dark")}
-                className={`px-4 py-1 rounded-md text-sm transition-all ${theme === "dark" ? "bg-background shadow-sm font-bold" : ""}`}
-              >
-                Dark
-              </button>
-            </div>
-          </div>
-        </div>
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-50 border border-red-100 rounded-xl hover:bg-red-200 transition-colors"
@@ -81,4 +31,4 @@ export function SettingsScreen() {
       </div>
     </div>
   )
-      }
+}
