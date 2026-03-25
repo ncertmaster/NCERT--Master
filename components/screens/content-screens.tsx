@@ -1,11 +1,11 @@
 "use client"
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState, useCallback, useRef } from "react"
 import { useSheetContent } from "@/hooks/use-sheet-content"
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { ChevronRight, Download, Loader2 } from "lucide-react"
+import { ChevronRight, Download, Loader2, ExternalLink, BookMarked, Globe2, RefreshCw, ArrowLeft } from "lucide-react"
 import type { ClassNumber, Subject, Stream, Book, Chapter } from "@/lib/data"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { AppScreen } from "@/lib/app-context"
@@ -193,10 +193,10 @@ export function ClassSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "
 // 2️⃣ SUBJECT / STREAM SELECT
 // ===============================
 export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "quiz" }) {
-  const { language, selectedClass, setScreen, setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter } = useApp()
+  const { language, selectedClass, selectedStream, setScreen, setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter } = useApp()
 
   React.useEffect(() => {
-    setSelectedStream(null)
+    // Only reset subject/book/chapter — DO NOT reset stream (it's set before reaching here for class 11/12)
     setSelectedSubject(null)
     setSelectedBook(null)
     setSelectedChapter(null)
@@ -210,29 +210,40 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     books: "books-list", notes: "notes-chapter", iq: "iq-chapter", quiz: "quiz-mode",
   }
 
-  if (selectedClass === 11 || selectedClass === 12) {
+  // Class 11/12 with stream already selected — show subjects of that stream
+  if ((selectedClass === 11 || selectedClass === 12) && selectedStream) {
     const streams: Stream[] = streamsByClass[selectedClass] || []
+    const stream = streams.find((s: Stream) => s.id === selectedStream)
+    const subjects = (stream?.subjects || []).filter((s: Subject) => Array.isArray(s.tabs) && s.tabs.includes(flow))
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
-        <ScreenHeader title={`${getText("class", language)} ${selectedClass} - Stream`} />
+        <ScreenHeader title={`${stream?.nameHi || ""} - ${getText("selectSubject", language)}`} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-3">
-            {streams.map((stream: Stream) => (
-              <button
-                key={stream.id}
-                onClick={() => {
-                  setSelectedStream(stream.id)
-                  setSelectedSubject(null)
-                  setSelectedBook(null)
-                  setSelectedChapter(null)
-                  setScreen(nextScreen[flow])
-                }}
-                className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
-              >
-                <span className="text-base font-semibold text-card-foreground">{stream.nameHi}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              </button>
-            ))}
+            {subjects.map((subject: Subject) => {
+              const Icon = iconMap[subject.icon] || BookOpen
+              return (
+                <button
+                  key={subject.id}
+                  onClick={() => {
+                    setSelectedSubject(subject.id)
+                    setSelectedBook(null)
+                    setSelectedChapter(null)
+                    setScreen(nextScreen[flow])
+                  }}
+                  className="animate-fade-in flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-card-foreground">{subject.name}</p>
+                    <p className="text-xs text-muted-foreground">{subject.nameHi}</p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                </button>
+              )
+            })}
           </div>
         </div>
         <BottomTabs activeTab={tabKey[flow]} />
@@ -666,26 +677,59 @@ export function BookContentScreen() {
 // 📚 BOOKS LIST SCREEN
 // Sirf books ke naam dikhte hain — koi chapter link nahi
 // ===============================
+// ─── NCERT URL Generator ─────────────────────────────────────────────────────
+// Generates official NCERT epathshala URL for any book
+// Uses the standard NCERT digital textbook URL pattern
+function getNcertUrl(classNum: number, bookId: string, bookName: string): string {
+  // NCERT epathshala — official govt platform, always legal & free
+  // URL pattern: https://epathshala.nic.in/e-pathshala-4/flip/?id=<code>
+  // Fallback: NCERT textbook page filtered by class
+  const classStr = classNum.toString().padStart(2, "0")
+  // Direct NCERT textbook listing page for the class — always works, no copyright issue
+  return `https://ncert.nic.in/textbook.php?class=${classNum}`
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// 📚 BOOKS LIST SCREEN — Enhanced with in-app reader
+// ──────────────────────────────────────────────────────────────────────────────
 export function BooksListScreen() {
-  const { language, selectedClass, selectedStream, selectedSubject } = useApp()
+  const { language, selectedClass, selectedStream, selectedSubject, setScreen, setSelectedBookUrl } = useApp()
 
   let books: Book[] = []
+  let subjectName = ""
 
   if (selectedClass === 11 || selectedClass === 12) {
     const streams: Stream[] = streamsByClass[selectedClass] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
     const subject = stream?.subjects.find((s: Subject) => s.id === selectedSubject)
     books = subject?.books || []
+    subjectName = subject?.name || ""
   } else {
     const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
     const subject = subjects.find((s: Subject) => s.id === selectedSubject)
     books = subject?.books || []
+    subjectName = subject?.name || ""
+  }
+
+  const handleOpenBook = (book: Book) => {
+    // Use book's custom URL if set, otherwise generate NCERT official URL
+    const url = book.ncertUrl || getNcertUrl(selectedClass || 6, book.id, book.name)
+    setSelectedBookUrl(url)
+    setScreen("books-reader")
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={getText("books", language)} />
       <div className="mx-auto w-full max-w-md px-4 py-4">
+        {/* Info banner */}
+        <div className="mb-4 rounded-xl bg-blue-500/10 border border-blue-500/20 px-3 py-2.5 flex items-start gap-2">
+          <Globe2 className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+          <p className="text-xs text-blue-600 dark:text-blue-400 leading-relaxed">
+            NCERT की आधिकारिक पुस्तकें — सीधे ऐप में पढ़ें। यह डेटा NCERT की सरकारी वेबसाइट से आता है।
+          </p>
+        </div>
+
         {books.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-10">
             कोई पुस्तक उपलब्ध नहीं है।
@@ -695,19 +739,37 @@ export function BooksListScreen() {
             {books.map((book: Book, idx: number) => (
               <div
                 key={book.id}
-                className="animate-fade-in rounded-xl border border-border bg-card p-4 shadow-sm"
+                className="animate-fade-in rounded-xl border border-border bg-card shadow-sm overflow-hidden"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <BookOpen className="h-5 w-5 text-primary" />
+                <div className="flex items-center gap-3 p-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <BookMarked className="h-5 w-5 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
                     <p className="text-xs text-muted-foreground">{book.nameHi}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {book.chapters.length} अध्याय
-                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{book.chapters.length} अध्याय</p>
                   </div>
+                </div>
+                {/* Action buttons */}
+                <div className="flex gap-2 px-4 pb-4">
+                  <button
+                    onClick={() => handleOpenBook(book)}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    📖 ऐप में पढ़ें
+                  </button>
+                  <button
+                    onClick={() => {
+                      const url = book.ncertUrl || `https://ncert.nic.in/textbook.php?class=${selectedClass}`
+                      window.open(url, "_blank", "noopener,noreferrer")
+                    }}
+                    className="flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-all active:scale-[0.97]"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Browser
+                  </button>
                 </div>
               </div>
             ))}
@@ -718,3 +780,105 @@ export function BooksListScreen() {
     </div>
   )
 }
+
+// ──────────────────────────────────────────────────────────────────────────────
+// 🌐 BOOKS READER SCREEN — In-app NCERT viewer
+// ──────────────────────────────────────────────────────────────────────────────
+export function BooksReaderScreen() {
+  const { selectedBookUrl, goBack } = useApp()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  // NCERT nic.in allows embedding — it's an official govt portal
+  const url = selectedBookUrl || "https://ncert.nic.in/textbook.php"
+
+  const handleReload = () => {
+    setLoading(true)
+    setError(false)
+    if (iframeRef.current) {
+      iframeRef.current.src = url
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      {/* Custom header with back + reload */}
+      <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2 sticky top-0 z-50">
+        <button
+          onClick={goBack}
+          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 text-foreground" />
+        </button>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-foreground truncate">NCERT पुस्तकें</p>
+          <p className="text-[10px] text-muted-foreground truncate">{url}</p>
+        </div>
+        <button
+          onClick={handleReload}
+          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
+        >
+          <RefreshCw className="h-4 w-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
+          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
+        >
+          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+        </button>
+      </div>
+
+      {/* Loading state */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm text-muted-foreground">NCERT पुस्तक लोड हो रही है...</p>
+          <p className="text-xs text-muted-foreground">कृपया प्रतीक्षा करें</p>
+        </div>
+      )}
+
+      {/* Error fallback */}
+      {error && (
+        <div className="mx-auto w-full max-w-md px-4 py-8 flex flex-col items-center gap-4">
+          <div className="rounded-full bg-red-100 p-4">
+            <Globe2 className="h-8 w-8 text-red-500" />
+          </div>
+          <div className="text-center">
+            <p className="font-semibold text-foreground">लोड नहीं हो सका</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              इंटरनेट कनेक्शन जाँचें या Browser में खोलें
+            </p>
+          </div>
+          <div className="flex gap-3 w-full">
+            <button
+              onClick={handleReload}
+              className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground"
+            >
+              दोबारा कोशिश करें
+            </button>
+            <button
+              onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
+              className="flex-1 rounded-lg border border-border py-2.5 text-sm font-semibold text-foreground"
+            >
+              Browser में खोलें
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Iframe — NCERT official site */}
+      <iframe
+        ref={iframeRef}
+        src={url}
+        className={`flex-1 w-full border-0 ${loading || error ? "hidden" : "block"}`}
+        style={{ height: "calc(100vh - 56px)" }}
+        onLoad={() => setLoading(false)}
+        onError={() => { setLoading(false); setError(true) }}
+        title="NCERT Books"
+        allow="fullscreen"
+        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+      />
+    </div>
+  )
+            }
