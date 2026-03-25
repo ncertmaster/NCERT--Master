@@ -8,7 +8,7 @@ export function SplashScreen() {
   const { setScreen } = useApp()
 
   useEffect(() => {
-    const timer = setTimeout(() => setScreen("login"), 2500)
+    const timer = setTimeout(() =>setScreen("setup"), 2500)
     return () => clearTimeout(timer)
   }, [setScreen])
 
