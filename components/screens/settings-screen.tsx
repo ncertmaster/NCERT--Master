@@ -11,7 +11,7 @@ export function SettingsScreen() {
 
   const handleLogout = () => {
     logout()
-    setScreen("login")
+    setScreen("setup")
   }
 
   return (
