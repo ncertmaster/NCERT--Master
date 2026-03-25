@@ -13,6 +13,7 @@ export type AppScreen =
   | "books-chapter"
   | "books-content"
   | "books-list"
+  | "books-reader"
   | "notes-class"
   | "notes-subject"
   | "notes-chapter"
@@ -46,6 +47,7 @@ interface AppState {
   selectedSubject: string | null
   selectedBook: string | null
   selectedChapter: string | null
+  selectedBookUrl: string | null
   quizMode: "chapter" | "full" | null
   quizScore: number
   quizTotal: number
@@ -62,6 +64,7 @@ interface AppContextType extends AppState {
   setSelectedSubject: (s: string | null) => void
   setSelectedBook: (b: string | null) => void
   setSelectedChapter: (ch: string | null) => void
+  setSelectedBookUrl: (url: string | null) => void
   setQuizMode: (m: "chapter" | "full") => void
   setQuizScore: (score: number, total: number) => void
   logout: () => void
@@ -79,6 +82,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     selectedSubject: null,
     selectedBook: null,
     selectedChapter: null,
+    selectedBookUrl: null,
     quizMode: null,
     quizScore: 0,
     quizTotal: 0,
@@ -165,6 +169,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState(prev => ({ ...prev, selectedChapter }))
   }, [])
 
+  const setSelectedBookUrl = useCallback((selectedBookUrl: string | null) => {
+    setState(prev => ({ ...prev, selectedBookUrl }))
+  }, [])
+
   const setQuizMode = useCallback((quizMode: "chapter" | "full") => {
     setState(prev => ({ ...prev, quizMode }))
   }, [])
@@ -184,6 +192,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       selectedSubject: null,
       selectedBook: null,
       selectedChapter: null,
+      selectedBookUrl: null,
       quizMode: null,
       quizScore: 0,
       quizTotal: 0,
@@ -203,6 +212,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setSelectedSubject,
       setSelectedBook,
       setSelectedChapter,
+      setSelectedBookUrl,
       setQuizMode,
       setQuizScore,
       logout,
@@ -217,4 +227,5 @@ export function useApp() {
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
     }
-      
+
+  
