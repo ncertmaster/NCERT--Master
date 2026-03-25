@@ -207,7 +207,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   }
 
   const nextScreen: Record<string, AppScreen> = {
-    books: "books-chapter", notes: "notes-chapter", iq: "iq-chapter", quiz: "quiz-mode",
+    books: "books-list", notes: "notes-chapter", iq: "iq-chapter", quiz: "quiz-mode",
   }
 
   if (selectedClass === 11 || selectedClass === 12) {
@@ -327,14 +327,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
 
     if (flow === "books") {
-      return (
-        <button
-          onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
-          className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
-        >
-          📖 ऑनलाइन पढ़ें
-        </button>
-      )
+      return null // Books tab mein koi button nahi
     }
 
     // notes or iq — show Download + Online Read
@@ -452,9 +445,11 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                   </div>
                 </div>
-                <div className="flex gap-2 px-3 pb-3">
-                  <ChapterButtons ch={ch} subjectName={subject.name} />
-                </div>
+                {flow !== "books" && (
+                  <div className="flex gap-2 px-3 pb-3">
+                    <ChapterButtons ch={ch} subjectName={subject.name} />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -516,9 +511,11 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                   <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                 </div>
               </div>
-              <div className="flex gap-2 px-3 pb-3">
-                <ChapterButtons ch={ch} subjectName={subject.name} />
-              </div>
+              {flow !== "books" && (
+                <div className="flex gap-2 px-3 pb-3">
+                  <ChapterButtons ch={ch} subjectName={subject.name} />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -664,3 +661,60 @@ export function BookContentScreen() {
     </div>
   )
             }
+
+// ===============================
+// 📚 BOOKS LIST SCREEN
+// Sirf books ke naam dikhte hain — koi chapter link nahi
+// ===============================
+export function BooksListScreen() {
+  const { language, selectedClass, selectedStream, selectedSubject } = useApp()
+
+  let books: Book[] = []
+
+  if (selectedClass === 11 || selectedClass === 12) {
+    const streams: Stream[] = streamsByClass[selectedClass] || []
+    const stream = streams.find((s: Stream) => s.id === selectedStream)
+    const subject = stream?.subjects.find((s: Subject) => s.id === selectedSubject)
+    books = subject?.books || []
+  } else {
+    const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
+    const subject = subjects.find((s: Subject) => s.id === selectedSubject)
+    books = subject?.books || []
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background pb-20">
+      <ScreenHeader title={getText("books", language)} />
+      <div className="mx-auto w-full max-w-md px-4 py-4">
+        {books.length === 0 ? (
+          <p className="text-center text-sm text-muted-foreground py-10">
+            कोई पुस्तक उपलब्ध नहीं है।
+          </p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {books.map((book: Book, idx: number) => (
+              <div
+                key={book.id}
+                className="animate-fade-in rounded-xl border border-border bg-card p-4 shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <BookOpen className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
+                    <p className="text-xs text-muted-foreground">{book.nameHi}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {book.chapters.length} अध्याय
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <BottomTabs activeTab="books" />
+    </div>
+  )
+}
