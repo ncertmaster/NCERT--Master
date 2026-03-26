@@ -75,7 +75,12 @@ export function AiDoubtSolver() {
 
   const sendMessage = async (text: string) => {
     if ((!text.trim() && !selectedImage) || loading || !activeChatId) return
-    const userMsg: Message = { role: "user", content: text.trim() || (selectedImage ? "📷 Image attached" : ""), image: selectedImage || undefined, timestamp: Date.now() }
+    const userMsg: Message = {
+      role: "user",
+      content: text.trim() || "Is image ke baare mein explain karo",
+      image: selectedImage || undefined,
+      timestamp: Date.now()
+    }
     let updated = chats.map(c => {
       if (c.id !== activeChatId) return c
       const msgs = [...c.messages, userMsg]
@@ -85,21 +90,38 @@ export function AiDoubtSolver() {
 
     try {
       const current = updated.find(c => c.id === activeChatId)!
+      // Build messages — for image messages use vision-compatible format
       const apiMessages = current.messages.slice(-8).map(m => {
         if (m.image) {
+          // Extract base64 data from data URL
+          const base64Data = m.image.split(",")[1] || m.image
+          const mimeType = m.image.startsWith("data:image/png") ? "image/png" : "image/jpeg"
           return {
             role: m.role,
             content: [
-              { type: "image_url", image_url: { url: m.image } },
-              { type: "text", text: m.content || "What is in this image? Help me with this doubt." }
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${mimeType};base64,${base64Data}`
+                }
+              },
+              {
+                type: "text",
+                text: m.content || "Is image mein kya hai? Mera doubt solve karo."
+              }
             ]
           }
         }
         return { role: m.role, content: m.content }
       })
+
+      // Check if any message has an image — use vision model
+      const hasImage = current.messages.slice(-8).some(m => m.image)
+
       const res = await fetch("/api/doubt", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: apiMessages, useVision: hasImage }),
       })
       const data = await res.json()
       const reply = data?.reply || "Kuch gadbad ho gayi. Dobara try karo bhai!"
@@ -302,16 +324,8 @@ export function AiDoubtSolver() {
                       <div>
                         <p className="font-bold text-foreground">Guru AI — Your Mentor 🎓</p>
                         <p className="text-xs text-muted-foreground mt-1 max-w-[260px] leading-relaxed">
-                          Koi bhi doubt puchho — science, math, history, life advice — main hoon na! 💪
+                          Ask anything — type your doubt or share an image 📷
                         </p>
-                      </div>
-                      <div className="flex flex-wrap gap-2 justify-center">
-                        {QUICK_ACTIONS.map(a => (
-                          <button key={a.label} onClick={() => sendMessage(a.prompt)}
-                            className="text-xs px-3 py-2 rounded-xl border border-border bg-card hover:bg-secondary text-foreground transition-colors">
-                            {a.label}
-                          </button>
-                        ))}
                       </div>
                     </div>
                   )}
@@ -407,4 +421,4 @@ export function AiDoubtSolver() {
       )}
     </>
   )
-                      }
+}
