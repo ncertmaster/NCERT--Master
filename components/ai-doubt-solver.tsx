@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useState, useRef, useEffect, useCallback } from "react"
-import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap } from "lucide-react"
+import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap, Paperclip, Camera, XCircle } from "lucide-react"
 
 interface Message {
   role: "user" | "assistant"
   content: string
+  image?: string   // base64 data URL
   timestamp: number
 }
 
@@ -51,9 +52,12 @@ export function AiDoubtSolver() {
   const [loading, setLoading] = useState(false)
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState("")
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const renameRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { setChats(loadChats()) }, [])
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
@@ -70,20 +74,32 @@ export function AiDoubtSolver() {
   }, [chats])
 
   const sendMessage = async (text: string) => {
-    if (!text.trim() || loading || !activeChatId) return
-    const userMsg: Message = { role: "user", content: text.trim(), timestamp: Date.now() }
+    if ((!text.trim() && !selectedImage) || loading || !activeChatId) return
+    const userMsg: Message = { role: "user", content: text.trim() || (selectedImage ? "📷 Image attached" : ""), image: selectedImage || undefined, timestamp: Date.now() }
     let updated = chats.map(c => {
       if (c.id !== activeChatId) return c
       const msgs = [...c.messages, userMsg]
       return { ...c, messages: msgs, title: c.messages.length === 0 ? makeTitle(msgs) : c.title, updatedAt: Date.now() }
     })
-    setChats(updated); saveChats(updated); setInput(""); setLoading(true)
+    setChats(updated); saveChats(updated); setInput(""); setSelectedImage(null); setLoading(true)
 
     try {
       const current = updated.find(c => c.id === activeChatId)!
+      const apiMessages = current.messages.slice(-8).map(m => {
+        if (m.image) {
+          return {
+            role: m.role,
+            content: [
+              { type: "image_url", image_url: { url: m.image } },
+              { type: "text", text: m.content || "What is in this image? Help me with this doubt." }
+            ]
+          }
+        }
+        return { role: m.role, content: m.content }
+      })
       const res = await fetch("/api/doubt", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: current.messages.slice(-8).map(m => ({ role: m.role, content: m.content })) }),
+        body: JSON.stringify({ messages: apiMessages }),
       })
       const data = await res.json()
       const reply = data?.reply || "Kuch gadbad ho gayi. Dobara try karo bhai!"
@@ -95,6 +111,15 @@ export function AiDoubtSolver() {
       updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, errMsg] } : c)
       setChats(updated); saveChats(updated)
     } finally { setLoading(false) }
+  }
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setSelectedImage(reader.result as string)
+    reader.readAsDataURL(file)
+    e.target.value = ""
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -304,6 +329,9 @@ export function AiDoubtSolver() {
                             ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
                             : "bg-card border border-border text-foreground rounded-bl-sm space-y-1"
                         }`}>
+                          {msg.image && (
+                            <img src={msg.image} alt="Attached" className="rounded-xl mb-2 max-h-48 w-auto object-contain" />
+                          )}
                           {msg.role === "assistant" ? formatContent(msg.content) : msg.content}
                         </div>
                         <p className={`text-[10px] text-muted-foreground mt-1 ${msg.role === "user" ? "text-right" : "text-left"}`}>
@@ -331,20 +359,40 @@ export function AiDoubtSolver() {
                 </div>
 
                 <div className="border-t border-border px-3 py-3 bg-card/80 backdrop-blur shrink-0">
+                  {/* Image Preview */}
+                  {selectedImage && (
+                    <div className="mb-2 relative inline-block">
+                      <img src={selectedImage} alt="Selected" className="h-20 w-20 rounded-xl object-cover border border-border" />
+                      <button onClick={() => setSelectedImage(null)} className="absolute -top-1.5 -right-1.5 bg-background rounded-full text-muted-foreground hover:text-foreground">
+                        <XCircle className="h-5 w-5" />
+                      </button>
+                    </div>
+                  )}
+                  {/* Hidden file inputs */}
+                  <input ref={fileInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleImageSelect} />
+                  <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
                   <div className="flex items-center gap-2">
+                    <button onClick={() => cameraInputRef.current?.click()} title="Take Photo"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all">
+                      <Camera className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => fileInputRef.current?.click()} title="Attach File"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all">
+                      <Paperclip className="h-4 w-4" />
+                    </button>
                     <input
                       ref={inputRef}
                       type="text"
                       value={input}
                       onChange={e => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask your doubt..."
+                      placeholder={selectedImage ? "Add a question about image..." : "Ask your doubt..."}
                       disabled={loading}
                       className="flex-1 rounded-2xl border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-60"
                     />
                     <button
-                    onClick={() => sendMessage(input)}
-                      disabled={!input.trim() || loading}
+                      onClick={() => sendMessage(input)}
+                      disabled={(!input.trim() && !selectedImage) || loading}
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all"
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
@@ -359,4 +407,4 @@ export function AiDoubtSolver() {
       )}
     </>
   )
-}
+                      }
