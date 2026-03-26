@@ -16,11 +16,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
+  attribute="class"
+  defaultTheme="light"
+  forcedTheme="light"
+  enableSystem={false}
+  storageKey="ncert-theme"
+>
           {children}
         </ThemeProvider>
       </body>
