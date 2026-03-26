@@ -14,16 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{
-          __html: `localStorage.removeItem('ncert-theme'); localStorage.removeItem('theme');`
-        }} />
-      </head>
+      <head />
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          forcedTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
           storageKey="ncert-theme"
         >
