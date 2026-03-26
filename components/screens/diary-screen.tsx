@@ -348,6 +348,6 @@ export function DiaryScreen() {
       </div>
     </div>
   )
-    }
+}
 
-    
+   
