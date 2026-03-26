@@ -81,6 +81,7 @@ export const class6Subjects: Subject[] = [
         id: "science-6-jigyasa",
         name: "Jigyasa",
         nameHi: "जिज्ञासा",
+        ncertUrl: "https://drive.google.com/file/d/1Bh1K3XvKL07jIjWQGc68oF73r902NQ9S/preview",
         chapters: [
           { id: "j6-ch1", name: "The Wonderful World of Science", nameHi: "विज्ञान का अनूठा संसार" },
           { id: "j6-ch2", name: "Diversity in the Living World", nameHi: "सजीव जगत में विविधता" },
@@ -383,7 +384,7 @@ export const class6Subjects: Subject[] = [
           { id: "hs6-ch1", name: "Who Did Patrick's Homework?", nameHi: "Who Did Patrick's Homework?" },
           { id: "hs6-ch2", name: "How the Dog Found Himself a New Master!", nameHi: "How the Dog Found Himself a New Master!" },
           { id: "hs6-ch3", name: "Taro's Reward", nameHi: "Taro's Reward" },
-          { id: "hs6-ch4", name: "An Indian-American Woman in Space: Kalpana Chawla", nameHi: "An Indian-American Woman in Space: Kalpana Chawla" },
+            { id: "hs6-ch4", name: "An Indian-American Woman in Space: Kalpana Chawla", nameHi: "An Indian-American Woman in Space: Kalpana Chawla" },
           { id: "hs6-ch5", name: "A Different Kind of School", nameHi: "A Different Kind of School" },
           { id: "hs6-ch6", name: "Who I Am", nameHi: "Who I Am" },
           { id: "hs6-ch7", name: "Fair Play", nameHi: "Fair Play" },
