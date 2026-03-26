@@ -133,19 +133,25 @@ export function DiaryScreen() {
       tags: selectedTags, word_count: countWords(content),
       updated_at: new Date().toISOString()
     }
-    if (editingId) {
-      const { error } = await supabase.from("diary_entries").update(payload).eq("id", editingId)
-      if (!error) setEntries(prev => prev.map(e => e.id === editingId ? { ...e, ...payload } : e))
-    } else {
-      const { data, error } = await supabase.from("diary_entries").insert({
-        user_email: user.email, ...payload,
-        created_at: new Date().toISOString()
-      }).select().single()
-      if (!error && data) setEntries(prev => [data as DiaryEntry, ...prev])
+    try {
+      if (editingId) {
+        const { error } = await supabase.from("diary_entries").update(payload).eq("id", editingId)
+        if (error) { alert("Save failed: " + error.message); setSaving(false); return }
+        setEntries(prev => prev.map(e => e.id === editingId ? { ...e, ...payload } : e))
+      } else {
+        const { data, error } = await supabase.from("diary_entries").insert({
+          user_email: user.email, ...payload,
+          created_at: new Date().toISOString()
+        }).select().single()
+        if (error) { alert("Save failed: " + error.message); setSaving(false); return }
+        if (data) setEntries(prev => [data as DiaryEntry, ...prev])
+      }
+      setSaving(false)
+      closeEditor()
+    } catch (err: unknown) {
+      alert("Save failed: " + String(err))
+      setSaving(false)
     }
-    setSaving(false)
-    closeEditor()
-  }
 
   const openNewEditor = () => {
     setEditingId(null); setTitle(""); setContent(""); setMood("😊"); setSelectedTags([]); setAutoSaveStatus("idle"); setIsEditing(true)
@@ -343,4 +349,5 @@ export function DiaryScreen() {
     </div>
   )
     }
-      
+
+    
