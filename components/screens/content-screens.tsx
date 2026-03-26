@@ -744,8 +744,8 @@ export function BooksListScreen() {
       // Google Docs Viewer — works perfectly in mobile WebView
       const fileId = book.ncertUrl.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1]
       const viewerUrl = fileId
-        ? `https://docs.google.com/viewer?url=https://drive.google.com/uc?id=${fileId}&embedded=true`
-        : book.ncertUrl
+  ? `https://drive.google.com/file/d/${fileId}/preview`
+  : book.ncertUrl
       setSelectedBookUrl(viewerUrl)
       setScreen("books-reader")
     } else {
