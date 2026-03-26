@@ -56,7 +56,6 @@ function countWords(text: string) {
   return text.trim().split(/\s+/).filter(Boolean).length
 }
 
-// ── Rich Text Toolbar ─────────────────────────────────────────────────────────
 function insertFormat(
   textarea: HTMLTextAreaElement,
   setContent: (v: string) => void,
@@ -107,7 +106,6 @@ export function DiaryScreen() {
 
   useEffect(() => { loadEntries() }, [loadEntries])
 
-  // Auto-save for existing entries
   useEffect(() => {
     if (!isEditing || !editingId) return
     if (!title.trim() && !content.trim()) return
@@ -152,6 +150,7 @@ export function DiaryScreen() {
       alert("Save failed: " + String(err))
       setSaving(false)
     }
+  }
 
   const openNewEditor = () => {
     setEditingId(null); setTitle(""); setContent(""); setMood("😊"); setSelectedTags([]); setAutoSaveStatus("idle"); setIsEditing(true)
@@ -176,11 +175,9 @@ export function DiaryScreen() {
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
 
-  // ── Editor ────────────────────────────────────────────────────────────────────
   if (isEditing) {
     return (
       <div className="flex flex-col min-h-screen bg-background">
-        {/* Editor Header */}
         <div className="sticky top-0 z-40 flex items-center gap-2 border-b border-border bg-card/95 px-4 py-3 backdrop-blur">
           <button onClick={closeEditor} className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary">
             <X className="h-5 w-5" />
@@ -197,7 +194,6 @@ export function DiaryScreen() {
         </div>
 
         <div className="flex-1 px-4 py-4 space-y-3 max-w-md mx-auto w-full">
-          {/* Mood */}
           <div>
             <p className="text-xs text-muted-foreground mb-2 font-medium">How are you feeling?</p>
             <div className="flex gap-1.5 flex-wrap">
@@ -210,7 +206,6 @@ export function DiaryScreen() {
             </div>
           </div>
 
-          {/* Tags */}
           <div>
             <p className="text-xs text-muted-foreground mb-2 font-medium flex items-center gap-1"><Hash className="h-3 w-3" /> Tags</p>
             <div className="flex gap-1.5 flex-wrap">
@@ -223,12 +218,10 @@ export function DiaryScreen() {
             </div>
           </div>
 
-          {/* Title */}
           <input type="text" placeholder="Entry title..."
             value={title} onChange={e => setTitle(e.target.value)}
             className="w-full rounded-xl border border-border bg-card px-4 py-3 text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20" />
 
-          {/* Formatting Toolbar */}
           <div className="flex gap-1 p-1 rounded-xl border border-border bg-card">
             {[
               { icon: Bold, action: () => textareaRef.current && insertFormat(textareaRef.current, setContent, "**", "**", "bold text"), title: "Bold" },
@@ -244,7 +237,6 @@ export function DiaryScreen() {
             ))}
           </div>
 
-          {/* Content */}
           <textarea ref={textareaRef} placeholder="Start writing... your thoughts, goals, reflections — anything!"
             value={content} onChange={e => setContent(e.target.value)}
             rows={18}
@@ -254,13 +246,11 @@ export function DiaryScreen() {
     )
   }
 
-  // ── List View ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <ScreenHeader title="My Diary" />
       <div className="flex-1 px-4 py-4 max-w-md mx-auto w-full pb-8">
 
-        {/* Header Row */}
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm font-semibold text-foreground">{entries.length} {entries.length === 1 ? "Entry" : "Entries"}</p>
@@ -272,14 +262,12 @@ export function DiaryScreen() {
           </button>
         </div>
 
-        {/* Search */}
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input type="text" placeholder="Search entries..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20" />
         </div>
 
-        {/* Tag Filter */}
         <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1 scrollbar-hide">
           <button onClick={() => setFilterTag(null)}
             className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-all ${!filterTag ? "bg-amber-500 border-amber-500 text-white" : "border-border text-muted-foreground hover:bg-secondary"}`}>
@@ -348,6 +336,5 @@ export function DiaryScreen() {
       </div>
     </div>
   )
-}
-
-   
+    }
+    
