@@ -506,10 +506,11 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const subject = subjects.find((s: Subject) => s.id === selectedSubject)
   if (!subject) return null
-if (!selectedBook && subject.books.length > 1) {
+
+  if (!selectedBook && subject.books.length > 1) {
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
-        <ScreenHeader title={`${subject.nameHi} - Book`} />
+              <ScreenHeader title={`${subject.nameHi} - Book`} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-3">
             {subject.books.map((book: Book) => (
@@ -739,10 +740,15 @@ export function BooksListScreen() {
   }
 
   const handleOpenBook = (book: Book) => {
-    // Use book's custom URL if set, otherwise generate NCERT official URL
-    const url = book.ncertUrl || getNcertUrl(selectedClass || 6, book.id, book.name)
-    setSelectedBookUrl(url)
-    setScreen("books-reader")
+    const url = book.ncertUrl || `https://ncert.nic.in/textbook.php?class=${selectedClass}`
+    if (book.ncertUrl) {
+      // Google Drive preview — in-app reader mein kholo
+      setSelectedBookUrl(url)
+      setScreen("books-reader")
+    } else {
+      // No PDF yet — browser mein NCERT site kholo
+      window.open(url, "_blank", "noopener,noreferrer")
+    }
   }
 
   return (
@@ -778,24 +784,14 @@ export function BooksListScreen() {
                     <p className="text-xs text-muted-foreground mt-0.5">{book.chapters.length} अध्याय</p>
                   </div>
                 </div>
-                {/* Action buttons */}
+                {/* Action button */}
                 <div className="flex gap-2 px-4 pb-4">
                   <button
                     onClick={() => handleOpenBook(book)}
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
                   >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    🌐 ऑनलाइन पढ़ें
-                  </button>
-                  <button
-                    onClick={() => {
-                      const url = book.ncertUrl || `https://epathshala.nic.in/e-pathshala-4/profile/?id=${selectedClass}`
-                      window.open(url, "_blank", "noopener,noreferrer")
-                    }}
-                    className="flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-all active:scale-[0.97]"
-                  >
                     <ExternalLink className="h-3.5 w-3.5" />
-                    Browser
+                    🌐 ऑनलाइन पढ़ें
                   </button>
                 </div>
               </div>
@@ -814,98 +810,42 @@ export function BooksListScreen() {
 export function BooksReaderScreen() {
   const { selectedBookUrl, goBack } = useApp()
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-
-  // NCERT nic.in allows embedding — it's an official govt portal
-  const url = selectedBookUrl || "https://ncert.nic.in/textbook.php"
-
-  const handleReload = () => {
-    setLoading(true)
-    setError(false)
-    if (iframeRef.current) {
-      iframeRef.current.src = url
-    }
-  }
+  const url = selectedBookUrl || ""
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      {/* Custom header with back + reload */}
-      <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2 sticky top-0 z-50">
-        <button
-          onClick={goBack}
-          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
-        >
+    <div className="flex flex-col bg-background" style={{ height: "100dvh" }}>
+      {/* Header */}
+      <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2 shrink-0">
+        <button onClick={goBack} className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors">
           <ArrowLeft className="h-4 w-4 text-foreground" />
         </button>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-foreground truncate">NCERT पुस्तकें</p>
-          <p className="text-[10px] text-muted-foreground truncate">{url}</p>
-        </div>
+        <p className="flex-1 text-sm font-semibold text-foreground">📖 NCERT पुस्तक</p>
         <button
-          onClick={handleReload}
+          onClick={() => { setLoading(true); if (iframeRef.current) iframeRef.current.src = url }}
           className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
         >
           <RefreshCw className="h-4 w-4 text-muted-foreground" />
         </button>
-        <button
-          onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
-        >
-          <ExternalLink className="h-4 w-4 text-muted-foreground" />
-        </button>
       </div>
 
-      {/* Loading state */}
+      {/* Loading */}
       {loading && (
-        <div className="flex flex-col items-center justify-center py-16 gap-3">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background z-10 mt-12">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">NCERT पुस्तक लोड हो रही है...</p>
-          <p className="text-xs text-muted-foreground">कृपया प्रतीक्षा करें</p>
+          <p className="text-sm text-muted-foreground">पुस्तक लोड हो रही है...</p>
         </div>
       )}
 
-      {/* Error fallback */}
-      {error && (
-        <div className="mx-auto w-full max-w-md px-4 py-8 flex flex-col items-center gap-4">
-          <div className="rounded-full bg-red-100 p-4">
-            <Globe2 className="h-8 w-8 text-red-500" />
-          </div>
-          <div className="text-center">
-            <p className="font-semibold text-foreground">लोड नहीं हो सका</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              इंटरनेट कनेक्शन जाँचें या Browser में खोलें
-            </p>
-          </div>
-          <div className="flex gap-3 w-full">
-            <button
-              onClick={handleReload}
-              className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground"
-            >
-              दोबारा कोशिश करें
-            </button>
-            <button
-              onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-              className="flex-1 rounded-lg border border-border py-2.5 text-sm font-semibold text-foreground"
-            >
-              Browser में खोलें
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Iframe — NCERT official site */}
+      {/* Google Drive PDF iframe */}
       <iframe
         ref={iframeRef}
         src={url}
-        className={`flex-1 w-full border-0 ${loading || error ? "hidden" : "block"}`}
-        style={{ height: "calc(100vh - 56px)" }}
+        className="flex-1 w-full border-0"
         onLoad={() => setLoading(false)}
-        onError={() => { setLoading(false); setError(true) }}
-        title="NCERT Books"
+        title="NCERT Book"
         allow="fullscreen"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
       />
     </div>
   )
-      }
+    }
