@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useState, useRef, useEffect, useCallback } from "react"
-import { Bot, X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare } from "lucide-react"
+import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap } from "lucide-react"
 
-// ─── Types ──────────────────────────────────────────────────────────────────
 interface Message {
   role: "user" | "assistant"
   content: string
@@ -19,40 +18,30 @@ interface Chat {
   updatedAt: number
 }
 
-// ─── Storage helpers ─────────────────────────────────────────────────────────
 const CHATS_KEY = "ncert_ai_chats"
 
 function loadChats(): Chat[] {
-  try {
-    const raw = localStorage.getItem(CHATS_KEY)
-    if (!raw) return []
-    return JSON.parse(raw) as Chat[]
-  } catch { return [] }
+  try { return JSON.parse(localStorage.getItem(CHATS_KEY) || "[]") } catch { return [] }
 }
-
 function saveChats(chats: Chat[]) {
   try { localStorage.setItem(CHATS_KEY, JSON.stringify(chats)) } catch {}
 }
-
-function generateId() {
-  return Math.random().toString(36).slice(2, 10)
-}
-
-function generateTitle(messages: Message[]) {
+function genId() { return Math.random().toString(36).slice(2, 10) }
+function makeTitle(messages: Message[]) {
   const first = messages.find(m => m.role === "user")
   if (!first) return "New Chat"
   return first.content.slice(0, 40) + (first.content.length > 40 ? "..." : "")
 }
 
-// ─── Quick Actions ───────────────────────────────────────────────────────────
 const QUICK_ACTIONS = [
-  { label: "📖 Explain a concept", prompt: "Explain an important NCERT concept" },
-  { label: "📝 Make study plan", prompt: "Create my study plan for today" },
-  { label: "🧠 Take a quiz", prompt: "Take a short quiz from me" },
-  { label: "💪 Motivate me", prompt: "Motivate me to study" },
+  { label: "📐 Explain a concept", prompt: "Explain an important NCERT concept to me in detail" },
+  { label: "📝 Make study plan", prompt: "Help me make an effective study plan for today" },
+  { label: "🧠 Quiz me", prompt: "Take a short quiz from me on any NCERT topic" },
+  { label: "🔍 Solve a problem", prompt: "Help me solve a difficult problem step by step" },
+  { label: "💪 Motivate me", prompt: "I'm feeling demotivated. Please motivate me to study" },
+  { label: "📊 Important topics", prompt: "What are the most important topics for board exams?" },
 ]
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 export function AiDoubtSolver() {
   const [isOpen, setIsOpen] = useState(false)
   const [view, setView] = useState<"history" | "chat">("history")
@@ -66,196 +55,139 @@ export function AiDoubtSolver() {
   const inputRef = useRef<HTMLInputElement>(null)
   const renameRef = useRef<HTMLInputElement>(null)
 
-  // Load chats on mount
   useEffect(() => { setChats(loadChats()) }, [])
-
-  // Auto scroll
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [chats, activeChatId])
-
-  // Focus input when chat opens
-  useEffect(() => {
-    if (view === "chat") setTimeout(() => inputRef.current?.focus(), 300)
-  }, [view])
-
-  // Focus rename input
-  useEffect(() => {
-    if (renamingId) setTimeout(() => renameRef.current?.focus(), 100)
-  }, [renamingId])
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
+  useEffect(() => { if (view === "chat") setTimeout(() => inputRef.current?.focus(), 300) }, [view])
+  useEffect(() => { if (renamingId) setTimeout(() => renameRef.current?.focus(), 100) }, [renamingId])
 
   const activeChat = chats.find(c => c.id === activeChatId)
 
-  // ── New chat ───────────────────────────────────────────────────────────────
   const startNewChat = useCallback(() => {
-    const newChat: Chat = {
-      id: generateId(),
-      title: "New Chat",
-      messages: [],
-      pinned: false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    }
-    const updated = [newChat, ...chats]
-    setChats(updated)
-    saveChats(updated)
-    setActiveChatId(newChat.id)
-    setView("chat")
+    const chat: Chat = { id: genId(), title: "New Chat", messages: [], pinned: false, createdAt: Date.now(), updatedAt: Date.now() }
+    const updated = [chat, ...chats]
+    setChats(updated); saveChats(updated)
+    setActiveChatId(chat.id); setView("chat")
   }, [chats])
 
-  // ── Open existing chat ────────────────────────────────────────────────────
-  const openChat = (id: string) => {
-    setActiveChatId(id)
-    setView("chat")
-  }
-
-  // ── Send message ──────────────────────────────────────────────────────────
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading || !activeChatId) return
-
     const userMsg: Message = { role: "user", content: text.trim(), timestamp: Date.now() }
-
-    let updatedChats = chats.map(c => {
+    let updated = chats.map(c => {
       if (c.id !== activeChatId) return c
-      const newMessages = [...c.messages, userMsg]
-      return {
-        ...c,
-        messages: newMessages,
-        title: c.messages.length === 0 ? generateTitle(newMessages) : c.title,
-        updatedAt: Date.now(),
-      }
+      const msgs = [...c.messages, userMsg]
+      return { ...c, messages: msgs, title: c.messages.length === 0 ? makeTitle(msgs) : c.title, updatedAt: Date.now() }
     })
-    setChats(updatedChats)
-    saveChats(updatedChats)
-    setInput("")
-    setLoading(true)
+    setChats(updated); saveChats(updated); setInput(""); setLoading(true)
 
     try {
-      const currentChat = updatedChats.find(c => c.id === activeChatId)!
+      const current = updated.find(c => c.id === activeChatId)!
       const res = await fetch("/api/doubt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: currentChat.messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
-        }),
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: current.messages.slice(-8).map(m => ({ role: m.role, content: m.content })) }),
       })
       const data = await res.json()
-      const reply = data?.reply || "Something went wrong, please try again."
-
+      const reply = data?.reply || "Kuch gadbad ho gayi. Dobara try karo bhai!"
       const assistantMsg: Message = { role: "assistant", content: reply, timestamp: Date.now() }
-      updatedChats = updatedChats.map(c =>
-        c.id === activeChatId
-          ? { ...c, messages: [...c.messages, assistantMsg], updatedAt: Date.now() }
-          : c
-      )
-      setChats(updatedChats)
-      saveChats(updatedChats)
+      updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, assistantMsg], updatedAt: Date.now() } : c)
+      setChats(updated); saveChats(updated)
     } catch {
-      const errMsg: Message = { role: "assistant", content: "Connection error. Please try again.", timestamp: Date.now() }
-      updatedChats = updatedChats.map(c =>
-        c.id === activeChatId ? { ...c, messages: [...c.messages, errMsg] } : c
-      )
-      setChats(updatedChats)
-      saveChats(updatedChats)
-    } finally {
-      setLoading(false)
-    }
+      const errMsg: Message = { role: "assistant", content: "Connection error. Check your internet and try again.", timestamp: Date.now() }
+      updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, errMsg] } : c)
+      setChats(updated); saveChats(updated)
+    } finally { setLoading(false) }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input) }
   }
 
-  // ── Pin / Unpin ───────────────────────────────────────────────────────────
   const togglePin = (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     const updated = chats.map(c => c.id === id ? { ...c, pinned: !c.pinned } : c)
-    setChats(updated)
-    saveChats(updated)
+    setChats(updated); saveChats(updated)
   }
 
-  // ── Delete chat ───────────────────────────────────────────────────────────
   const deleteChat = (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     const updated = chats.filter(c => c.id !== id)
-    setChats(updated)
-    saveChats(updated)
+    setChats(updated); saveChats(updated)
     if (activeChatId === id) { setActiveChatId(null); setView("history") }
   }
 
-  // ── Rename ────────────────────────────────────────────────────────────────
   const startRename = (chat: Chat, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setRenamingId(chat.id)
-    setRenameValue(chat.title)
+    e.stopPropagation(); setRenamingId(chat.id); setRenameValue(chat.title)
   }
 
   const confirmRename = (e?: React.MouseEvent) => {
     e?.stopPropagation()
     if (!renamingId || !renameValue.trim()) { setRenamingId(null); return }
     const updated = chats.map(c => c.id === renamingId ? { ...c, title: renameValue.trim() } : c)
-    setChats(updated)
-    saveChats(updated)
-    setRenamingId(null)
+    setChats(updated); saveChats(updated); setRenamingId(null)
   }
 
-  // Sorted: pinned first, then by updatedAt
-  const sortedChats = [...chats].sort((a, b) => {
+  const sorted = [...chats].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1
     if (!a.pinned && b.pinned) return 1
     return b.updatedAt - a.updatedAt
   })
 
-  const formatTime = (ts: number) =>
-    new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
-
+  const formatTime = (ts: number) => new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
   const formatDate = (ts: number) => {
-    const d = new Date(ts)
-    const today = new Date()
+    const d = new Date(ts), today = new Date()
     if (d.toDateString() === today.toDateString()) return "Today"
-    const yesterday = new Date(today)
-    yesterday.setDate(today.getDate() - 1)
-    if (d.toDateString() === yesterday.toDateString()) return "Yesterday"
+    const y = new Date(today); y.setDate(today.getDate() - 1)
+    if (d.toDateString() === y.toDateString()) return "Yesterday"
     return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" })
+  }
+
+  // Format AI response with basic markdown
+  const formatContent = (text: string) => {
+    return text.split("\n").map((line, i) => {
+      if (line.startsWith("## ")) return <p key={i} className="font-bold text-foreground mt-2 mb-1">{line.slice(3)}</p>
+      if (line.startsWith("**") && line.endsWith("**")) return <p key={i} className="font-semibold text-foreground">{line.slice(2, -2)}</p>
+      if (line.match(/^\d+\. /)) return <p key={i} className="ml-2">{line}</p>
+      if (line.startsWith("• ") || line.startsWith("- ")) return <p key={i} className="ml-2">{line}</p>
+      if (!line.trim()) return <br key={i} />
+      // Inline bold
+      if (line.includes("**")) {
+        const parts = line.split(/(\*\*[^*]+\*\*)/)
+        return <p key={i}>{parts.map((p, j) => p.startsWith("**") && p.endsWith("**") ? <strong key={j}>{p.slice(2,-2)}</strong> : p)}</p>
+      }
+      return <p key={i}>{line}</p>
+    })
   }
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button — Graduation cap icon, study themed */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300 ${
+        className={`fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 ${
           isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
-        } bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-400 hover:to-purple-500 active:scale-95`}
+        } bg-gradient-to-br from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 active:scale-95`}
         aria-label="Open Guru AI"
       >
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-20" />
-        <Bot className="h-6 w-6 text-white" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-2xl bg-indigo-400 opacity-20" />
+        <GraduationCap className="h-7 w-7 text-white" />
       </button>
 
-      {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+          <div className="relative z-10 mx-auto flex h-[88vh] w-full max-w-md flex-col rounded-t-3xl bg-background shadow-2xl sm:rounded-3xl sm:h-[82vh] overflow-hidden">
 
-          <div className="relative z-10 mx-auto flex h-[85vh] w-full max-w-md flex-col rounded-t-3xl bg-background shadow-2xl sm:rounded-3xl sm:h-[80vh] overflow-hidden">
-
-            {/* ── HISTORY VIEW ─────────────────────────────────────────── */}
+            {/* ── HISTORY ──────────────────────────────────────────────── */}
             {view === "history" && (
               <>
-                {/* Header */}
                 <div className="flex items-center gap-3 border-b border-border px-4 py-3 bg-card/80 backdrop-blur shrink-0">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 shrink-0">
-                    <Bot className="h-5 w-5 text-white" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shrink-0">
+                    <GraduationCap className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground text-sm">Guru AI</p>
-                    <p className="text-xs text-muted-foreground">Your AI Study Mentor</p>
+                    <p className="font-bold text-foreground text-sm">Guru AI</p>
+                    <p className="text-xs text-emerald-500">● Always available</p>
                   </div>
-                  <button
-                    onClick={startNewChat}
-                    className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-xl bg-violet-500/15 text-violet-500 font-semibold hover:bg-violet-500/25 transition-colors"
-                  >
+                  <button onClick={startNewChat} className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-xl bg-indigo-500/15 text-indigo-500 font-semibold hover:bg-indigo-500/25 transition-colors">
                     <Plus className="h-3.5 w-3.5" /> New Chat
                   </button>
                   <button onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
@@ -263,71 +195,51 @@ export function AiDoubtSolver() {
                   </button>
                 </div>
 
-                {/* Chat List */}
                 <div className="flex-1 overflow-y-auto">
-                  {sortedChats.length === 0 ? (
+                  {sorted.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/15">
-                        <Sparkles className="h-8 w-8 text-violet-400" />
+                      <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
+                        <GraduationCap className="h-10 w-10 text-indigo-400" />
                       </div>
                       <div>
-                        <p className="font-semibold text-foreground">Guru AI — Your Mentor 🙏</p>
-                        <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
-                          Ask study doubts, get guidance, stay motivated!
+                        <p className="font-bold text-foreground text-lg">Guru AI 🎓</p>
+                        <p className="text-sm text-muted-foreground mt-1 max-w-[240px] leading-relaxed">
+                          Your personal NCERT mentor — ask anything, anytime!
                         </p>
                       </div>
-                      <button
-                        onClick={startNewChat}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors"
-                      >
-                        <Plus className="h-4 w-4" /> Start New Chat
+                      <button onClick={startNewChat} className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white text-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg">
+                        <Plus className="h-4 w-4" /> Start Chatting
                       </button>
                     </div>
                   ) : (
                     <div className="p-3 space-y-2">
-                      {sortedChats.map(chat => (
-                        <button
-                          key={chat.id}
-                          onClick={() => openChat(chat.id)}
-                          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border/60 bg-card hover:bg-secondary/50 active:bg-secondary transition-colors text-left"
-                        >
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-500/15">
-                            <MessageSquare className="h-4 w-4 text-violet-400" />
+                      {sorted.map(chat => (
+                        <button key={chat.id} onClick={() => { setActiveChatId(chat.id); setView("chat") }}
+                          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border/60 bg-card hover:bg-secondary/50 active:bg-secondary transition-colors text-left">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/15">
+                            {chat.pinned ? <Pin className="h-4 w-4 text-amber-400" /> : <MessageSquare className="h-4 w-4 text-indigo-400" />}
                           </div>
                           <div className="flex-1 min-w-0">
                             {renamingId === chat.id ? (
-                              <input
-                                ref={renameRef}
-                                value={renameValue}
-                                onChange={e => setRenameValue(e.target.value)}
+                              <input ref={renameRef} value={renameValue} onChange={e => setRenameValue(e.target.value)}
                                 onKeyDown={e => { if (e.key === "Enter") confirmRename(); e.stopPropagation() }}
                                 onClick={e => e.stopPropagation()}
-                                className="w-full text-sm font-semibold bg-transparent border-b border-violet-500 outline-none text-foreground"
-                              />
+                                className="w-full text-sm font-semibold bg-transparent border-b border-indigo-500 outline-none text-foreground" />
                             ) : (
                               <p className="text-sm font-semibold text-foreground truncate">{chat.title}</p>
                             )}
-                            <p className="text-[11px] text-muted-foreground mt-0.5">
-                              {chat.messages.length} messages · {formatDate(chat.updatedAt)}
-                            </p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5">{chat.messages.length} messages · {formatDate(chat.updatedAt)}</p>
                           </div>
-                          {/* Actions */}
                           <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
                             {renamingId === chat.id ? (
-                              <button onClick={confirmRename} className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 transition-colors">
-                                <Check className="h-3.5 w-3.5" />
-                              </button>
+                              <button onClick={confirmRename} className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 transition-colors"><Check className="h-3.5 w-3.5" /></button>
                             ) : (
-                              <button onClick={e => startRename(chat, e)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors">
-                                <Edit3 className="h-3.5 w-3.5" />
-                              </button>
+                              <button onClick={e => startRename(chat, e)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"><Edit3 className="h-3.5 w-3.5" /></button>
                             )}
                             <button onClick={e => togglePin(chat.id, e)} className={`p-1.5 rounded-lg transition-colors ${chat.pinned ? "bg-amber-500/15 text-amber-400" : "hover:bg-secondary text-muted-foreground"}`}>
                               {chat.pinned ? <Pin className="h-3.5 w-3.5" /> : <PinOff className="h-3.5 w-3.5" />}
                             </button>
-                            <button onClick={e => deleteChat(chat.id, e)} className="p-1.5 rounded-lg hover:bg-red-500/15 text-muted-foreground hover:text-red-400 transition-colors">
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
+                            <button onClick={e => deleteChat(chat.id, e)} className="p-1.5 rounded-lg hover:bg-red-500/15 text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
                           </div>
                         </button>
                       ))}
@@ -337,44 +249,42 @@ export function AiDoubtSolver() {
               </>
             )}
 
-            {/* ── CHAT VIEW ────────────────────────────────────────────── */}
+            {/* ── CHAT ─────────────────────────────────────────────────── */}
             {view === "chat" && activeChat && (
               <>
-                {/* Header */}
                 <div className="flex items-center gap-3 border-b border-border px-4 py-3 bg-card/80 backdrop-blur shrink-0">
                   <button onClick={() => setView("history")} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
                     <ChevronLeft className="h-4 w-4" />
                   </button>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shrink-0">
+                    <GraduationCap className="h-4 w-4 text-white" />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-foreground text-sm truncate">{activeChat.title}</p>
-                    <p className="text-xs text-emerald-500">● Online — Always available</p>
+                    <p className="text-xs text-emerald-500">● Guru AI</p>
                   </div>
                   <button onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
                   {activeChat.messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/15">
-                        <Sparkles className="h-8 w-8 text-violet-400" />
+                    <div className="flex flex-col items-center gap-4 text-center pt-4">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
+                        <Sparkles className="h-8 w-8 text-indigo-400" />
                       </div>
                       <div>
-                        <p className="font-semibold text-foreground">Guru AI — Your Mentor 🙏</p>
-                        <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
-                          Ask study doubts, get guidance, stay motivated!
+                        <p className="font-bold text-foreground">Guru AI — Your Mentor 🎓</p>
+                        <p className="text-xs text-muted-foreground mt-1 max-w-[260px] leading-relaxed">
+                          Koi bhi doubt puchho — science, math, history, life advice — main hoon na! 💪
                         </p>
                       </div>
-                      <div className="flex flex-wrap gap-2 justify-center mt-2">
-                        {QUICK_ACTIONS.map(action => (
-                          <button
-                            key={action.label}
-                            onClick={() => sendMessage(action.prompt)}
-                            className="text-xs px-3 py-1.5 rounded-full border border-border bg-card hover:bg-secondary text-foreground transition-colors"
-                          >
-                            {action.label}
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {QUICK_ACTIONS.map(a => (
+                          <button key={a.label} onClick={() => sendMessage(a.prompt)}
+                            className="text-xs px-3 py-2 rounded-xl border border-border bg-card hover:bg-secondary text-foreground transition-colors">
+                            {a.label}
                           </button>
                         ))}
                       </div>
@@ -384,19 +294,19 @@ export function AiDoubtSolver() {
                   {activeChat.messages.map((msg, i) => (
                     <div key={i} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       {msg.role === "assistant" && (
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15 mt-1">
-                          <Bot className="h-3.5 w-3.5 text-violet-400" />
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 mt-1">
+                          <GraduationCap className="h-4 w-4 text-indigo-400" />
                         </div>
                       )}
-                      <div className="max-w-[78%]">
-                        <div className={`rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                      <div className="max-w-[80%]">
+                        <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                           msg.role === "user"
-                            ? "bg-violet-600 text-white rounded-br-sm"
-                            : "bg-card border border-border text-foreground rounded-bl-sm"
+                            ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
+                            : "bg-card border border-border text-foreground rounded-bl-sm space-y-1"
                         }`}>
-                          {msg.content}
+                          {msg.role === "assistant" ? formatContent(msg.content) : msg.content}
                         </div>
-                        <p className={`text-[10px] text-muted-foreground mt-0.5 ${msg.role === "user" ? "text-right" : "text-left"}`}>
+                        <p className={`text-[10px] text-muted-foreground mt-1 ${msg.role === "user" ? "text-right" : "text-left"}`}>
                           {formatTime(msg.timestamp)}
                         </p>
                       </div>
@@ -405,22 +315,21 @@ export function AiDoubtSolver() {
 
                   {loading && (
                     <div className="flex gap-2 justify-start">
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/15 mt-1">
-                        <Bot className="h-3.5 w-3.5 text-violet-400" />
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 mt-1">
+                        <GraduationCap className="h-4 w-4 text-indigo-400" />
                       </div>
                       <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-4 py-3">
                         <div className="flex gap-1 items-center">
-                          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "300ms" }} />
                         </div>
                       </div>
                     </div>
                   )}
-
                   <div ref={messagesEndRef} />
                 </div>
-                {/* Input */}
+
                 <div className="border-t border-border px-3 py-3 bg-card/80 backdrop-blur shrink-0">
                   <div className="flex items-center gap-2">
                     <input
@@ -429,14 +338,14 @@ export function AiDoubtSolver() {
                       value={input}
                       onChange={e => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask your doubt or question..."
+                      placeholder="Ask your doubt..."
                       disabled={loading}
-                      className="flex-1 rounded-full border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all disabled:opacity-60"
+                      className="flex-1 rounded-2xl border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-60"
                     />
                     <button
-                      onClick={() => sendMessage(input)}
+                    onClick={() => sendMessage(input)}
                       disabled={!input.trim() || loading}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white disabled:opacity-40 hover:bg-violet-500 active:scale-95 transition-all"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all"
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                     </button>
