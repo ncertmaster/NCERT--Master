@@ -13,13 +13,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="hi" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
           enableSystem={false}
+          disableTransitionOnChange
         >
           {children}
         </ThemeProvider>
