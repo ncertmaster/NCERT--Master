@@ -8,63 +8,63 @@ const sections = [
   {
     icon: Database,
     iconBg: "bg-blue-500/15 text-blue-400",
-    title: "Data Usage (Tumhara Data)",
-    content: `NCERT Master mein aap jo bhi information dete ho — name, class, aim, diary entries, tasks — woh sirf tumhare account ke liye use hoti hai.
+    title: "Data Usage",
+    content: `All information you provide in NCERT Master — name, class, aim, diary entries, tasks — is used only for your account.
 
-• Kisi bhi third-party ke saath tumhara personal data share NAHI kiya jaata
-• Tumhara data Supabase ke secure servers par store hota hai
-• Tum apna data kisi bhi waqt delete kar sakte ho`,
+• Your personal data is NOT shared with any third party
+• Your data is stored on Supabase secure servers
+• You can delete your data at any time`,
   },
   {
     icon: Bot,
     iconBg: "bg-violet-500/15 text-violet-400",
     title: "AI Usage (Groq / LLaMA)",
-    content: `App mein AI features ke liye Groq API (LLaMA model) use hota hai — Notes, Important Questions, Quiz, aur Guru AI chat ke liye.
+    content: `The app uses Groq API (LLaMA model) for AI features — Notes, Important Questions, Quiz, and Guru AI chat.
 
-• Tumhare sawaal AI ko bheje jaate hain jawab paane ke liye
-• AI chat history sirf tumhare device par store hoti hai
-• Groq ke apne privacy terms bhi laagu hote hain`,
+• Your questions are sent to the AI to generate answers
+• AI chat history is stored only on your device
+• Groq's own privacy terms also apply`,
   },
   {
     icon: Eye,
     iconBg: "bg-emerald-500/15 text-emerald-400",
-    title: "Kya Data Collect Hota Hai",
-    content: `Hum sirf woh data collect karte hain jo app chalane ke liye zaroori hai:
+    title: "What Data We Collect",
+    content: `We collect only what is necessary to run the app:
 
-• Name, Email, Class, Target (setup ke waqt)
-• Study tasks aur diary entries (Supabase mein)
-• Language preference (device mein)
-• Koi bhi location ya payment data NAHI`,
+• Name, Email, Class, Target (during setup)
+• Study tasks and diary entries (on Supabase)
+• Language preference (on device)
+• No location or payment data`,
   },
   {
     icon: Bell,
     iconBg: "bg-amber-500/15 text-amber-400",
     title: "Notifications",
-    content: `App kisi bhi tarah ki push notifications ya spam nahi bhejta.
+    content: `The app does not send any push notifications or spam.
 
-Future mein study reminders ka option aayega — lekin woh completely optional rahega aur tumhari permission se hi enable hoga.`,
+Study reminders may be added in the future — but they will be completely optional and enabled only with your permission.`,
   },
   {
     icon: Shield,
     iconBg: "bg-rose-500/15 text-rose-400",
-    title: "Tumhare Rights",
-    content: `Tum apne data ke poore malik ho:
+    title: "Your Rights",
+    content: `You are the complete owner of your data:
 
-• Apna account aur data delete kar sakte ho (Settings > Logout > Data Delete)
-• Kisi bhi waqt app use karna band kar sakte ho
-• Apni information update kar sakte ho
+• You can delete your account and data (Settings > Logout > Data Delete)
+• You can stop using the app at any time
+• You can update your information
 
-Agar koi sawaal ho toh contact karo.`,
+Contact us if you have any questions.`,
   },
   {
     icon: Mail,
     iconBg: "bg-cyan-500/15 text-cyan-400",
     title: "Contact Us",
-    content: `Koi bhi privacy concern ho toh humse sampark karo:
+    content: `For any privacy concerns, reach out to us:
 
-📧 support@ncertmaster.app
+📧 support.ncertmaster@gmail.com
 
-Hum 48 ghante ke andar jawab denge. Tumhari privacy humari zimmedaari hai. 🙏`,
+We will respond within 48 hours. Your privacy is our responsibility. 🙏`,
   },
 ]
 
@@ -79,11 +79,9 @@ export function PrivacyPolicyScreen() {
         <div className="rounded-2xl bg-gradient-to-br from-emerald-500/15 to-cyan-500/10 border border-emerald-500/20 p-5 text-center">
           <Shield className="h-10 w-10 mx-auto text-emerald-400 mb-2" />
           <h1 className="text-base font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Last updated: January 2025
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Last updated: January 2025</p>
           <p className="text-xs text-muted-foreground/80 mt-3 leading-relaxed">
-            NCERT Master tumhari privacy ka pura khayal rakhta hai. Yeh policy batati hai ki hum tumhara data kaise use karte hain.
+            NCERT Master takes your privacy seriously. This policy explains how we use your data.
           </p>
         </div>
 
@@ -94,7 +92,7 @@ export function PrivacyPolicyScreen() {
             <div key={section.title} className="rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden">
               <div className="flex items-center gap-3 px-4 py-3.5 border-b border-border/40">
                 <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${section.iconBg}`}>
-                  <Icon className="h-4.5 w-4.5" />
+                  <Icon className="h-4 w-4" />
                 </div>
                 <h2 className="text-sm font-semibold text-foreground">{section.title}</h2>
               </div>
@@ -108,10 +106,9 @@ export function PrivacyPolicyScreen() {
         })}
 
         <p className="text-center text-[11px] text-muted-foreground/50 pt-2">
-          © 2025 NCERT Master. Sab rights reserved.
+          © 2025 NCERT Master. All rights reserved.
         </p>
       </div>
     </div>
   )
-        }
-              
+      }
