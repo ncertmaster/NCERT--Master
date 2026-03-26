@@ -29,6 +29,9 @@ export type AppScreen =
   | "quiz-play"
   | "quiz-result"
   | "settings"
+  | "study-timer"
+  | "diary"
+  | "privacy-policy"
 
 export interface UserProfile {
   name: string
@@ -89,7 +92,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
-  // ─── On app load: check localStorage only ────────────────────────────────
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("ncert_user")
@@ -226,6 +228,5 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-    }
-
+  }
   
