@@ -510,7 +510,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   if (!selectedBook && subject.books.length > 1) {
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">
-              <ScreenHeader title={`${subject.nameHi} - Book`} />
+      <ScreenHeader title={`${subject.nameHi} - Book`} />
         <div className="mx-auto w-full max-w-md px-4 py-4">
           <div className="flex flex-col gap-3">
             {subject.books.map((book: Book) => (
@@ -740,14 +740,16 @@ export function BooksListScreen() {
   }
 
   const handleOpenBook = (book: Book) => {
-    const url = book.ncertUrl || `https://ncert.nic.in/textbook.php?class=${selectedClass}`
     if (book.ncertUrl) {
-      // Google Drive preview — in-app reader mein kholo
-      setSelectedBookUrl(url)
+      // Google Docs Viewer — works perfectly in mobile WebView
+      const fileId = book.ncertUrl.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1]
+      const viewerUrl = fileId
+        ? `https://docs.google.com/viewer?url=https://drive.google.com/uc?id=${fileId}&embedded=true`
+        : book.ncertUrl
+      setSelectedBookUrl(viewerUrl)
       setScreen("books-reader")
     } else {
-      // No PDF yet — browser mein NCERT site kholo
-      window.open(url, "_blank", "noopener,noreferrer")
+      window.open(`https://ncert.nic.in/textbook.php?class=${selectedClass}`, "_blank", "noopener,noreferrer")
     }
   }
 
@@ -848,4 +850,4 @@ export function BooksReaderScreen() {
       />
     </div>
   )
-    }
+        }
