@@ -3,6 +3,7 @@
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { BottomTabs } from "@/components/bottom-tabs"
+import { AiDoubtSolver } from "@/components/ai-doubt-solver"
 import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Layers } from "lucide-react"
 import type { AppScreen } from "@/lib/app-context"
 import Image from "next/image"
@@ -47,11 +48,9 @@ export function DashboardScreen() {
     <div className="flex min-h-screen flex-col bg-background pb-20">
       {/* Compact Header */}
       <header className="relative overflow-hidden px-5 pb-5 pt-6">
-        {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/8 to-transparent" />
         <div className="relative mx-auto flex max-w-md items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Profile Photo */}
             <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-primary/30 bg-primary/10">
               {user?.photo ? (
                 <img src={user.photo} alt={user.name} className="h-full w-full object-cover" />
@@ -61,7 +60,6 @@ export function DashboardScreen() {
                 </span>
               )}
             </div>
-            {/* Name + Class */}
             <div className="min-w-0">
               <h2 className="truncate text-sm font-semibold text-foreground leading-tight">
                 {user?.name}
@@ -71,7 +69,6 @@ export function DashboardScreen() {
               </p>
             </div>
           </div>
-          {/* Settings + Logo */}
           <div className="flex items-center gap-3">
             <div className="relative h-9 w-9">
               <Image
@@ -105,13 +102,10 @@ export function DashboardScreen() {
                 className="animate-fade-in group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm transition-all hover:shadow-lg hover:border-primary/30 active:scale-[0.97]"
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                {/* Gradient background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 transition-opacity group-hover:opacity-100`} />
-                {/* Icon */}
                 <div className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl ${f.iconBg} transition-transform group-hover:scale-105`}>
                   <Icon className="h-7 w-7" />
                 </div>
-                {/* Label */}
                 <span className="relative z-10 text-sm font-semibold text-card-foreground leading-tight">
                   {getText(f.key, language)}
                 </span>
@@ -123,7 +117,6 @@ export function DashboardScreen() {
         {/* Info Strip */}
         <div className="mt-5 animate-slide-up rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
           <div className="grid grid-cols-3 divide-x divide-border">
-            {/* Target */}
             <div className="flex flex-col items-center gap-1.5 px-2">
               <Target className="h-4 w-4 text-amber-400" />
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
@@ -133,7 +126,6 @@ export function DashboardScreen() {
                 {user?.aim || "---"}
               </span>
             </div>
-            {/* Language */}
             <div className="flex flex-col items-center gap-1.5 px-2">
               <Globe className="h-4 w-4 text-cyan-400" />
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
@@ -143,7 +135,6 @@ export function DashboardScreen() {
                 {getText("hindi", language)}
               </span>
             </div>
-            {/* Mode */}
             <div className="flex flex-col items-center gap-1.5 px-2">
               <Layers className="h-4 w-4 text-indigo-400" />
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
@@ -156,13 +147,17 @@ export function DashboardScreen() {
           </div>
         </div>
 
-        {/* Content Language Note */}
         <p className="mt-4 text-center text-[11px] text-muted-foreground/60">
           {getText("contentLanguageNote", language)}
         </p>
       </div>
 
       <BottomTabs activeTab="dashboard" />
+
+      {/* ─── AI Doubt Solver Floating Button ────────────────────── */}
+      {/* Yeh button fixed bottom-right par hoga, WhatsApp style   */}
+      <AiDoubtSolver />
     </div>
   )
-}
+              }
+              
