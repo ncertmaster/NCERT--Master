@@ -2,33 +2,89 @@
 
 import React from "react"
 import { useApp } from "@/lib/app-context"
-import { ChevronLeft, LogOut } from "lucide-react"
+import { ScreenHeader } from "@/components/screen-header"
+import {
+  LogOut,
+  Timer,
+  BookMarked,
+  Shield,
+  ChevronRight,
+} from "lucide-react"
 
 export function SettingsScreen() {
-  const { goBack, logout, setScreen } = useApp()
+  const { logout, setScreen } = useApp()
 
   const handleLogout = () => {
     logout()
     setScreen("setup")
   }
 
+  const menuItems = [
+    {
+      icon: Timer,
+      label: "Study Timer & Tasks",
+      sublabel: "Daily routine aur Pomodoro timer",
+      iconBg: "bg-violet-500/15 text-violet-400",
+      onClick: () => setScreen("study-timer"),
+    },
+    {
+      icon: BookMarked,
+      label: "My Diary",
+      sublabel: "Daily notes, goals aur life journey",
+      iconBg: "bg-amber-500/15 text-amber-400",
+      onClick: () => setScreen("diary"),
+    },
+    {
+      icon: Shield,
+      label: "Privacy Policy",
+      sublabel: "Data usage aur AI policy",
+      iconBg: "bg-emerald-500/15 text-emerald-400",
+      onClick: () => setScreen("privacy-policy"),
+    },
+  ]
+
   return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="flex items-center p-4 border-b">
-        <button onClick={() => goBack()} className="p-2 -ml-2 rounded-full hover:bg-accent">
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <h1 className="ml-2 text-xl font-bold">Settings</h1>
-      </div>
-      <div className="flex-1 p-4 space-y-6">
+    <div className="flex flex-col min-h-screen bg-background">
+      <ScreenHeader title="Settings" />
+
+      <div className="flex-1 px-4 py-5 space-y-3 max-w-md mx-auto w-full">
+
+        {/* Feature Menu */}
+        <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
+          {menuItems.map((item, i) => {
+            const Icon = item.icon
+            return (
+              <button
+                key={item.label}
+                onClick={item.onClick}
+                className={`w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary ${
+                  i < menuItems.length - 1 ? "border-b border-border/60" : ""
+                }`}
+              >
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.iconBg}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground">{item.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{item.sublabel}</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Logout */}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-50 border border-red-100 rounded-xl hover:bg-red-200 transition-colors"
+          className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl hover:bg-red-500/20 transition-colors font-semibold"
         >
           <LogOut className="w-5 h-5" />
-          <span className="font-bold">Logout</span>
+          <span>Logout</span>
         </button>
+
       </div>
     </div>
   )
-}
+      }
+          
