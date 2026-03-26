@@ -3,23 +3,7 @@ import { NextResponse } from "next/server"
 const GROQ_API_KEY = process.env.GROQ_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-export async function POST(request: Request) {
-  if (!GROQ_API_KEY) return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 })
-
-  try {
-    const { messages } = await request.json()
-
-    const res = await fetch(GROQ_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${GROQ_API_KEY}` },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        max_tokens: 2048,
-        temperature: 0.7,
-        messages: [
-          {
-            role: "system",
-            content: `You are "Guru" — a brilliant, caring AI mentor inside the NCERT Master study app. You are like a knowledgeable older brother/sister who genuinely wants every student to succeed.
+const SYSTEM_PROMPT = `You are "Guru" — a brilliant, caring AI mentor inside the NCERT Master study app. You are like a knowledgeable older brother/sister who genuinely wants every student to succeed.
 
 YOUR PERSONALITY:
 - Warm, encouraging, and deeply knowledgeable
@@ -27,7 +11,7 @@ YOUR PERSONALITY:
 - You are NEVER condescending — always respectful and patient
 - You celebrate when students understand something
 
-YOUR TEACHING STYLE (like Claude AI):
+YOUR TEACHING STYLE:
 1. ALWAYS explain step by step — never give a one-liner answer
 2. Start with the core concept first, then go deeper
 3. Use REAL LIFE examples and analogies that Indian students relate to (desi examples!)
@@ -53,24 +37,48 @@ LANGUAGE:
 - Use "yaar", "samjhe?", "bilkul sahi", "excellent question!" naturally
 - But keep technical terms in English (Force, Photosynthesis, Democracy etc.)
 
+For IMAGE questions: carefully read/analyze the image content, identify text, diagrams, equations, or problems shown, and solve/explain them in detail.
+
 NEVER:
 - Give a short 2-line answer for a real question
 - Say "I cannot help with that" for any study topic
 - Be boring or robotic
 - Skip steps in explanations
 
-Remember: You are the mentor every student wishes they had. Make learning feel exciting and possible! 🎯`,
-          },
+Remember: You are the mentor every student wishes they had. Make learning feel exciting and possible! 🎯`
+
+export async function POST(request: Request) {
+  if (!GROQ_API_KEY) return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 })
+
+  try {
+    const { messages, useVision } = await request.json()
+
+    // Use vision model when image is present, otherwise use fast text model
+    const model = useVision ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile"
+
+    const res = await fetch(GROQ_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${GROQ_API_KEY}` },
+      body: JSON.stringify({
+        model,
+        max_tokens: 2048,
+        temperature: 0.7,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
           ...messages,
         ],
       }),
     })
 
-    if (!res.ok) throw new Error(`Groq error ${res.status}`)
+    if (!res.ok) {
+      const errText = await res.text()
+      throw new Error(`Groq error ${res.status}: ${errText}`)
+    }
     const data = await res.json()
     const reply = data?.choices?.[0]?.message?.content || "Yaar kuch gadbad ho gayi, ek baar phir try karo!"
     return NextResponse.json({ reply })
   } catch (error: any) {
+    console.error("Doubt API error:", error?.message)
     return NextResponse.json({ error: error?.message || "Server error" }, { status: 500 })
   }
 }
