@@ -822,7 +822,16 @@ export function BooksReaderScreen() {
         <button onClick={goBack} className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors">
           <ArrowLeft className="h-4 w-4 text-foreground" />
         </button>
-        <p className="flex-1 text-sm font-semibold text-foreground">📖 NCERT पुस्तक</p>
+       <p className="flex-1 text-sm font-semibold text-foreground">📖 NCERT पुस्तक</p>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
+          title="Browser में खोलें"
+        >
+          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+        </a>
         <button
           onClick={() => { setLoading(true); if (iframeRef.current) iframeRef.current.src = url }}
           className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
