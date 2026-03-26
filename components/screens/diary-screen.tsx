@@ -184,7 +184,7 @@ export function DiaryScreen() {
             <X className="h-5 w-5" />
           </button>
           <span className="flex-1 text-sm font-semibold text-foreground">
-            {editingId ? "Entry Edit Karo" : "Nai Entry Likho"}
+            {editingId ? "Edit Entry" : "New Entry"}
           </span>
           {/* Auto-save status */}
           <span className={`text-xs transition-all ${
@@ -207,7 +207,7 @@ export function DiaryScreen() {
         <div className="flex-1 px-4 py-4 space-y-3 max-w-md mx-auto w-full">
           {/* Mood Selector */}
           <div>
-            <p className="text-xs text-muted-foreground mb-2">Aaj kaisa feel ho raha hai?</p>
+            <p className="text-xs text-muted-foreground mb-2">How are you feeling today?</p>
             <div className="flex gap-2">
               {MOODS.map(m => (
                 <button
@@ -226,7 +226,7 @@ export function DiaryScreen() {
           {/* Title */}
           <input
             type="text"
-            placeholder="Title likhna... (jaise: Aaj ka din, Goal, Reflection)"
+            placeholder="Write a title... (e.g. Today's Day, Goal, Reflection)"
             value={title}
             onChange={e => setTitle(e.target.value)}
             className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground placeholder:text-muted-foreground outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
@@ -234,7 +234,7 @@ export function DiaryScreen() {
 
           {/* Content */}
           <textarea
-            placeholder="Apne dil ki baat likho... goals, thoughts, aaj kya seekha, kya feel kiya — sab kuch!"
+            placeholder="Write your thoughts... goals, reflections, what you learned — anything!"
             value={content}
             onChange={e => setContent(e.target.value)}
             rows={16}
@@ -255,7 +255,7 @@ export function DiaryScreen() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm font-semibold text-foreground">{entries.length} Entries</p>
-            <p className="text-xs text-muted-foreground">Tumhara personal diary ✍️</p>
+            <p className="text-xs text-muted-foreground">Your personal diary ✍️</p>
           </div>
           <button
             onClick={openNewEditor}
@@ -271,9 +271,9 @@ export function DiaryScreen() {
         ) : entries.length === 0 ? (
           <div className="text-center py-14 rounded-2xl border border-dashed border-border">
             <BookMarked className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
-            <p className="text-sm font-medium text-muted-foreground">Diary abhi khaali hai</p>
+            <p className="text-sm font-medium text-muted-foreground">Diary is empty</p>
             <p className="text-xs text-muted-foreground/60 mt-1">
-              Upar "Likho" button se pehli entry add karo!
+              Use the "Write" button above to add your first entry!
             </p>
           </div>
         ) : (
@@ -347,4 +347,5 @@ export function DiaryScreen() {
     </div>
   )
     }
-        
+
+  
