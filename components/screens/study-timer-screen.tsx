@@ -136,11 +136,31 @@ export function StudyTimerScreen() {
   const addTask = async () => {
     if (!subject.trim() || !user?.email) return
     setSaving(true)
-    const { data, error } = await supabase.from("study_tasks").insert({
-      user_email: user.email, subject: subject.trim(), chapter: "",
-      start_time: startTime, end_time: endTime, repeat, completed: false, streak: 0, time_slot: timeSlot
-    }).select().single()
-    if (!error && data) { setTasks(prev => [...prev, data as Task].sort((a, b) => a.start_time.localeCompare(b.start_time))); setSubject(""); setChapter(""); setShowForm(false) }
+    try {
+      const { data, error } = await supabase.from("study_tasks").insert({
+        user_email: user.email,
+        subject: subject.trim(),
+        chapter: "",
+        start_time: startTime,
+        end_time: endTime,
+        repeat,
+        completed: false,
+        streak: 0,
+        time_slot: timeSlot
+      }).select().single()
+      if (error) {
+        console.error("addTask error:", error)
+        alert("Schedule save failed: " + error.message)
+      } else if (data) {
+        setTasks(prev => [...prev, data as Task].sort((a, b) => a.start_time.localeCompare(b.start_time)))
+        setSubject("")
+        setChapter("")
+        setShowForm(false)
+      }
+    } catch (err: any) {
+      console.error("addTask catch:", err)
+      alert("Schedule save failed: " + String(err))
+    }
     setSaving(false)
   }
 
@@ -302,13 +322,13 @@ export function StudyTimerScreen() {
               <p className="text-sm font-semibold text-foreground">Today's Schedule</p>
               <button onClick={() => setShowForm(!showForm)}
                 className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-violet-500/15 text-violet-400 hover:bg-violet-500/25 font-medium">
-                <Plus className="h-3.5 w-3.5" /> Add Task
+                <Plus className="h-3.5 w-3.5" /> Add Schedule
               </button>
             </div>
 
             {showForm && (
               <div className="rounded-2xl border border-violet-500/30 bg-card p-4 shadow-sm space-y-3">
-                <input type="text" placeholder="Add Schedule... (e.g. History, Physics)" value={subject} onChange={e => setSubject(e.target.value)}
+                <input type="text" placeholder="Add Schedule..." value={subject} onChange={e => setSubject(e.target.value)}
                   className="w-full rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
                 <div className="grid grid-cols-2 gap-2">
                   <div><label className="text-xs text-muted-foreground mb-1 block">Start Time</label>
@@ -332,7 +352,7 @@ export function StudyTimerScreen() {
                 <div className="flex gap-2">
                   <button onClick={addTask} disabled={saving || !subject.trim()}
                     className="flex-1 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 disabled:opacity-50">
-                    {saving ? "Saving..." : "Add Task"}
+                    {saving ? "Saving..." : "Add Schedule"}
                   </button>
                   <button onClick={() => setShowForm(false)} className="px-4 py-2.5 rounded-xl border border-border text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" /></button>
                 </div>
@@ -363,7 +383,7 @@ export function StudyTimerScreen() {
                       </div>
                     </div>
                     <button onClick={() => deleteTask(task.id)} className="shrink-0 p-1 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10">
-                     <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 ))}
