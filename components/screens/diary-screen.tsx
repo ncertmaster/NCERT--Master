@@ -58,7 +58,7 @@ export function DiaryScreen() {
     const { data, error } = await supabase
       .from("diary_entries")
       .select("*")
-      .eq("user_email", userEmail)
+      .eq("user_email", user?.email)
       .order("created_at", { ascending: false })
     if (!error && data) setEntries(data as DiaryEntry[])
     setLoading(false)
