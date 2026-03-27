@@ -1,17 +1,12 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useApp } from "@/lib/app-context"
 import Image from "next/image"
 
 export function SplashScreen() {
-  const { setScreen } = useApp()
-
-  useEffect(() => {
-    const timer = setTimeout(() =>setScreen("setup"), 2500)
-    return () => clearTimeout(timer)
-  }, [setScreen])
-
+  // Splash bas dikhti hai — app-context ki init() hi screen change karegi
+  // Yahan koi setScreen("setup") nahi — warna race condition se flash aata tha
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0e2a]">
       <div className="animate-scale-in flex flex-col items-center gap-6">
