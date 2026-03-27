@@ -15,6 +15,7 @@ export const class10Subjects: Subject[] = [
         id: "math-10-ganit",
         name: "Ganit",
         nameHi: "गणित",
+        ncertPdfCode: "jemh1",
         chapters: [
           { id: "m10-ch1", name: "Real Numbers", nameHi: "वास्तविक संख्याएँ" },
           { id: "m10-ch2", name: "Polynomials", nameHi: "बहुपद" },
@@ -68,6 +69,7 @@ export const class10Subjects: Subject[] = [
         id: "science-10-vigyan",
         name: "Vigyan",
         nameHi: "विज्ञान",
+        ncertPdfCode: "jesc1",
         chapters: [
           { id: "v10-ch1", name: "Chemical Reactions and Equations", nameHi: "रासायनिक अभिक्रियाएँ एवं समीकरण" },
           { id: "v10-ch2", name: "Acids, Bases and Salts", nameHi: "अम्ल, क्षारक एवं लवण" },
@@ -130,6 +132,7 @@ export const class10Subjects: Subject[] = [
         id: "social-10-itihas",
         name: "Bharat aur Samkaleen Vishwa - 2",
         nameHi: "भारत और समकालीन विश्व - 2",
+        ncertPdfCode: "jess1",
         chapters: [
           { id: "bs10-ch1", name: "The Rise of Nationalism in Europe", nameHi: "यूरोप में राष्ट्रवाद का उदय" },
           { id: "bs10-ch2", name: "Nationalism in India", nameHi: "भारत में राष्ट्रवाद" },
@@ -142,6 +145,7 @@ export const class10Subjects: Subject[] = [
         id: "social-10-bhugol",
         name: "Samkaleen Bharat - 2",
         nameHi: "समकालीन भारत - 2",
+        ncertPdfCode: "jess2",
         chapters: [
           { id: "sb10-ch1", name: "Resources and Development", nameHi: "संसाधन एवं विकास" },
           { id: "sb10-ch2", name: "Forest and Wildlife Resources", nameHi: "वन एवं वन्य जीव संसाधन" },
@@ -156,6 +160,7 @@ export const class10Subjects: Subject[] = [
         id: "social-10-rajniti",
         name: "Loktantrik Rajneeti - 2",
         nameHi: "लोकतांत्रिक राजनीति - 2",
+        ncertPdfCode: "jess3",
         chapters: [
           { id: "lr10-ch1", name: "Power Sharing", nameHi: "सत्ता की साझेदारी" },
           { id: "lr10-ch2", name: "Federalism", nameHi: "संघवाद" },
@@ -168,6 +173,7 @@ export const class10Subjects: Subject[] = [
         id: "social-10-arthashastra",
         name: "Arthik Vikas Ki Samajh",
         nameHi: "आर्थिक विकास की समझ",
+        ncertPdfCode: "jess4",
         chapters: [
           { id: "ar10-ch1", name: "Development", nameHi: "विकास" },
           { id: "ar10-ch2", name: "Sectors of the Indian Economy", nameHi: "भारतीय अर्थव्यवस्था के क्षेत्रक" },
@@ -193,6 +199,7 @@ export const class10Subjects: Subject[] = [
         id: "hindi-10-kshitiz",
         name: "Kshitiz Bhag 2",
         nameHi: "क्षितिज भाग 2",
+        ncertPdfCode: "jhhc1",
         chapters: [
           { id: "ksh10-ch1", name: "Pad", nameHi: "पद (सूरदास)" },
           { id: "ksh10-ch2", name: "Ram-Lakshman-Parashuram Samvad", nameHi: "राम-लक्ष्मण-परशुराम संवाद" },
@@ -213,6 +220,7 @@ export const class10Subjects: Subject[] = [
         id: "hindi-10-sparsh",
         name: "Sparsh Bhag 2",
         nameHi: "स्पर्श भाग 2",
+        ncertPdfCode: "jhic1",
         chapters: [
           { id: "sp10-ch1", name: "Saakhi", nameHi: "साखी (कबीर)" },
           { id: "sp10-ch2", name: "Pad", nameHi: "पद (मीरा)" },
@@ -369,6 +377,7 @@ export const class10Subjects: Subject[] = [
         id: "english-10-firstflight",
         name: "First Flight",
         nameHi: "First Flight",
+        ncertPdfCode: "jenc1",
         chapters: [
           { id: "ff10-ch1", name: "A Letter to God", nameHi: "A Letter to God" },
           { id: "ff10-ch2", name: "Nelson Mandela: Long Walk to Freedom", nameHi: "Nelson Mandela: Long Walk to Freedom" },
