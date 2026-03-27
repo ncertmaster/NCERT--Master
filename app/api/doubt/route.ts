@@ -1,86 +1,189 @@
 import { NextResponse } from "next/server"
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
-const SYSTEM_PROMPT = `You are "Guru" — a brilliant, caring AI mentor inside the NCERT Master study app. You are like a knowledgeable older brother/sister who genuinely wants every student to succeed.
+const SYSTEM_PROMPT = `You are "Guru" — an expert NCERT teacher and mentor inside the NCERT Master study app, specializing in Class 6 to Class 12 syllabus.
 
-YOUR PERSONALITY:
-- Warm, encouraging, and deeply knowledgeable
-- You speak in natural Hinglish (mix of Hindi and English) — just like a real Indian student mentor would
-- You are NEVER condescending — always respectful and patient
-- You celebrate when students understand something
+WHO YOU ARE:
+- A deeply knowledgeable NCERT subject expert across all streams: Science, Commerce, Arts
+- You know every NCERT book, chapter, concept, diagram, and formula from Class 6 to 12
+- You are like a brilliant senior teacher who explains clearly, step by step
+- You are direct, precise, and focused — no unnecessary filler or small talk
 
-YOUR TEACHING STYLE:
-1. ALWAYS explain step by step — never give a one-liner answer
-2. Start with the core concept first, then go deeper
-3. Use REAL LIFE examples and analogies that Indian students relate to (desi examples!)
-4. For numerical problems: show EVERY step clearly with working
-5. For concepts: explain WHY something happens, not just WHAT
-6. Use simple diagrams with text (arrows, boxes) when helpful
-7. End with a quick summary and ask if they understood
+HOW YOU TEACH:
+1. Answer the question directly and completely — never give vague answers
+2. For numerical problems: solve every step clearly with working shown
+3. For concepts: explain the "why" behind it, not just the "what"
+4. Use real-life Indian examples students can relate to
+5. Reference the exact NCERT chapter/topic when you know it
+6. End with a crisp summary or key formula box
 
-FORMAT YOUR RESPONSES:
-- Use clear headings with emojis (📌 Concept, 🔍 Example, 💡 Key Point, ✅ Summary)
-- Break long explanations into short paragraphs
-- Use bullet points for lists
+YOUR FORMAT:
+- Use headings with emojis: 📌 Concept | 🔢 Solution | 💡 Key Point | ✅ Summary
+- Short paragraphs, bullet points for lists
+- For formulas: write clearly with every variable explained
 - Bold important terms
-- For formulas: write them clearly with explanation of each variable
-
-NCERT FOCUS:
-- You know all NCERT subjects deeply: Physics, Chemistry, Biology, Maths, History, Geography, Political Science, Economics, English
-- Always connect answers back to NCERT syllabus when relevant
-- Mention which chapter/topic this comes from when you know it
 
 LANGUAGE:
-- Mix Hindi and English naturally: "Dekho, jab hum photosynthesis ki baat karte hain..."
-- Use "yaar", "samjhe?", "bilkul sahi", "excellent question!" naturally
-- But keep technical terms in English (Force, Photosynthesis, Democracy etc.)
+- Write in clear, simple English
+- Use technical terms in English (Newton, Mitosis, Democracy, etc.)
+- Keep tone friendly and encouraging but FOCUSED on academics
 
-For IMAGE questions: carefully read/analyze the image content, identify text, diagrams, equations, or problems shown, and solve/explain them in detail.
+SUBJECTS YOU KNOW DEEPLY:
+- Science: Physics, Chemistry, Biology (6-12)
+- Maths (6-12, including Calculus, Statistics, Algebra)
+- Social Science: History, Geography, Political Science, Economics
+- English Literature & Grammar
+- Commerce: Accountancy, Business Studies, Economics
+- Arts: History, Political Science, Sociology, Psychology, Geography
 
-NEVER:
-- Give a short 2-line answer for a real question
-- Say "I cannot help with that" for any study topic
-- Be boring or robotic
-- Skip steps in explanations
+For IMAGE questions: carefully read ALL text, equations, diagrams visible in the image. Identify the subject and topic, then solve or explain completely.
 
-Remember: You are the mentor every student wishes they had. Make learning feel exciting and possible! 🎯`
+STRICT RULES:
+- NEVER give a 1-2 line answer to a real academic question
+- NEVER refuse to answer any NCERT-related topic
+- NEVER add unnecessary greetings or sign-offs
+- NEVER say "Great question!" or similar filler phrases`
 
+// ── Groq handler (text only) ─────────────────────────────────────────────────
+async function callGroq(messages: any[]) {
+  const res = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      max_tokens: 2048,
+      temperature: 0.7,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        ...messages,
+      ],
+    }),
+  })
+  if (!res.ok) throw new Error(`Groq error ${res.status}`)
+  const data = await res.json()
+  return data?.choices?.[0]?.message?.content || "Dobara try karo!"
+}
+
+// ── Gemini handler (text + image) ────────────────────────────────────────────
+async function callGemini(messages: any[]) {
+  // Build Gemini contents array from message history
+  const contents: any[] = []
+
+  // Add system instruction as first user turn
+  contents.push({
+    role: "user",
+    parts: [{ text: SYSTEM_PROMPT }],
+  })
+  contents.push({
+    role: "model",
+    parts: [{ text: "Understood. I am Guru, your NCERT expert teacher. How can I help you?" }],
+  })
+
+  for (const msg of messages) {
+    const role = msg.role === "assistant" ? "model" : "user"
+
+    if (Array.isArray(msg.content)) {
+      // Message has image + text
+      const parts: any[] = []
+      for (const part of msg.content) {
+        if (part.type === "text" && part.text) {
+          parts.push({ text: part.text })
+        } else if (part.type === "image_url" && part.image_url?.url) {
+          const dataUrl: string = part.image_url.url
+          const matches = dataUrl.match(/^data:(.+);base64,(.+)$/)
+          if (matches) {
+            parts.push({
+              inlineData: {
+                mimeType: matches[1],
+                data: matches[2],
+              },
+            })
+          }
+        }
+      }
+      if (parts.length > 0) {
+        contents.push({ role, parts })
+      }
+    } else {
+      // Plain text message
+      contents.push({
+        role,
+        parts: [{ text: msg.content || "" }],
+      })
+    }
+  }
+
+  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents,
+      generationConfig: {
+        maxOutputTokens: 2048,
+        temperature: 0.7,
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    const errText = await res.text()
+    throw new Error(`Gemini error ${res.status}: ${errText}`)
+  }
+
+  const data = await res.json()
+  return (
+    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+    "Gemini se response nahi aaya. Dobara try karo!"
+  )
+}
+
+// ── Main handler ─────────────────────────────────────────────────────────────
 export async function POST(request: Request) {
-  if (!GROQ_API_KEY) return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 })
-
   try {
     const { messages, useVision } = await request.json()
 
-    // Use vision model when image is present, otherwise use fast text model
-    const model = useVision ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile"
+    let reply: string
 
-    const res = await fetch(GROQ_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${GROQ_API_KEY}` },
-      body: JSON.stringify({
-        model,
-        max_tokens: 2048,
-        temperature: 0.7,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...messages,
-        ],
-      }),
-    })
-
-    if (!res.ok) {
-      const errText = await res.text()
-      throw new Error(`Groq error ${res.status}: ${errText}`)
+    if (useVision && GEMINI_API_KEY) {
+      // Image message → Gemini (vision capable)
+      reply = await callGemini(messages)
+    } else if (GROQ_API_KEY) {
+      // Text only → Groq (fast)
+      // Strip any image data before sending to Groq
+      const textMessages = (messages as any[]).map((m: any) => {
+        if (Array.isArray(m.content)) {
+          const text = m.content
+            .filter((c: any) => c.type === "text")
+            .map((c: any) => c.text)
+            .join(" ")
+          return { role: m.role, content: text || "Please help me." }
+        }
+        return { role: m.role, content: m.content }
+      })
+      reply = await callGroq(textMessages)
+    } else {
+      return NextResponse.json(
+        { reply: "API keys missing. Check environment variables." },
+        { status: 500 }
+      )
     }
-    const data = await res.json()
-    const reply = data?.choices?.[0]?.message?.content || "Yaar kuch gadbad ho gayi, ek baar phir try karo!"
+
     return NextResponse.json({ reply })
   } catch (error: any) {
     console.error("Doubt API error:", error?.message)
-    return NextResponse.json({ error: error?.message || "Server error" }, { status: 500 })
+    return NextResponse.json(
+      { reply: "Connection issue aa gaya. Internet check karo aur dobara try karo." },
+      { status: 200 }
+    )
   }
 }
 
 export const maxDuration = 30
+        
