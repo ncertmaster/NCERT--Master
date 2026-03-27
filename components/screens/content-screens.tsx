@@ -337,7 +337,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "quiz" }) {
   const {
     language, selectedClass, selectedStream, selectedSubject, selectedBook,
-    setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen,
+    setSelectedStream, setSelectedSubject, setSelectedBook, setSelectedChapter, setScreen, setSelectedBookUrl,
   } = useApp()
 
   const tabKey: Record<string, string> = {
@@ -364,8 +364,15 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
   }, [selectedStream, selectedClass])
 
-  // Helper to render chapter buttons — avoids code duplication
-  function ChapterButtons({ ch, subjectName }: { ch: Chapter; subjectName: string }) {
+  // Builds Google Docs viewer URL for a specific NCERT chapter PDF
+  function buildNcertUrl(code: string | undefined, chapterIndex: number): string | null {
+    if (!code) return null
+    const ch = String(chapterIndex).padStart(2, "0")
+    const pdfUrl = `https://ncert.nic.in/textbook/pdf/${code}${ch}.pdf`
+    return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`
+  }
+
+  function ChapterButtons({ ch, subjectName, ncertPdfCode, chapterIndex }: { ch: Chapter; subjectName: string; ncertPdfCode?: string; chapterIndex: number }) {
     if (flow === "quiz") {
       return (
         <button
@@ -378,9 +385,14 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
 
     if (flow === "books") {
+      const ncertUrl = buildNcertUrl(ncertPdfCode, chapterIndex)
       return (
         <button
-          onClick={() => { setSelectedChapter(ch.id); setScreen("books-reader") }}
+          onClick={() => {
+            setSelectedChapter(ch.id)
+            setSelectedBookUrl(ncertUrl)
+            setScreen("books-reader")
+          }}
           className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground active:opacity-90"
         >
           📖 ऑनलाइन पढ़ें
@@ -499,12 +511,12 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     {idx + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-semibold leading-tight text-card-foreground">{ch.name}</p>
+                   <p className="text-[13px] font-semibold leading-tight text-card-foreground">{ch.name}</p>
                     <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                   </div>
                 </div>
                 <div className="flex gap-2 px-3 pb-3">
-                  <ChapterButtons ch={ch} subjectName={subject.name} />
+                  <ChapterButtons ch={ch} subjectName={subject.name} ncertPdfCode={book.ncertPdfCode} chapterIndex={idx + 1} />
                 </div>
               </div>
             ))}
@@ -514,7 +526,9 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       </div>
     )
   }
-// ── Class 6–10 ──
+
+  
+  // ── Class 6–10 ──
   const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const subject = subjects.find((s: Subject) => s.id === selectedSubject)
   if (!subject) return null
@@ -567,7 +581,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                 </div>
               </div>
               <div className="flex gap-2 px-3 pb-3">
-                <ChapterButtons ch={ch} subjectName={subject.name} />
+                <ChapterButtons ch={ch} subjectName={subject.name} ncertPdfCode={book.ncertPdfCode} chapterIndex={idx + 1} />
               </div>
             </div>
           ))}
@@ -805,17 +819,24 @@ export function BooksListScreen() {
 }
 
 export function BooksReaderScreen() {
-  const { selectedClass, goBack } = useApp()
+  const { selectedClass, selectedBookUrl, goBack } = useApp()
   const [loading, setLoading] = React.useState(true)
+  const [iframeError, setIframeError] = React.useState(false)
 
-  // Official NCERT epathshala — class-specific books page
-  const ncertUrl = `https://epathshala.nic.in/e-pathshala-4/profile/?id=${selectedClass || 6}`
+  // Fallback: epathshala class page if no specific URL
+  const readerUrl = selectedBookUrl || `https://epathshala.nic.in/e-pathshala-4/profile/?id=${selectedClass || 6}`
 
-  // Timeout fallback: if still loading after 8s, iframe probably blocked
+  // Direct NCERT PDF URL (for download/browser fallback)
+  const directPdfUrl = selectedBookUrl
+    ? decodeURIComponent(selectedBookUrl.replace("https://docs.google.com/viewer?url=", "").replace("&embedded=true", ""))
+    : readerUrl
+
   React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 8000)
+    setLoading(true)
+    setIframeError(false)
+    const timer = setTimeout(() => setLoading(false), 10000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [readerUrl])
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -823,7 +844,7 @@ export function BooksReaderScreen() {
       <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur">
         <button
           onClick={goBack}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary text-foreground"
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary text-foreground text-lg"
         >
           ←
         </button>
@@ -832,7 +853,7 @@ export function BooksReaderScreen() {
           <p className="text-xs text-muted-foreground">Class {selectedClass} — Official NCERT</p>
         </div>
         <button
-          onClick={() => window.open(ncertUrl, "_blank")}
+          onClick={() => window.open(directPdfUrl, "_blank")}
           className="flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground"
         >
           <ExternalLink className="h-3.5 w-3.5" />
@@ -846,32 +867,40 @@ export function BooksReaderScreen() {
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <p className="text-sm text-muted-foreground">NCERT किताब लोड हो रही है...</p>
-            <p className="text-xs text-muted-foreground opacity-60">कुछ सेकंड रुकें</p>
+            <p className="text-xs text-muted-foreground opacity-60">10-20 सेकंड लग सकते हैं</p>
           </div>
         )}
-        <iframe
-          src={ncertUrl}
-          title="NCERT Books"
-          className="h-full w-full border-0"
-          style={{ height: "calc(100vh - 60px)" }}
-          onLoad={() => setLoading(false)}
-          allow="fullscreen"
-        />
+        {!iframeError && (
+          <iframe
+            key={readerUrl}
+            src={readerUrl}
+            title="NCERT Books"
+            className="h-full w-full border-0"
+            style={{ height: "calc(100vh - 120px)" }}
+            onLoad={() => setLoading(false)}
+            onError={() => { setLoading(false); setIframeError(true) }}
+            allow="fullscreen"
+          />
+        )}
+        {iframeError && (
+          <div className="flex flex-col items-center justify-center h-full gap-4 px-6">
+            <p className="text-sm text-muted-foreground text-center">
+              यह PDF यहाँ नहीं खुल सका। नीचे से Browser में खोलें।
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Bottom fallback banner */}
+      {/* Bottom fallback */}
       <div className="border-t border-border bg-card px-4 py-3">
-        <p className="text-xs text-muted-foreground text-center mb-2">
-          अगर किताब नहीं दिख रही तो Browser में खोलें
-        </p>
         <button
-          onClick={() => window.open(ncertUrl, "_blank")}
+          onClick={() => window.open(directPdfUrl, "_blank")}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground"
         >
           <ExternalLink className="h-4 w-4" />
-          Browser में खोलें
+          Browser में खोलें / Download करें
         </button>
       </div>
     </div>
   )
-}
+         }
