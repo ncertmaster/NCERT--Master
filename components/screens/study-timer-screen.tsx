@@ -107,7 +107,7 @@ function usePageNotifications(tasks: Task[], permission: NotificationPermission)
         const tid = setTimeout(() => {
           try {
             new Notification(`📚 Study Time: ${task.subject}`, {
-              body: `${task.start_time} – ${task.end_time} | Abhi padhai shuru karo! 🚀`,
+              body: `${task.start_time} – ${task.end_time} | Time to study! 🚀`,
               icon: "/icons/icon-192x192.jpg",
               tag: `ncert-page-${task.id}`,
             })
@@ -313,7 +313,7 @@ export function StudyTimerScreen() {
           <Bell className="h-5 w-5 text-violet-400 shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold text-violet-400">Schedule Notifications Enable Karo</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Task ke exact time par phone pe reminder milega!</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">You will get a notification on your device at the scheduled time!</p>
           </div>
           <button onClick={handleEnableNotifications}
             className="shrink-0 text-xs px-3 py-1.5 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-500 transition-colors">
@@ -439,7 +439,7 @@ export function StudyTimerScreen() {
                   <p className="text-sm font-semibold text-foreground">Today's Progress</p>
                   <p className="text-sm font-bold text-violet-400">{progressPct}%</p>
                 </div>
-            <div className="h-2 rounded-full bg-secondary overflow-hidden">
+    <div className="h-2 rounded-full bg-secondary overflow-hidden">
                   <div className="h-full rounded-full bg-violet-500 transition-all duration-500" style={{ width: `${progressPct}%` }} />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1.5">{completedToday} of {totalTasks} tasks completed</p>
@@ -479,7 +479,7 @@ export function StudyTimerScreen() {
 
             {showForm && (
               <div className="rounded-2xl border border-violet-500/30 bg-card p-4 shadow-sm space-y-3">
-                <input type="text" placeholder="Add Schedule (e.g. Physics, Maths...)"
+                <input type="text" placeholder="Add Schedule"
                   value={subject} onChange={e => setSubject(e.target.value)}
                   className="w-full rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
                 <div className="grid grid-cols-2 gap-2">
@@ -507,7 +507,7 @@ export function StudyTimerScreen() {
                 </div>
                 {notifPermission === "granted" && (
                   <p className="text-[11px] text-emerald-400 flex items-center gap-1">
-                    <Bell className="h-3 w-3" /> {startTime} par notification milega!
+                    <Bell className="h-3 w-3" /> Notification scheduled at {startTime}
                   </p>
                 )}
                 <div className="flex gap-2">
@@ -603,4 +603,4 @@ export function StudyTimerScreen() {
       </div>
     </div>
   )
-                }
+                                                 }
