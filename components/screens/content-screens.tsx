@@ -378,7 +378,14 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     }
 
     if (flow === "books") {
-      return null // Books tab mein koi button nahi
+      return (
+        <button
+          onClick={() => { setSelectedChapter(ch.id); setScreen("books-content") }}
+          className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground active:opacity-90"
+        >
+          📖 Read Chapter
+        </button>
+      )
     }
 
     // notes or iq — show Download + Online Read
@@ -496,11 +503,9 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                   </div>
                 </div>
-                {flow !== "books" && (
-                  <div className="flex gap-2 px-3 pb-3">
-                    <ChapterButtons ch={ch} subjectName={subject.name} />
-                  </div>
-                )}
+                <div className="flex gap-2 px-3 pb-3">
+                  <ChapterButtons ch={ch} subjectName={subject.name} />
+                </div>
               </div>
             ))}
           </div>
@@ -510,6 +515,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     )
   }
 
+  
   // ── Class 6–10 ──
   const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const subject = subjects.find((s: Subject) => s.id === selectedSubject)
@@ -562,11 +568,9 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                   <p className="text-[11px] text-muted-foreground">{ch.nameHi}</p>
                 </div>
               </div>
-              {flow !== "books" && (
-                <div className="flex gap-2 px-3 pb-3">
-                  <ChapterButtons ch={ch} subjectName={subject.name} />
-                </div>
-              )}
+              <div className="flex gap-2 px-3 pb-3">
+                <ChapterButtons ch={ch} subjectName={subject.name} />
+              </div>
             </div>
           ))}
         </div>
@@ -809,4 +813,4 @@ export function BooksReaderScreen() {
   const { goBack } = useApp()
   React.useEffect(() => { goBack() }, [])
   return null
-            }
+}
