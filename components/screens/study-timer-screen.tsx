@@ -47,7 +47,8 @@ const TIME_SLOTS = [
 type TabType = "timer" | "schedule" | "routine"
 
 export function StudyTimerScreen() {
-  const { user } = useApp()
+  const { user, supabaseUser, sessionReady } = useApp()
+  const userEmail = supabaseUser?.email || user?.email || ""
   const [activeTab, setActiveTab] = useState<TabType>("timer")
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -82,12 +83,12 @@ export function StudyTimerScreen() {
       return
     }
     setLoading(true)
-    const { data, error } = await supabase.from("study_tasks").select("*").eq("user_email", user.email).order("start_time")
+    const { data, error } = await supabase.from("study_tasks").select("*").eq("user_email", userEmail).order("start_time")
     if (!error && data) setTasks(data as Task[])
     setLoading(false)
   }, [user?.email])
 
-  useEffect(() => { loadTasks() }, [loadTasks])
+  useEffect(() => { if (sessionReady) loadTasks() }, [loadTasks, sessionReady])
 
   // ── Timer logic ───────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -152,7 +153,7 @@ export function StudyTimerScreen() {
       } catch (e) {}
     }
 
-    if (!email) { alert("User session load ho rahi hai, ek second baad try karo."); return }
+    if (!email) { console.error("No user email available"); return }
     
     setSaving(true)
     try {
