@@ -3,35 +3,16 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Language } from "@/lib/translations"
 import type { ClassNumber } from "@/lib/data"
+import { supabase } from "@/lib/supabase"
+import type { User } from "@supabase/supabase-js"
 
 export type AppScreen =
-  | "splash"
-  | "setup"
-  | "dashboard"
-  | "books-class"
-  | "books-subject"
-  | "books-chapter"
-  | "books-content"
-  | "books-list"
-  | "books-reader"
-  | "notes-class"
-  | "notes-subject"
-  | "notes-chapter"
-  | "notes-content"
-  | "iq-class"
-  | "iq-subject"
-  | "iq-chapter"
-  | "iq-content"
-  | "quiz-class"
-  | "quiz-subject"
-  | "quiz-mode"
-  | "quiz-chapter"
-  | "quiz-play"
-  | "quiz-result"
-  | "settings"
-  | "study-timer"
-  | "diary"
-  | "privacy-policy"
+  | "splash" | "setup" | "dashboard"
+  | "books-class" | "books-subject" | "books-chapter" | "books-content" | "books-list" | "books-reader"
+  | "notes-class" | "notes-subject" | "notes-chapter" | "notes-content"
+  | "iq-class" | "iq-subject" | "iq-chapter" | "iq-content"
+  | "quiz-class" | "quiz-subject" | "quiz-mode" | "quiz-chapter" | "quiz-play" | "quiz-result"
+  | "settings" | "study-timer" | "diary" | "privacy-policy"
 
 export interface UserProfile {
   name: string
@@ -44,6 +25,8 @@ export interface UserProfile {
 interface AppState {
   screen: AppScreen
   user: UserProfile | null
+  supabaseUser: User | null
+  sessionReady: boolean
   language: Language
   selectedClass: ClassNumber | null
   selectedStream: string | null
@@ -79,6 +62,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>({
     screen: "splash",
     user: null,
+    supabaseUser: null,
+    sessionReady: false,
     language: "en",
     selectedClass: null,
     selectedStream: null,
@@ -92,33 +77,66 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
+  // ── Load session + user profile on mount ──────────────────────────────────
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("ncert_user")
+    async function init() {
+      // 1. Get Supabase session
+      const { data: { session } } = await supabase.auth.getSession()
+      const supabaseUser = session?.user ?? null
+
+      // 2. Load saved profile from localStorage
+      let savedProfile: UserProfile | null = null
+      try {
+        const raw = localStorage.getItem("ncert_user")
+        if (raw) savedProfile = JSON.parse(raw)
+      } catch {}
+
       const savedLanguage = localStorage.getItem("ncert_language") as Language | null
-      if (savedUser) {
-        const user = JSON.parse(savedUser)
-        setState(prev => ({
-          ...prev,
-          user,
-          screen: "dashboard",
-          language: savedLanguage || "en",
-        }))
-      } else {
-        setState(prev => ({ ...prev, screen: "setup" }))
+
+      // 3. If Supabase user exists, use their email (overrides localStorage email)
+      if (supabaseUser && savedProfile) {
+        savedProfile.email = supabaseUser.email || savedProfile.email
+        savedProfile.photo = savedProfile.photo || supabaseUser.user_metadata?.avatar_url || null
+        savedProfile.name = savedProfile.name || supabaseUser.user_metadata?.full_name || ""
       }
-    } catch {
-      setState(prev => ({ ...prev, screen: "setup" }))
+
+      // 4. Determine screen
+      const screen = savedProfile?.name && savedProfile?.classNumber ? "dashboard" : "setup"
+
+      setState(prev => ({
+        ...prev,
+        supabaseUser,
+        sessionReady: true,
+        user: savedProfile,
+        screen,
+        language: savedLanguage || "en",
+      }))
     }
+
+    init()
+
+    // Listen for auth changes (Google login callback)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const supabaseUser = session?.user ?? null
+      setState(prev => {
+        // If user logged in via Google and no profile set → go to setup
+        let screen = prev.screen
+        if (event === "SIGNED_IN" && supabaseUser) {
+          const hasProfile = prev.user?.name && prev.user?.classNumber
+          if (!hasProfile) screen = "setup"
+          else screen = "dashboard"
+        }
+        if (event === "SIGNED_OUT") screen = "setup"
+        return { ...prev, supabaseUser, sessionReady: true, screen }
+      })
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const setScreen = useCallback((screen: AppScreen) => {
     window.history.pushState(null, "", "")
-    setState(prev => ({
-      ...prev,
-      screen,
-      screenHistory: [...prev.screenHistory, prev.screen],
-    }))
+    setState(prev => ({ ...prev, screen, screenHistory: [...prev.screenHistory, prev.screen] }))
   }, [])
 
   const goBack = useCallback(() => {
@@ -151,73 +169,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState(prev => ({ ...prev, language }))
   }, [])
 
-  const setSelectedClass = useCallback((selectedClass: ClassNumber) => {
-    setState(prev => ({ ...prev, selectedClass }))
-  }, [])
+  const setSelectedClass = useCallback((selectedClass: ClassNumber) => setState(prev => ({ ...prev, selectedClass })), [])
+  const setSelectedStream = useCallback((selectedStream: string | null) => setState(prev => ({ ...prev, selectedStream })), [])
+  const setSelectedSubject = useCallback((selectedSubject: string | null) => setState(prev => ({ ...prev, selectedSubject })), [])
+  const setSelectedBook = useCallback((selectedBook: string | null) => setState(prev => ({ ...prev, selectedBook })), [])
+  const setSelectedChapter = useCallback((selectedChapter: string | null) => setState(prev => ({ ...prev, selectedChapter })), [])
+  const setSelectedBookUrl = useCallback((selectedBookUrl: string | null) => setState(prev => ({ ...prev, selectedBookUrl })), [])
+  const setQuizMode = useCallback((quizMode: "chapter" | "full") => setState(prev => ({ ...prev, quizMode })), [])
+  const setQuizScore = useCallback((quizScore: number, quizTotal: number) => setState(prev => ({ ...prev, quizScore, quizTotal })), [])
 
-  const setSelectedStream = useCallback((selectedStream: string | null) => {
-    setState(prev => ({ ...prev, selectedStream }))
-  }, [])
-
-  const setSelectedSubject = useCallback((selectedSubject: string | null) => {
-    setState(prev => ({ ...prev, selectedSubject }))
-  }, [])
-
-  const setSelectedBook = useCallback((selectedBook: string | null) => {
-    setState(prev => ({ ...prev, selectedBook }))
-  }, [])
-
-  const setSelectedChapter = useCallback((selectedChapter: string | null) => {
-    setState(prev => ({ ...prev, selectedChapter }))
-  }, [])
-
-  const setSelectedBookUrl = useCallback((selectedBookUrl: string | null) => {
-    setState(prev => ({ ...prev, selectedBookUrl }))
-  }, [])
-
-  const setQuizMode = useCallback((quizMode: "chapter" | "full") => {
-    setState(prev => ({ ...prev, quizMode }))
-  }, [])
-
-  const setQuizScore = useCallback((quizScore: number, quizTotal: number) => {
-    setState(prev => ({ ...prev, quizScore, quizTotal }))
-  }, [])
-
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
     try { localStorage.removeItem("ncert_user") } catch {}
     setState(prev => ({
-      screen: "setup",
-      user: null,
-      language: prev.language,
-      selectedClass: null,
-      selectedStream: null,
-      selectedSubject: null,
-      selectedBook: null,
-      selectedChapter: null,
-      selectedBookUrl: null,
-      quizMode: null,
-      quizScore: 0,
-      quizTotal: 0,
-      screenHistory: [],
+      screen: "setup", user: null, supabaseUser: null, sessionReady: true,
+      language: prev.language, selectedClass: null, selectedStream: null,
+      selectedSubject: null, selectedBook: null, selectedChapter: null,
+      selectedBookUrl: null, quizMode: null, quizScore: 0, quizTotal: 0, screenHistory: [],
     }))
   }, [])
 
   return (
     <AppContext.Provider value={{
-      ...state,
-      setScreen,
-      goBack,
-      setUser,
-      setLanguage,
-      setSelectedClass,
-      setSelectedStream,
-      setSelectedSubject,
-      setSelectedBook,
-      setSelectedChapter,
-      setSelectedBookUrl,
-      setQuizMode,
-      setQuizScore,
-      logout,
+      ...state, setScreen, goBack, setUser, setLanguage,
+      setSelectedClass, setSelectedStream, setSelectedSubject,
+      setSelectedBook, setSelectedChapter, setSelectedBookUrl,
+      setQuizMode, setQuizScore, logout,
     }}>
       {children}
     </AppContext.Provider>
@@ -228,5 +205,5 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-  }
-  
+      }
+                                      
