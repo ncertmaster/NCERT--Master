@@ -3,13 +3,15 @@
 import React, { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { ScreenHeader } from "@/components/screen-header"
+import { useTheme } from "next-themes"
 import {
   LogOut, Timer, BookMarked, Shield, ChevronRight,
-  MessageSquare, Share2, Check, X
+  MessageSquare, Share2, Check, X, Sun, Moon, Eye, Languages
 } from "lucide-react"
 
 export function SettingsScreen() {
-  const { logout, setScreen } = useApp()
+  const { logout, setScreen, language, setLanguage, eyeProtection, setEyeProtection } = useApp()
+  const { theme, setTheme } = useTheme()
 
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedbackText, setFeedbackText] = useState("")
@@ -17,6 +19,8 @@ export function SettingsScreen() {
   const [feedbackSent, setFeedbackSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [showShareToast, setShowShareToast] = useState(false)
+
+  const isDark = theme === "dark"
 
   const handleLogout = () => { logout(); setScreen("setup") }
 
@@ -85,7 +89,72 @@ export function SettingsScreen() {
       <ScreenHeader title="Settings" />
       <div className="flex-1 px-4 py-5 space-y-3 max-w-md mx-auto w-full">
 
-        {/* Main Menu Items */}
+        {/* ── APPEARANCE SECTION ─────────────────────────────────────── */}
+        <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
+
+          {/* Dark / Light Theme Toggle */}
+          <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
+            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isDark ? "bg-indigo-500/15 text-indigo-400" : "bg-amber-500/15 text-amber-400"}`}>
+              {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">Theme</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{isDark ? "Dark Mode On" : "Light Mode On"}</p>
+            </div>
+            {/* Toggle Switch */}
+            <button
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-300 focus:outline-none ${isDark ? "bg-indigo-500" : "bg-border"}`}
+            >
+              <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${isDark ? "translate-x-6" : "translate-x-1"}`} />
+            </button>
+          </div>
+
+          {/* Language Toggle */}
+          <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+              <Languages className="h-5 w-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">Language / भाषा</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{language === "hi" ? "हिंदी सेलेक्ट है" : "English selected"}</p>
+            </div>
+            {/* EN / HI Toggle Pill */}
+            <div className="flex items-center gap-1 rounded-xl border border-border bg-secondary p-1">
+              <button
+                onClick={() => setLanguage("en")}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${language === "en" ? "bg-blue-500 text-white shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage("hi")}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${language === "hi" ? "bg-blue-500 text-white shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                हि
+              </button>
+            </div>
+          </div>
+
+          {/* Eye Protection Toggle */}
+          <div className="flex items-center gap-3 px-4 py-4">
+            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${eyeProtection ? "bg-green-500/15 text-green-400" : "bg-teal-500/15 text-teal-400"}`}>
+              <Eye className="h-5 w-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">Eye Protection</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{eyeProtection ? "Warm filter On — easy on eyes" : "Reduces blue light strain"}</p>
+            </div>
+            <button
+              onClick={() => setEyeProtection(!eyeProtection)}
+              className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-300 focus:outline-none ${eyeProtection ? "bg-green-500" : "bg-border"}`}
+            >
+              <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${eyeProtection ? "translate-x-6" : "translate-x-1"}`} />
+            </button>
+          </div>
+        </div>
+
+        {/* ── MAIN MENU ──────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
           {menuItems.map((item, i) => {
             const Icon = item.icon
@@ -183,4 +252,5 @@ export function SettingsScreen() {
       )}
     </div>
   )
-}
+        }
+            
