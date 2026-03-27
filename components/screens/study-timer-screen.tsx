@@ -48,14 +48,12 @@ type TabType = "timer" | "schedule" | "routine"
 
 // ── Notification helpers ───────────────────────────────────────────────────────
 
-function getTodayDayKey(): Task["repeat"] {
-  const days: Task["repeat"][] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
-  return days[new Date().getDay()]
+function getTodayKey(): Task["repeat"] {
+  return (["sun","mon","tue","wed","thu","fri","sat"] as Task["repeat"][])[new Date().getDay()]
 }
 
 function taskRepeatsTodaay(task: Task): boolean {
-  if (task.repeat === "daily") return true
-  return task.repeat === getTodayDayKey()
+  return task.repeat === "daily" || task.repeat === getTodayKey()
 }
 
 async function requestNotifPermission(): Promise<NotificationPermission> {
@@ -64,27 +62,68 @@ async function requestNotifPermission(): Promise<NotificationPermission> {
   return Notification.requestPermission()
 }
 
-function sendScheduleToSW(tasks: Task[]) {
+// ── Schedule via Service Worker ────────────────────────────────────────────────
+function sendToSW(type: string, payload?: object) {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return
   navigator.serviceWorker.ready.then(reg => {
-    if (reg.active) {
-      reg.active.postMessage({
-        type: "SCHEDULE_NOTIFICATIONS",
-        tasks: tasks.filter(t => taskRepeatsTodaay(t) && !t.completed),
-      })
-    }
+    if (reg.active) reg.active.postMessage({ type, ...payload })
   }).catch(() => {})
 }
 
-function sendTestNotif() {
-  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return
-  navigator.serviceWorker.ready.then(reg => {
-    if (reg.active) reg.active.postMessage({ type: "TEST_NOTIFICATION" })
-  }).catch(() => {})
+function scheduleViaSW(tasks: Task[]) {
+  sendToSW("SCHEDULE_NOTIFICATIONS", {
+    tasks: tasks.filter(t => taskRepeatsTodaay(t) && !t.completed),
+  })
 }
+
+// ── Page-level scheduler (works when app is open) ──────────────────────────────
+function usePageNotifications(tasks: Task[], permission: NotificationPermission) {
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  useEffect(() => {
+    timeoutsRef.current.forEach(clearTimeout)
+    timeoutsRef.current = []
+
+    if (permission !== "granted") return
+
+    const now = Date.now()
+
+    tasks.forEach(task => {
+      if (task.completed || !taskRepeatsTodaay(task)) return
+
+      const [hStr, mStr] = (task.start_time || "").split(":")
+      const h = parseInt(hStr, 10)
+      const m = parseInt(mStr, 10)
+      if (isNaN(h) || isNaN(m)) return
+
+      const taskTime = new Date()
+      taskTime.setHours(h, m, 0, 0)
+      let delay = taskTime.getTime() - now
+
+      // Within 5 minutes past due → fire immediately
+      if (delay <= 0 && delay > -300000) delay = 800
+
+      if (delay > 0 && delay < 86400000) {
+        const tid = setTimeout(() => {
+          try {
+            new Notification(`📚 Study Time: ${task.subject}`, {
+              body: `${task.start_time} – ${task.end_time} | Abhi padhai shuru karo! 🚀`,
+              icon: "/icons/icon-192x192.jpg",
+              tag: `ncert-page-${task.id}`,
+            })
+          } catch {}
+        }, delay)
+        timeoutsRef.current.push(tid)
+      }
+    })
+
+    return () => timeoutsRef.current.forEach(clearTimeout)
+  }, [tasks, permission])
+}
+
+type TabType2 = TabType
 
 // ── Main Component ─────────────────────────────────────────────────────────────
-
 export function StudyTimerScreen() {
   const { user, supabaseUser, sessionReady } = useApp() as any
   const userEmail = (supabaseUser as any)?.email || user?.email || ""
@@ -97,8 +136,7 @@ export function StudyTimerScreen() {
 
   // Notification state
   const [notifPermission, setNotifPermission] = useState<NotificationPermission>("default")
-  const [notifBanner, setNotifBanner] = useState(false)   // show ask-permission banner
-  const pageTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const [notifBanner, setNotifBanner] = useState(false)
 
   // Timer settings
   const [workMin, setWorkMin] = useState(25)
@@ -121,84 +159,41 @@ export function StudyTimerScreen() {
   const [repeat, setRepeat] = useState<Task["repeat"]>("daily")
   const [timeSlot, setTimeSlot] = useState<Task["time_slot"]>("morning")
 
-  // ── Check notification permission on mount ────────────────────────────────
+  // Page-level notifications
+  usePageNotifications(tasks, notifPermission)
+
+  // Check permission on mount
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window) {
-      setNotifPermission(Notification.permission)
-      if (Notification.permission === "default") setNotifBanner(true)
+      const perm = Notification.permission
+      setNotifPermission(perm)
+      if (perm === "default") setNotifBanner(true)
     }
   }, [])
 
-  // ── Page-level notification scheduler (fallback + redundancy) ─────────────
-  const schedulePageNotifications = useCallback((taskList: Task[]) => {
-    // Clear old timeouts
-    pageTimeoutsRef.current.forEach(clearTimeout)
-    pageTimeoutsRef.current = []
-
-    if (
-      typeof window === "undefined" ||
-      !("Notification" in window) ||
-      Notification.permission !== "granted"
-    ) return
-
-    const now = Date.now()
-
-    taskList.forEach(task => {
-      if (task.completed) return
-      if (!taskRepeatsTodaay(task)) return
-
-      const [hStr, mStr] = (task.start_time || "").split(":")
-      const h = parseInt(hStr, 10)
-      const m = parseInt(mStr, 10)
-      if (isNaN(h) || isNaN(m)) return
-
-      const taskDate = new Date()
-      taskDate.setHours(h, m, 0, 0)
-      const delay = taskDate.getTime() - now
-
-      if (delay > 0 && delay < 86400000) {
-        const tid = setTimeout(() => {
-          try {
-            new Notification(`📚 Study Time: ${task.subject}`, {
-              body: `${task.start_time} – ${task.end_time} | Abhi padhai shuru karo! 🚀`,
-              icon: "/icons/icon-192x192.jpg",
-              tag: `ncert-page-${task.id}`,
-            })
-          } catch {}
-        }, delay)
-        pageTimeoutsRef.current.push(tid)
-      }
-    })
-  }, [])
-
-  // ── On tasks change: schedule notifications both page & SW ────────────────
+  // Re-schedule via SW whenever tasks or permission changes
   useEffect(() => {
-    schedulePageNotifications(tasks)
-    if (Notification.permission === "granted") sendScheduleToSW(tasks)
-    return () => { pageTimeoutsRef.current.forEach(clearTimeout) }
-  }, [tasks, schedulePageNotifications])
+    if (notifPermission === "granted") scheduleViaSW(tasks)
+  }, [tasks, notifPermission])
 
-  // ── Ask for permission ────────────────────────────────────────────────────
   const handleEnableNotifications = async () => {
     const perm = await requestNotifPermission()
     setNotifPermission(perm)
     setNotifBanner(false)
     if (perm === "granted") {
-      sendScheduleToSW(tasks)
-      schedulePageNotifications(tasks)
-      sendTestNotif()
+      scheduleViaSW(tasks)
+      // Send test notification to confirm it works
+      setTimeout(() => sendToSW("TEST_NOTIFICATION"), 500)
     }
   }
 
-  // ── Load tasks ─────────────────────────────────────────────────────────────
+  // Load tasks
   const loadTasks = useCallback(async () => {
     if (!user?.email || !supabase) { setLoading(false); return }
     setLoading(true)
     const { data, error } = await supabase
-      .from("study_tasks")
-      .select("*")
-      .eq("user_email", userEmail)
-      .order("start_time")
+      .from("study_tasks").select("*")
+      .eq("user_email", userEmail).order("start_time")
     if (!error && data) setTasks(data as Task[])
     setLoading(false)
   }, [user?.email, userEmail])
@@ -208,23 +203,18 @@ export function StudyTimerScreen() {
     if (ready) loadTasks()
   }, [loadTasks, sessionReady])
 
-  // ── Timer logic ────────────────────────────────────────────────────────────
+  // Timer logic
   useEffect(() => {
     if (timerRunning) {
       intervalRef.current = setInterval(() => {
         setTimerSeconds(prev => {
           if (prev <= 1) {
             if (timerMode === "work") {
-              const newCount = pomodoroCount + 1
-              setPomodoroCount(newCount)
-              if (newCount % 4 === 0) {
-                setTimerMode("longBreak"); setTimerSeconds(longBreakMin * 60)
-              } else {
-                setTimerMode("break"); setTimerSeconds(breakMin * 60)
-              }
-            } else {
-              setTimerMode("work"); setTimerSeconds(workMin * 60)
-            }
+              const nc = pomodoroCount + 1
+              setPomodoroCount(nc)
+              if (nc % 4 === 0) { setTimerMode("longBreak"); setTimerSeconds(longBreakMin * 60) }
+              else { setTimerMode("break"); setTimerSeconds(breakMin * 60) }
+            } else { setTimerMode("work"); setTimerSeconds(workMin * 60) }
             setTimerRunning(false)
             return 0
           }
@@ -239,42 +229,38 @@ export function StudyTimerScreen() {
   const resetTimer = () => { setTimerRunning(false); setTimerMode("work"); setTimerSeconds(workMin * 60) }
   const takeBreak = () => { setTimerRunning(false); setTimerMode("break"); setTimerSeconds(breakMin * 60); setTimerRunning(true) }
   const skipBreak = () => { setTimerMode("work"); setTimerSeconds(workMin * 60); setTimerRunning(false) }
+  const formatTime = (s: number) => `${Math.floor(s/60).toString().padStart(2,"0")}:${(s%60).toString().padStart(2,"0")}`
 
-  const formatTime = (s: number) =>
-    `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`
-
-  const totalSecs = timerMode === "work" ? workMin * 60 : timerMode === "break" ? breakMin * 60 : longBreakMin * 60
+  const totalSecs = timerMode === "work" ? workMin*60 : timerMode === "break" ? breakMin*60 : longBreakMin*60
   const progress = 1 - timerSeconds / totalSecs
   const circumference = 2 * Math.PI * 54
-
   const timerColor = timerMode === "work" ? "#8b5cf6" : timerMode === "break" ? "#10b981" : "#3b82f6"
   const timerLabel = timerMode === "work" ? "Focus Time" : timerMode === "break" ? "Short Break" : "Long Break"
   const timerEmoji = timerMode === "work" ? "📚" : timerMode === "break" ? "☕" : "🧘"
 
-  // ── Tasks CRUD ─────────────────────────────────────────────────────────────
+  // Task CRUD
   const addTask = async () => {
     if (!supabase) { alert("Supabase env variables missing!"); return }
     if (!subject.trim()) { alert("Schedule name likhna zaroori hai!"); return }
-
     let email = user?.email
     if (!email) {
       try { email = JSON.parse(localStorage.getItem("ncert_user") || "{}").email } catch {}
     }
-    if (!email) { return }
+    if (!email) return
 
-    // Request notification permission when adding first task
+    // Auto-ask notification permission on first task add
     if (notifPermission === "default") {
       const perm = await requestNotifPermission()
       setNotifPermission(perm)
       setNotifBanner(false)
+      if (perm === "granted") setTimeout(() => sendToSW("TEST_NOTIFICATION"), 500)
     }
 
     setSaving(true)
     try {
       const insertData: Record<string, unknown> = {
         user_email: email, subject: subject.trim(),
-        start_time: startTime, end_time: endTime,
-        repeat, completed: false,
+        start_time: startTime, end_time: endTime, repeat, completed: false,
       }
       try { insertData.chapter = "" } catch {}
       try { insertData.streak = 0 } catch {}
@@ -282,16 +268,16 @@ export function StudyTimerScreen() {
 
       const { data, error } = await supabase.from("study_tasks").insert(insertData).select().single()
       if (error) {
-        const { data: data2, error: error2 } = await supabase.from("study_tasks").insert({
+        const { data: d2, error: e2 } = await supabase.from("study_tasks").insert({
           user_email: email, subject: subject.trim(),
           start_time: startTime, end_time: endTime, repeat, completed: false,
         }).select().single()
-        if (!error2 && data2) {
-          setTasks(prev => [...prev, data2 as Task].sort((a, b) => a.start_time.localeCompare(b.start_time)))
+        if (!e2 && d2) {
+          setTasks(prev => [...prev, d2 as Task].sort((a,b) => a.start_time.localeCompare(b.start_time)))
           setSubject(""); setChapter(""); setShowForm(false)
         }
       } else if (data) {
-        setTasks(prev => [...prev, data as Task].sort((a, b) => a.start_time.localeCompare(b.start_time)))
+        setTasks(prev => [...prev, data as Task].sort((a,b) => a.start_time.localeCompare(b.start_time)))
         setSubject(""); setChapter(""); setShowForm(false)
       }
     } catch (err) { alert("Save failed: " + String(err)) }
@@ -300,10 +286,10 @@ export function StudyTimerScreen() {
 
   const toggleTask = async (task: Task) => {
     if (!supabase) return
-    const newCompleted = !task.completed
-    const newStreak = newCompleted ? task.streak + 1 : Math.max(0, task.streak - 1)
-    const { error } = await supabase.from("study_tasks").update({ completed: newCompleted, streak: newStreak }).eq("id", task.id)
-    if (!error) setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: newCompleted, streak: newStreak } : t))
+    const nc = !task.completed
+    const ns = nc ? task.streak + 1 : Math.max(0, task.streak - 1)
+    const { error } = await supabase.from("study_tasks").update({ completed: nc, streak: ns }).eq("id", task.id)
+    if (!error) setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: nc, streak: ns } : t))
   }
 
   const deleteTask = async (id: string) => {
@@ -317,26 +303,23 @@ export function StudyTimerScreen() {
   const progressPct = totalTasks > 0 ? Math.round((completedToday / totalTasks) * 100) : 0
   const maxStreak = tasks.reduce((max, t) => Math.max(max, t.streak), 0)
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <ScreenHeader title="Time Management" />
 
-      {/* ── Notification Permission Banner ─────────────────────────────────── */}
+      {/* Notification Banner */}
       {notifBanner && notifPermission === "default" && (
         <div className="mx-4 mt-3 rounded-2xl border border-violet-500/30 bg-violet-500/10 p-3 flex items-center gap-3">
           <Bell className="h-5 w-5 text-violet-400 shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-violet-400">Schedule Notifications On Karo</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Task ke time par phone pe reminder milega!</p>
+            <p className="text-xs font-semibold text-violet-400">Schedule Notifications Enable Karo</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Task ke exact time par phone pe reminder milega!</p>
           </div>
-          <button
-            onClick={handleEnableNotifications}
-            className="shrink-0 text-xs px-3 py-1.5 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-500 transition-colors"
-          >
+          <button onClick={handleEnableNotifications}
+            className="shrink-0 text-xs px-3 py-1.5 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-500 transition-colors">
             Allow
           </button>
-          <button onClick={() => setNotifBanner(false)} className="shrink-0 text-muted-foreground hover:text-foreground">
+          <button onClick={() => setNotifBanner(false)} className="shrink-0 text-muted-foreground">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -344,7 +327,7 @@ export function StudyTimerScreen() {
 
       {/* Tabs */}
       <div className="flex border-b border-border bg-card mt-3">
-        {(["timer", "schedule", "routine"] as TabType[]).map(tab => (
+        {(["timer","schedule","routine"] as TabType[]).map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)}
             className={`flex-1 py-3 text-xs font-semibold capitalize transition-all ${activeTab === tab ? "text-violet-500 border-b-2 border-violet-500" : "text-muted-foreground hover:text-foreground"}`}>
             {tab === "timer" ? "⏱ Timer" : tab === "schedule" ? "📅 Schedule" : "🔄 Routine"}
@@ -354,7 +337,7 @@ export function StudyTimerScreen() {
 
       <div className="flex-1 px-4 py-4 space-y-4 max-w-md mx-auto w-full pb-8">
 
-        {/* ── TIMER TAB ──────────────────────────────────────────────────────── */}
+        {/* TIMER TAB */}
         {activeTab === "timer" && (
           <>
             <div className="grid grid-cols-3 gap-3">
@@ -378,7 +361,7 @@ export function StudyTimerScreen() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs bg-violet-500/15 text-violet-400 px-2 py-0.5 rounded-full font-medium">#{pomodoroCount + 1}</span>
-                  <button onClick={() => setShowTimerSettings(s => !s)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors">
+                  <button onClick={() => setShowTimerSettings(s => !s)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground">
                     <Settings2 className="h-4 w-4" />
                   </button>
                 </div>
@@ -456,7 +439,7 @@ export function StudyTimerScreen() {
                   <p className="text-sm font-semibold text-foreground">Today's Progress</p>
                   <p className="text-sm font-bold text-violet-400">{progressPct}%</p>
                 </div>
-                <div className="h-2 rounded-full bg-secondary overflow-hidden">
+            <div className="h-2 rounded-full bg-secondary overflow-hidden">
                   <div className="h-full rounded-full bg-violet-500 transition-all duration-500" style={{ width: `${progressPct}%` }} />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1.5">{completedToday} of {totalTasks} tasks completed</p>
@@ -465,17 +448,15 @@ export function StudyTimerScreen() {
           </>
         )}
 
-        {/* ── SCHEDULE TAB ───────────────────────────────────────────────────── */}
+        {/* SCHEDULE TAB */}
         {activeTab === "schedule" && (
           <>
-            {/* Header row */}
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-foreground">Today's Schedule</p>
-                {/* Notification status pill */}
                 <button
                   onClick={notifPermission === "default" ? handleEnableNotifications : undefined}
-                  className={`mt-0.5 flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full transition-colors ${
+                  className={`mt-0.5 flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full ${
                     notifPermission === "granted"
                       ? "text-emerald-400 bg-emerald-500/10"
                       : notifPermission === "denied"
@@ -487,27 +468,20 @@ export function StudyTimerScreen() {
                     ? <><Bell className="h-3 w-3" /> Notifications ON</>
                     : notifPermission === "denied"
                     ? <><BellOff className="h-3 w-3" /> Notifications Blocked</>
-                    : <><Bell className="h-3 w-3" /> Enable Notifications</>
-                  }
+                    : <><Bell className="h-3 w-3" /> Enable Notifications</>}
                 </button>
               </div>
-              <button
-                onClick={() => setShowForm(!showForm)}
-                className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-violet-500/15 text-violet-400 hover:bg-violet-500/25 font-medium"
-              >
+              <button onClick={() => setShowForm(!showForm)}
+                className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-violet-500/15 text-violet-400 hover:bg-violet-500/25 font-medium">
                 <Plus className="h-3.5 w-3.5" /> Add Schedule
               </button>
             </div>
 
             {showForm && (
               <div className="rounded-2xl border border-violet-500/30 bg-card p-4 shadow-sm space-y-3">
-                <input
-                  type="text"
-                  placeholder="Add Schedule (e.g. Physics, Maths...)"
-                  value={subject}
-                  onChange={e => setSubject(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
-                />
+                <input type="text" placeholder="Add Schedule (e.g. Physics, Maths...)"
+                  value={subject} onChange={e => setSubject(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 block">Start Time</label>
@@ -531,15 +505,11 @@ export function StudyTimerScreen() {
                     ))}
                   </div>
                 </div>
-
-                {/* Show notification info in form */}
                 {notifPermission === "granted" && (
                   <p className="text-[11px] text-emerald-400 flex items-center gap-1">
-                    <Bell className="h-3 w-3" />
-                    {startTime} par notification milega!
+                    <Bell className="h-3 w-3" /> {startTime} par notification milega!
                   </p>
                 )}
-
                 <div className="flex gap-2">
                   <button onClick={addTask} disabled={saving || !subject.trim()}
                     className="flex-1 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 disabled:opacity-50">
@@ -569,7 +539,7 @@ export function StudyTimerScreen() {
                     </button>
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm font-medium ${task.completed ? "line-through text-muted-foreground" : "text-foreground"}`}>{task.subject}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         <span className="text-[10px] text-muted-foreground/70">{task.start_time} – {task.end_time}</span>
                         {task.streak > 0 && <span className="text-[10px] text-orange-400">🔥 {task.streak} day streak</span>}
                         {notifPermission === "granted" && !task.completed && taskRepeatsTodaay(task) && (
@@ -589,7 +559,7 @@ export function StudyTimerScreen() {
           </>
         )}
 
-        {/* ── ROUTINE TAB ────────────────────────────────────────────────────── */}
+        {/* ROUTINE TAB */}
         {activeTab === "routine" && (
           <>
             <p className="text-sm text-muted-foreground">Your tasks organized by time of day</p>
@@ -633,4 +603,4 @@ export function StudyTimerScreen() {
       </div>
     </div>
   )
-                    }
+                }
