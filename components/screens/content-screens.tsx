@@ -5,7 +5,7 @@ import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { ChevronRight, Download, Loader2, ExternalLink, BookMarked, Globe2, RefreshCw, ArrowLeft } from "lucide-react"
+import { ChevronRight, Download, Loader2, BookMarked } from "lucide-react"
 import type { ClassNumber, Subject, Stream, Book, Chapter } from "@/lib/data"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { AppScreen } from "@/lib/app-context"
@@ -176,7 +176,7 @@ export function ClassSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "
                 setSelectedChapter(null)
                 setScreen(nextScreen[flow])
               }}
-              className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+              className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
             >
               <span className="text-base font-semibold text-card-foreground">
                 {getText("class", language)} {c}
@@ -225,7 +225,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
               <button
                 key={stream.id}
                 onClick={() => setSelectedStream(stream.id)}
-                className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
               >
                 <div>
                   <p className="text-base font-semibold text-card-foreground">{stream.nameHi}</p>
@@ -262,7 +262,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     setSelectedChapter(null)
                     setScreen(nextScreen[flow])
                   }}
-                  className="animate-fade-in flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                  className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
                 >
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                     <Icon className="h-5 w-5 text-primary" />
@@ -303,7 +303,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                   setSelectedChapter(null)
                   setScreen(nextScreen[flow])
                 }}
-                className="animate-fade-in flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                   <Icon className="h-5 w-5 text-primary" />
@@ -420,7 +420,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     <button
                       key={subject.id}
                       onClick={() => setSelectedSubject(subject.id)}
-                      className="animate-fade-in flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                      className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
                     >
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                         <Icon className="h-5 w-5 text-primary" />
@@ -453,7 +453,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                 <button
                   key={book.id}
                   onClick={() => setSelectedBook(book.id)}
-                  className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                  className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
                 >
                   <div>
                     <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
@@ -478,7 +478,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         <div className="mx-auto w-full max-w-md px-4 py-3">
           <div className="flex flex-col gap-2">
             {book.chapters.map((ch: Chapter, idx: number) => (
-              <div key={ch.id} className="animate-fade-in rounded-xl border border-border bg-card shadow-sm">
+              <div key={ch.id} className="rounded-xl border border-border bg-card shadow-sm">
                 <div className="flex items-center gap-3 px-3 pt-3 pb-2">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
                     {idx + 1}
@@ -517,7 +517,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
               <button
                 key={book.id}
                 onClick={() => setSelectedBook(book.id)}
-                className="animate-fade-in flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
               >
                 <div>
                   <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
@@ -544,7 +544,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       <div className="mx-auto w-full max-w-md px-4 py-3">
         <div className="flex flex-col gap-2">
           {book.chapters.map((ch: Chapter, idx: number) => (
-            <div key={ch.id} className="animate-fade-in rounded-xl border border-border bg-card shadow-sm">
+            <div key={ch.id} className="rounded-xl border border-border bg-card shadow-sm">
               <div className="flex items-center gap-3 px-3 pt-3 pb-2">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
                   {idx + 1}
@@ -718,39 +718,28 @@ function getNcertUrl(classNum: number, bookId: string, bookName: string): string
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
-// 📚 BOOKS LIST SCREEN — Enhanced with in-app reader
+// 📚 BOOKS LIST SCREEN
 // ──────────────────────────────────────────────────────────────────────────────
 export function BooksListScreen() {
-  const { language, selectedClass, selectedStream, selectedSubject, setScreen, setSelectedBookUrl } = useApp()
+  const { language, selectedClass, selectedStream, selectedSubject, setScreen, setSelectedBook } = useApp()
 
   let books: Book[] = []
-  let subjectName = ""
 
   if (selectedClass === 11 || selectedClass === 12) {
     const streams: Stream[] = streamsByClass[selectedClass] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
     const subject = stream?.subjects.find((s: Subject) => s.id === selectedSubject)
     books = subject?.books || []
-    subjectName = subject?.name || ""
   } else {
     const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
     const subject = subjects.find((s: Subject) => s.id === selectedSubject)
     books = subject?.books || []
-    subjectName = subject?.name || ""
   }
 
   const handleOpenBook = (book: Book) => {
-    if (book.ncertUrl) {
-      // Google Docs Viewer — works perfectly in mobile WebView
-      const fileId = book.ncertUrl.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1]
-      const viewerUrl = fileId
-  ? `https://drive.google.com/file/d/${fileId}/preview`
-  : book.ncertUrl
-      setSelectedBookUrl(viewerUrl)
-      setScreen("books-reader")
-    } else {
-      window.open(`https://ncert.nic.in/textbook.php?class=${selectedClass}`, "_blank", "noopener,noreferrer")
-    }
+    // Navigate to chapters list within the app — user stays inside
+    setSelectedBook(book.id)
+    setScreen("books-chapter")
   }
 
   return (
@@ -759,9 +748,9 @@ export function BooksListScreen() {
       <div className="mx-auto w-full max-w-md px-4 py-4">
         {/* Info banner */}
         <div className="mb-4 rounded-xl bg-blue-500/10 border border-blue-500/20 px-3 py-2.5 flex items-start gap-2">
-          <Globe2 className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+          <BookMarked className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
           <p className="text-xs text-blue-600 dark:text-blue-400 leading-relaxed">
-            NCERT की आधिकारिक पुस्तकें — सीधे ऐप में पढ़ें। यह डेटा NCERT की सरकारी वेबसाइट से आता है।
+            Select a book to view all chapters inside the app.
           </p>
         </div>
 
@@ -771,10 +760,10 @@ export function BooksListScreen() {
           </p>
         ) : (
           <div className="flex flex-col gap-3">
-            {books.map((book: Book, idx: number) => (
+            {books.map((book: Book) => (
               <div
                 key={book.id}
-                className="animate-fade-in rounded-xl border border-border bg-card shadow-sm overflow-hidden"
+                className="rounded-xl border border-border bg-card shadow-sm overflow-hidden"
               >
                 <div className="flex items-center gap-3 p-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
@@ -783,17 +772,16 @@ export function BooksListScreen() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
                     <p className="text-xs text-muted-foreground">{book.nameHi}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{book.chapters.length} अध्याय</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{book.chapters.length} Chapters</p>
                   </div>
                 </div>
-                {/* Action button */}
                 <div className="flex gap-2 px-4 pb-4">
                   <button
                     onClick={() => handleOpenBook(book)}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all active:scale-[0.97]"
                   >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    🌐 ऑनलाइन पढ़ें
+                    <BookMarked className="h-4 w-4" />
+                    View Chapters
                   </button>
                 </div>
               </div>
@@ -807,56 +795,10 @@ export function BooksListScreen() {
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
-// 🌐 BOOKS READER SCREEN — In-app NCERT viewer
+// 🌐 BOOKS READER SCREEN — kept for backward compat, redirects back
 // ──────────────────────────────────────────────────────────────────────────────
 export function BooksReaderScreen() {
-  const { selectedBookUrl, goBack } = useApp()
-  const [loading, setLoading] = useState(true)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
-  const url = selectedBookUrl || ""
-
-  return (
-    <div className="flex flex-col bg-background" style={{ height: "100dvh" }}>
-      {/* Header */}
-      <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2 shrink-0">
-        <button onClick={goBack} className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors">
-          <ArrowLeft className="h-4 w-4 text-foreground" />
-        </button>
-       <p className="flex-1 text-sm font-semibold text-foreground">📖 NCERT पुस्तक</p>
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
-          title="Browser में खोलें"
-        >
-          <ExternalLink className="h-4 w-4 text-muted-foreground" />
-        </a>
-        <button
-          onClick={() => { setLoading(true); if (iframeRef.current) iframeRef.current.src = url }}
-          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted transition-colors"
-        >
-          <RefreshCw className="h-4 w-4 text-muted-foreground" />
-        </button>
-      </div>
-
-      {/* Loading */}
-      {loading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background z-10 mt-12">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">पुस्तक लोड हो रही है...</p>
-        </div>
-      )}
-
-      {/* Google Drive PDF iframe */}
-      <iframe
-        ref={iframeRef}
-        src={url}
-        className="flex-1 w-full border-0"
-        onLoad={() => setLoading(false)}
-        title="NCERT Book"
-        allow="fullscreen"
-      />
-    </div>
-  )
-        }
+  const { goBack } = useApp()
+  React.useEffect(() => { goBack() }, [])
+  return null
+            }
