@@ -11,7 +11,8 @@ export type Book = {
   name: string
   nameHi: string
   chapters: Chapter[]
-  ncertUrl?: string  // Official NCERT epathshala PDF URL
+  ncertUrl?: string       // Official NCERT epathshala PDF URL
+  ncertPdfCode?: string   // e.g. "jesc1" → jesc101.pdf, jesc102.pdf ...
 }
 
 export type Subject = {
