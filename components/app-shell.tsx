@@ -58,8 +58,10 @@ export function AppShell() {
 
   return (
     <main className="mx-auto min-h-screen max-w-md">
-      {renderScreen()}
+      <div key={screen}>
+        {renderScreen()}
+      </div>
     </main>
   )
-  }
+}
         
