@@ -28,7 +28,7 @@ function countWords(text: string) {
 }
 
 export function DiaryScreen() {
-  const { user } = useApp()
+  const { user, supabaseUser, sessionReady } = useApp()
 
   const [entries, setEntries] = useState<DiaryEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -58,7 +58,7 @@ export function DiaryScreen() {
     const { data, error } = await supabase
       .from("diary_entries")
       .select("*")
-      .eq("user_email", user.email)
+      .eq("user_email", userEmail)
       .order("created_at", { ascending: false })
     if (!error && data) setEntries(data as DiaryEntry[])
     setLoading(false)
@@ -346,4 +346,5 @@ export function DiaryScreen() {
     </div>
   )
         }
-            
+
+    
