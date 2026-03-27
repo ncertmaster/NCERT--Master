@@ -8,12 +8,12 @@ import {
   Trash2, Timer, BookOpen, Flame, X, Coffee, Settings2,
   Calendar, ChevronRight, Sun, Sunset, Moon, Zap
 } from "lucide-react"
-import { createClient } from "@supabase/supabase-js"
+import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 
 interface Task {
   id: string
@@ -77,7 +77,10 @@ export function StudyTimerScreen() {
   const [timeSlot, setTimeSlot] = useState<Task["time_slot"]>("morning")
 
   const loadTasks = useCallback(async () => {
-    if (!user?.email) return
+    if (!user?.email || !supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     const { data, error } = await supabase.from("study_tasks").select("*").eq("user_email", user.email).order("start_time")
     if (!error && data) setTasks(data as Task[])
@@ -134,6 +137,11 @@ export function StudyTimerScreen() {
 
   // ── Tasks ─────────────────────────────────────────────────────────────────────
   const addTask = async () => {
+    if (!supabase) {
+      alert("Supabase env variables missing hain. NEXT_PUBLIC_SUPABASE_URL aur NEXT_PUBLIC_SUPABASE_ANON_KEY set karo.")
+      return
+    }
+
     if (!subject.trim()) { alert("Schedule name likhna zaroori hai!"); return }
     
     let email = user?.email
@@ -204,6 +212,7 @@ export function StudyTimerScreen() {
   }
 
   const toggleTask = async (task: Task) => {
+    if (!supabase) return
     const newCompleted = !task.completed
     const newStreak = newCompleted ? task.streak + 1 : Math.max(0, task.streak - 1)
     const { error } = await supabase.from("study_tasks").update({ completed: newCompleted, streak: newStreak }).eq("id", task.id)
@@ -211,6 +220,7 @@ export function StudyTimerScreen() {
   }
 
   const deleteTask = async (id: string) => {
+    if (!supabase) return
     const { error } = await supabase.from("study_tasks").delete().eq("id", id)
     if (!error) setTasks(prev => prev.filter(t => t.id !== id))
   }

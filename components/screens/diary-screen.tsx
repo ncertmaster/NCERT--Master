@@ -4,12 +4,12 @@ import React, { useState, useEffect, useCallback } from "react"
 import { ScreenHeader } from "@/components/screen-header"
 import { useApp } from "@/lib/app-context"
 import { BookMarked, Plus, Trash2, Edit3, Save, X, Calendar, Search } from "lucide-react"
-import { createClient } from "@supabase/supabase-js"
+import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 
 interface DiaryEntry {
   id: string
@@ -50,7 +50,10 @@ export function DiaryScreen() {
   }, [user])
 
   const loadEntries = useCallback(async () => {
-    if (!user?.email) return
+    if (!user?.email || !supabase) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
     const { data, error } = await supabase
       .from("diary_entries")
@@ -66,6 +69,11 @@ export function DiaryScreen() {
   }, [userReady, loadEntries])
 
   const saveEntry = async () => {
+    if (!supabase) {
+      setSaveError("Supabase env variables missing hain. NEXT_PUBLIC_SUPABASE_URL aur NEXT_PUBLIC_SUPABASE_ANON_KEY set karo.")
+      return
+    }
+
     if (!title.trim() || !content.trim()) {
       setSaveError("Title aur content dono likhna zaroori hai!")
       return
@@ -158,6 +166,7 @@ export function DiaryScreen() {
   }
 
   const deleteEntry = async (id: string) => {
+    if (!supabase) return
     const { error } = await supabase.from("diary_entries").delete().eq("id", id)
     if (!error) setEntries(prev => prev.filter(e => e.id !== id))
   }
