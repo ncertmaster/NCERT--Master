@@ -170,6 +170,7 @@ export function ClassSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "
               key={c}
               onClick={() => {
                 setSelectedClass(c)
+                // Reset all selections when class changes
                 setSelectedStream(null)
                 setSelectedSubject(null)
                 setSelectedBook(null)
@@ -245,6 +246,13 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   if (is1112 && selectedStream) {
     const streams: Stream[] = streamsByClass[selectedClass!] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
+    
+    // If stream not found (e.g. invalid ID in state), reset and show stream list
+    if (!stream) {
+      setSelectedStream(null)
+      return null
+    }
+
     const subjects = (stream?.subjects || []).filter((s: Subject) => Array.isArray(s.tabs) && s.tabs.includes(flow))
     return (
       <div className="flex min-h-screen flex-col bg-background pb-20">

@@ -135,12 +135,22 @@ export function StudyTimerScreen() {
   // ── Tasks ─────────────────────────────────────────────────────────────────────
   const addTask = async () => {
     if (!subject.trim()) { alert("Schedule name likhna zaroori hai!"); return }
-    if (!user?.email) { alert("User session load ho rahi hai, ek second baad try karo."); return }
+    
+    let email = user?.email
+    if (!email) {
+      try {
+        const localUser = JSON.parse(localStorage.getItem("ncert_user") || "{}")
+        email = localUser.email
+      } catch (e) {}
+    }
+
+    if (!email) { alert("User session load ho rahi hai, ek second baad try karo."); return }
+    
     setSaving(true)
     try {
       // Only insert columns that definitely exist in study_tasks table
       const insertData: Record<string, unknown> = {
-        user_email: user.email,
+        user_email: email,
         subject: subject.trim(),
         start_time: startTime,
         end_time: endTime,
@@ -159,11 +169,12 @@ export function StudyTimerScreen() {
         .single()
 
       if (error) {
+        console.error("Supabase insert error:", error)
         // Try again without optional fields
         const { data: data2, error: error2 } = await supabase
           .from("study_tasks")
           .insert({
-            user_email: user.email,
+            user_email: email,
             subject: subject.trim(),
             start_time: startTime,
             end_time: endTime,

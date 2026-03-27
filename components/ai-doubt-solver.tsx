@@ -93,9 +93,11 @@ export function AiDoubtSolver() {
       // Build messages — for image messages use vision-compatible format
       const apiMessages = current.messages.slice(-8).map(m => {
         if (m.image) {
-          // Extract base64 data from data URL
-          const base64Data = m.image.split(",")[1] || m.image
-          const mimeType = m.image.startsWith("data:image/png") ? "image/png" : "image/jpeg"
+          // Extract base64 data and mime type from data URL
+          const matches = m.image.match(/^data:(image\/.+);base64,(.+)$/)
+          const mimeType = matches ? matches[1] : "image/jpeg"
+          const base64Data = matches ? matches[2] : m.image
+          
           return {
             role: m.role,
             content: [

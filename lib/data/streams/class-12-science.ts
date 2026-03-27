@@ -244,7 +244,7 @@ const hindi12: Subject = {
 }
 
 export const class12ScienceStream: Stream = {
-  id: "science",
+  id: "science-12",
   name: "Science",
   nameHi: "विज्ञान",
   subjects: [

@@ -336,7 +336,7 @@ const legalStudies12: Subject = {
   ]
         }
 export const class12ArtsStream: Stream = {
-  id: "arts",
+  id: "arts-12",
   name: "Arts",
   nameHi: "कला",
   subjects: [

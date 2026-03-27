@@ -274,7 +274,7 @@ const hindi12com: Subject = {
 }
 
 export const class12CommerceStream: Stream = {
-  id: "commerce",
+  id: "commerce-12",
   name: "Commerce",
   nameHi: "वाणिज्य",
   subjects: [
@@ -287,4 +287,4 @@ export const class12CommerceStream: Stream = {
     english12com,
     hindi12com,
   ]
-      }
+}

@@ -72,7 +72,15 @@ export function DiaryScreen() {
     }
 
     // User email check with retry
-    const email = user?.email
+    let email = user?.email
+    if (!email) {
+      // Try to get from localStorage as fallback
+      try {
+        const localUser = JSON.parse(localStorage.getItem("ncert_user") || "{}")
+        email = localUser.email
+      } catch (e) {}
+    }
+
     if (!email) {
       setSaveError("User session load ho rahi hai... ek second ruko aur phir Save dabao.")
       return
