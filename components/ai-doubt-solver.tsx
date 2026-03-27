@@ -53,6 +53,7 @@ export function AiDoubtSolver() {
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState("")
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [imageError, setImageError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const renameRef = useRef<HTMLInputElement>(null)
@@ -137,12 +138,44 @@ export function AiDoubtSolver() {
     } finally { setLoading(false) }
   }
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const img = new Image()
+        img.onload = () => {
+          const maxSide = 1400
+          const scale = Math.min(1, maxSide / Math.max(img.width, img.height))
+          const canvas = document.createElement("canvas")
+          canvas.width = Math.max(1, Math.round(img.width * scale))
+          canvas.height = Math.max(1, Math.round(img.height * scale))
+          const ctx = canvas.getContext("2d")
+          if (!ctx) return reject(new Error("Canvas unavailable"))
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+          resolve(canvas.toDataURL("image/jpeg", 0.78))
+        }
+        img.onerror = () => reject(new Error("Image load failed"))
+        img.src = reader.result as string
+      }
+      reader.onerror = () => reject(new Error("File read failed"))
+      reader.readAsDataURL(file)
+    })
+
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setSelectedImage(reader.result as string)
-    reader.readAsDataURL(file)
+    setImageError(null)
+    if (!file.type.startsWith("image/")) {
+      setImageError("Only images are supported right now (PDF not supported).")
+      e.target.value = ""
+      return
+    }
+    try {
+      const compressed = await compressImage(file)
+      setSelectedImage(compressed)
+    } catch {
+      setImageError("Image read failed. Please try another image.")
+    }
     e.target.value = ""
   }
 
@@ -384,8 +417,11 @@ export function AiDoubtSolver() {
                       </button>
                     </div>
                   )}
+                  {imageError && (
+                    <p className="mb-2 text-xs text-red-400">{imageError}</p>
+                  )}
                   {/* Hidden file inputs */}
-                  <input ref={fileInputRef} type="file" accept="image/*,application/pdf" className="hidden" onChange={handleImageSelect} />
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
                   <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
                   <div className="flex items-center gap-2">
                     <button onClick={() => cameraInputRef.current?.click()} title="Take Photo"

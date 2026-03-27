@@ -7,7 +7,6 @@ import { AiDoubtSolver } from "@/components/ai-doubt-solver"
 import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Layers } from "lucide-react"
 import type { AppScreen } from "@/lib/app-context"
 import Image from "next/image"
-import { useTheme } from "next-themes"
 
 const features: { key: string; icon: typeof BookOpen; screen: AppScreen; gradient: string; iconBg: string }[] = [
   {
@@ -42,7 +41,6 @@ const features: { key: string; icon: typeof BookOpen; screen: AppScreen; gradien
 
 export function DashboardScreen() {
   const { user, language, setScreen } = useApp()
-  const { theme } = useTheme()
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
@@ -140,7 +138,7 @@ export function DashboardScreen() {
                 {getText("mode", language)}
               </span>
               <span className="text-xs font-semibold text-card-foreground">
-                {theme === "dark" ? getText("darkMode", language) : "Light"}
+                Light
               </span>
             </div>
           </div>
