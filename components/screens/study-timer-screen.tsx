@@ -134,31 +134,59 @@ export function StudyTimerScreen() {
 
   // ── Tasks ─────────────────────────────────────────────────────────────────────
   const addTask = async () => {
-    if (!subject.trim() || !user?.email) return
+    if (!subject.trim()) { alert("Schedule name likhna zaroori hai!"); return }
+    if (!user?.email) { alert("User session load ho rahi hai, ek second baad try karo."); return }
     setSaving(true)
     try {
-      const { data, error } = await supabase.from("study_tasks").insert({
+      // Only insert columns that definitely exist in study_tasks table
+      const insertData: Record<string, unknown> = {
         user_email: user.email,
         subject: subject.trim(),
-        chapter: "",
         start_time: startTime,
         end_time: endTime,
         repeat,
         completed: false,
-        streak: 0,
-        time_slot: timeSlot
-      }).select().single()
+      }
+      // Optionally add chapter/streak/time_slot if they exist — won't break if missing
+      try { insertData.chapter = "" } catch {}
+      try { insertData.streak = 0 } catch {}
+      try { insertData.time_slot = timeSlot } catch {}
+
+      const { data, error } = await supabase
+        .from("study_tasks")
+        .insert(insertData)
+        .select()
+        .single()
+
       if (error) {
-        console.error("addTask error:", error)
-        alert("Schedule save failed: " + error.message)
+        // Try again without optional fields
+        const { data: data2, error: error2 } = await supabase
+          .from("study_tasks")
+          .insert({
+            user_email: user.email,
+            subject: subject.trim(),
+            start_time: startTime,
+            end_time: endTime,
+            repeat,
+            completed: false,
+          })
+          .select()
+          .single()
+        if (error2) {
+          alert("Schedule save failed: " + error2.message)
+        } else if (data2) {
+          setTasks(prev => [...prev, data2 as Task].sort((a, b) => a.start_time.localeCompare(b.start_time)))
+          setSubject("")
+          setChapter("")
+          setShowForm(false)
+        }
       } else if (data) {
         setTasks(prev => [...prev, data as Task].sort((a, b) => a.start_time.localeCompare(b.start_time)))
         setSubject("")
         setChapter("")
         setShowForm(false)
       }
-    } catch (err: any) {
-      console.error("addTask catch:", err)
+    } catch (err: unknown) {
       alert("Schedule save failed: " + String(err))
     }
     setSaving(false)
@@ -369,7 +397,7 @@ export function StudyTimerScreen() {
               </div>
             ) : (
               <div className="space-y-2">
-                {tasks.map(task => (
+               {tasks.map(task => (
                   <div key={task.id} className={`flex items-center gap-3 rounded-2xl border p-3.5 transition-all ${task.completed ? "border-emerald-500/20 bg-emerald-500/5 opacity-70" : "border-border/60 bg-card"}`}>
                     <button onClick={() => toggleTask(task)} className="shrink-0">
                       {task.completed ? <CheckCircle2 className="h-5 w-5 text-emerald-500" /> : <Circle className="h-5 w-5 text-muted-foreground hover:text-violet-400" />}
