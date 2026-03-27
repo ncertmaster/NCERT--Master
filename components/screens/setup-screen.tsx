@@ -60,9 +60,11 @@ export function SetupScreen() {
           <div className="animate-slide-up w-full max-w-sm">
             {/* Logo */}
             <div className="flex flex-col items-center mb-8">
-              <div className="h-20 w-20 rounded-3xl bg-primary/10 flex items-center justify-center mb-4 border border-primary/20">
-                <span className="text-4xl">📚</span>
-              </div>
+              <img
+                src="/logo.png"
+                alt="NCERT Master"
+                className="h-24 w-24 object-contain mb-4"
+              />
               <h1 className="text-2xl font-bold text-foreground">NCERT Master</h1>
               <p className="text-sm text-muted-foreground mt-1">Learn Smarter, Score Better</p>
             </div>
@@ -174,4 +176,5 @@ export function SetupScreen() {
     </div>
   )
                                  }
-                  
+
+                                   
