@@ -124,7 +124,7 @@ function DownloadButton({
     <button
       onClick={handleDownload}
       disabled={downloading}
-      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97] disabled:opacity-70"
+      className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:opacity-90 disabled:opacity-70"
     >
       {downloading ? (
         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -177,7 +177,7 @@ export function ClassSelectScreen({ flow }: { flow: "books" | "notes" | "iq" | "
                 setSelectedChapter(null)
                 setScreen(nextScreen[flow])
               }}
-              className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+              className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:opacity-90"
             >
               <span className="text-base font-semibold text-card-foreground">
                 {getText("class", language)} {c}
@@ -226,7 +226,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
               <button
                 key={stream.id}
                 onClick={() => setSelectedStream(stream.id)}
-                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:opacity-90"
               >
                 <div>
                   <p className="text-base font-semibold text-card-foreground">{stream.nameHi}</p>
@@ -270,7 +270,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     setSelectedChapter(null)
                     setScreen(nextScreen[flow])
                   }}
-                  className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                  className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:opacity-90"
                 >
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                     <Icon className="h-5 w-5 text-primary" />
@@ -311,7 +311,7 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                   setSelectedChapter(null)
                   setScreen(nextScreen[flow])
                 }}
-                className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:opacity-90"
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                   <Icon className="h-5 w-5 text-primary" />
@@ -370,7 +370,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       return (
         <button
           onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
-          className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+          className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground transition-all active:opacity-90"
         >
           🧠 Quiz शुरू करें
         </button>
@@ -392,7 +392,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         />
         <button
           onClick={() => { setSelectedChapter(ch.id); setScreen(nextScreen[flow]) }}
-          className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:scale-[0.97]"
+          className="flex-1 rounded-lg border border-primary py-2 text-xs font-semibold text-primary transition-all active:opacity-90"
         >
           📖 ऑनलाइन पढ़ें
         </button>
@@ -428,7 +428,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                     <button
                       key={subject.id}
                       onClick={() => setSelectedSubject(subject.id)}
-                      className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                      className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md active:opacity-90"
                     >
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                         <Icon className="h-5 w-5 text-primary" />
@@ -461,7 +461,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
                 <button
                   key={book.id}
                   onClick={() => setSelectedBook(book.id)}
-                  className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                  className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:opacity-90"
                 >
                   <div>
                     <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
@@ -525,7 +525,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
               <button
                 key={book.id}
                 onClick={() => setSelectedBook(book.id)}
-                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:scale-[0.97]"
+                className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md active:opacity-90"
               >
                 <div>
                   <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
@@ -786,7 +786,7 @@ export function BooksListScreen() {
                 <div className="flex gap-2 px-4 pb-4">
                   <button
                     onClick={() => handleOpenBook(book)}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all active:scale-[0.97]"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all active:opacity-90"
                   >
                     <BookMarked className="h-4 w-4" />
                     View Chapters

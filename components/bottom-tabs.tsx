@@ -17,7 +17,7 @@ export function BottomTabs({ activeTab }: { activeTab: string }) {
   const { setScreen, language } = useApp()
 
   return (
-    <nav className="mobile-safe-bottom fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 backdrop-blur-lg">
+    <nav className="mobile-safe-bottom fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card">
       <div className="mx-auto flex max-w-md items-center justify-around py-1.5">
         {tabs.map((tab) => {
           const Icon = tab.icon
