@@ -80,11 +80,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // ── Load session + user profile on mount ──────────────────────────────────
   useEffect(() => {
     async function init() {
-      // 1. Get Supabase session
-      const { data: { session } } = await supabase.auth.getSession()
-      const supabaseUser = session?.user ?? null
+      // Run Supabase session check + minimum splash display time (1.5s) in parallel
+      // This ensures splash is visible long enough AND we don't wait extra if auth is fast
+      const [sessionResult] = await Promise.all([
+        supabase.auth.getSession(),
+        new Promise<void>(resolve => setTimeout(resolve, 1500)), // minimum 1.5s splash
+      ])
 
-      // 2. Load saved profile from localStorage
+      const supabaseUser = sessionResult.data?.session?.user ?? null
+
+      // Load saved profile from localStorage
       let savedProfile: UserProfile | null = null
       try {
         const raw = localStorage.getItem("ncert_user")
@@ -93,14 +98,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const savedLanguage = localStorage.getItem("ncert_language") as Language | null
 
-      // 3. If Supabase user exists, use their email (overrides localStorage email)
+      // If Supabase user exists, sync their email
       if (supabaseUser && savedProfile) {
         savedProfile.email = supabaseUser.email || savedProfile.email
         savedProfile.photo = savedProfile.photo || supabaseUser.user_metadata?.avatar_url || null
         savedProfile.name = savedProfile.name || supabaseUser.user_metadata?.full_name || ""
       }
 
-      // 4. Determine screen
+      // Determine correct screen — dashboard only if profile is complete
       const screen = savedProfile?.name && savedProfile?.classNumber ? "dashboard" : "setup"
 
       setState(prev => ({
@@ -115,16 +120,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     init()
 
-    // Listen for auth changes (Google login callback)
+    // Listen for auth changes (Google login callback etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       const supabaseUser = session?.user ?? null
       setState(prev => {
-        // If user logged in via Google and no profile set → go to setup
         let screen = prev.screen
         if (event === "SIGNED_IN" && supabaseUser) {
           const hasProfile = prev.user?.name && prev.user?.classNumber
-          if (!hasProfile) screen = "setup"
-          else screen = "dashboard"
+          screen = hasProfile ? "dashboard" : "setup"
         }
         if (event === "SIGNED_OUT") screen = "setup"
         return { ...prev, supabaseUser, sessionReady: true, screen }
@@ -205,5 +208,5 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-      }
-                                      
+        }
+      
