@@ -61,8 +61,37 @@ export const t: Translations = {
   target: { en: "Target", hi: "लक्ष्य" },
   mode: { en: "Mode", hi: "मोड" },
   home: { en: "Home", hi: "होम" },
+
+  // ── Settings screen ──────────────────────────────────────────────────────────
+  theme: { en: "Theme", hi: "थीम" },
+  darkModeOn: { en: "Dark Mode On", hi: "डार्क मोड चालू" },
+  lightModeOn: { en: "Light Mode On", hi: "लाइट मोड चालू" },
+  languageLabel: { en: "Language / भाषा", hi: "Language / भाषा" },
+  englishSelected: { en: "English selected", hi: "अंग्रेज़ी चुनी गई" },
+  hindiSelected: { en: "Hindi selected", hi: "हिंदी चुनी गई" },
+  eyeProtection: { en: "Eye Protection", hi: "आँख सुरक्षा" },
+  eyeProtectionOnDesc: { en: "Warm filter On — easy on eyes", hi: "वार्म फ़िल्टर चालू — आँखों के लिए आरामदायक" },
+  eyeProtectionOffDesc: { en: "Reduces blue light strain", hi: "नीली रोशनी कम करता है" },
+  timeManagement: { en: "Time Management", hi: "समय प्रबंधन" },
+  timeManagementSub: { en: "Pomodoro timer, schedule & daily routine", hi: "पोमोडोरो टाइमर, शेड्यूल और दिनचर्या" },
+  myDiary: { en: "My Diary", hi: "मेरी डायरी" },
+  myDiarySub: { en: "Notes, goals and life journal", hi: "नोट्स, लक्ष्य और जीवन जर्नल" },
+  privacyPolicy: { en: "Privacy Policy", hi: "गोपनीयता नीति" },
+  privacyPolicySub: { en: "Data usage and AI policy", hi: "डेटा उपयोग और AI नीति" },
+  shareApp: { en: "Share this App", hi: "ऐप शेयर करें" },
+  shareAppSub: { en: "Share NCERT Master with friends", hi: "NCERT Master दोस्तों के साथ शेयर करें" },
+  sendFeedback: { en: "Send Feedback", hi: "फ़ीडबैक भेजें" },
+  sendFeedbackSub: { en: "Help us improve NCERT Master", hi: "NCERT Master को बेहतर बनाने में मदद करें" },
+  yourName: { en: "Your name (optional)", hi: "आपका नाम (वैकल्पिक)" },
+  feedbackPlaceholder: { en: "What can we improve? Share your thoughts...", hi: "हम क्या बेहतर कर सकते हैं? अपने विचार साझा करें..." },
+  cancel: { en: "Cancel", hi: "रद्द करें" },
+  send: { en: "Send", hi: "भेजें" },
+  sent: { en: "Sent!", hi: "भेजा!" },
+  sending: { en: "Sending...", hi: "भेज रहे हैं..." },
+  linkCopied: { en: "Link copied to clipboard!", hi: "लिंक कॉपी हो गया!" },
 }
 
 export function getText(key: string, lang: Language): string {
   return t[key]?.[lang] || t[key]?.["en"] || key
-}
+             }
+         
