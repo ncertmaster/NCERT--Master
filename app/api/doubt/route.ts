@@ -151,6 +151,13 @@ export async function POST(request: Request) {
 
     let reply: string
 
+    if (useVision && !GEMINI_API_KEY) {
+      return NextResponse.json(
+        { reply: "Image analysis needs GEMINI_API_KEY on server. Please add it in environment variables." },
+        { status: 200 }
+      )
+    }
+
     if (useVision && GEMINI_API_KEY) {
       // Image message → Gemini (vision capable)
       reply = await callGemini(messages)

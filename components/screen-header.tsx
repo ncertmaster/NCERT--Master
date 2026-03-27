@@ -9,7 +9,7 @@ export function ScreenHeader({ title, onBack }: { title: string; onBack?: () => 
   const { goBack, language } = useApp()
 
   return (
-    <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-border bg-card/95 px-4 py-3.5 backdrop-blur-lg">
+    <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-border bg-card px-4 py-3.5">
       <button
         onClick={onBack || goBack}
         className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary"

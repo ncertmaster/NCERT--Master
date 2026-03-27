@@ -3,16 +3,13 @@
 import React, { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { ScreenHeader } from "@/components/screen-header"
-import { useTheme } from "next-themes"
 import {
   LogOut, Timer, BookMarked, Shield, ChevronRight,
-  Sun, Moon, MessageSquare, Share2, Check, X
+  MessageSquare, Share2, Check, X
 } from "lucide-react"
 
 export function SettingsScreen() {
   const { logout, setScreen } = useApp()
-  const { theme, setTheme } = useTheme()
-  const isDark = theme === "dark"
 
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedbackText, setFeedbackText] = useState("")
@@ -87,25 +84,6 @@ export function SettingsScreen() {
     <div className="flex flex-col min-h-screen bg-background">
       <ScreenHeader title="Settings" />
       <div className="flex-1 px-4 py-5 space-y-3 max-w-md mx-auto w-full">
-
-        {/* Theme Toggle */}
-        <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
-          <div className="w-full flex items-center gap-3 px-4 py-4">
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isDark ? "bg-indigo-500/15 text-indigo-400" : "bg-amber-500/15 text-amber-400"}`}>
-              {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">{isDark ? "Dark Mode" : "Light Mode"}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Tap to switch theme</p>
-            </div>
-            <button
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none ${isDark ? "bg-violet-500" : "bg-slate-300"}`}
-            >
-              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ${isDark ? "translate-x-5" : "translate-x-0"}`} />
-            </button>
-          </div>
-        </div>
 
         {/* Main Menu Items */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
@@ -205,5 +183,4 @@ export function SettingsScreen() {
       )}
     </div>
   )
-    }
-      
+}
