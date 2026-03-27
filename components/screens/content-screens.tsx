@@ -214,6 +214,17 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
   const is1112 = selectedClass === 11 || selectedClass === 12
 
+  // Guard: if stream ID is invalid, reset it via useEffect (NOT during render)
+  React.useEffect(() => {
+    if (is1112 && selectedStream) {
+      const streams: Stream[] = streamsByClass[selectedClass!] || []
+      const found = streams.find((s: Stream) => s.id === selectedStream)
+      if (!found) {
+        setSelectedStream(null)
+      }
+    }
+  }, [selectedStream, selectedClass, is1112])
+
   // ── CASE 1: Class 11/12, stream NOT yet selected → show stream list
   if (is1112 && !selectedStream) {
     const streams: Stream[] = streamsByClass[selectedClass!] || []
@@ -247,9 +258,8 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     const streams: Stream[] = streamsByClass[selectedClass!] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
     
-    // If stream not found (e.g. invalid ID in state), reset and show stream list
+    // If stream not found, return null — useEffect above will reset the state safely
     if (!stream) {
-      setSelectedStream(null)
       return null
     }
 
@@ -903,4 +913,4 @@ export function BooksReaderScreen() {
       </div>
     </div>
   )
-         }
+}
