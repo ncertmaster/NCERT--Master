@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { ScreenHeader } from "@/components/screen-header"
+import { getText } from "@/lib/translations"
 import { useTheme } from "next-themes"
 import {
   LogOut, Timer, BookMarked, Shield, ChevronRight,
@@ -21,6 +22,7 @@ export function SettingsScreen() {
   const [showShareToast, setShowShareToast] = useState(false)
 
   const isDark = theme === "dark"
+  const g = (key: string) => getText(key, language)
 
   const handleLogout = () => { logout(); setScreen("setup") }
 
@@ -65,20 +67,23 @@ export function SettingsScreen() {
 
   const menuItems = [
     {
-      icon: Timer, label: "Time Management",
-      sublabel: "Pomodoro timer, schedule & daily routine",
+      icon: Timer,
+      label: g("timeManagement"),
+      sublabel: g("timeManagementSub"),
       iconBg: "bg-violet-500/15 text-violet-400",
       onClick: () => setScreen("study-timer")
     },
     {
-      icon: BookMarked, label: "My Diary",
-      sublabel: "Notes, goals and life journal",
+      icon: BookMarked,
+      label: g("myDiary"),
+      sublabel: g("myDiarySub"),
       iconBg: "bg-amber-500/15 text-amber-400",
       onClick: () => setScreen("diary")
     },
     {
-      icon: Shield, label: "Privacy Policy",
-      sublabel: "Data usage and AI policy",
+      icon: Shield,
+      label: g("privacyPolicy"),
+      sublabel: g("privacyPolicySub"),
       iconBg: "bg-emerald-500/15 text-emerald-400",
       onClick: () => setScreen("privacy-policy")
     },
@@ -86,22 +91,21 @@ export function SettingsScreen() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <ScreenHeader title="Settings" />
+      <ScreenHeader title={g("settings")} />
       <div className="flex-1 px-4 py-5 space-y-3 max-w-md mx-auto w-full">
 
-        {/* ── APPEARANCE SECTION ─────────────────────────────────────── */}
+        {/* ── APPEARANCE ──────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
 
-          {/* Dark / Light Theme Toggle */}
+          {/* Dark / Light Theme */}
           <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isDark ? "bg-indigo-500/15 text-indigo-400" : "bg-amber-500/15 text-amber-400"}`}>
               {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">Theme</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{isDark ? "Dark Mode On" : "Light Mode On"}</p>
+              <p className="text-sm font-semibold text-foreground">{g("theme")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{isDark ? g("darkModeOn") : g("lightModeOn")}</p>
             </div>
-            {/* Toggle Switch */}
             <button
               onClick={() => setTheme(isDark ? "light" : "dark")}
               className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-300 focus:outline-none ${isDark ? "bg-indigo-500" : "bg-border"}`}
@@ -110,16 +114,15 @@ export function SettingsScreen() {
             </button>
           </div>
 
-          {/* Language Toggle */}
+          {/* Language */}
           <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
               <Languages className="h-5 w-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">Language / भाषा</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{language === "hi" ? "हिंदी सेलेक्ट है" : "English selected"}</p>
+              <p className="text-sm font-semibold text-foreground">{g("languageLabel")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{language === "hi" ? g("hindiSelected") : g("englishSelected")}</p>
             </div>
-            {/* EN / HI Toggle Pill */}
             <div className="flex items-center gap-1 rounded-xl border border-border bg-secondary p-1">
               <button
                 onClick={() => setLanguage("en")}
@@ -136,14 +139,14 @@ export function SettingsScreen() {
             </div>
           </div>
 
-          {/* Eye Protection Toggle */}
+          {/* Eye Protection */}
           <div className="flex items-center gap-3 px-4 py-4">
             <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${eyeProtection ? "bg-green-500/15 text-green-400" : "bg-teal-500/15 text-teal-400"}`}>
               <Eye className="h-5 w-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">Eye Protection</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{eyeProtection ? "Warm filter On — easy on eyes" : "Reduces blue light strain"}</p>
+              <p className="text-sm font-semibold text-foreground">{g("eyeProtection")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{eyeProtection ? g("eyeProtectionOnDesc") : g("eyeProtectionOffDesc")}</p>
             </div>
             <button
               onClick={() => setEyeProtection(!eyeProtection)}
@@ -154,12 +157,12 @@ export function SettingsScreen() {
           </div>
         </div>
 
-        {/* ── MAIN MENU ──────────────────────────────────────────────── */}
+        {/* ── MENU ──────────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
           {menuItems.map((item, i) => {
             const Icon = item.icon
             return (
-              <button key={item.label} onClick={item.onClick}
+              <button key={i} onClick={item.onClick}
                 className={`w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary ${i < menuItems.length - 1 ? "border-b border-border/60" : ""}`}>
                 <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.iconBg}`}><Icon className="h-5 w-5" /></div>
                 <div className="flex-1 min-w-0">
@@ -179,8 +182,8 @@ export function SettingsScreen() {
             <Share2 className="h-5 w-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">Share this App</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Share NCERT Master with friends</p>
+            <p className="text-sm font-semibold text-foreground">{g("shareApp")}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{g("shareAppSub")}</p>
           </div>
           <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
         </button>
@@ -193,8 +196,8 @@ export function SettingsScreen() {
               <MessageSquare className="h-5 w-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">Send Feedback</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Help us improve NCERT Master</p>
+              <p className="text-sm font-semibold text-foreground">{g("sendFeedback")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{g("sendFeedbackSub")}</p>
             </div>
             <ChevronRight className={`h-4 w-4 text-muted-foreground shrink-0 transition-transform ${showFeedback ? "rotate-90" : ""}`} />
           </button>
@@ -204,13 +207,13 @@ export function SettingsScreen() {
               <div className="pt-3 space-y-3">
                 <input
                   type="text"
-                  placeholder="Your name (optional)"
+                  placeholder={g("yourName")}
                   value={feedbackName}
                   onChange={e => setFeedbackName(e.target.value)}
                   className="w-full rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
                 />
                 <textarea
-                  placeholder="What can we improve? Share your thoughts..."
+                  placeholder={g("feedbackPlaceholder")}
                   value={feedbackText}
                   onChange={e => setFeedbackText(e.target.value)}
                   rows={4}
@@ -220,17 +223,17 @@ export function SettingsScreen() {
                   <button
                     onClick={() => { setShowFeedback(false); setFeedbackText(""); setFeedbackName("") }}
                     className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-semibold hover:bg-secondary/80 transition-colors">
-                    <X className="h-4 w-4" /> Cancel
+                    <X className="h-4 w-4" /> {g("cancel")}
                   </button>
                   <button
                     onClick={handleSendFeedback}
                     disabled={sending || !feedbackText.trim() || feedbackSent}
                     className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-pink-500 text-white text-sm font-semibold hover:bg-pink-600 disabled:opacity-60 transition-colors">
                     {feedbackSent
-                      ? <><Check className="h-4 w-4" /> Sent!</>
+                      ? <><Check className="h-4 w-4" /> {g("sent")}</>
                       : sending
-                        ? "Sending..."
-                        : <><MessageSquare className="h-4 w-4" /> Send</>}
+                        ? g("sending")
+                        : <><MessageSquare className="h-4 w-4" /> {g("send")}</>}
                   </button>
                 </div>
               </div>
@@ -240,17 +243,17 @@ export function SettingsScreen() {
 
         {/* Logout */}
         <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl hover:bg-red-500/20 transition-colors font-semibold">
-          <LogOut className="w-5 h-5" /><span>Logout</span>
+          <LogOut className="w-5 h-5" /><span>{g("logout")}</span>
         </button>
       </div>
 
       {/* Share Toast */}
       {showShareToast && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2.5 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2 z-50">
-          <Check className="h-4 w-4" /> Link copied to clipboard!
+          <Check className="h-4 w-4" /> {g("linkCopied")}
         </div>
       )}
     </div>
   )
-        }
-            
+               }
+      
