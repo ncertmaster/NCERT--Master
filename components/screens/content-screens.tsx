@@ -5,7 +5,7 @@ import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { ScreenHeader } from "@/components/screen-header"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { ChevronRight, Download, Loader2, BookMarked } from "lucide-react"
+import { ChevronRight, Download, Loader2, BookMarked, ExternalLink } from "lucide-react"
 import type { ClassNumber, Subject, Stream, Book, Chapter } from "@/lib/data"
 import { subjectsByClass, streamsByClass } from "@/lib/data"
 import type { AppScreen } from "@/lib/app-context"
@@ -380,10 +380,10 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
     if (flow === "books") {
       return (
         <button
-          onClick={() => { setSelectedChapter(ch.id); setScreen("books-content") }}
+          onClick={() => { setSelectedChapter(ch.id); setScreen("books-reader") }}
           className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground active:opacity-90"
         >
-          📖 Read Chapter
+          📖 ऑनलाइन पढ़ें
         </button>
       )
     }
@@ -514,9 +514,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       </div>
     )
   }
-
-  
-  // ── Class 6–10 ──
+// ── Class 6–10 ──
   const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
   const subject = subjects.find((s: Subject) => s.id === selectedSubject)
   if (!subject) return null
@@ -806,11 +804,74 @@ export function BooksListScreen() {
   )
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-// 🌐 BOOKS READER SCREEN — kept for backward compat, redirects back
-// ──────────────────────────────────────────────────────────────────────────────
 export function BooksReaderScreen() {
-  const { goBack } = useApp()
-  React.useEffect(() => { goBack() }, [])
-  return null
+  const { selectedClass, goBack } = useApp()
+  const [loading, setLoading] = React.useState(true)
+
+  // Official NCERT epathshala — class-specific books page
+  const ncertUrl = `https://epathshala.nic.in/e-pathshala-4/profile/?id=${selectedClass || 6}`
+
+  // Timeout fallback: if still loading after 8s, iframe probably blocked
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 8000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      {/* Header */}
+      <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur">
+        <button
+          onClick={goBack}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary text-foreground"
+        >
+          ←
+        </button>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-foreground truncate">NCERT किताब पढ़ें</p>
+          <p className="text-xs text-muted-foreground">Class {selectedClass} — Official NCERT</p>
+        </div>
+        <button
+          onClick={() => window.open(ncertUrl, "_blank")}
+          className="flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+          Browser
+        </button>
+      </div>
+
+      {/* Iframe reader */}
+      <div className="relative flex-1">
+        {loading && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">NCERT किताब लोड हो रही है...</p>
+            <p className="text-xs text-muted-foreground opacity-60">कुछ सेकंड रुकें</p>
+          </div>
+        )}
+        <iframe
+          src={ncertUrl}
+          title="NCERT Books"
+          className="h-full w-full border-0"
+          style={{ height: "calc(100vh - 60px)" }}
+          onLoad={() => setLoading(false)}
+          allow="fullscreen"
+        />
+      </div>
+
+      {/* Bottom fallback banner */}
+      <div className="border-t border-border bg-card px-4 py-3">
+        <p className="text-xs text-muted-foreground text-center mb-2">
+          अगर किताब नहीं दिख रही तो Browser में खोलें
+        </p>
+        <button
+          onClick={() => window.open(ncertUrl, "_blank")}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground"
+        >
+          <ExternalLink className="h-4 w-4" />
+          Browser में खोलें
+        </button>
+      </div>
+    </div>
+  )
 }
