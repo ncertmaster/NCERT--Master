@@ -17,12 +17,12 @@ import {
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
 import { SettingsScreen } from "@/components/screens/settings-screen"
-import { StudyTimerScreen } from "@/components/screens/study-timer-screen"   // NEW
-import { DiaryScreen } from "@/components/screens/diary-screen"               // NEW
-import { PrivacyPolicyScreen } from "@/components/screens/privacy-policy-screen" // NEW
+import { StudyTimerScreen } from "@/components/screens/study-timer-screen"
+import { DiaryScreen } from "@/components/screens/diary-screen"
+import { PrivacyPolicyScreen } from "@/components/screens/privacy-policy-screen"
 
 export function AppShell() {
-  const { screen } = useApp()
+  const { screen, eyeProtection } = useApp()
 
   const renderScreen = () => {
     switch (screen) {
@@ -49,19 +49,27 @@ export function AppShell() {
       case "quiz-chapter":  return <ChapterSelectScreen flow="quiz" />
       case "quiz-play":     return <QuizPlayScreen />
       case "settings":      return <SettingsScreen />
-      case "study-timer":   return <StudyTimerScreen />   // NEW
-      case "diary":         return <DiaryScreen />         // NEW
-      case "privacy-policy":return <PrivacyPolicyScreen /> // NEW
+      case "study-timer":   return <StudyTimerScreen />
+      case "diary":         return <DiaryScreen />
+      case "privacy-policy":return <PrivacyPolicyScreen />
       default:              return <DashboardScreen />
     }
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-md">
+    <main
+      className="mx-auto min-h-screen max-w-md"
+      style={eyeProtection ? {
+        filter: "sepia(25%) brightness(0.93) saturate(0.85)",
+        transition: "filter 0.4s ease",
+      } : {
+        filter: "none",
+        transition: "filter 0.4s ease",
+      }}
+    >
       <div key={screen}>
         {renderScreen()}
       </div>
     </main>
   )
 }
-        
