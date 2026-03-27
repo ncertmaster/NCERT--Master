@@ -4,60 +4,66 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-// gemini-2.0-flash supports vision + text
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
-const SYSTEM_PROMPT = `You are "Guru" — an expert NCERT teacher and mentor inside the NCERT Master study app, specializing in Class 6 to Class 12 syllabus.
+// ── System Prompt ─────────────────────────────────────────────────────────────
+const SYSTEM_PROMPT = `You are Guru — the expert AI teacher built into NCERT Master app.
 
 WHO YOU ARE:
-- A deeply knowledgeable NCERT subject expert across all streams: Science, Commerce, Arts
-- You know every NCERT book, chapter, concept, diagram, and formula from Class 6 to 12
-- You are like a brilliant senior teacher who explains clearly, step by step
-- You are direct, precise, and focused — no unnecessary filler or small talk
+You are a highly experienced, passionate teacher with 20+ years of teaching all NCERT subjects from Class 6 to 12. You are also a motivator who genuinely cares about every student's success. Think of yourself as the best teacher the student has ever had — knowledgeable, patient, clear, and encouraging.
 
-HOW YOU TEACH:
-1. Answer the question directly and completely — never give vague answers
-2. For numerical problems: solve every step clearly with working shown
-3. For concepts: explain the "why" behind it, not just the "what"
-4. Use real-life Indian examples students can relate to
-5. Reference the exact NCERT chapter/topic when you know it
-6. End with a crisp summary or key formula box
+THE APP YOU ARE PART OF (NCERT Master):
+This app has 4 main sections that students use:
+1. 📚 NCERT Books — Read full NCERT PDFs chapter by chapter (all classes 6-12, all subjects)
+2. 📝 Notes & IQ Points — Smart summarized notes and important points from each chapter
+3. 🧠 Quiz — Chapter-wise and full-subject MCQ quizzes for practice
+4. 📊 Dashboard — Student's progress, streak, and study overview
 
-YOUR FORMAT:
-- Use headings with emojis: 📌 Concept | 🔢 Solution | 💡 Key Point | ✅ Summary
-- Short paragraphs, bullet points for lists
-- For formulas: write clearly with every variable explained
-- Bold important terms
+When students mention any of these features, guide them accordingly. Example: "Quiz mein try karo" or "Notes section mein dekho".
+
+YOUR SUBJECTS (deep expertise):
+- Physics, Chemistry, Biology (Class 6-12)
+- Mathematics (Class 6-12: Arithmetic → Calculus → Statistics)
+- History, Geography, Political Science, Economics (Class 6-12)
+- English Literature & Grammar
+- Accountancy, Business Studies (Class 11-12 Commerce)
+- Sociology, Psychology (Class 11-12 Arts)
+
+HOW YOU TEACH — YOUR STYLE:
+1. Get straight to the answer — no filler greetings like "Great question!" or "Sure, I'd be happy to help"
+2. For numerical/problems: Show EVERY step clearly, never skip
+3. For concepts: Explain WHY it happens, not just WHAT. Use real-life Indian examples
+4. Reference exact NCERT chapter/book when relevant: e.g., "Class 10 Science, Chapter 3 — Metals and Non-metals"
+5. End responses with a crisp ✅ Summary or key formula box
+6. For motivation: Be like a coach — tough love + genuine belief in the student
+
+RESPONSE FORMAT:
+- 📌 for concepts, 🔢 for solutions, 💡 for key points, ⚠️ for common mistakes, ✅ for summary
+- Bold **important terms**
+- Numbered steps for multi-step problems
+- Short paragraphs — never walls of text
+
+FOR IMAGES:
+- Read ALL visible text, numbers, equations, diagrams carefully
+- State what you see: "Yeh [topic/question] hai..."
+- Solve or explain completely
 
 LANGUAGE:
-- Write in clear, simple English
-- Use technical terms in English (Newton, Mitosis, Democracy, etc.)
-- Keep tone friendly and encouraging but FOCUSED on academics
+- Simple, clear English as default
+- Mix Hindi naturally when helpful: "Dekho yaar, jab current flow karta hai..."
+- Technical terms always in English
 
-SUBJECTS YOU KNOW DEEPLY:
-- Science: Physics, Chemistry, Biology (6-12)
-- Maths (6-12, including Calculus, Statistics, Algebra)
-- Social Science: History, Geography, Political Science, Economics
-- English Literature & Grammar
-- Commerce: Accountancy, Business Studies, Economics
-- Arts: History, Political Science, Sociology, Psychology, Geography
+ABSOLUTE RULES:
+- Never give a 1-2 line answer to a real academic question
+- Never say "I cannot help" for any school/study topic
+- Never add unnecessary sign-offs or greetings
+- If a student shares a photo of their notes/question paper — analyze it fully`
 
-For IMAGE questions:
-- Carefully read ALL text, equations, numbers, and diagrams visible in the image
-- Identify the subject and topic from visual context
-- If it is a question/problem — solve it completely step by step
-- If it is notes/textbook page — summarize and explain the key concepts
-- Always start with: "Image mein dekha: [what you see]..."
-
-STRICT RULES:
-- NEVER give a 1-2 line answer to a real academic question
-- NEVER refuse to answer any NCERT-related topic
-- NEVER add unnecessary greetings or sign-offs
-- NEVER say "Great question!" or similar filler phrases`
-
-// ── Groq handler — text only ──────────────────────────────────────────────────
-async function callGroq(messages: any[]) {
+// ── Groq — text only ──────────────────────────────────────────────────────────
+async function callGroq(messages: any[], useVision = false) {
   if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY missing")
+
+  const model = useVision ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile"
 
   const res = await fetch(GROQ_URL, {
     method: "POST",
@@ -66,9 +72,9 @@ async function callGroq(messages: any[]) {
       Authorization: `Bearer ${GROQ_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
+      model,
       max_tokens: 2048,
-      temperature: 0.7,
+      temperature: 0.6,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages,
@@ -80,95 +86,67 @@ async function callGroq(messages: any[]) {
     const errText = await res.text()
     throw new Error(`Groq ${res.status}: ${errText.slice(0, 200)}`)
   }
+
   const data = await res.json()
   return data?.choices?.[0]?.message?.content || "Dobara try karo!"
 }
 
-// ── Parse data URL → { mimeType, base64 } ────────────────────────────────────
+// ── Parse data URL safely (no regex on huge base64) ───────────────────────────
 function parseDataUrl(dataUrl: string): { mimeType: string; base64: string } | null {
-  // Format: data:<mimeType>;base64,<data>
-  // Use indexOf to avoid regex issues with very long base64 strings
   const commaIdx = dataUrl.indexOf(",")
   if (commaIdx === -1) return null
-
-  const prefix = dataUrl.substring(0, commaIdx)           // "data:image/jpeg;base64"
-  const base64  = dataUrl.substring(commaIdx + 1)          // pure base64 data
-
+  const prefix = dataUrl.substring(0, commaIdx)         // "data:image/jpeg;base64"
+  const base64  = dataUrl.substring(commaIdx + 1)        // pure base64
   const mimeMatch = prefix.match(/^data:([^;]+)/)
   if (!mimeMatch) return null
-
   return { mimeType: mimeMatch[1], base64 }
 }
 
-// ── Gemini handler — text + vision ───────────────────────────────────────────
+// ── Gemini — text + vision fallback ──────────────────────────────────────────
 async function callGemini(messages: any[]) {
   if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY missing")
 
-  // Build Gemini contents array
   const contents: any[] = []
 
   for (const msg of messages) {
     const role = msg.role === "assistant" ? "model" : "user"
 
     if (Array.isArray(msg.content)) {
-      // Multi-modal message (image + text)
       const parts: any[] = []
-
       for (const part of msg.content) {
         if (part.type === "text" && part.text) {
           parts.push({ text: part.text })
         } else if (part.type === "image_url" && part.image_url?.url) {
           const parsed = parseDataUrl(part.image_url.url)
           if (parsed) {
-            parts.push({
-              inlineData: {
-                mimeType: parsed.mimeType,
-                data: parsed.base64,
-              },
-            })
+            parts.push({ inlineData: { mimeType: parsed.mimeType, data: parsed.base64 } })
           }
         }
       }
-
-      if (parts.length > 0) {
-        contents.push({ role, parts })
-      }
+      if (parts.length > 0) contents.push({ role, parts })
     } else if (typeof msg.content === "string") {
       contents.push({ role, parts: [{ text: msg.content }] })
     }
   }
 
-  // Use systemInstruction field (supported by gemini-2.0-flash)
-  const requestBody = {
-    systemInstruction: {
-      parts: [{ text: SYSTEM_PROMPT }],
-    },
-    contents,
-    generationConfig: {
-      maxOutputTokens: 2048,
-      temperature: 0.7,
-    },
-  }
-
   const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents,
+      generationConfig: { maxOutputTokens: 2048, temperature: 0.6 },
+    }),
   })
 
   if (!res.ok) {
     const errText = await res.text()
-    throw new Error(`Gemini ${res.status}: ${errText.slice(0, 300)}`)
+    throw new Error(`Gemini ${res.status}: ${errText.slice(0, 200)}`)
   }
 
   const data = await res.json()
-
-  // Check for safety blocks or empty candidates
   const candidate = data?.candidates?.[0]
-  if (!candidate) {
-    console.error("Gemini: no candidates", JSON.stringify(data).slice(0, 500))
-    throw new Error("Gemini returned no candidates")
-  }
+  if (!candidate) throw new Error("Gemini: no candidates returned")
 
   const text = candidate?.content?.parts
     ?.filter((p: any) => p.text)
@@ -176,9 +154,9 @@ async function callGemini(messages: any[]) {
     ?.join("\n")
 
   if (!text) {
-    const finishReason = candidate?.finishReason
-    if (finishReason === "SAFETY") throw new Error("Gemini blocked response (safety filter)")
-    throw new Error(`Gemini empty response (finishReason: ${finishReason})`)
+    const reason = candidate?.finishReason
+    if (reason === "SAFETY") throw new Error("Gemini safety filter triggered")
+    throw new Error(`Gemini empty response (reason: ${reason})`)
   }
 
   return text
@@ -196,24 +174,51 @@ export async function POST(request: Request) {
     let reply: string
 
     if (useVision) {
-      // Image attached → use Gemini Vision
-      if (!GEMINI_API_KEY) {
-        return NextResponse.json({
-          reply: "⚠️ Image analysis ke liye GEMINI_API_KEY server pe set karni hai. Vercel Environment Variables mein GEMINI_API_KEY add karo.",
-        })
-      }
-      reply = await callGemini(messages)
-    } else {
-      // Text only → use Groq (faster)
-      if (!GROQ_API_KEY) {
-        // Fallback to Gemini if only Gemini key available
-        if (GEMINI_API_KEY) {
+      // Image attached → Try Groq Vision first (generous free quota)
+      // Fallback to Gemini if Groq vision fails
+      if (GROQ_API_KEY) {
+        try {
+          reply = await callGroq(messages, true)
+        } catch (groqErr: any) {
+          console.warn("Groq vision failed, trying Gemini:", groqErr?.message)
+          if (GEMINI_API_KEY) {
+            try {
+              reply = await callGemini(messages)
+            } catch (geminiErr: any) {
+              return NextResponse.json({
+                reply: `⚠️ Image analysis temporarily unavailable: ${geminiErr?.message?.slice(0, 80)}. Text mein apna question likhkar try karo.`,
+              })
+            }
+          } else {
+            return NextResponse.json({
+              reply: "⚠️ Image analysis ke liye GROQ_API_KEY ya GEMINI_API_KEY chahiye. Environment variables check karo.",
+            })
+          }
+        }
+      } else if (GEMINI_API_KEY) {
+        // Only Gemini available
+        try {
           reply = await callGemini(messages)
-        } else {
-          return NextResponse.json({ reply: "API keys missing. GROQ_API_KEY ya GEMINI_API_KEY set karo." }, { status: 500 })
+        } catch (geminiErr: any) {
+          const msg = geminiErr?.message || ""
+          if (msg.includes("429")) {
+            return NextResponse.json({
+              reply: "⚠️ Image analysis ka quota khatam ho gaya (429). Thodi der baad try karo ya text mein apna question likhkar puchho.",
+            })
+          }
+          return NextResponse.json({
+            reply: `⚠️ Image analysis error: ${msg.slice(0, 100)}. Text mein puchho.`,
+          })
         }
       } else {
-        // Strip any accidental image data before sending to Groq (text model)
+        return NextResponse.json({
+          reply: "⚠️ Image analysis ke liye server pe GROQ_API_KEY set karo (Vercel Environment Variables).",
+        })
+      }
+    } else {
+      // Text only → Groq fast model
+      if (GROQ_API_KEY) {
+        // Strip any accidental image data before sending text model
         const textMessages = messages.map((m: any) => {
           if (Array.isArray(m.content)) {
             const text = m.content
@@ -224,7 +229,23 @@ export async function POST(request: Request) {
           }
           return { role: m.role, content: m.content }
         })
-        reply = await callGroq(textMessages)
+        try {
+          reply = await callGroq(textMessages, false)
+        } catch (err: any) {
+          // Groq text failed → try Gemini
+          if (GEMINI_API_KEY) {
+            reply = await callGemini(textMessages)
+          } else {
+            throw err
+          }
+        }
+      } else if (GEMINI_API_KEY) {
+        reply = await callGemini(messages)
+      } else {
+        return NextResponse.json(
+          { reply: "API keys missing. Server pe GROQ_API_KEY set karo." },
+          { status: 500 }
+        )
       }
     }
 
@@ -232,13 +253,11 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error("Doubt API error:", error?.message)
-
-    // Return friendly error instead of crashing
     return NextResponse.json({
-      reply: `Connection issue: ${error?.message?.slice(0, 100) || "Unknown error"}. Internet check karo aur dobara try karo.`,
+      reply: `Kuch gadbad ho gayi (${error?.message?.slice(0, 60) || "unknown"}). Internet check karo aur dobara try karo.`,
     }, { status: 200 })
   }
 }
 
 export const maxDuration = 30
-        
+    
