@@ -33,7 +33,7 @@ export function SetupScreen() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: 
+        redirectTo:
           "https://v0-ncert-master-app.vercel.app/auth/callback",
       },
     })
@@ -58,10 +58,10 @@ export function SetupScreen() {
       <div className="flex min-h-screen flex-col bg-background">
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
           <div className="animate-slide-up w-full max-w-sm">
-            {/* Logo */}
+            {/* Logo — FIXED PATH: /images/logo.png */}
             <div className="flex flex-col items-center mb-8">
               <img
-                src="/logo.png"
+                src="/images/logo.png"
                 alt="NCERT Master"
                 className="h-24 w-24 object-contain mb-4"
               />
@@ -175,6 +175,5 @@ export function SetupScreen() {
       </div>
     </div>
   )
-                                 }
-
-                
+              }
+                  
