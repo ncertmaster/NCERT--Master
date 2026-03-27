@@ -1,34 +1,25 @@
-const CACHE_NAME = 'ncert-master-v2';
+const CACHE_NAME = 'ncert-master-v3';
 
-const PRECACHE_URLS = [
-  '/',
-  '/manifest.json',
-  '/icons/icon-192x192.jpg',
-  '/icons/icon-512x512.jpg',
-];
+const PRECACHE_URLS = ['/', '/manifest.json', '/icons/icon-192x192.jpg', '/icons/icon-512x512.jpg'];
 
-// ── Notification schedules store ──────────────────────────────────────────────
-let scheduledNotifTimeouts = [];
+// Active scheduled timeouts (in-SW scheduling)
+let scheduledTimeouts = [];
 
 // ── Install ───────────────────────────────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting())
   );
 });
 
 // ── Activate ──────────────────────────────────────────────────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    }).then(() => self.clients.claim())
+    caches.keys()
+      .then(names => Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n))))
+      .then(() => self.clients.claim())
   );
 });
 
@@ -36,73 +27,61 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-
   if (request.method !== 'GET') return;
   if (!url.protocol.startsWith('http')) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(c => c.put(request, clone));
           return response;
         })
-        .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
+        .catch(() => caches.match(request).then(c => c || caches.match('/')))
     );
     return;
   }
 
-  if (
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|ico|woff|woff2|ttf|eot)$/) ||
-    url.pathname.startsWith('/_next/')
-  ) {
+  if (url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|ico|woff|woff2|ttf)$/) ||
+      url.pathname.startsWith('/_next/')) {
     event.respondWith(
-      caches.match(request).then((cached) => {
-        const fetchPromise = fetch(request)
-          .then((response) => {
-            if (response.ok) {
-              const responseClone = response.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
-            }
-            return response;
-          })
-          .catch(() => cached);
-        return cached || fetchPromise;
+      caches.match(request).then(cached => {
+        const fetch$ = fetch(request).then(r => {
+          if (r.ok) { const c = r.clone(); caches.open(CACHE_NAME).then(cache => cache.put(request, c)); }
+          return r;
+        }).catch(() => cached);
+        return cached || fetch$;
       })
     );
     return;
   }
 
-  event.respondWith(
-    fetch(request).catch(() => caches.match(request))
-  );
+  event.respondWith(fetch(request).catch(() => caches.match(request)));
 });
 
-// ── Notification click → focus/open app ──────────────────────────────────────
+// ── Notification click ────────────────────────────────────────────────────────
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      // If app window already open → focus it
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
       for (const client of clientList) {
         if ('focus' in client) return client.focus();
       }
-      // Otherwise open a new window
       if (clients.openWindow) return clients.openWindow('/');
     })
   );
 });
 
-// ── Message from page: schedule notifications ─────────────────────────────────
+// ── Message handler ───────────────────────────────────────────────────────────
 self.addEventListener('message', (event) => {
   if (!event.data) return;
 
+  // Schedule notifications for today's tasks
   if (event.data.type === 'SCHEDULE_NOTIFICATIONS') {
-    // Clear previous timeouts
-    scheduledNotifTimeouts.forEach(id => clearTimeout(id));
-    scheduledNotifTimeouts = [];
+    // Clear old timeouts
+    scheduledTimeouts.forEach(id => clearTimeout(id));
+    scheduledTimeouts = [];
 
     const tasks = event.data.tasks || [];
     const now = Date.now();
@@ -110,46 +89,42 @@ self.addEventListener('message', (event) => {
     tasks.forEach(task => {
       if (!task.start_time || task.completed) return;
 
-      // Parse HH:MM
       const [hStr, mStr] = task.start_time.split(':');
       const h = parseInt(hStr, 10);
       const m = parseInt(mStr, 10);
       if (isNaN(h) || isNaN(m)) return;
 
-      const taskDate = new Date();
-      taskDate.setHours(h, m, 0, 0);
-      const delay = taskDate.getTime() - now;
+      const taskTime = new Date();
+      taskTime.setHours(h, m, 0, 0);
+      let delay = taskTime.getTime() - now;
 
-      // Only schedule future notifications within next 24 hours
+      // If time already passed today but within 5 minutes → fire immediately
+      if (delay <= 0 && delay > -300000) {
+        delay = 500; // fire in 500ms
+      }
+
       if (delay > 0 && delay < 86400000) {
-        const timeoutId = setTimeout(() => {
+        const tid = setTimeout(() => {
           self.registration.showNotification(`📚 Study Time: ${task.subject}`, {
-            body: `${task.start_time} – ${task.end_time} | Abhi padhai shuru karo! 🚀`,
+            body: `${task.start_time} – ${task.end_time}\nAbhi padhai shuru karo! 🚀`,
             icon: '/icons/icon-192x192.jpg',
             badge: '/icons/icon-192x192.jpg',
             tag: `ncert-task-${task.id}`,
             requireInteraction: true,
-            data: { taskId: task.id },
+            data: { taskId: task.id, url: '/' },
           });
         }, delay);
-        scheduledNotifTimeouts.push(timeoutId);
+        scheduledTimeouts.push(tid);
       }
     });
-
-    // Respond back with count
-    if (event.ports && event.ports[0]) {
-      event.ports[0].postMessage({ scheduled: scheduledNotifTimeouts.length });
-    }
   }
 
   // Test notification
   if (event.data.type === 'TEST_NOTIFICATION') {
-    self.registration.showNotification('📚 NCERT Master — Notifications Active!', {
-      body: 'Teri study schedule notifications ab kaam karenge! 🎉',
+    self.registration.showNotification('✅ NCERT Master — Notifications Active!', {
+      body: 'Teri study schedule notifications ab kaam karenge! Notifications ON hain 🎉',
       icon: '/icons/icon-192x192.jpg',
-      badge: '/icons/icon-192x192.jpg',
       tag: 'ncert-test',
     });
   }
 });
-        
