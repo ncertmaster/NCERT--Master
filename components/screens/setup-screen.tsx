@@ -61,7 +61,7 @@ export function SetupScreen() {
             {/* Logo */}
             <div className="flex flex-col items-center mb-8">
               <img
-                src="/images/logo.png"
+                src="/logo.png"
                 alt="NCERT Master"
                 className="h-24 w-24 object-contain mb-4"
               />
@@ -177,4 +177,4 @@ export function SetupScreen() {
   )
                                  }
 
-                                   
+                
