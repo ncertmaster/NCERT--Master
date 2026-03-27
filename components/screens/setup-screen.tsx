@@ -33,7 +33,7 @@ export function SetupScreen() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: "https://v0-ncert-master-app.vercel.app/auth/callback"
       },
     })
     if (error) { setError(error.message); setLoading(false) }
