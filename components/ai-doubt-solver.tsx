@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useState, useRef, useEffect, useCallback } from "react"
-import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap, Paperclip, Camera, XCircle } from "lucide-react"
+import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap } from "lucide-react"
 
 interface Message {
   role: "user" | "assistant"
   content: string
-  image?: string   // base64 data URL
+  image?: string   // kept for backward compat with old chat history
   timestamp: number
 }
 
@@ -52,13 +52,9 @@ export function AiDoubtSolver() {
   const [loading, setLoading] = useState(false)
   const [renamingId, setRenamingId] = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState("")
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [imageError, setImageError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const renameRef = useRef<HTMLInputElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { setChats(loadChats()) }, [])
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
@@ -75,11 +71,10 @@ export function AiDoubtSolver() {
   }, [chats])
 
   const sendMessage = async (text: string) => {
-    if ((!text.trim() && !selectedImage) || loading || !activeChatId) return
+    if (!text.trim() || loading || !activeChatId) return
     const userMsg: Message = {
       role: "user",
-      content: text.trim() || "Is image ke baare mein explain karo",
-      image: selectedImage || undefined,
+      content: text.trim(),
       timestamp: Date.now()
     }
     let updated = chats.map(c => {
@@ -87,44 +82,19 @@ export function AiDoubtSolver() {
       const msgs = [...c.messages, userMsg]
       return { ...c, messages: msgs, title: c.messages.length === 0 ? makeTitle(msgs) : c.title, updatedAt: Date.now() }
     })
-    setChats(updated); saveChats(updated); setInput(""); setSelectedImage(null); setLoading(true)
+    setChats(updated); saveChats(updated); setInput(""); setLoading(true)
 
     try {
       const current = updated.find(c => c.id === activeChatId)!
-      // Build messages — for image messages use vision-compatible format
-      const apiMessages = current.messages.slice(-8).map(m => {
-        if (m.image) {
-          // Extract base64 data and mime type from data URL
-          const matches = m.image.match(/^data:(image\/.+);base64,(.+)$/)
-          const mimeType = matches ? matches[1] : "image/jpeg"
-          const base64Data = matches ? matches[2] : m.image
-          
-          return {
-            role: m.role,
-            content: [
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:${mimeType};base64,${base64Data}`
-                }
-              },
-              {
-                type: "text",
-                text: m.content || "Is image mein kya hai? Mera doubt solve karo."
-              }
-            ]
-          }
-        }
-        return { role: m.role, content: m.content }
-      })
-
-      // Check if any message has an image — use vision model
-      const hasImage = current.messages.slice(-8).some(m => m.image)
+      const apiMessages = current.messages.slice(-8).map(m => ({
+        role: m.role,
+        content: m.content,
+      }))
 
       const res = await fetch("/api/doubt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages, useVision: hasImage }),
+        body: JSON.stringify({ messages: apiMessages, useVision: false }),
       })
       const data = await res.json()
       const reply = data?.reply || "Kuch gadbad ho gayi. Dobara try karo bhai!"
@@ -136,47 +106,6 @@ export function AiDoubtSolver() {
       updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, errMsg] } : c)
       setChats(updated); saveChats(updated)
     } finally { setLoading(false) }
-  }
-
-  const compressImage = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const img = new Image()
-        img.onload = () => {
-          const maxSide = 1400
-          const scale = Math.min(1, maxSide / Math.max(img.width, img.height))
-          const canvas = document.createElement("canvas")
-          canvas.width = Math.max(1, Math.round(img.width * scale))
-          canvas.height = Math.max(1, Math.round(img.height * scale))
-          const ctx = canvas.getContext("2d")
-          if (!ctx) return reject(new Error("Canvas unavailable"))
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-          resolve(canvas.toDataURL("image/jpeg", 0.78))
-        }
-        img.onerror = () => reject(new Error("Image load failed"))
-        img.src = reader.result as string
-      }
-      reader.onerror = () => reject(new Error("File read failed"))
-      reader.readAsDataURL(file)
-    })
-
-  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setImageError(null)
-    if (!file.type.startsWith("image/")) {
-      setImageError("Only images are supported right now (PDF not supported).")
-      e.target.value = ""
-      return
-    }
-    try {
-      const compressed = await compressImage(file)
-      setSelectedImage(compressed)
-    } catch {
-      setImageError("Image read failed. Please try another image.")
-    }
-    e.target.value = ""
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -222,7 +151,6 @@ export function AiDoubtSolver() {
     return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" })
   }
 
-  // Format AI response with basic markdown
   const formatContent = (text: string) => {
     return text.split("\n").map((line, i) => {
       if (line.startsWith("## ")) return <p key={i} className="font-bold text-foreground mt-2 mb-1">{line.slice(3)}</p>
@@ -230,7 +158,6 @@ export function AiDoubtSolver() {
       if (line.match(/^\d+\. /)) return <p key={i} className="ml-2">{line}</p>
       if (line.startsWith("• ") || line.startsWith("- ")) return <p key={i} className="ml-2">{line}</p>
       if (!line.trim()) return <br key={i} />
-      // Inline bold
       if (line.includes("**")) {
         const parts = line.split(/(\*\*[^*]+\*\*)/)
         return <p key={i}>{parts.map((p, j) => p.startsWith("**") && p.endsWith("**") ? <strong key={j}>{p.slice(2,-2)}</strong> : p)}</p>
@@ -241,7 +168,7 @@ export function AiDoubtSolver() {
 
   return (
     <>
-      {/* Floating Button — Graduation cap icon, study themed */}
+      {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
         className={`fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 ${
@@ -359,8 +286,16 @@ export function AiDoubtSolver() {
                       <div>
                         <p className="font-bold text-foreground">Guru AI — Your Mentor 🎓</p>
                         <p className="text-xs text-muted-foreground mt-1 max-w-[260px] leading-relaxed">
-                          Ask anything — type your doubt or share an image 📷
+                          Koi bhi doubt poocho — main hoon na! 💪
                         </p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 w-full max-w-[320px]">
+                        {QUICK_ACTIONS.map(a => (
+                          <button key={a.label} onClick={() => sendMessage(a.prompt)}
+                            className="text-left rounded-xl border border-border bg-card px-3 py-2.5 text-xs text-foreground hover:bg-secondary transition-colors">
+                            {a.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -408,43 +343,20 @@ export function AiDoubtSolver() {
                 </div>
 
                 <div className="border-t border-border px-3 py-3 bg-card/80 backdrop-blur shrink-0">
-                  {/* Image Preview */}
-                  {selectedImage && (
-                    <div className="mb-2 relative inline-block">
-                      <img src={selectedImage} alt="Selected" className="h-20 w-20 rounded-xl object-cover border border-border" />
-                      <button onClick={() => setSelectedImage(null)} className="absolute -top-1.5 -right-1.5 bg-background rounded-full text-muted-foreground hover:text-foreground">
-                        <XCircle className="h-5 w-5" />
-                      </button>
-                    </div>
-                  )}
-                  {imageError && (
-                    <p className="mb-2 text-xs text-red-400">{imageError}</p>
-                  )}
-                  {/* Hidden file inputs */}
-                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
-                  <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
                   <div className="flex items-center gap-2">
-                    <button onClick={() => cameraInputRef.current?.click()} title="Take Photo"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all">
-                      <Camera className="h-4 w-4" />
-                    </button>
-                    <button onClick={() => fileInputRef.current?.click()} title="Attach File"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all">
-                      <Paperclip className="h-4 w-4" />
-                    </button>
                     <input
                       ref={inputRef}
                       type="text"
                       value={input}
                       onChange={e => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder={selectedImage ? "Add a question about image..." : "Ask your doubt..."}
+                      placeholder="Ask your doubt..."
                       disabled={loading}
                       className="flex-1 rounded-2xl border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-60"
                     />
                     <button
                       onClick={() => sendMessage(input)}
-                      disabled={(!input.trim() && !selectedImage) || loading}
+                      disabled={!input.trim() || loading}
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all"
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
