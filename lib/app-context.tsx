@@ -28,6 +28,7 @@ interface AppState {
   supabaseUser: User | null
   sessionReady: boolean
   language: Language
+  eyeProtection: boolean
   selectedClass: ClassNumber | null
   selectedStream: string | null
   selectedSubject: string | null
@@ -45,6 +46,7 @@ interface AppContextType extends AppState {
   goBack: () => void
   setUser: (user: UserProfile) => void
   setLanguage: (lang: Language) => void
+  setEyeProtection: (v: boolean) => void
   setSelectedClass: (c: ClassNumber) => void
   setSelectedStream: (s: string | null) => void
   setSelectedSubject: (s: string | null) => void
@@ -65,6 +67,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     supabaseUser: null,
     sessionReady: false,
     language: "en",
+    eyeProtection: false,
     selectedClass: null,
     selectedStream: null,
     selectedSubject: null,
@@ -81,10 +84,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function init() {
       // Run Supabase session check + minimum splash display time (1.5s) in parallel
-      // This ensures splash is visible long enough AND we don't wait extra if auth is fast
       const [sessionResult] = await Promise.all([
         supabase.auth.getSession(),
-        new Promise<void>(resolve => setTimeout(resolve, 1500)), // minimum 1.5s splash
+        new Promise<void>(resolve => setTimeout(resolve, 1500)),
       ])
 
       const supabaseUser = sessionResult.data?.session?.user ?? null
@@ -97,6 +99,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       } catch {}
 
       const savedLanguage = localStorage.getItem("ncert_language") as Language | null
+      const savedEyeProtection = localStorage.getItem("ncert_eye_protection") === "true"
 
       // If Supabase user exists, sync their email
       if (supabaseUser && savedProfile) {
@@ -115,15 +118,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         user: savedProfile,
         screen,
         language: savedLanguage || "en",
+        eyeProtection: savedEyeProtection,
       }))
     }
 
     init()
 
     // Listen for auth changes (Google login callback etc.)
+    // IMPORTANT: Only change screen AFTER sessionReady (init completed).
+    // This prevents the flash where setup screen shows briefly before dashboard.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       const supabaseUser = session?.user ?? null
       setState(prev => {
+        // During initial load (sessionReady = false), let init() handle screen.
+        // Only act on auth changes AFTER app is fully initialized.
+        if (!prev.sessionReady) {
+          return { ...prev, supabaseUser }
+        }
         let screen = prev.screen
         if (event === "SIGNED_IN" && supabaseUser) {
           const hasProfile = prev.user?.name && prev.user?.classNumber
@@ -172,6 +183,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState(prev => ({ ...prev, language }))
   }, [])
 
+  const setEyeProtection = useCallback((eyeProtection: boolean) => {
+    try { localStorage.setItem("ncert_eye_protection", String(eyeProtection)) } catch {}
+    setState(prev => ({ ...prev, eyeProtection }))
+  }, [])
+
   const setSelectedClass = useCallback((selectedClass: ClassNumber) => setState(prev => ({ ...prev, selectedClass })), [])
   const setSelectedStream = useCallback((selectedStream: string | null) => setState(prev => ({ ...prev, selectedStream })), [])
   const setSelectedSubject = useCallback((selectedSubject: string | null) => setState(prev => ({ ...prev, selectedSubject })), [])
@@ -186,7 +202,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try { localStorage.removeItem("ncert_user") } catch {}
     setState(prev => ({
       screen: "setup", user: null, supabaseUser: null, sessionReady: true,
-      language: prev.language, selectedClass: null, selectedStream: null,
+      language: prev.language, eyeProtection: prev.eyeProtection,
+      selectedClass: null, selectedStream: null,
       selectedSubject: null, selectedBook: null, selectedChapter: null,
       selectedBookUrl: null, quizMode: null, quizScore: 0, quizTotal: 0, screenHistory: [],
     }))
@@ -194,7 +211,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AppContext.Provider value={{
-      ...state, setScreen, goBack, setUser, setLanguage,
+      ...state, setScreen, goBack, setUser, setLanguage, setEyeProtection,
       setSelectedClass, setSelectedStream, setSelectedSubject,
       setSelectedBook, setSelectedChapter, setSelectedBookUrl,
       setQuizMode, setQuizScore, logout,
@@ -208,5 +225,5 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-        }
-      
+  }
+  
