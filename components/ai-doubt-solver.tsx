@@ -6,7 +6,7 @@ import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, Ch
 interface Message {
   role: "user" | "assistant"
   content: string
-  image?: string   // kept for backward compat with old chat history
+  image?: string
   timestamp: number
 }
 
@@ -33,15 +33,6 @@ function makeTitle(messages: Message[]) {
   if (!first) return "New Chat"
   return first.content.slice(0, 40) + (first.content.length > 40 ? "..." : "")
 }
-
-const QUICK_ACTIONS = [
-  { label: "📐 Explain a concept", prompt: "Explain an important NCERT concept to me in detail" },
-  { label: "📝 Make study plan", prompt: "Help me make an effective study plan for today" },
-  { label: "🧠 Quiz me", prompt: "Take a short quiz from me on any NCERT topic" },
-  { label: "🔍 Solve a problem", prompt: "Help me solve a difficult problem step by step" },
-  { label: "💪 Motivate me", prompt: "I'm feeling demotivated. Please motivate me to study" },
-  { label: "📊 Important topics", prompt: "What are the most important topics for board exams?" },
-]
 
 export function AiDoubtSolver() {
   const [isOpen, setIsOpen] = useState(false)
@@ -72,11 +63,7 @@ export function AiDoubtSolver() {
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading || !activeChatId) return
-    const userMsg: Message = {
-      role: "user",
-      content: text.trim(),
-      timestamp: Date.now()
-    }
+    const userMsg: Message = { role: "user", content: text.trim(), timestamp: Date.now() }
     let updated = chats.map(c => {
       if (c.id !== activeChatId) return c
       const msgs = [...c.messages, userMsg]
@@ -86,18 +73,14 @@ export function AiDoubtSolver() {
 
     try {
       const current = updated.find(c => c.id === activeChatId)!
-      const apiMessages = current.messages.slice(-8).map(m => ({
-        role: m.role,
-        content: m.content,
-      }))
-
+      const apiMessages = current.messages.slice(-8).map(m => ({ role: m.role, content: m.content }))
       const res = await fetch("/api/doubt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: apiMessages, useVision: false }),
       })
       const data = await res.json()
-      const reply = data?.reply || "Kuch gadbad ho gayi. Dobara try karo bhai!"
+      const reply = data?.reply || "Something went wrong. Please try again!"
       const assistantMsg: Message = { role: "assistant", content: reply, timestamp: Date.now() }
       updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, assistantMsg], updatedAt: Date.now() } : c)
       setChats(updated); saveChats(updated)
@@ -279,23 +262,15 @@ export function AiDoubtSolver() {
 
                 <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
                   {activeChat.messages.length === 0 && (
-                    <div className="flex flex-col items-center gap-4 text-center pt-4">
+                    <div className="flex flex-col items-center gap-4 text-center pt-8">
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
                         <Sparkles className="h-8 w-8 text-indigo-400" />
                       </div>
                       <div>
                         <p className="font-bold text-foreground">Guru AI — Your Mentor 🎓</p>
-                        <p className="text-xs text-muted-foreground mt-1 max-w-[260px] leading-relaxed">
-                          Koi bhi doubt poocho — main hoon na! 💪
+                        <p className="text-sm text-muted-foreground mt-2 max-w-[260px] leading-relaxed">
+                          Ask any question and get instant answers on your NCERT topics.
                         </p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 w-full max-w-[320px]">
-                        {QUICK_ACTIONS.map(a => (
-                          <button key={a.label} onClick={() => sendMessage(a.prompt)}
-                            className="text-left rounded-xl border border-border bg-card px-3 py-2.5 text-xs text-foreground hover:bg-secondary transition-colors">
-                            {a.label}
-                          </button>
-                        ))}
                       </div>
                     </div>
                   )}
@@ -371,4 +346,5 @@ export function AiDoubtSolver() {
       )}
     </>
   )
-}
+    }
+  
