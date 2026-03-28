@@ -9,6 +9,7 @@ const history11: Subject = {
   books: [
     {
       id: "history-11-book",
+        ncertPdfCode: "kehh1",
       name: "Vishwa Itihas Ke Kuch Vishay",
       nameHi: "विश्व इतिहास के कुछ विषय",
       chapters: [
@@ -33,6 +34,7 @@ const geography11: Subject = {
   books: [
     {
       id: "geography-11-physical",
+        ncertPdfCode: "kegp1",
       name: "Fundamentals of Physical Geography",
       nameHi: "भौतिक भूगोल के मूल सिद्धांत",
       chapters: [
@@ -50,6 +52,7 @@ const geography11: Subject = {
     },
     {
       id: "geography-11-india",
+        ncertPdfCode: "kegi1",
       name: "India: Physical Environment",
       nameHi: "भारत: भौतिक पर्यावरण",
       chapters: [
@@ -105,6 +108,7 @@ const polSci11: Subject = {
       }
 const sociology11: Subject = {
   id: "sociology-11",
+        ncertPdfCode: "kess1",
   name: "Sociology",
   nameHi: "समाजशास्त्र",
   icon: "users",
@@ -257,3 +261,4 @@ export const class11ArtsStream: Stream = {
     hindi11arts,
   ]
          }
+         
