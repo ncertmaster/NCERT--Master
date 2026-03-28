@@ -13,6 +13,7 @@ export const class7Subjects: Subject[] = [
     books: [
       {
         id: "math-7-ganit",
+        ncertPdfCode: "gemh1",
         name: "Ganit",
         nameHi: "गणित",
         chapters: [
@@ -87,6 +88,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "science-7-vigyan",
+        ncertPdfCode: "gesc1",
         name: "Vigyan",
         nameHi: "विज्ञान",
         chapters: [
@@ -137,6 +139,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "social-7-rajniti",
+        ncertPdfCode: "gess3",
         name: "Samajik evam Rajnitik Jeevan - II",
         nameHi: "सामाजिक एवं राजनीतिक जीवन - II",
         chapters: [
@@ -152,6 +155,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "social-7-ateet",
+        ncertPdfCode: "gess1",
         name: "Hamare Ateet - II",
         nameHi: "हमारे अतीत - II",
         chapters: [
@@ -209,6 +213,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "hindi-7-vasant",
+        ncertPdfCode: "ghhv1",
         name: "Vasant Bhag 2",
         nameHi: "वसंत भाग 2",
         chapters: [
@@ -231,6 +236,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "hindi-7-durva",
+        ncertPdfCode: "ghhd1",
         name: "Durva Bhag 2",
         nameHi: "दूर्वा भाग 2",
         chapters: [
@@ -347,7 +353,7 @@ export const class7Subjects: Subject[] = [
           { id: "hc7-ch4", name: "The Ashes That Made Trees Bloom", nameHi: "The Ashes That Made Trees Bloom" },
           { id: "hc7-ch5", name: "Quality", nameHi: "Quality" },
           { id: "hc7-ch6", name: "Expert Detectives", nameHi: "Expert Detectives" },
-          { id: "hc7-ch7", name: "The Invention of Vita-Wonk", nameHi: "The Invention of Vita-Wonk" },
+           { id: "hc7-ch7", name: "The Invention of Vita-Wonk", nameHi: "The Invention of Vita-Wonk" },
           { id: "hc7-ch8", name: "A Homage to our Brave Soldiers", nameHi: "A Homage to our Brave Soldiers" },
           { id: "hc7-ch9", name: "Fire: Friend and Foe", nameHi: "Fire: Friend and Foe" },
         ]
@@ -396,6 +402,7 @@ export const class7Subjects: Subject[] = [
       },
       {
         id: "sanskrit-7-ruchira",
+        ncertPdfCode: "gssu1",
         name: "Ruchira Bhag 2",
         nameHi: "रुचिरा द्वितीयो भागः",
         chapters: [
