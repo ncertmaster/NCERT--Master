@@ -9,6 +9,7 @@ const physics11: Subject = {
   books: [
     {
       id: "physics-11-part1",
+        ncertPdfCode: "keph1",
       name: "Physics Part I",
       nameHi: "भौतिक विज्ञान भाग 1",
       chapters: [
@@ -23,6 +24,7 @@ const physics11: Subject = {
     },
     {
       id: "physics-11-part2",
+        ncertPdfCode: "keph2",
       name: "Physics Part II",
       nameHi: "भौतिक विज्ञान भाग 2",
       chapters: [
@@ -47,6 +49,7 @@ const chemistry11: Subject = {
   books: [
     {
       id: "chemistry-11-part1",
+        ncertPdfCode: "kech1",
       name: "Chemistry Part I",
       nameHi: "रसायन विज्ञान भाग 1",
       chapters: [
@@ -61,6 +64,7 @@ const chemistry11: Subject = {
     },
     {
       id: "chemistry-11-part2",
+        ncertPdfCode: "kech2",
       name: "Chemistry Part II",
       nameHi: "रसायन विज्ञान भाग 2",
       chapters: [
@@ -72,6 +76,7 @@ const chemistry11: Subject = {
         }
 const biology11: Subject = {
   id: "biology-11",
+        ncertPdfCode: "kebo1",
   name: "Biology",
   nameHi: "जीव विज्ञान",
   icon: "leaf",
@@ -159,6 +164,7 @@ const english11: Subject = {
   books: [
     {
       id: "english-11-hornbill",
+        ncertPdfCode: "keeh1",
       name: "Hornbill",
       nameHi: "Hornbill",
       chapters: [
@@ -176,6 +182,7 @@ const english11: Subject = {
     },
     {
       id: "english-11-snapshots",
+        ncertPdfCode: "keer1",
       name: "Snapshots",
       nameHi: "Snapshots",
       chapters: [
@@ -245,4 +252,5 @@ export const class11ScienceStream: Stream = {
     english11,
     hindi11,
   ]
-          }
+      }
+        
