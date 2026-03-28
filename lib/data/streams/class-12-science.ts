@@ -77,7 +77,6 @@ const chemistry12: Subject = {
          }
 const biology12: Subject = {
   id: "biology-12",
-        ncertPdfCode: "lebo2",
   name: "Biology",
   nameHi: "जीव विज्ञान",
   icon: "leaf",
@@ -264,5 +263,5 @@ export const class12ScienceStream: Stream = {
     english12,
     hindi12,
   ]
-          }
-         
+        }
+        
