@@ -9,6 +9,7 @@ const physics12: Subject = {
   books: [
     {
       id: "physics-12-part1",
+        ncertPdfCode: "leph3",
       name: "Physics Part I",
       nameHi: "भौतिक विज्ञान भाग 1",
       chapters: [
@@ -24,6 +25,7 @@ const physics12: Subject = {
     },
     {
       id: "physics-12-part2",
+        ncertPdfCode: "leph4",
       name: "Physics Part II",
       nameHi: "भौतिक विज्ञान भाग 2",
       chapters: [
@@ -47,6 +49,7 @@ const chemistry12: Subject = {
   books: [
     {
       id: "chemistry-12-part1",
+        ncertPdfCode: "lech3",
       name: "Chemistry Part I",
       nameHi: "रसायन विज्ञान भाग 1",
       chapters: [
@@ -59,6 +62,7 @@ const chemistry12: Subject = {
     },
     {
       id: "chemistry-12-part2",
+        ncertPdfCode: "lech4",
       name: "Chemistry Part II",
       nameHi: "रसायन विज्ञान भाग 2",
       chapters: [
@@ -73,6 +77,7 @@ const chemistry12: Subject = {
          }
 const biology12: Subject = {
   id: "biology-12",
+        ncertPdfCode: "lebo2",
   name: "Biology",
   nameHi: "जीव विज्ञान",
   icon: "leaf",
@@ -117,6 +122,7 @@ const math12: Subject = {
   books: [
     {
       id: "math-12-part1",
+        ncertPdfCode: "lemh1",
       name: "Mathematics Part I",
       nameHi: "गणित भाग 1",
       chapters: [
@@ -130,6 +136,7 @@ const math12: Subject = {
     },
     {
       id: "math-12-part2",
+        ncertPdfCode: "lemh2",
       name: "Mathematics Part II",
       nameHi: "गणित भाग 2",
       chapters: [
@@ -153,6 +160,7 @@ const english12: Subject = {
   books: [
     {
       id: "english-12-flamingo",
+        ncertPdfCode: "leeh2",
       name: "Flamingo",
       nameHi: "Flamingo",
       chapters: [
@@ -173,6 +181,7 @@ const english12: Subject = {
     },
     {
       id: "english-12-vistas",
+        ncertPdfCode: "leer2",
       name: "Vistas",
       nameHi: "Vistas",
       chapters: [
@@ -255,4 +264,5 @@ export const class12ScienceStream: Stream = {
     english12,
     hindi12,
   ]
-}
+          }
+         
