@@ -1,7 +1,11 @@
 "use client"
 
 import React, { useState, useRef, useEffect, useCallback } from "react"
-import { X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check, Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap } from "lucide-react"
+import {
+  X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check,
+  Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap,
+  Camera, Paperclip, XCircle,
+} from "lucide-react"
 
 interface Message {
   role: "user" | "assistant"
@@ -19,7 +23,7 @@ interface Chat {
   updatedAt: number
 }
 
-const CHATS_KEY = "ncert_ai_chats"
+const CHATS_KEY = "ncert_ai_chats_v2"
 
 function loadChats(): Chat[] {
   try { return JSON.parse(localStorage.getItem(CHATS_KEY) || "[]") } catch { return [] }
@@ -30,22 +34,34 @@ function saveChats(chats: Chat[]) {
 function genId() { return Math.random().toString(36).slice(2, 10) }
 function makeTitle(messages: Message[]) {
   const first = messages.find(m => m.role === "user")
-  if (!first) return "New Chat"
+  if (!first) return "नई Chat"
   return first.content.slice(0, 40) + (first.content.length > 40 ? "..." : "")
 }
 
+// Quick suggestion chips shown on empty chat
+const SUGGESTIONS = [
+  "प्रकाश संश्लेषण समझाओ",
+  "Newton के नियम",
+  "Important questions दो",
+  "Numerical solve करो",
+]
+
 export function AiDoubtSolver() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [view, setView] = useState<"history" | "chat">("history")
-  const [chats, setChats] = useState<Chat[]>([])
+  const [isOpen, setIsOpen]           = useState(false)
+  const [view, setView]               = useState<"history" | "chat">("history")
+  const [chats, setChats]             = useState<Chat[]>([])
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
-  const [input, setInput] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [renamingId, setRenamingId] = useState<string | null>(null)
+  const [input, setInput]             = useState("")
+  const [loading, setLoading]         = useState(false)
+  const [renamingId, setRenamingId]   = useState<string | null>(null)
   const [renameValue, setRenameValue] = useState("")
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const renameRef = useRef<HTMLInputElement>(null)
+  const inputRef       = useRef<HTMLInputElement>(null)
+  const renameRef      = useRef<HTMLInputElement>(null)
+  const fileInputRef   = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { setChats(loadChats()) }, [])
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
@@ -55,40 +71,102 @@ export function AiDoubtSolver() {
   const activeChat = chats.find(c => c.id === activeChatId)
 
   const startNewChat = useCallback(() => {
-    const chat: Chat = { id: genId(), title: "New Chat", messages: [], pinned: false, createdAt: Date.now(), updatedAt: Date.now() }
+    const chat: Chat = {
+      id: genId(), title: "नई Chat", messages: [],
+      pinned: false, createdAt: Date.now(), updatedAt: Date.now(),
+    }
     const updated = [chat, ...chats]
     setChats(updated); saveChats(updated)
     setActiveChatId(chat.id); setView("chat")
   }, [chats])
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    // Limit to 4MB
+    if (file.size > 4 * 1024 * 1024) {
+      alert("Image 4MB से छोटी होनी चाहिए।")
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setSelectedImage(reader.result as string)
+    reader.readAsDataURL(file)
+    // Reset input so same file can be re-selected
+    e.target.value = ""
+  }
+
   const sendMessage = async (text: string) => {
-    if (!text.trim() || loading || !activeChatId) return
-    const userMsg: Message = { role: "user", content: text.trim(), timestamp: Date.now() }
+    const hasText  = text.trim().length > 0
+    const hasImage = !!selectedImage
+    if ((!hasText && !hasImage) || loading || !activeChatId) return
+
+    const userMsg: Message = {
+      role: "user",
+      content: hasText ? text.trim() : "इस image के बारे में explain करो",
+      image: selectedImage || undefined,
+      timestamp: Date.now(),
+    }
+
     let updated = chats.map(c => {
       if (c.id !== activeChatId) return c
       const msgs = [...c.messages, userMsg]
-      return { ...c, messages: msgs, title: c.messages.length === 0 ? makeTitle(msgs) : c.title, updatedAt: Date.now() }
+      return {
+        ...c,
+        messages: msgs,
+        title: c.messages.length === 0 ? makeTitle(msgs) : c.title,
+        updatedAt: Date.now(),
+      }
     })
-    setChats(updated); saveChats(updated); setInput(""); setLoading(true)
+    setChats(updated); saveChats(updated)
+    setInput(""); setSelectedImage(null); setLoading(true)
 
     try {
       const current = updated.find(c => c.id === activeChatId)!
-      const apiMessages = current.messages.slice(-8).map(m => ({ role: m.role, content: m.content }))
+      const recentMsgs = current.messages.slice(-10)
+      const hasVision  = recentMsgs.some(m => m.image)
+
+      const apiMessages = recentMsgs.map(m => {
+        if (m.image) {
+          const parsed = m.image.match(/^data:(.+);base64,(.+)$/)
+          const mimeType = parsed ? parsed[1] : "image/jpeg"
+          const base64   = parsed ? parsed[2] : m.image
+          return {
+            role: m.role,
+            content: [
+              { type: "image_url", image_url: { url: `data:${mimeType};base64,${base64}` } },
+              { type: "text",      text: m.content || "इस image में क्या है? मेरा doubt solve करो।" },
+            ],
+          }
+        }
+        return { role: m.role, content: m.content }
+      })
+
       const res = await fetch("/api/doubt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages, useVision: false }),
+        body: JSON.stringify({ messages: apiMessages, useVision: hasVision }),
       })
-      const data = await res.json()
-      const reply = data?.reply || "Something went wrong. Please try again!"
+      const data  = await res.json()
+      const reply = data?.reply || "कुछ गड़बड़ हो गई। दोबारा try करो!"
+
       const assistantMsg: Message = { role: "assistant", content: reply, timestamp: Date.now() }
-      updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, assistantMsg], updatedAt: Date.now() } : c)
+      updated = updated.map(c =>
+        c.id === activeChatId
+          ? { ...c, messages: [...c.messages, assistantMsg], updatedAt: Date.now() }
+          : c
+      )
       setChats(updated); saveChats(updated)
     } catch {
-      const errMsg: Message = { role: "assistant", content: "Connection error. Check your internet and try again.", timestamp: Date.now() }
+      const errMsg: Message = {
+        role: "assistant",
+        content: "Connection error। Internet check करो और दोबारा try करो।",
+        timestamp: Date.now(),
+      }
       updated = updated.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, errMsg] } : c)
       setChats(updated); saveChats(updated)
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -125,39 +203,92 @@ export function AiDoubtSolver() {
     return b.updatedAt - a.updatedAt
   })
 
-  const formatTime = (ts: number) => new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+  const formatTime = (ts: number) =>
+    new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+
   const formatDate = (ts: number) => {
     const d = new Date(ts), today = new Date()
-    if (d.toDateString() === today.toDateString()) return "Today"
+    if (d.toDateString() === today.toDateString()) return "आज"
     const y = new Date(today); y.setDate(today.getDate() - 1)
-    if (d.toDateString() === y.toDateString()) return "Yesterday"
+    if (d.toDateString() === y.toDateString()) return "कल"
     return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" })
   }
 
+  // ── Render formatted AI response ──────────────────────────────────────────
   const formatContent = (text: string) => {
     return text.split("\n").map((line, i) => {
-      if (line.startsWith("## ")) return <p key={i} className="font-bold text-foreground mt-2 mb-1">{line.slice(3)}</p>
-      if (line.startsWith("**") && line.endsWith("**")) return <p key={i} className="font-semibold text-foreground">{line.slice(2, -2)}</p>
-      if (line.match(/^\d+\. /)) return <p key={i} className="ml-2">{line}</p>
-      if (line.startsWith("• ") || line.startsWith("- ")) return <p key={i} className="ml-2">{line}</p>
-      if (!line.trim()) return <br key={i} />
+      // Section dividers
+      if (line.startsWith("━━━")) return <hr key={i} className="border-border/40 my-2" />
+      // Headings ##
+      if (line.startsWith("## ")) return (
+        <p key={i} className="font-bold text-foreground mt-3 mb-1 text-[13px]">
+          {line.slice(3)}
+        </p>
+      )
+      // Bold-only lines **text**
+      if (line.startsWith("**") && line.endsWith("**") && line.length > 4) return (
+        <p key={i} className="font-semibold text-foreground text-[13px]">{line.slice(2, -2)}</p>
+      )
+      // Exam star highlight ⭐
+      if (line.includes("⭐")) return (
+        <p key={i} className="text-amber-600 dark:text-amber-400 font-medium text-[12px] bg-amber-500/10 rounded-lg px-2 py-1 my-1">
+          {line}
+        </p>
+      )
+      // Numbered list
+      if (line.match(/^\d+\. /)) return (
+        <p key={i} className="ml-3 text-[13px] leading-relaxed">{line}</p>
+      )
+      // Bullet points
+      if (line.startsWith("• ") || line.startsWith("- ") || line.startsWith("(i)") || line.startsWith("(ii)") || line.startsWith("(iii)")) return (
+        <p key={i} className="ml-3 text-[13px] leading-relaxed">{line}</p>
+      )
+      // Empty line
+      if (!line.trim()) return <div key={i} className="h-1" />
+      // Inline bold **word**
       if (line.includes("**")) {
         const parts = line.split(/(\*\*[^*]+\*\*)/)
-        return <p key={i}>{parts.map((p, j) => p.startsWith("**") && p.endsWith("**") ? <strong key={j}>{p.slice(2,-2)}</strong> : p)}</p>
+        return (
+          <p key={i} className="text-[13px] leading-relaxed">
+            {parts.map((p, j) =>
+              p.startsWith("**") && p.endsWith("**")
+                ? <strong key={j} className="font-semibold">{p.slice(2, -2)}</strong>
+                : p
+            )}
+          </p>
+        )
       }
-      return <p key={i}>{line}</p>
+      return <p key={i} className="text-[13px] leading-relaxed">{line}</p>
     })
   }
 
+  // ── JSX ───────────────────────────────────────────────────────────────────
   return (
     <>
+      {/* Hidden file inputs */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageSelect}
+      />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleImageSelect}
+      />
+
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
         className={`fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 ${
           isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
         } bg-gradient-to-br from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 active:scale-95`}
-        aria-label="Open Guru AI"
+        aria-label="Guru AI खोलो"
       >
         <span className="absolute inline-flex h-full w-full animate-ping rounded-2xl bg-indigo-400 opacity-20" />
         <GraduationCap className="h-7 w-7 text-white" />
@@ -176,13 +307,19 @@ export function AiDoubtSolver() {
                     <GraduationCap className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-foreground text-sm">Guru AI</p>
-                    <p className="text-xs text-emerald-500">● Always available</p>
+                    <p className="font-bold text-foreground text-sm">Guru AI 🎓</p>
+                    <p className="text-xs text-emerald-500">● हमेशा उपलब्ध</p>
                   </div>
-                  <button onClick={startNewChat} className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-xl bg-indigo-500/15 text-indigo-500 font-semibold hover:bg-indigo-500/25 transition-colors">
-                    <Plus className="h-3.5 w-3.5" /> New Chat
+                  <button
+                    onClick={startNewChat}
+                    className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-xl bg-indigo-500/15 text-indigo-500 font-semibold hover:bg-indigo-500/25 transition-colors"
+                  >
+                    <Plus className="h-3.5 w-3.5" /> नई Chat
                   </button>
-                  <button onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+                  >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
@@ -196,42 +333,65 @@ export function AiDoubtSolver() {
                       <div>
                         <p className="font-bold text-foreground text-lg">Guru AI 🎓</p>
                         <p className="text-sm text-muted-foreground mt-1 max-w-[240px] leading-relaxed">
-                          Your personal NCERT mentor — ask anything, anytime!
+                          तुम्हारा personal NCERT शिक्षक — कुछ भी पूछो, कभी भी!
                         </p>
                       </div>
-                      <button onClick={startNewChat} className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white text-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg">
-                        <Plus className="h-4 w-4" /> Start Chatting
+                      <button
+                        onClick={startNewChat}
+                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white text-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg"
+                      >
+                        <Plus className="h-4 w-4" /> Chat शुरू करो
                       </button>
                     </div>
                   ) : (
                     <div className="p-3 space-y-2">
                       {sorted.map(chat => (
-                        <button key={chat.id} onClick={() => { setActiveChatId(chat.id); setView("chat") }}
-                          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border/60 bg-card hover:bg-secondary/50 active:bg-secondary transition-colors text-left">
+                        <button
+                          key={chat.id}
+                          onClick={() => { setActiveChatId(chat.id); setView("chat") }}
+                          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border/60 bg-card hover:bg-secondary/50 active:bg-secondary transition-colors text-left"
+                        >
                           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/15">
-                            {chat.pinned ? <Pin className="h-4 w-4 text-amber-400" /> : <MessageSquare className="h-4 w-4 text-indigo-400" />}
+                            {chat.pinned
+                              ? <Pin className="h-4 w-4 text-amber-400" />
+                              : <MessageSquare className="h-4 w-4 text-indigo-400" />}
                           </div>
                           <div className="flex-1 min-w-0">
                             {renamingId === chat.id ? (
-                              <input ref={renameRef} value={renameValue} onChange={e => setRenameValue(e.target.value)}
+                              <input
+                                ref={renameRef}
+                                value={renameValue}
+                                onChange={e => setRenameValue(e.target.value)}
                                 onKeyDown={e => { if (e.key === "Enter") confirmRename(); e.stopPropagation() }}
                                 onClick={e => e.stopPropagation()}
-                                className="w-full text-sm font-semibold bg-transparent border-b border-indigo-500 outline-none text-foreground" />
+                                className="w-full text-sm font-semibold bg-transparent border-b border-indigo-500 outline-none text-foreground"
+                              />
                             ) : (
                               <p className="text-sm font-semibold text-foreground truncate">{chat.title}</p>
                             )}
-                            <p className="text-[11px] text-muted-foreground mt-0.5">{chat.messages.length} messages · {formatDate(chat.updatedAt)}</p>
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              {chat.messages.length} messages · {formatDate(chat.updatedAt)}
+                            </p>
                           </div>
                           <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
                             {renamingId === chat.id ? (
-                              <button onClick={confirmRename} className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 transition-colors"><Check className="h-3.5 w-3.5" /></button>
+                              <button onClick={confirmRename} className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 transition-colors">
+                                <Check className="h-3.5 w-3.5" />
+                              </button>
                             ) : (
-                              <button onClick={e => startRename(chat, e)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors"><Edit3 className="h-3.5 w-3.5" /></button>
+                              <button onClick={e => startRename(chat, e)} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground transition-colors">
+                                <Edit3 className="h-3.5 w-3.5" />
+                              </button>
                             )}
-                            <button onClick={e => togglePin(chat.id, e)} className={`p-1.5 rounded-lg transition-colors ${chat.pinned ? "bg-amber-500/15 text-amber-400" : "hover:bg-secondary text-muted-foreground"}`}>
+                            <button
+                              onClick={e => togglePin(chat.id, e)}
+                              className={`p-1.5 rounded-lg transition-colors ${chat.pinned ? "bg-amber-500/15 text-amber-400" : "hover:bg-secondary text-muted-foreground"}`}
+                            >
                               {chat.pinned ? <Pin className="h-3.5 w-3.5" /> : <PinOff className="h-3.5 w-3.5" />}
                             </button>
-                            <button onClick={e => deleteChat(chat.id, e)} className="p-1.5 rounded-lg hover:bg-red-500/15 text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
+                            <button onClick={e => deleteChat(chat.id, e)} className="p-1.5 rounded-lg hover:bg-red-500/15 text-muted-foreground hover:text-red-400 transition-colors">
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
                           </div>
                         </button>
                       ))}
@@ -244,8 +404,12 @@ export function AiDoubtSolver() {
             {/* ── CHAT ─────────────────────────────────────────────────── */}
             {view === "chat" && activeChat && (
               <>
+                {/* Chat Header */}
                 <div className="flex items-center gap-3 border-b border-border px-4 py-3 bg-card/80 backdrop-blur shrink-0">
-                  <button onClick={() => setView("history")} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
+                  <button
+                    onClick={() => setView("history")}
+                    className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+                  >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
                   <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shrink-0">
@@ -255,26 +419,44 @@ export function AiDoubtSolver() {
                     <p className="font-semibold text-foreground text-sm truncate">{activeChat.title}</p>
                     <p className="text-xs text-emerald-500">● Guru AI</p>
                   </div>
-                  <button onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors"
+                  >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
+                {/* Messages */}
                 <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+                  {/* Empty state with suggestions */}
                   {activeChat.messages.length === 0 && (
-                    <div className="flex flex-col items-center gap-4 text-center pt-8">
+                    <div className="flex flex-col items-center gap-4 text-center pt-6">
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
                         <Sparkles className="h-8 w-8 text-indigo-400" />
                       </div>
                       <div>
-                        <p className="font-bold text-foreground">Guru AI — Your Mentor 🎓</p>
-                        <p className="text-sm text-muted-foreground mt-2 max-w-[260px] leading-relaxed">
-                          Ask any question and get instant answers on your NCERT topics.
+                        <p className="font-bold text-foreground">नमस्ते! मैं Guru हूँ 🎓</p>
+                        <p className="text-xs text-muted-foreground mt-1 max-w-[240px] leading-relaxed">
+                          कोई भी NCERT doubt पूछो — text में या photo खींचकर!
                         </p>
+                      </div>
+                      {/* Quick suggestion chips */}
+      <div className="flex flex-wrap gap-2 justify-center max-w-[280px]">
+                        {SUGGESTIONS.map(s => (
+                          <button
+                            key={s}
+                            onClick={() => sendMessage(s)}
+                            className="text-xs px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20 transition-colors font-medium"
+                          >
+                            {s}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   )}
 
+                  {/* Message bubbles */}
                   {activeChat.messages.map((msg, i) => (
                     <div key={i} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       {msg.role === "assistant" && (
@@ -286,10 +468,15 @@ export function AiDoubtSolver() {
                         <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                           msg.role === "user"
                             ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
-                            : "bg-card border border-border text-foreground rounded-bl-sm space-y-1"
+                            : "bg-card border border-border text-foreground rounded-bl-sm space-y-0.5"
                         }`}>
+                          {/* Image in message */}
                           {msg.image && (
-                            <img src={msg.image} alt="Attached" className="rounded-xl mb-2 max-h-48 w-auto object-contain" />
+                            <img
+                              src={msg.image}
+                              alt="Attached"
+                              className="rounded-xl mb-2 max-h-48 w-auto object-contain"
+                            />
                           )}
                           {msg.role === "assistant" ? formatContent(msg.content) : msg.content}
                         </div>
@@ -300,6 +487,7 @@ export function AiDoubtSolver() {
                     </div>
                   ))}
 
+                  {/* Typing indicator */}
                   {loading && (
                     <div className="flex gap-2 justify-start">
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 mt-1">
@@ -317,21 +505,57 @@ export function AiDoubtSolver() {
                   <div ref={messagesEndRef} />
                 </div>
 
+                {/* Input Area */}
                 <div className="border-t border-border px-3 py-3 bg-card/80 backdrop-blur shrink-0">
+                  {/* Image preview */}
+                  {selectedImage && (
+                    <div className="mb-2 relative inline-block">
+                      <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="h-20 w-20 rounded-xl object-cover border border-border"
+                      />
+                      <button
+                        onClick={() => setSelectedImage(null)}
+                        className="absolute -top-1.5 -right-1.5 bg-background rounded-full text-muted-foreground hover:text-foreground"
+                      >
+                        <XCircle className="h-5 w-5" />
+                      </button>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-2">
+                    {/* Camera button */}
+                    <button
+                      onClick={() => cameraInputRef.current?.click()}
+                      title="Photo लो"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                    >
+                      <Camera className="h-4 w-4" />
+                    </button>
+                    {/* Gallery button */}
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      title="Image attach करो"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                    >
+                      <Paperclip className="h-4 w-4" />
+                    </button>
+                    {/* Text input */}
                     <input
                       ref={inputRef}
                       type="text"
                       value={input}
                       onChange={e => setInput(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask your doubt..."
+                      placeholder={selectedImage ? "Image के बारे में question लिखो..." : "अपना doubt पूछो..."}
                       disabled={loading}
                       className="flex-1 rounded-2xl border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all disabled:opacity-60"
                     />
+                    {/* Send button */}
                     <button
                       onClick={() => sendMessage(input)}
-                      disabled={!input.trim() || loading}
+                      disabled={(!input.trim() && !selectedImage) || loading}
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all"
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
@@ -346,5 +570,4 @@ export function AiDoubtSolver() {
       )}
     </>
   )
-    }
-  
+                        }
