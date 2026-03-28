@@ -68,21 +68,21 @@ export function SettingsScreen() {
       label: g("timeManagement"),
       sublabel: g("timeManagementSub"),
       iconBg: "bg-violet-500/15 text-violet-400",
-      onClick: () => setScreen("study-timer")
+      onClick: () => setScreen("study-timer"),
     },
     {
       icon: BookMarked,
       label: g("myDiary"),
       sublabel: g("myDiarySub"),
       iconBg: "bg-amber-500/15 text-amber-400",
-      onClick: () => setScreen("diary")
+      onClick: () => setScreen("diary"),
     },
     {
       icon: Shield,
       label: g("privacyPolicy"),
       sublabel: g("privacyPolicySub"),
       iconBg: "bg-emerald-500/15 text-emerald-400",
-      onClick: () => setScreen("privacy-policy")
+      onClick: () => setScreen("privacy-policy"),
     },
   ]
 
@@ -101,7 +101,9 @@ export function SettingsScreen() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground">{g("languageLabel")}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{language === "hi" ? g("hindiSelected") : g("englishSelected")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {language === "hi" ? g("hindiSelected") : g("englishSelected")}
+              </p>
             </div>
             <div className="flex items-center gap-1 rounded-xl border border-border bg-secondary p-1">
               <button
@@ -126,7 +128,9 @@ export function SettingsScreen() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground">{g("eyeProtection")}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{eyeProtection ? g("eyeProtectionOnDesc") : g("eyeProtectionOffDesc")}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {eyeProtection ? g("eyeProtectionOnDesc") : g("eyeProtectionOffDesc")}
+              </p>
             </div>
             <button
               onClick={() => setEyeProtection(!eyeProtection)}
@@ -142,9 +146,14 @@ export function SettingsScreen() {
           {menuItems.map((item, i) => {
             const Icon = item.icon
             return (
-              <button key={i} onClick={item.onClick}
-                className={`w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary ${i < menuItems.length - 1 ? "border-b border-border/60" : ""}`}>
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.iconBg}`}><Icon className="h-5 w-5" /></div>
+              <button
+                key={i}
+                onClick={item.onClick}
+                className={`w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary ${i < menuItems.length - 1 ? "border-b border-border/60" : ""}`}
+              >
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.iconBg}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground">{item.label}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{item.sublabel}</p>
@@ -156,8 +165,10 @@ export function SettingsScreen() {
         </div>
 
         {/* Share App */}
-        <button onClick={handleShare}
-          className="w-full flex items-center gap-3 px-4 py-4 text-left rounded-2xl border border-border/60 bg-card shadow-sm hover:bg-secondary/50 active:bg-secondary transition-colors">
+        <button
+          onClick={handleShare}
+          className="w-full flex items-center gap-3 px-4 py-4 text-left rounded-2xl border border-border/60 bg-card shadow-sm hover:bg-secondary/50 active:bg-secondary transition-colors"
+        >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400">
             <Share2 className="h-5 w-5" />
           </div>
@@ -170,8 +181,10 @@ export function SettingsScreen() {
 
         {/* Feedback */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
-          <button onClick={() => setShowFeedback(s => !s)}
-            className="w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary">
+          <button
+            onClick={() => setShowFeedback(s => !s)}
+            className="w-full flex items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-secondary/50 active:bg-secondary"
+          >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pink-500/15 text-pink-400">
               <MessageSquare className="h-5 w-5" />
             </div>
@@ -202,13 +215,15 @@ export function SettingsScreen() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => { setShowFeedback(false); setFeedbackText(""); setFeedbackName("") }}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-semibold hover:bg-secondary/80 transition-colors">
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-secondary text-foreground text-sm font-semibold hover:bg-secondary/80 transition-colors"
+                  >
                     <X className="h-4 w-4" /> {g("cancel")}
                   </button>
                   <button
                     onClick={handleSendFeedback}
                     disabled={sending || !feedbackText.trim() || feedbackSent}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-pink-500 text-white text-sm font-semibold hover:bg-pink-600 disabled:opacity-60 transition-colors">
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-pink-500 text-white text-sm font-semibold hover:bg-pink-600 disabled:opacity-60 transition-colors"
+                  >
                     {feedbackSent
                       ? <><Check className="h-4 w-4" /> {g("sent")}</>
                       : sending
@@ -222,8 +237,12 @@ export function SettingsScreen() {
         </div>
 
         {/* Logout */}
-        <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl hover:bg-red-500/20 transition-colors font-semibold">
-          <LogOut className="w-5 h-5" /><span>{g("logout")}</span>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl hover:bg-red-500/20 transition-colors font-semibold"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>{g("logout")}</span>
         </button>
       </div>
 
@@ -234,5 +253,6 @@ export function SettingsScreen() {
         </div>
       )}
     </div>
-    )
-}
+  )
+      }
+                                                              
