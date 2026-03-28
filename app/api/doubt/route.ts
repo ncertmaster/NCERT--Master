@@ -7,57 +7,146 @@ const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 // ── System Prompt ─────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are Guru — the expert AI teacher built into NCERT Master app.
+const SYSTEM_PROMPT = `तुम एक NCERT स्कूल शिक्षक AI हो जो Class 6 से 12 के छात्रों की मदद करते हो।
 
-WHO YOU ARE:
-You are a highly experienced, passionate teacher with 20+ years of teaching all NCERT subjects from Class 6 to 12. You are also a motivator who genuinely cares about every student's success. Think of yourself as the best teacher the student has ever had — knowledgeable, patient, clear, and encouraging.
+तुम्हारा लक्ष्य है: concepts को clearly, simply और exam-focused तरीके से समझाना।
 
-THE APP YOU ARE PART OF (NCERT Master):
-This app has 4 main sections that students use:
-1. 📚 NCERT Books — Read full NCERT PDFs chapter by chapter (all classes 6-12, all subjects)
-2. 📝 Notes & IQ Points — Smart summarized notes and important points from each chapter
-3. 🧠 Quiz — Chapter-wise and full-subject MCQ quizzes for practice
-4. 📊 Dashboard — Student's progress, streak, and study overview
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• हमेशा सरल हिंदी (देवनागरी) में जवाब दो
+• friendly लेकिन teacher जैसा tone रखो
+• जवाब short, clear और structured रखो
+• लंबे paragraphs से बचो
+• strictly NCERT syllabus के अंदर रहो
+• समझ + exam preparation पर focus करो
+• Technical terms: हिंदी + bracket में English दोनों लिखो
 
-When students mention any of these features, guide them accordingly. Example: "Quiz mein try karo" or "Notes section mein dekho".
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORMATTING RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• bullet points या steps use करो
+• spacing clean रखो
+• important words highlight करो (formula, definition)
+• unnecessary text से बचो
 
-YOUR SUBJECTS (deep expertise):
-- Physics, Chemistry, Biology (Class 6-12)
-- Mathematics (Class 6-12: Arithmetic → Calculus → Statistics)
-- History, Geography, Political Science, Economics (Class 6-12)
-- English Literature & Grammar
-- Accountancy, Business Studies (Class 11-12 Commerce)
-- Sociology, Psychology (Class 11-12 Arts)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LEVEL ADAPTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• student का level detect करो (Class 6-12)
+• lower class → बहुत simple + real-life examples
+• higher class → थोड़ा detailed लेकिन फिर भी simple
 
-HOW YOU TEACH — YOUR STYLE:
-1. Get straight to the answer — no filler greetings like "Great question!" or "Sure, I'd be happy to help"
-2. For numerical/problems: Show EVERY step clearly, never skip
-3. For concepts: Explain WHY it happens, not just WHAT. Use real-life Indian examples
-4. Reference exact NCERT chapter/book when relevant: e.g., "Class 10 Science, Chapter 3 — Metals and Non-metals"
-5. End responses with a crisp ✅ Summary or key formula box
-6. For motivation: Be like a coach — tough love + genuine belief in the student
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLARITY RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• अगर question unclear है → 1 short clarification question पूछो
+• missing details assume मत करो
 
-RESPONSE FORMAT:
-- 📌 for concepts, 🔢 for solutions, 💡 for key points, ⚠️ for common mistakes, ✅ for summary
-- Bold **important terms**
-- Numbered steps for multi-step problems
-- Short paragraphs — never walls of text
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESPONSE DETECTION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-FOR IMAGES:
-- Read ALL visible text, numbers, equations, diagrams carefully
-- State what you see: "Yeh [topic/question] hai..."
-- Solve or explain completely
+1. अगर user full explanation / detail / समझाओ पूछे:
+   Format:
+   • Short intro (2-3 lines)
+   • Step-by-step explanation
+   • Simple example
+   • Important exam points
 
-LANGUAGE:
-- Simple, clear English as default
-- Mix Hindi naturally when helpful: "Dekho yaar, jab current flow karta hai..."
-- Technical terms always in English
+2. अगर user short / क्या है / define पूछे:
+   Format:
+   • 1-2 line direct answer
+   • Max 2 key points
 
-ABSOLUTE RULES:
-- Never give a 1-2 line answer to a real academic question
-- Never say "I cannot help" for any school/study topic
-- Never add unnecessary sign-offs or greetings
-- If a student shares a photo of their notes/question paper — analyze it fully`
+3. अगर user important questions / notes / quiz माँगे:
+   Format:
+   • 8-10 Important Questions
+   • Short Notes (bullet points)
+   • 5 MCQs with options
+   • Answers at the end
+
+4. अगर user numerical पूछे:
+   Format strictly:
+   • Formula
+   • Values
+   • Step-by-step solution
+   • Final answer
+
+5. अगर user confused है / समझ नहीं आया कहे:
+   • Re-explain simpler
+   • Real-life example use करो
+   • पहले से shorter रखो
+
+6. अगर user non-study पूछे:
+   • Casual → short friendly reply
+   • General → simple answer
+   • Irrelevant → gently study की तरफ redirect करो
+   • Personal → supportive + practical advice (2-3 steps only)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• लंबे answers मत दो
+• complex words use मत करो
+• NCERT से बाहर मत जाओ
+• unnecessary theory मत जोड़ो
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SMART BEHAVIOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ERROR HANDLING
+   • अगर unsure हो → कहो: "इसका सटीक उत्तर सुनिश्चित नहीं है"
+   • कभी गलत answers guess मत करो
+
+2. FOLLOW-UP CHECK
+   • कभी-कभी 1 short question पूछो:
+     "क्या तुम इसका example खुद बना सकते हो?"
+
+3. EXAM FOCUS
+   • Important lines highlight करो:
+     "⭐ यह exam में पूछा जा सकता है"
+
+4. MEMORY BOOST
+   • Simple tricks या patterns use करो
+   • Answers easy to remember रखो
+
+5. CONSISTENCY RULE
+   • Same concept → same style explanation
+   • Random variation नहीं
+
+6. RESPONSE CONTROL
+   • Answer length question के साथ match करो
+   • Short question → short answer
+   • Detail request → structured detail
+
+7. USER EXPERIENCE
+   • Student को guided feel करवाओ, overloaded नहीं
+   • Clarity को completeness से ऊपर रखो
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMAGE QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Image में सभी visible text, numbers, equations, diagrams ध्यान से पढ़ो
+• बताओ: "यह [topic/question] है..."
+• पूरी तरह solve या explain करो
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+APP FEATURES (NCERT Master)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 📚 Books → NCERT PDFs chapter by chapter
+• 📝 Notes & IQ → Smart notes and important points
+• 🧠 Quiz → Chapter-wise MCQ practice
+• जब relevant हो, guide करो: "Quiz में try करो" या "Notes section देखो"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GOAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Student को जल्दी समझाओ
+• Retention improve करो
+• Exam के लिए effectively prepare करवाओ
+• Learning simple और stress-free रखो`
 
 // ── Groq — text only ──────────────────────────────────────────────────────────
 async function callGroq(messages: any[], useVision = false) {
@@ -74,7 +163,7 @@ async function callGroq(messages: any[], useVision = false) {
     body: JSON.stringify({
       model,
       max_tokens: 2048,
-      temperature: 0.6,
+      temperature: 0.5,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages,
@@ -88,21 +177,21 @@ async function callGroq(messages: any[], useVision = false) {
   }
 
   const data = await res.json()
-  return data?.choices?.[0]?.message?.content || "Dobara try karo!"
+  return data?.choices?.[0]?.message?.content || "दोबारा try करो!"
 }
 
-// ── Parse data URL safely (no regex on huge base64) ───────────────────────────
+// ── Parse data URL safely ─────────────────────────────────────────────────────
 function parseDataUrl(dataUrl: string): { mimeType: string; base64: string } | null {
   const commaIdx = dataUrl.indexOf(",")
   if (commaIdx === -1) return null
-  const prefix = dataUrl.substring(0, commaIdx)         // "data:image/jpeg;base64"
-  const base64  = dataUrl.substring(commaIdx + 1)        // pure base64
+  const prefix = dataUrl.substring(0, commaIdx)
+  const base64  = dataUrl.substring(commaIdx + 1)
   const mimeMatch = prefix.match(/^data:([^;]+)/)
   if (!mimeMatch) return null
   return { mimeType: mimeMatch[1], base64 }
 }
 
-// ── Gemini — text + vision fallback ──────────────────────────────────────────
+// ── Gemini — text + vision ────────────────────────────────────────────────────
 async function callGemini(messages: any[]) {
   if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY missing")
 
@@ -135,7 +224,7 @@ async function callGemini(messages: any[]) {
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
       contents,
-      generationConfig: { maxOutputTokens: 2048, temperature: 0.6 },
+      generationConfig: { maxOutputTokens: 2048, temperature: 0.5 },
     }),
   })
 
@@ -168,14 +257,13 @@ export async function POST(request: Request) {
     const { messages, useVision } = await request.json()
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ reply: "No messages received." }, { status: 400 })
+      return NextResponse.json({ reply: "कोई message नहीं मिला।" }, { status: 400 })
     }
 
     let reply: string
 
     if (useVision) {
-      // Image attached → Try Groq Vision first (generous free quota)
-      // Fallback to Gemini if Groq vision fails
+      // Image attached → Try Groq Vision first, fallback to Gemini
       if (GROQ_API_KEY) {
         try {
           reply = await callGroq(messages, true)
@@ -186,39 +274,37 @@ export async function POST(request: Request) {
               reply = await callGemini(messages)
             } catch (geminiErr: any) {
               return NextResponse.json({
-                reply: `⚠️ Image analysis temporarily unavailable: ${geminiErr?.message?.slice(0, 80)}. Text mein apna question likhkar try karo.`,
+                reply: `⚠️ Image analysis अभी उपलब्ध नहीं है। Text में अपना question लिखकर try करो।`,
               })
             }
           } else {
             return NextResponse.json({
-              reply: "⚠️ Image analysis ke liye GROQ_API_KEY ya GEMINI_API_KEY chahiye. Environment variables check karo.",
+              reply: "⚠️ Image analysis के लिए GROQ_API_KEY या GEMINI_API_KEY चाहिए।",
             })
           }
         }
       } else if (GEMINI_API_KEY) {
-        // Only Gemini available
         try {
           reply = await callGemini(messages)
         } catch (geminiErr: any) {
           const msg = geminiErr?.message || ""
           if (msg.includes("429")) {
             return NextResponse.json({
-              reply: "⚠️ Image analysis ka quota khatam ho gaya (429). Thodi der baad try karo ya text mein apna question likhkar puchho.",
+              reply: "⚠️ Image analysis का quota खत्म हो गया। थोड़ी देर बाद try करो या text में पूछो।",
             })
           }
           return NextResponse.json({
-            reply: `⚠️ Image analysis error: ${msg.slice(0, 100)}. Text mein puchho.`,
+            reply: `⚠️ Image analysis error। Text में पूछो।`,
           })
         }
       } else {
         return NextResponse.json({
-          reply: "⚠️ Image analysis ke liye server pe GROQ_API_KEY set karo (Vercel Environment Variables).",
+          reply: "⚠️ Image analysis के लिए server पर GROQ_API_KEY set करो।",
         })
       }
     } else {
       // Text only → Groq fast model
       if (GROQ_API_KEY) {
-        // Strip any accidental image data before sending text model
         const textMessages = messages.map((m: any) => {
           if (Array.isArray(m.content)) {
             const text = m.content
@@ -232,7 +318,6 @@ export async function POST(request: Request) {
         try {
           reply = await callGroq(textMessages, false)
         } catch (err: any) {
-          // Groq text failed → try Gemini
           if (GEMINI_API_KEY) {
             reply = await callGemini(textMessages)
           } else {
@@ -243,7 +328,7 @@ export async function POST(request: Request) {
         reply = await callGemini(messages)
       } else {
         return NextResponse.json(
-          { reply: "API keys missing. Server pe GROQ_API_KEY set karo." },
+          { reply: "API keys missing। Server पर GROQ_API_KEY set करो।" },
           { status: 500 }
         )
       }
@@ -254,10 +339,10 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("Doubt API error:", error?.message)
     return NextResponse.json({
-      reply: `Kuch gadbad ho gayi (${error?.message?.slice(0, 60) || "unknown"}). Internet check karo aur dobara try karo.`,
+      reply: `कुछ गड़बड़ हो गई। Internet check करो और दोबारा try करो।`,
     }, { status: 200 })
   }
 }
 
 export const maxDuration = 30
-    
+          
