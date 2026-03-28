@@ -234,5 +234,5 @@ export function SettingsScreen() {
         </div>
       )}
     </div>
-  )
-      
+    )
+}
