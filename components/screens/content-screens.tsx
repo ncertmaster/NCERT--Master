@@ -378,8 +378,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
   function buildNcertUrl(code: string | undefined, chapterIndex: number): string | null {
     if (!code) return null
     const ch = String(chapterIndex).padStart(2, "0")
-    const pdfUrl = `https://ncert.nic.in/textbook/pdf/${code}${ch}.pdf`
-    return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`
+    return `https://ncert.nic.in/textbook/pdf/${code}${ch}.pdf`
   }
 
   function ChapterButtons({ ch, subjectName, ncertPdfCode, chapterIndex }: { ch: Chapter; subjectName: string; ncertPdfCode?: string; chapterIndex: number }) {
@@ -396,16 +395,23 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
 
     if (flow === "books") {
       const ncertUrl = buildNcertUrl(ncertPdfCode, chapterIndex)
+      if (!ncertUrl) {
+        // No PDF code — show NCERT site button
+        return (
+          <button
+            onClick={() => window.open(`https://ncert.nic.in/textbook.php`, "_blank", "noopener,noreferrer")}
+            className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground active:opacity-90"
+          >
+            📖 NCERT Site पर पढ़ें
+          </button>
+        )
+      }
       return (
         <button
-          onClick={() => {
-            setSelectedChapter(ch.id)
-            setSelectedBookUrl(ncertUrl)
-            setScreen("books-reader")
-          }}
+          onClick={() => window.open(ncertUrl, "_blank", "noopener,noreferrer")}
           className="flex-1 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground active:opacity-90"
         >
-          📖 ऑनलाइन पढ़ें
+          📖 ऑनलाइन पढ़ें / Download
         </button>
       )
     }
@@ -755,73 +761,65 @@ function getNcertUrl(classNum: number, bookId: string, bookName: string): string
 // 📚 BOOKS LIST SCREEN
 // ──────────────────────────────────────────────────────────────────────────────
 export function BooksListScreen() {
-  const { language, selectedClass, selectedStream, selectedSubject, setScreen, setSelectedBook } = useApp()
+  const { language, selectedClass } = useApp()
 
-  let books: Book[] = []
-
-  if (selectedClass === 11 || selectedClass === 12) {
-    const streams: Stream[] = streamsByClass[selectedClass] || []
-    const stream = streams.find((s: Stream) => s.id === selectedStream)
-    const subject = stream?.subjects.find((s: Subject) => s.id === selectedSubject)
-    books = subject?.books || []
-  } else {
-    const subjects: Subject[] = selectedClass ? (subjectsByClass[selectedClass] || []) : []
-    const subject = subjects.find((s: Subject) => s.id === selectedSubject)
-    books = subject?.books || []
-  }
-
-  const handleOpenBook = (book: Book) => {
-    // Navigate to chapters list within the app — user stays inside
-    setSelectedBook(book.id)
-    setScreen("books-chapter")
-  }
+  const ncertUrl = `https://ncert.nic.in/textbook.php?class=${selectedClass || ""}`
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
       <ScreenHeader title={getText("books", language)} />
-      <div className="mx-auto w-full max-w-md px-4 py-4">
-        {/* Info banner */}
-        <div className="mb-4 rounded-xl bg-blue-500/10 border border-blue-500/20 px-3 py-2.5 flex items-start gap-2">
-          <BookMarked className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
-          <p className="text-xs text-blue-600 dark:text-blue-400 leading-relaxed">
-            Select a book to view all chapters inside the app.
+      <div className="mx-auto w-full max-w-md px-4 py-6 flex flex-col items-center gap-6">
+
+        {/* Icon */}
+        <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 border border-primary/20">
+          <BookOpen className="h-12 w-12 text-primary" />
+        </div>
+
+        {/* Info */}
+        <div className="text-center space-y-2">
+          <h2 className="text-lg font-bold text-foreground">NCERT Official Books</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+            NCERT की official website पर Class {selectedClass} की सभी books freely available हैं।
           </p>
         </div>
 
-        {books.length === 0 ? (
-          <p className="text-center text-sm text-muted-foreground py-10">
-            कोई पुस्तक उपलब्ध नहीं है।
+        {/* Info card */}
+        <div className="w-full rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 space-y-2">
+          <p className="text-xs font-semibold text-amber-600">📌 Important</p>
+          <p className="text-xs text-amber-700 leading-relaxed">
+            NCERT books copyright protected हैं इसलिए हम इन्हें app के अंदर नहीं दिखा सकते।
+            NCERT की official site पर जाकर आप free में पढ़ और download कर सकते हैं।
           </p>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {books.map((book: Book) => (
-              <div
-                key={book.id}
-                className="rounded-xl border border-border bg-card shadow-sm overflow-hidden"
-              >
-                <div className="flex items-center gap-3 p-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <BookMarked className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-card-foreground">{book.name}</p>
-                    <p className="text-xs text-muted-foreground">{book.nameHi}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{book.chapters.length} Chapters</p>
-                  </div>
-                </div>
-                <div className="flex gap-2 px-4 pb-4">
-                  <button
-                    onClick={() => handleOpenBook(book)}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all active:opacity-90"
-                  >
-                    <BookMarked className="h-4 w-4" />
-                    View Chapters
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        </div>
+
+        {/* What you'll find */}
+        <div className="w-full rounded-2xl border border-border/60 bg-card p-4 space-y-3">
+          <p className="text-xs font-semibold text-foreground">NCERT site पर मिलेगा:</p>
+          {[
+            "📖 सभी chapters online पढ़ें",
+            "⬇️ Full book PDF download करें",
+            "📑 Chapter-wise PDF download",
+            "🆓 Completely free — कोई charge नहीं",
+          ].map(item => (
+            <div key={item} className="flex items-center gap-2">
+              <p className="text-sm text-muted-foreground">{item}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Button */}
+        <button
+          onClick={() => window.open(ncertUrl, "_blank", "noopener,noreferrer")}
+          className="w-full flex items-center justify-center gap-2 rounded-2xl bg-primary py-4 text-sm font-semibold text-primary-foreground active:scale-[0.98] transition-all shadow-sm"
+        >
+          <ExternalLink className="h-4 w-4" />
+          NCERT Official Site पर जाएं
+        </button>
+
+        <p className="text-xs text-muted-foreground text-center">
+          ncert.nic.in — Government of India
+        </p>
+
       </div>
       <BottomTabs activeTab="books" />
     </div>
@@ -913,4 +911,4 @@ export function BooksReaderScreen() {
       </div>
     </div>
   )
-}
+  }
