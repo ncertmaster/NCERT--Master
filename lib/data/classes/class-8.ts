@@ -13,6 +13,7 @@ export const class8Subjects: Subject[] = [
     books: [
       {
         id: "math-8-ganit",
+        ncertPdfCode: "hemh1",
         name: "Ganit",
         nameHi: "गणित",
         chapters: [
@@ -64,6 +65,7 @@ export const class8Subjects: Subject[] = [
     books: [
       {
         id: "science-8-vigyan",
+        ncertPdfCode: "hesc1",
         name: "Vigyan",
         nameHi: "विज्ञान",
         chapters: [
@@ -121,6 +123,7 @@ export const class8Subjects: Subject[] = [
     books: [
       {
         id: "social-8-sansadhan",
+        ncertPdfCode: "hess2",
         name: "Sansadhan evam Vikas",
         nameHi: "संसाधन एवं विकास",
         chapters: [
@@ -133,6 +136,7 @@ export const class8Subjects: Subject[] = [
       },
       {
         id: "social-8-rajniti",
+        ncertPdfCode: "hess3",
         name: "Samajik evam Rajnitik Jeevan - III",
         nameHi: "सामाजिक एवं राजनीतिक जीवन - III",
         chapters: [
@@ -150,6 +154,7 @@ export const class8Subjects: Subject[] = [
       },
       {
         id: "social-8-ateet",
+        ncertPdfCode: "hess1",
         name: "Hamare Ateet - III",
         nameHi: "हमारे अतीत - III",
         chapters: [
@@ -198,6 +203,7 @@ export const class8Subjects: Subject[] = [
       },
       {
         id: "hindi-8-vasant",
+        ncertPdfCode: "hhhv1",
         name: "Vasant Bhag 3",
         nameHi: "वसंत भाग 3",
         chapters: [
@@ -218,6 +224,7 @@ export const class8Subjects: Subject[] = [
       },
       {
         id: "hindi-8-durva",
+        ncertPdfCode: "hhhd1",
         name: "Durva Bhag 3",
         nameHi: "दूर्वा भाग 3",
         chapters: [
@@ -282,6 +289,7 @@ export const class8Subjects: Subject[] = [
     books: [
       {
         id: "sanskrit-8-ruchira",
+        ncertPdfCode: "hssu1",
         name: "Ruchira Triteeyo Bhagah",
         nameHi: "रुचिरा तृतीयो भागः",
         chapters: [
@@ -350,6 +358,7 @@ export const class8Subjects: Subject[] = [
       },
       {
         id: "english-8-honeydew",
+        ncertPdfCode: "heeh1",
         name: "Honeydew",
         nameHi: "Honeydew",
         chapters: [
