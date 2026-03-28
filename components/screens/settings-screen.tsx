@@ -4,15 +4,13 @@ import React, { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { ScreenHeader } from "@/components/screen-header"
 import { getText } from "@/lib/translations"
-import { useTheme } from "next-themes"
 import {
   LogOut, Timer, BookMarked, Shield, ChevronRight,
-  MessageSquare, Share2, Check, X, Sun, Moon, Eye, Languages
+  MessageSquare, Share2, Check, X, Eye, Languages
 } from "lucide-react"
 
 export function SettingsScreen() {
   const { logout, setScreen, language, setLanguage, eyeProtection, setEyeProtection } = useApp()
-  const { theme, setTheme } = useTheme()
 
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedbackText, setFeedbackText] = useState("")
@@ -21,7 +19,6 @@ export function SettingsScreen() {
   const [sending, setSending] = useState(false)
   const [showShareToast, setShowShareToast] = useState(false)
 
-  const isDark = theme === "dark"
   const g = (key: string) => getText(key, language)
 
   const handleLogout = () => { logout(); setScreen("setup") }
@@ -96,23 +93,6 @@ export function SettingsScreen() {
 
         {/* ── APPEARANCE ──────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
-
-          {/* Dark / Light Theme */}
-          <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isDark ? "bg-indigo-500/15 text-indigo-400" : "bg-amber-500/15 text-amber-400"}`}>
-              {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground">{g("theme")}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{isDark ? g("darkModeOn") : g("lightModeOn")}</p>
-            </div>
-            <button
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-              className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors duration-300 focus:outline-none ${isDark ? "bg-indigo-500" : "bg-border"}`}
-            >
-              <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${isDark ? "translate-x-6" : "translate-x-1"}`} />
-            </button>
-          </div>
 
           {/* Language */}
           <div className="flex items-center gap-3 px-4 py-4 border-b border-border/60">
@@ -255,5 +235,4 @@ export function SettingsScreen() {
       )}
     </div>
   )
-               }
       
