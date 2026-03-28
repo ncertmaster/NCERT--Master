@@ -9,6 +9,7 @@ const history12: Subject = {
   books: [
     {
       id: "history-12-part1",
+        ncertPdfCode: "lhst1",
       name: "Themes in Indian History Part I",
       nameHi: "भारतीय इतिहास के कुछ विषय भाग 1",
       chapters: [
@@ -20,6 +21,7 @@ const history12: Subject = {
     },
     {
       id: "history-12-part2",
+        ncertPdfCode: "lhst2",
       name: "Themes in Indian History Part II",
       nameHi: "भारतीय इतिहास के कुछ विषय भाग 2",
       chapters: [
@@ -31,6 +33,7 @@ const history12: Subject = {
     },
     {
       id: "history-12-part3",
+        ncertPdfCode: "lhst3",
       name: "Themes in Indian History Part III",
       nameHi: "भारतीय इतिहास के कुछ विषय भाग 3",
       chapters: [
@@ -52,6 +55,7 @@ const geography12: Subject = {
   books: [
     {
       id: "geography-12-human",
+        ncertPdfCode: "lhge1",
       name: "Fundamentals of Human Geography",
       nameHi: "मानव भूगोल के मूल सिद्धांत",
       chapters: [
@@ -350,4 +354,5 @@ export const class12ArtsStream: Stream = {
     homeScience12,
     legalStudies12,
   ]
-}
+         }
+         
