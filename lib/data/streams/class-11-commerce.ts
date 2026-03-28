@@ -9,6 +9,7 @@ const accountancy11: Subject = {
   books: [
     {
       id: "accountancy-11-part1",
+        ncertPdfCode: "keac1",
       name: "Accountancy Part I",
       nameHi: "लेखाशास्त्र भाग 1",
       chapters: [
@@ -21,6 +22,7 @@ const accountancy11: Subject = {
     },
     {
       id: "accountancy-11-part2",
+        ncertPdfCode: "keac2",
       name: "Accountancy Part II",
       nameHi: "लेखाशास्त्र भाग 2",
       chapters: [
@@ -76,6 +78,7 @@ const economics11com: Subject = {
   books: [
     {
       id: "economics-11-statistics",
+        ncertPdfCode: "kees1",
       name: "Statistics for Economics",
       nameHi: "सांख्यिकी (अर्थशास्त्र के लिए)",
       chapters: [
@@ -91,6 +94,7 @@ const economics11com: Subject = {
     },
     {
       id: "economics-11-indian",
+        ncertPdfCode: "keec1",
       name: "Indian Economic Development",
       nameHi: "भारतीय अर्थव्यवस्था का विकास",
       chapters: [
@@ -225,3 +229,4 @@ export const class11CommerceStream: Stream = {
     hindi11com,
   ]
          }
+         
