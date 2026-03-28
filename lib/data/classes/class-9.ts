@@ -13,6 +13,7 @@ export const class9Subjects: Subject[] = [
     books: [
       {
         id: "math-9-ganit",
+        ncertPdfCode: "iemh1",
         name: "Ganit",
         nameHi: "गणित",
         chapters: [
@@ -64,6 +65,7 @@ export const class9Subjects: Subject[] = [
     books: [
       {
         id: "science-9-vigyan",
+        ncertPdfCode: "iesc1",
         name: "Vigyan",
         nameHi: "विज्ञान",
         chapters: [
@@ -126,6 +128,7 @@ export const class9Subjects: Subject[] = [
     books: [
       {
         id: "social-9-itihas",
+        ncertPdfCode: "iess1",
         name: "Bharat aur Samkaleen Vishwa - 1",
         nameHi: "भारत और समकालीन विश्व - 1",
         chapters: [
@@ -138,6 +141,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "social-9-bhugol",
+        ncertPdfCode: "iess2",
         name: "Samkaleen Bharat - 1",
         nameHi: "समकालीन भारत - 1",
         chapters: [
@@ -151,6 +155,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "social-9-rajniti",
+        ncertPdfCode: "iess3",
         name: "Loktantrik Rajneeti - 1",
         nameHi: "लोकतांत्रिक राजनीति - 1",
         chapters: [
@@ -205,6 +210,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "hindi-9-sparsh",
+        ncertPdfCode: "ihhsp1",
         name: "Sparsh Bhag 1",
         nameHi: "स्पर्श भाग 1",
         chapters: [
@@ -222,6 +228,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "hindi-9-kritika",
+        ncertPdfCode: "ihhkr1",
         name: "Kritika Bhag 1",
         nameHi: "कृतिका भाग 1",
         chapters: [
@@ -232,6 +239,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "hindi-9-sanchayan",
+        ncertPdfCode: "ihhsc1",
         name: "Sanchayan Bhag 1",
         nameHi: "संचयन भाग 1",
         chapters: [
@@ -255,6 +263,7 @@ export const class9Subjects: Subject[] = [
     books: [
       {
         id: "sanskrit-9-shemushi",
+        ncertPdfCode: "issu1",
         name: "Shemushi Prathamo Bhagah",
         nameHi: "शेमुषी प्रथमो भागः",
         chapters: [
@@ -340,6 +349,7 @@ export const class9Subjects: Subject[] = [
     books: [
       {
         id: "english-9-beehive",
+        ncertPdfCode: "ieep1",
         name: "Beehive",
         nameHi: "Beehive",
         chapters: [
@@ -364,6 +374,7 @@ export const class9Subjects: Subject[] = [
       },
       {
         id: "english-9-moments",
+        ncertPdfCode: "ieer1",
         name: "Moments",
         nameHi: "Moments",
         chapters: [
@@ -381,3 +392,4 @@ export const class9Subjects: Subject[] = [
     ]
   },
 ]
+        
