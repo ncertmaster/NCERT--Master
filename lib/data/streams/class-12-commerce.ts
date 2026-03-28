@@ -9,6 +9,7 @@ const accountancy12: Subject = {
   books: [
     {
       id: "accountancy-12-part1",
+        ncertPdfCode: "lhac1",
       name: "Accountancy Part I",
       nameHi: "लेखाशास्त्र भाग 1",
       chapters: [
@@ -20,6 +21,7 @@ const accountancy12: Subject = {
     },
     {
       id: "accountancy-12-part2",
+        ncertPdfCode: "lhac2",
       name: "Accountancy Part II",
       nameHi: "लेखाशास्त्र भाग 2",
       chapters: [
@@ -79,6 +81,7 @@ const economics12com: Subject = {
   books: [
     {
       id: "economics-12-micro",
+        ncertPdfCode: "lhec2",
       name: "Introductory Microeconomics",
       nameHi: "व्यष्टि अर्थशास्त्र एक परिचय",
       chapters: [
@@ -92,6 +95,7 @@ const economics12com: Subject = {
     },
     {
       id: "economics-12-macro",
+        ncertPdfCode: "lhec1",
       name: "Introductory Macroeconomics",
       nameHi: "समष्टि अर्थशास्त्र एक परिचय",
       chapters: [
