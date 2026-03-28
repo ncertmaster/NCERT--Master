@@ -16,7 +16,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+        {/*
+          forcedTheme="light" — localStorage, system preference, sab ignore.
+          .dark class kabhi <html> pe add nahi hogi.
+          Dark mode CSS permanently disabled.
+        */}
+        <ThemeProvider
+          attribute="class"
+          forcedTheme="light"
+          enableSystem={false}
+          storageKey="ncert-theme"
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </body>
