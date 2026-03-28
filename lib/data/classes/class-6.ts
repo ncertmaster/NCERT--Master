@@ -14,6 +14,7 @@ export const class6Subjects: Subject[] = [
     books: [
       {
         id: "math-6-ganit",
+        ncertPdfCode: "femh1",
         name: "Ganit",
         nameHi: "गणित",
         chapters: [
@@ -99,6 +100,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "science-6-vigyan",
+        ncertPdfCode: "fesc1",
         name: "Vigyan",
         nameHi: "विज्ञान",
         chapters: [
@@ -129,6 +131,7 @@ export const class6Subjects: Subject[] = [
     books: [
       {
         id: "social-6-ateet",
+        ncertPdfCode: "fess1",
         name: "Hamare Ateet - I",
         nameHi: "हमारे अतीत - I",
         chapters: [
@@ -146,6 +149,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "social-6-prithvi",
+        ncertPdfCode: "fess2",
         name: "Prithvi: Hamara Aawas",
         nameHi: "पृथ्वी: हमारा आवास",
         chapters: [
@@ -159,6 +163,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "social-6-rajniti",
+        ncertPdfCode: "fess3",
         name: "Samajik evam Rajnitik Jeevan - I",
         nameHi: "सामाजिक एवं राजनीतिक जीवन - I",
         chapters: [
@@ -219,6 +224,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "hindi-6-vasant",
+        ncertPdfCode: "fhhv1",
         name: "Vasant Bhag 1",
         nameHi: "वसंत भाग 1",
         chapters: [
@@ -240,6 +246,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "hindi-6-durva",
+        ncertPdfCode: "fhhd1",
         name: "Durva Bhag 1",
         nameHi: "दूर्वा भाग 1",
         chapters: [
@@ -275,6 +282,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "hindi-6-balramkatha",
+        ncertPdfCode: "fhhr1",
         name: "Bal Ramkatha",
         nameHi: "बाल रामकथा",
         chapters: [
@@ -306,6 +314,7 @@ export const class6Subjects: Subject[] = [
     books: [
       {
         id: "sanskrit-6-ruchira",
+        ncertPdfCode: "fssu1",
         name: "Ruchira Bhag 1",
         nameHi: "रुचिरा भाग 1",
         chapters: [
@@ -378,6 +387,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "english-6-honeysuckle",
+        ncertPdfCode: "feeh1",
         name: "Honeysuckle",
         nameHi: "Honeysuckle",
         chapters: [
@@ -395,6 +405,7 @@ export const class6Subjects: Subject[] = [
       },
       {
         id: "english-6-pact",
+        ncertPdfCode: "feer1",
         name: "A Pact With The Sun",
         nameHi: "A Pact With The Sun",
         chapters: [
@@ -501,3 +512,4 @@ export const class6Subjects: Subject[] = [
     ]
   },
 ]
+    
