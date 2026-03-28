@@ -108,7 +108,6 @@ const polSci11: Subject = {
       }
 const sociology11: Subject = {
   id: "sociology-11",
-        ncertPdfCode: "kess1",
   name: "Sociology",
   nameHi: "समाजशास्त्र",
   icon: "users",
@@ -260,5 +259,5 @@ export const class11ArtsStream: Stream = {
     english11arts,
     hindi11arts,
   ]
-         }
-         
+        }
+  
