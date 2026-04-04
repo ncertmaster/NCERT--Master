@@ -6,6 +6,25 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
+// ── Simple in-memory rate limiter ──────────────────────────────────────────
+// Max 15 doubt questions per IP per minute
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = 15
+const RATE_WINDOW_MS = 60 * 1000
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= RATE_LIMIT) return false
+  entry.count++
+  return true
+}
+// ──────────────────────────────────────────────────────────────────────────
+
 // ── System Prompt ─────────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `तुम एक NCERT स्कूल शिक्षक AI हो जो Class 6 से 12 के छात्रों की मदद करते हो।
 
@@ -345,4 +364,5 @@ export async function POST(request: Request) {
 }
 
 export const maxDuration = 30
-          
+
+     
