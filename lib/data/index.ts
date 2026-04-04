@@ -32,15 +32,3 @@ export type QuizQuestion = {
   options: string[]
   correctIndex: number
 }
-
-export function getQuizQuestions(subjectId: string, chapterId?: string): QuizQuestion[] {
-  return []
-}
-
-export function getNotesContent(chapterId: string) {
-  return ""
-}
-
-export function getImportantQuestions(chapterId: string) {
-  return []
-}
