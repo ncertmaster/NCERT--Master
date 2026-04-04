@@ -3,6 +3,25 @@ import { NextResponse } from "next/server"
 const GROQ_API_KEY = process.env.GROQ_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
+// ── Simple in-memory rate limiter ──────────────────────────────────────────
+// Max 10 requests per IP per minute
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = 10
+const RATE_WINDOW_MS = 60 * 1000
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= RATE_LIMIT) return false
+  entry.count++
+  return true
+}
+// ──────────────────────────────────────────────────────────────────────────
+
 function getClassGroup(cls: number): "6-8" | "9-10" | "11-12" {
   if (cls <= 8) return "6-8"
   if (cls <= 10) return "9-10"
@@ -223,6 +242,19 @@ function parseQuizJSON(text: string): any[] {
 }
 
 export async function GET(request: Request) {
+  // ── Rate limit check ──────────────────────────────────────────────────────
+  const ip =
+    (request.headers as any).get?.("x-forwarded-for")?.split(",")[0]?.trim() ||
+    (request.headers as any).get?.("x-real-ip") ||
+    "unknown"
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { error: "Bahut zyada requests. 1 minute baad try karein." },
+      { status: 429 }
+    )
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
   const { searchParams } = new URL(request.url)
   const chapterId     = searchParams.get("chapter_id") || ""
   const chapterName   = searchParams.get("chapter_name") || ""
@@ -299,4 +331,5 @@ export async function GET(request: Request) {
 }
 
 export const maxDuration = 60
+
     
