@@ -208,19 +208,27 @@ export function QuizPlayScreen() {
               <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: `${percentage}%` }} />
             </div>
             <p className="text-sm text-muted-foreground">{percentage}%</p>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-col gap-3 w-full items-center">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setCurrentIndex(0); setSelectedOption(null); setIsAnswered(false); setScore(0); setShowResult(false) }}
+                  className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-medium text-card-foreground transition-all active:scale-[0.97]"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  {getText("tryAgain", language)}
+                </button>
+                <button
+                  onClick={() => setScreen("dashboard")}
+                  className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all active:scale-[0.97]"
+                >
+                  {getText("backToDashboard", language)}
+                </button>
+              </div>
               <button
-                onClick={() => { setCurrentIndex(0); setSelectedOption(null); setIsAnswered(false); setScore(0); setShowResult(false) }}
-                className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-medium text-card-foreground transition-all active:scale-[0.97]"
+                onClick={() => setScreen("quiz-history")}
+                className="flex items-center gap-2 rounded-xl border border-border bg-card/50 px-5 py-2.5 text-sm font-medium text-muted-foreground transition-all active:scale-[0.97]"
               >
-                <RotateCcw className="h-4 w-4" />
-                {getText("tryAgain", language)}
-              </button>
-              <button
-                onClick={() => setScreen("dashboard")}
-                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all active:scale-[0.97]"
-              >
-                {getText("backToDashboard", language)}
+                📊 Quiz History Dekho
               </button>
             </div>
           </div>
@@ -306,5 +314,5 @@ export function QuizPlayScreen() {
       </div>
     </div>
   )
-      }
-        
+}
+  
