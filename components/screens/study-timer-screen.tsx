@@ -8,12 +8,7 @@ import {
   Trash2, Timer, X, Coffee, Settings2,
   Calendar, Sun, Sunset, Moon, Zap, Bell, BellOff
 } from "lucide-react"
-import { createClient, type SupabaseClient } from "@supabase/supabase-js"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-const supabase: SupabaseClient | null =
-  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
+import { supabase } from "@/lib/supabase"
 
 interface Task {
   id: string
@@ -108,7 +103,7 @@ function usePageNotifications(tasks: Task[], permission: NotificationPermission)
           try {
             new Notification(`📚 Study Time: ${task.subject}`, {
               body: `${task.start_time} – ${task.end_time} | Time to study! 🚀`,
-              icon: "/icons/icon-192x192.jpg",
+              icon: "/icons/ncert_master_192x192.png",
               tag: `ncert-page-${task.id}`,
             })
           } catch {}
@@ -121,7 +116,27 @@ function usePageNotifications(tasks: Task[], permission: NotificationPermission)
   }, [tasks, permission])
 }
 
-type TabType2 = TabType
+// ── Pomodoro completion notification ──────────────────────────────────────────
+function firePomoNotification(mode: "work" | "break" | "longBreak", count: number) {
+  if (typeof window === "undefined" || !("Notification" in window)) return
+  if (Notification.permission !== "granted") return
+  try {
+    if (mode === "work") {
+      new Notification("📚 Focus Session Complete! 🎉", {
+        body: `Session #${count} done! Time for a break. Bahut badhiya! 💪`,
+        icon: "/icons/ncert_master_192x192.png",
+        tag: "ncert-pomo-work",
+      })
+    } else {
+      new Notification("⏰ Break Khatam! Padhai Shuru Karo 🚀", {
+        body: "Break over — focus session shuru karo. You got this! 📚",
+        icon: "/icons/ncert_master_192x192.png",
+        tag: "ncert-pomo-break",
+      })
+    }
+  } catch {}
+}
+// ──────────────────────────────────────────────────────────────────────────────
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export function StudyTimerScreen() {
@@ -212,9 +227,14 @@ export function StudyTimerScreen() {
             if (timerMode === "work") {
               const nc = pomodoroCount + 1
               setPomodoroCount(nc)
+              firePomoNotification("work", nc)
               if (nc % 4 === 0) { setTimerMode("longBreak"); setTimerSeconds(longBreakMin * 60) }
               else { setTimerMode("break"); setTimerSeconds(breakMin * 60) }
-            } else { setTimerMode("work"); setTimerSeconds(workMin * 60) }
+            } else {
+              firePomoNotification("break", pomodoroCount)
+              setTimerMode("work")
+              setTimerSeconds(workMin * 60)
+            }
             setTimerRunning(false)
             return 0
           }
@@ -603,4 +623,4 @@ export function StudyTimerScreen() {
       </div>
     </div>
   )
-                                                 }
+                }
