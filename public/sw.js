@@ -1,131 +1,147 @@
-const CACHE_NAME = 'ncert-master-v3';
+const CACHE_VERSION = 'v3';
+const STATIC_CACHE = `ncert-static-${CACHE_VERSION}`;
+const API_CACHE = `ncert-api-${CACHE_VERSION}`;
+const OFFLINE_URL = '/offline.html';
 
-const PRECACHE_URLS = ['/', '/manifest.json', '/icons/ncert_master_192x192.png', '/icons/ncert_master_512x512.png'];
+// Static assets to precache
+const PRECACHE_ASSETS = [
+  '/',
+  '/offline.html',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+];
 
-// Active scheduled timeouts (in-SW scheduling)
-let scheduledTimeouts = [];
-
-// ── Install ───────────────────────────────────────────────────────────────────
+// ─── Install ───────────────────────────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_ASSETS))
   );
+  self.skipWaiting();
 });
 
-// ── Activate ──────────────────────────────────────────────────────────────────
+// ─── Activate ──────────────────────────────────────────────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys()
-      .then(names => Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n))))
-      .then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((k) => k !== STATIC_CACHE && k !== API_CACHE)
+          .map((k) => caches.delete(k))
+      )
+    )
   );
+  self.clients.claim();
 });
 
-// ── Fetch ─────────────────────────────────────────────────────────────────────
+// ─── Fetch ─────────────────────────────────────────────────────────────────
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  // Skip non-GET, chrome-extension, supabase auth calls
   if (request.method !== 'GET') return;
-  if (!url.protocol.startsWith('http')) return;
+  if (url.origin !== self.location.origin) return;
 
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone));
-          return response;
-        })
-        .catch(() => caches.match(request).then(c => c || caches.match('/')))
-    );
+  // /api/content → Stale-While-Revalidate
+  if (url.pathname.startsWith('/api/content')) {
+    event.respondWith(staleWhileRevalidate(request, API_CACHE));
     return;
   }
 
-  if (url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|ico|woff|woff2|ttf)$/) ||
-      url.pathname.startsWith('/_next/')) {
-    event.respondWith(
-      caches.match(request).then(cached => {
-        const fetch$ = fetch(request).then(r => {
-          if (r.ok) { const c = r.clone(); caches.open(CACHE_NAME).then(cache => cache.put(request, c)); }
-          return r;
-        }).catch(() => cached);
-        return cached || fetch$;
-      })
-    );
+  // /api/doubt → Network-first, cache fallback
+  if (url.pathname.startsWith('/api/doubt')) {
+    event.respondWith(networkFirstWithCache(request, API_CACHE));
     return;
   }
 
-  event.respondWith(fetch(request).catch(() => caches.match(request)));
+  // Static assets → Cache-first
+  if (
+    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|ico|woff2|webmanifest)$/)
+  ) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+    return;
+  }
+
+  // HTML navigation → Network-first, offline fallback
+  if (request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(navigationHandler(request));
+    return;
+  }
 });
 
-// ── Notification click ────────────────────────────────────────────────────────
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
+// ─── Strategies ────────────────────────────────────────────────────────────
+
+async function cacheFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+  const response = await fetch(request);
+  if (response.ok) cache.put(request, response.clone());
+  return response;
+}
+
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  const fetchPromise = fetch(request)
+    .then((response) => {
+      if (response.ok) cache.put(request, response.clone());
+      return response;
+    })
+    .catch(() => null);
+
+  // Return cached immediately if available, else wait for network
+  if (cached) {
+    // Revalidate in background
+    fetchPromise;
+    return cached;
+  }
+  return fetchPromise || offlineFallback(request);
+}
+
+async function networkFirstWithCache(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    return offlineFallback(request);
+  }
+}
+
+async function navigationHandler(request) {
+  try {
+    const response = await fetch(request);
+    return response;
+  } catch {
+    const cache = await caches.open(STATIC_CACHE);
+    return cache.match(OFFLINE_URL);
+  }
+}
+
+function offlineFallback(request) {
+  return new Response(
+    JSON.stringify({ error: 'You are offline. Please reconnect.' }),
+    {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
+
+// ─── Push Notifications (existing) ─────────────────────────────────────────
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() ?? {};
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      for (const client of clientList) {
-        if ('focus' in client) return client.focus();
-      }
-      if (clients.openWindow) return clients.openWindow('/');
+    self.registration.showNotification(data.title || 'NCERT Master', {
+      body: data.body || 'Time to study!',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
     })
   );
 });
-
-// ── Message handler ───────────────────────────────────────────────────────────
-self.addEventListener('message', (event) => {
-  if (!event.data) return;
-
-  // Schedule notifications for today's tasks
-  if (event.data.type === 'SCHEDULE_NOTIFICATIONS') {
-    // Clear old timeouts
-    scheduledTimeouts.forEach(id => clearTimeout(id));
-    scheduledTimeouts = [];
-
-    const tasks = event.data.tasks || [];
-    const now = Date.now();
-
-    tasks.forEach(task => {
-      if (!task.start_time || task.completed) return;
-
-      const [hStr, mStr] = task.start_time.split(':');
-      const h = parseInt(hStr, 10);
-      const m = parseInt(mStr, 10);
-      if (isNaN(h) || isNaN(m)) return;
-
-      const taskTime = new Date();
-      taskTime.setHours(h, m, 0, 0);
-      let delay = taskTime.getTime() - now;
-
-      // If time already passed today but within 5 minutes → fire immediately
-      if (delay <= 0 && delay > -300000) {
-        delay = 500; // fire in 500ms
-      }
-
-      if (delay > 0 && delay < 86400000) {
-        const tid = setTimeout(() => {
-          self.registration.showNotification(`📚 Study Time: ${task.subject}`, {
-            body: `${task.start_time} – ${task.end_time}\nAbhi padhai shuru karo! 🚀`,
-            icon: '/icons/ncert_master_192x192.png',
-            badge: '/icons/ncert_master_192x192.png',
-            tag: `ncert-task-${task.id}`,
-            requireInteraction: true,
-            data: { taskId: task.id, url: '/' },
-          });
-        }, delay);
-        scheduledTimeouts.push(tid);
-      }
-    });
-  }
-
-  // Test notification
-  if (event.data.type === 'TEST_NOTIFICATION') {
-    self.registration.showNotification('✅ NCERT Master — Notifications Active!', {
-      body: 'Teri study schedule notifications ab kaam karenge! Notifications ON hain 🎉',
-      icon: '/icons/ncert_master_192x192.png',
-      tag: 'ncert-test',
-    });
-  }
-});
-  
