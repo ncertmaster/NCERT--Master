@@ -12,7 +12,7 @@ export type AppScreen =
   | "notes-class" | "notes-subject" | "notes-chapter" | "notes-content"
   | "iq-class" | "iq-subject" | "iq-chapter" | "iq-content"
   | "quiz-class" | "quiz-subject" | "quiz-mode" | "quiz-chapter" | "quiz-play" | "quiz-result"
-  | "settings" | "study-timer" | "diary" | "privacy-policy"
+  | "settings" | "study-timer" | "diary" | "privacy-policy" | "quiz-history"
 
 export interface UserProfile {
   name: string
@@ -226,4 +226,5 @@ export function useApp() {
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
   }
-  
+
+    
