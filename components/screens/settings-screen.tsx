@@ -6,7 +6,7 @@ import { ScreenHeader } from "@/components/screen-header"
 import { getText } from "@/lib/translations"
 import {
   LogOut, Timer, BookMarked, Shield, ChevronRight,
-  MessageSquare, Share2, Check, X, Eye, Languages
+  MessageSquare, Share2, Check, X, Eye, Languages, Trophy
 } from "lucide-react"
 
 export function SettingsScreen() {
@@ -63,6 +63,13 @@ export function SettingsScreen() {
   }
 
   const menuItems = [
+    {
+      icon: Trophy,
+      label: "Quiz History",
+      sublabel: "Apne past quiz results dekho",
+      iconBg: "bg-amber-500/15 text-amber-400",
+      onClick: () => setScreen("quiz-history"),
+    },
     {
       icon: Timer,
       label: g("timeManagement"),
@@ -255,4 +262,5 @@ export function SettingsScreen() {
     </div>
   )
       }
-                                                              
+
+      
