@@ -242,18 +242,17 @@ function parseQuizJSON(text: string): any[] {
 }
 
 export async function GET(request: Request) {
-  // ── Rate limit check ──────────────────────────────────────────────────────
   const ip =
     (request.headers as any).get?.("x-forwarded-for")?.split(",")[0]?.trim() ||
     (request.headers as any).get?.("x-real-ip") ||
     "unknown"
+
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
       { error: "Bahut zyada requests. 1 minute baad try karein." },
       { status: 429 }
     )
   }
-  // ─────────────────────────────────────────────────────────────────────────
 
   const { searchParams } = new URL(request.url)
   const chapterId     = searchParams.get("chapter_id") || ""
@@ -264,8 +263,11 @@ export async function GET(request: Request) {
   const tab           = searchParams.get("tab") || "notes"
   const quizMode      = searchParams.get("quiz_mode") || "chapter"
 
-  if (!chapterName) return NextResponse.json({ error: "Missing chapter_name" }, { status: 400 })
-  if (!GROQ_API_KEY) return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 })
+  if (!chapterName)
+    return NextResponse.json({ error: "Missing chapter_name" }, { status: 400 })
+
+  if (!GROQ_API_KEY)
+    return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 })
 
   const cls = parseInt(classNum)
   const group = getClassGroup(cls)
@@ -274,17 +276,32 @@ export async function GET(request: Request) {
     if (tab === "notes") {
       const maxTok = group === "6-8" ? 3000 : group === "9-10" ? 4000 : 5000
       const content = await callGroq(getNotesPrompt(chapterName, chapterNameHi, subject, classNum), maxTok)
-      return NextResponse.json({ content, chapterId, tab })
+
+      return NextResponse.json(
+        { content, chapterId, tab },
+        {
+          headers: {
+            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        }
+      )
     }
 
     if (tab === "iq") {
       const maxTok = group === "6-8" ? 3500 : group === "9-10" ? 5000 : 6000
       const content = await callGroq(getIQPrompt(chapterName, chapterNameHi, subject, classNum), maxTok)
-      return NextResponse.json({ content, chapterId, tab })
+
+      return NextResponse.json(
+        { content, chapterId, tab },
+        {
+          headers: {
+            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        }
+      )
     }
 
     if (tab === "quiz") {
-      // Hamesha 2 batches = 20 questions per chapter
       const totalBatches = quizMode === "full"
         ? (group === "6-8" ? 5 : group === "9-10" ? 7 : 10)
         : 2
@@ -320,16 +337,32 @@ export async function GET(request: Request) {
         return true
       })
 
-      return NextResponse.json({ content: JSON.stringify(unique), chapterId, tab, total: unique.length })
+      return NextResponse.json(
+        { content: JSON.stringify(unique), chapterId, tab, total: unique.length },
+        {
+          headers: {
+            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        }
+      )
     }
 
-    return NextResponse.json({ error: "Invalid tab" }, { status: 400 })
+    return NextResponse.json(
+      { error: "Invalid tab" },
+      {
+        status: 400,
+        headers: {
+          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+        },
+      }
+    )
 
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || String(error) }, { status: 500 })
+    return NextResponse.json(
+      { error: error?.message || String(error) },
+      { status: 500 }
+    )
   }
 }
 
 export const maxDuration = 60
-
-    
