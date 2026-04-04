@@ -16,6 +16,7 @@ import {
 } from "@/components/screens/content-screens"
 import { QuizModeScreen } from "@/components/screens/quiz-mode-screen"
 import { QuizPlayScreen } from "@/components/screens/quiz-play-screen"
+import { QuizHistoryScreen } from "@/components/screens/quiz-history-screen"
 import { SettingsScreen } from "@/components/screens/settings-screen"
 import { StudyTimerScreen } from "@/components/screens/study-timer-screen"
 import { DiaryScreen } from "@/components/screens/diary-screen"
@@ -52,6 +53,7 @@ export function AppShell() {
       case "study-timer":   return <StudyTimerScreen />
       case "diary":         return <DiaryScreen />
       case "privacy-policy":return <PrivacyPolicyScreen />
+      case "quiz-history":  return <QuizHistoryScreen />
       default:              return <DashboardScreen />
     }
   }
@@ -72,4 +74,4 @@ export function AppShell() {
       </div>
     </main>
   )
-}
+        }
