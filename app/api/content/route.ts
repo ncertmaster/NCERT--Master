@@ -3,13 +3,6 @@ import { NextResponse } from "next/server"
 const GROQ_API_KEY = process.env.GROQ_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-// Response banate waqt yeh header add karo
-return NextResponse.json(data, {
-  headers: {
-    'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-  },
-});
-
 // ── Simple in-memory rate limiter ──────────────────────────────────────────
 // Max 10 requests per IP per minute
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
