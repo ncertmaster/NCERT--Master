@@ -4,12 +4,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import { ScreenHeader } from "@/components/screen-header"
 import { useApp } from "@/lib/app-context"
 import { BookMarked, Plus, Trash2, Edit3, Save, X, Calendar, Search } from "lucide-react"
-import { createClient, type SupabaseClient } from "@supabase/supabase-js"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-const supabase: SupabaseClient | null =
-  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
+import { supabase } from "@/lib/supabase"
 
 interface DiaryEntry {
   id: string
@@ -347,4 +342,5 @@ export function DiaryScreen() {
   )
         }
 
-  
+
+                                                            
