@@ -33,6 +33,26 @@ export function QuizPlayScreen() {
   const [score, setScore] = useState(0)
   const [showResult, setShowResult] = useState(false)
 
+  // ── Save quiz result to localStorage history ───────────────────────────────
+  function saveQuizResult(finalScore: number, total: number) {
+    try {
+      const key = "ncert_quiz_history"
+      const prev = JSON.parse(localStorage.getItem(key) || "[]")
+      const entry = {
+        subject: selectedSubject,
+        chapter: selectedChapter,
+        class: selectedClass,
+        score: finalScore,
+        total,
+        percent: Math.round((finalScore / total) * 100),
+        date: new Date().toISOString(),
+      }
+      // Keep last 50 results only
+      const updated = [entry, ...prev].slice(0, 50)
+      localStorage.setItem(key, JSON.stringify(updated))
+    } catch { /* silently fail */ }
+  }
+
   useEffect(() => {
     if (!selectedClass || !selectedSubject) {
       setError("Subject select karein pehle.")
@@ -226,6 +246,7 @@ export function QuizPlayScreen() {
   const handleNext = () => {
     if (currentIndex + 1 >= questions.length) {
       setQuizScore(score, questions.length)
+      saveQuizResult(score, questions.length)
       setShowResult(true)
     } else {
       setCurrentIndex((i) => i + 1)
@@ -285,4 +306,5 @@ export function QuizPlayScreen() {
       </div>
     </div>
   )
-}
+      }
+        
