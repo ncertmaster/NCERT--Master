@@ -1,6 +1,6 @@
 const CACHE_NAME = 'ncert-master-v3';
 
-const PRECACHE_URLS = ['/', '/manifest.json', '/icons/icon-192x192.jpg', '/icons/icon-512x512.jpg'];
+const PRECACHE_URLS = ['/', '/manifest.json', '/icons/ncert_master_192x192.png', '/icons/ncert_master_512x512.png'];
 
 // Active scheduled timeouts (in-SW scheduling)
 let scheduledTimeouts = [];
@@ -107,8 +107,8 @@ self.addEventListener('message', (event) => {
         const tid = setTimeout(() => {
           self.registration.showNotification(`📚 Study Time: ${task.subject}`, {
             body: `${task.start_time} – ${task.end_time}\nAbhi padhai shuru karo! 🚀`,
-            icon: '/icons/icon-192x192.jpg',
-            badge: '/icons/icon-192x192.jpg',
+            icon: '/icons/ncert_master_192x192.png',
+            badge: '/icons/ncert_master_192x192.png',
             tag: `ncert-task-${task.id}`,
             requireInteraction: true,
             data: { taskId: task.id, url: '/' },
@@ -123,8 +123,9 @@ self.addEventListener('message', (event) => {
   if (event.data.type === 'TEST_NOTIFICATION') {
     self.registration.showNotification('✅ NCERT Master — Notifications Active!', {
       body: 'Teri study schedule notifications ab kaam karenge! Notifications ON hain 🎉',
-      icon: '/icons/icon-192x192.jpg',
+      icon: '/icons/ncert_master_192x192.png',
       tag: 'ncert-test',
     });
   }
 });
+  
