@@ -519,7 +519,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       <div className="flex min-h-screen flex-col bg-background pb-20">
         <ScreenHeader title={book.nameHi} />
         <div className="mx-auto w-full max-w-md px-4 py-3">
-          <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
             {book.chapters.map((ch: Chapter, idx: number) => (
               <div key={ch.id} className="rounded-xl border border-border bg-card shadow-sm">
                 <div className="flex items-center gap-3 px-3 pt-3 pb-2">
@@ -677,10 +677,42 @@ function renderContent(content: string) {
 
 function ContentLoader() {
   return (
-    <div className="flex flex-col items-center justify-center py-10 gap-3">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      <p className="text-sm text-muted-foreground">Content load हो रहा है...</p>
-      <p className="text-xs text-muted-foreground">पहली बार 15-30 sec लग सकते हैं</p>
+    <div className="flex flex-col gap-4 py-4">
+      {/* Shimmer header block */}
+      <div className="h-5 w-2/5 animate-pulse rounded-lg bg-muted" />
+
+      {/* Shimmer lines — mimics actual notes content */}
+      <div className="flex flex-col gap-2.5">
+        <div className="h-3.5 w-full animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[92%] animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[85%] animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-full animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[78%] animate-pulse rounded-md bg-muted" />
+      </div>
+
+      {/* Shimmer sub-heading */}
+      <div className="h-4 w-1/3 animate-pulse rounded-lg bg-muted mt-2" />
+
+      <div className="flex flex-col gap-2.5">
+        <div className="h-3.5 w-full animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[88%] animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-full animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[70%] animate-pulse rounded-md bg-muted" />
+      </div>
+
+      {/* Shimmer sub-heading */}
+      <div className="h-4 w-2/5 animate-pulse rounded-lg bg-muted mt-2" />
+
+      <div className="flex flex-col gap-2.5">
+        <div className="h-3.5 w-full animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[95%] animate-pulse rounded-md bg-muted" />
+        <div className="h-3.5 w-[80%] animate-pulse rounded-md bg-muted" />
+      </div>
+
+      {/* Hint text */}
+      <p className="mt-2 text-center text-xs text-muted-foreground/50">
+        AI content taiyaar kar raha hai... ⏳
+      </p>
     </div>
   )
 }
@@ -878,6 +910,7 @@ export function BooksReaderScreen() {
             <p className="text-xs text-muted-foreground opacity-60">10-20 सेकंड लग सकते हैं</p>
           </div>
         )}
+        
         {!iframeError && (
           <iframe
             key={readerUrl}
@@ -911,4 +944,4 @@ export function BooksReaderScreen() {
       </div>
     </div>
   )
-  }
+                }
