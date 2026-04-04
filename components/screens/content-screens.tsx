@@ -251,9 +251,8 @@ export function SubjectSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
         <BottomTabs activeTab={tabKey[flow]} />
       </div>
     )
-  }
-
-  // ── CASE 2: Class 11/12, stream selected → show subjects
+}
+          // ── CASE 2: Class 11/12, stream selected → show subjects
   if (is1112 && selectedStream) {
     const streams: Stream[] = streamsByClass[selectedClass!] || []
     const stream = streams.find((s: Stream) => s.id === selectedStream)
@@ -510,8 +509,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
           <BottomTabs activeTab={tabKey[flow]} />
         </div>
       )
-    }
-
+      }
     const book = subject.books.find((b: Book) => b.id === selectedBook)
     if (!book) return null
 
@@ -519,7 +517,7 @@ export function ChapterSelectScreen({ flow }: { flow: "books" | "notes" | "iq" |
       <div className="flex min-h-screen flex-col bg-background pb-20">
         <ScreenHeader title={book.nameHi} />
         <div className="mx-auto w-full max-w-md px-4 py-3">
-      <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             {book.chapters.map((ch: Chapter, idx: number) => (
               <div key={ch.id} className="rounded-xl border border-border bg-card shadow-sm">
                 <div className="flex items-center gap-3 px-3 pt-3 pb-2">
@@ -856,8 +854,7 @@ export function BooksListScreen() {
       <BottomTabs activeTab="books" />
     </div>
   )
-}
-
+    }
 export function BooksReaderScreen() {
   const { selectedClass, selectedBookUrl, goBack } = useApp()
   const [loading, setLoading] = React.useState(true)
@@ -910,7 +907,6 @@ export function BooksReaderScreen() {
             <p className="text-xs text-muted-foreground opacity-60">10-20 सेकंड लग सकते हैं</p>
           </div>
         )}
-        
         {!iframeError && (
           <iframe
             key={readerUrl}
@@ -944,4 +940,4 @@ export function BooksReaderScreen() {
       </div>
     </div>
   )
-                }
+  }
