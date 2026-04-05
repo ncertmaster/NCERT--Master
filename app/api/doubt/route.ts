@@ -315,6 +315,17 @@ export async function POST(request: Request) {
       }
     }
 
+// ── Block unauthenticated users ───────────────────────────────────────
+    if (!userId) {
+      return NextResponse.json({
+        reply: "",
+        limitHit: true,
+        limitType: "text",
+        plan: "guest",
+        message: "🔒 AI Doubt Solver use karne ke liye pehle login karo!",
+      })
+    }
+    
     // ── AI call ───────────────────────────────────────────────────────────
     let reply: string
 
