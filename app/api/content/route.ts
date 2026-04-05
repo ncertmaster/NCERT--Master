@@ -1,10 +1,65 @@
 import { NextResponse } from "next/server"
+import { createClient } from "@supabase/supabase-js"
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
+// ── Supabase admin client for shared content cache ─────────────────────────
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
+}
+
+function buildCacheKey(classNum: string, chapterId: string, tab: string): string {
+  return `${classNum}__${chapterId}__${tab}`
+}
+
+async function getCachedContent(cacheKey: string): Promise<string | null> {
+  const db = getSupabaseAdmin()
+  if (!db) return null
+  try {
+    const { data } = await db
+      .from("content_cache")
+      .select("content, hit_count")
+      .eq("cache_key", cacheKey)
+      .single()
+    if (!data) return null
+    // Increment hit count in background — do not await
+    db.from("content_cache")
+      .update({ hit_count: (data.hit_count || 0) + 1 })
+      .eq("cache_key", cacheKey)
+      .then(() => {})
+    return data.content as string
+  } catch {
+    return null
+  }
+}
+
+async function saveCachedContent(
+  cacheKey: string,
+  content: string,
+  classNum: string,
+  chapterId: string,
+  tab: string
+): Promise<void> {
+  const db = getSupabaseAdmin()
+  if (!db) return
+  try {
+    await db.from("content_cache").upsert({
+      cache_key: cacheKey,
+      content,
+      class_num: parseInt(classNum),
+      chapter_id: chapterId,
+      tab,
+    }, { onConflict: "cache_key" })
+  } catch {
+    // Cache save failure is non-fatal
+  }
+}
+
 // ── Simple in-memory rate limiter ──────────────────────────────────────────
-// Max 10 requests per IP per minute
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 10
 const RATE_WINDOW_MS = 60 * 1000
@@ -20,7 +75,6 @@ function checkRateLimit(ip: string): boolean {
   entry.count++
   return true
 }
-// ──────────────────────────────────────────────────────────────────────────
 
 function getClassGroup(cls: number): "6-8" | "9-10" | "11-12" {
   if (cls <= 8) return "6-8"
@@ -40,14 +94,7 @@ async function callGroq(prompt: string, maxTokens = 4000): Promise<string> {
       messages: [
         {
           role: "system",
-          content: `Tu ek expert NCERT teacher hai jo SIRF DEVANAGARI HINDI mein likhta hai.
-MANDATORY RULES:
-1. POORA content HINDI (Devanagari) mein likhna hai
-2. Scientific/technical terms: Hindi + bracket mein English dono likho
-3. Format EXACTLY waise rakho jaisa prompt mein bataya gaya hai
-4. NCERT content se bahar bilkul mat jao
-5. Content POORA complete karo — beech mein mat rokna
-6. Headings SAAF aur KHULE KHULE rakho — har topic clearly alag dikhe`,
+          content: `Tu ek expert NCERT teacher hai jo SIRF DEVANAGARI HINDI mein likhta hai.\nMANDATORY RULES:\n1. POORA content HINDI (Devanagari) mein likhna hai\n2. Scientific/technical terms: Hindi + bracket mein English dono likho\n3. Format EXACTLY waise rakho jaisa prompt mein bataya gaya hai\n4. NCERT content se bahar bilkul mat jao\n5. Content POORA complete karo — beech mein mat rokna\n6. Headings SAAF aur KHULE KHULE rakho — har topic clearly alag dikhe`,
         },
         { role: "user", content: prompt },
       ],
@@ -74,80 +121,7 @@ function getNotesPrompt(chapterName: string, chapterNameHi: string, subject: str
     group === "9-10"  ? "Board exam level. Definitions, processes, data clearly explain karo." :
                         "UPSC analytical depth. Concepts ka broader impact, causes, effects clearly batao."
 
-  return `NCERT Class ${classNum} ${subject}
-Chapter: ${chapterName} (${chapterNameHi})
-${depthTip}
-Target length: ${lengthGuide}
-
-NIYAM:
-- Chapter ke HARE EK sub-topic ko cover karo — koi bhi topic skip nahi
-- Har heading clearly alag aur bold dikhe (## use karo)
-- Sub-headings ke liye ** use karo
-- Points ke liye (i)(ii)(iii) use karo  
-- Jahan process/cycle/flow samjhana ho → emoji diagram banao
-- Jahan comparison ho → table banao
-- UPSC connection zaroor batao
-- Saral aur pyari Hindi mein likho
-
-FORMAT (exactly isi tarah — headings khuli khuli rakho):
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 📖 अध्याय परिचय
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[2-3 line mein chapter ka overview aur mahatva]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 🔹 [Pehla Main Topic ka naam]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[3-4 lines detailed explanation]
-
-**[Sub Topic 1]**
-[2-3 lines]
-(i) [Point]
-(ii) [Point]
-
-**[Sub Topic 2]**
-[Explanation]
-
-[Agar diagram chahiye:]
-🔄 [Step 1] → [Step 2] → [Step 3] → [Step 4]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 🔹 [Doosra Main Topic ka naam]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[Explanation]
-
-[Agar comparison chahiye:]
-| विषय | [Cheez 1] | [Cheez 2] |
-|------|-----------|-----------|
-| [Point] | [Value] | [Value] |
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 📊 महत्वपूर्ण तथ्य एवं आंकड़े
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-(i) [Fact/date/name/formula]
-(ii) [Fact]
-(iii) [Fact]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 🔑 मुख्य शब्दावली (Key Terms)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**[Term 1]:** [One line definition]
-**[Term 2]:** [One line definition]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## ⭐ याद रखने योग्य बातें
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-(i) [Most important point]
-(ii) [Important point]
-(iii) [Important point]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 🏛️ UPSC दृष्टि से महत्व
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[2-3 lines: is chapter ka UPSC Prelims/Mains se seedha connection]
-
-IMPORTANT: Har ## heading ke upar-neeche ━━━ line zaroor daalo taaki topics clearly alag dikhen`
+  return `NCERT Class ${classNum} ${subject}\nChapter: ${chapterName} (${chapterNameHi})\n${depthTip}\nTarget length: ${lengthGuide}\n\nNIYAM:\n- Chapter ke HARE EK sub-topic ko cover karo — koi bhi topic skip nahi\n- Har heading clearly alag aur bold dikhe (## use karo)\n- Sub-headings ke liye ** use karo\n- Points ke liye (i)(ii)(iii) use karo  \n- Jahan process/cycle/flow samjhana ho → emoji diagram banao\n- Jahan comparison ho → table banao\n- UPSC connection zaroor batao\n- Saral aur pyari Hindi mein likho\n\nFORMAT (exactly isi tarah — headings khuli khuli rakho):\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 📖 अध्याय परिचय\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[2-3 line mein chapter ka overview aur mahatva]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 🔹 [Pehla Main Topic ka naam]\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[3-4 lines detailed explanation]\n\n**[Sub Topic 1]**\n[2-3 lines]\n(i) [Point]\n(ii) [Point]\n\n**[Sub Topic 2]**\n[Explanation]\n\n[Agar diagram chahiye:]\n🔄 [Step 1] → [Step 2] → [Step 3] → [Step 4]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 🔹 [Doosra Main Topic ka naam]\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[Explanation]\n\n[Agar comparison chahiye:]\n| विषय | [Cheez 1] | [Cheez 2] |\n|------|-----------|-----------|\n| [Point] | [Value] | [Value] |\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 📊 महत्वपूर्ण तथ्य एवं आंकड़े\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n(i) [Fact/date/name/formula]\n(ii) [Fact]\n(iii) [Fact]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 🔑 मुख्य शब्दावली (Key Terms)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n**[Term 1]:** [One line definition]\n**[Term 2]:** [One line definition]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## ⭐ याद रखने योग्य बातें\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n(i) [Most important point]\n(ii) [Important point]\n(iii) [Important point]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 🏛️ UPSC दृष्टि से महत्व\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[2-3 lines: is chapter ka UPSC Prelims/Mains se seedha connection]\n\nIMPORTANT: Har ## heading ke upar-neeche ━━━ line zaroor daalo taaki topics clearly alag dikhen`
 }
 
 function getIQPrompt(chapterName: string, chapterNameHi: string, subject: string, classNum: string): string {
@@ -161,74 +135,11 @@ function getIQPrompt(chapterName: string, chapterNameHi: string, subject: string
 
   const total = counts.short + counts.long + counts.analyze
 
-  return `NCERT Class ${classNum} ${subject}
-Chapter: ${chapterName} (${chapterNameHi})
-
-${total} important questions banao (${counts.short} Short + ${counts.long} Long + ${counts.analyze} Analytical).
-Chapter ke HARE EK sub-topic se questions aane chahiye.
-UPSC Prelims/Mains style mein questions banao.
-NOTE: MCQ mat banana — sirf Short, Long aur Analytical questions.
-
-FORMAT:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## ✍️ लघु उत्तरीय प्रश्न (2-3 अंक)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**प्रश्न 1.** [Question - direct, factual]
-💡 **उत्तर:** [2-3 line clear answer]
-
-**प्रश्न 2.** [Question]
-💡 **उत्तर:** [Answer]
-
-[${counts.short} short questions total — continuously number karo]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 📝 दीर्घ उत्तरीय प्रश्न (5 अंक)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**प्रश्न ${counts.short + 1}.** [Question - detailed, conceptual]
-💡 **उत्तर:** [5-6 line detailed answer with examples]
-
-[${counts.long} long questions total]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-## 🧠 विश्लेषणात्मक प्रश्न — UPSC स्तर
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**प्रश्न ${counts.short + counts.long + 1}.** [Higher order analytical question]
-🏛️ **UPSC संबंध:** [One line UPSC relevance]
-💡 **उत्तर:** [4-5 line analytical answer]
-
-[${counts.analyze} analytical questions total]
-
-RULES:
-- MCQ bilkul mat banana
-- Saare questions NCERT content se hon
-- Questions continuously number karo
-- Response POORA complete karo`
+  return `NCERT Class ${classNum} ${subject}\nChapter: ${chapterName} (${chapterNameHi})\n\n${total} important questions banao (${counts.short} Short + ${counts.long} Long + ${counts.analyze} Analytical).\nChapter ke HARE EK sub-topic se questions aane chahiye.\nUPSC Prelims/Mains style mein questions banao.\nNOTE: MCQ mat banana — sirf Short, Long aur Analytical questions.\n\nFORMAT:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## ✍️ लघु उत्तरीय प्रश्न (2-3 अंक)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n**प्रश्न 1.** [Question - direct, factual]\n💡 **उत्तर:** [2-3 line clear answer]\n\n**प्रश्न 2.** [Question]\n💡 **उत्तर:** [Answer]\n\n[${counts.short} short questions total — continuously number karo]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 📝 दीर्घ उत्तरीय प्रश्न (5 अंक)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n**प्रश्न ${counts.short + 1}.** [Question - detailed, conceptual]\n💡 **उत्तर:** [5-6 line detailed answer with examples]\n\n[${counts.long} long questions total]\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n## 🧠 विश्लेषणात्मक प्रश्न — UPSC स्तर\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n**प्रश्न ${counts.short + counts.long + 1}.** [Higher order analytical question]\n🏛️ **UPSC संबंध:** [One line UPSC relevance]\n💡 **उत्तर:** [4-5 line analytical answer]\n\n[${counts.analyze} analytical questions total]\n\nRULES:\n- MCQ bilkul mat banana\n- Saare questions NCERT content se hon\n- Questions continuously number karo\n- Response POORA complete karo`
 }
 
 function getQuizPrompt(scope: string, batchNum: number, topicHint: string, classNum: string): string {
-  return `Quiz: ${scope}
-Batch ${batchNum} — Focus: ${topicHint}
-Class: ${classNum}
-
-10 UNIQUE UPSC-style MCQ questions banao.
-- Har question DIFFERENT topic se ho
-- Mix: factual + conceptual + application-based
-- 1 Assertion-Reason type zaroor ho
-- NCERT content se bahar mat jao
-
-SIRF valid JSON array return karo:
-[
-  {
-    "question": "Saral Hindi mein UPSC style question",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "correctIndex": 0,
-    "explanation": "Ek line saral explanation kyun sahi hai"
-  }
-]`
+  return `Quiz: ${scope}\nBatch ${batchNum} — Focus: ${topicHint}\nClass: ${classNum}\n\n10 UNIQUE UPSC-style MCQ questions banao.\n- Har question DIFFERENT topic se ho\n- Mix: factual + conceptual + application-based\n- 1 Assertion-Reason type zaroor ho\n- NCERT content se bahar mat jao\n\nSIRF valid JSON array return karo:\n[\n  {\n    "question": "Saral Hindi mein UPSC style question",\n    "options": ["Option A", "Option B", "Option C", "Option D"],\n    "correctIndex": 0,\n    "explanation": "Ek line saral explanation kyun sahi hai"\n  }\n]`
 }
 
 function parseQuizJSON(text: string): any[] {
@@ -243,13 +154,13 @@ function parseQuizJSON(text: string): any[] {
 
 export async function GET(request: Request) {
   const ip =
-    (request.headers as any).get?.("x-forwarded-for")?.split(",")[0]?.trim() ||
+    (request.headers as any).get?.("x-forwarded-for")?.split(",")?.[0]?.trim() ||
     (request.headers as any).get?.("x-real-ip") ||
     "unknown"
 
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
-      { error: "Bahut zyada requests. 1 minute baad try karein." },
+      { error: "बहुत ज़्यादा अनुरोध। एक मिनट बाद पुनः प्रयास करें।" },
       { status: 429 }
     )
   }
@@ -272,36 +183,57 @@ export async function GET(request: Request) {
   const cls = parseInt(classNum)
   const group = getClassGroup(cls)
 
+  const CACHE_HEADERS = {
+    'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+  }
+
   try {
     if (tab === "notes") {
+      // Check Supabase cache first
+      const cacheKey = buildCacheKey(classNum, chapterId, "notes")
+      const cached = await getCachedContent(cacheKey)
+      if (cached) {
+        return NextResponse.json({ content: cached, chapterId, tab, source: "cache" }, { headers: CACHE_HEADERS })
+      }
+
       const maxTok = group === "6-8" ? 3000 : group === "9-10" ? 4000 : 5000
       const content = await callGroq(getNotesPrompt(chapterName, chapterNameHi, subject, classNum), maxTok)
 
-      return NextResponse.json(
-        { content, chapterId, tab },
-        {
-          headers: {
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-          },
-        }
-      )
+      // Save to Supabase in background
+      saveCachedContent(cacheKey, content, classNum, chapterId, "notes")
+
+      return NextResponse.json({ content, chapterId, tab, source: "generated" }, { headers: CACHE_HEADERS })
     }
 
     if (tab === "iq") {
+      // Check Supabase cache first
+      const cacheKey = buildCacheKey(classNum, chapterId, "iq")
+      const cached = await getCachedContent(cacheKey)
+      if (cached) {
+        return NextResponse.json({ content: cached, chapterId, tab, source: "cache" }, { headers: CACHE_HEADERS })
+      }
+
       const maxTok = group === "6-8" ? 3500 : group === "9-10" ? 5000 : 6000
       const content = await callGroq(getIQPrompt(chapterName, chapterNameHi, subject, classNum), maxTok)
 
-      return NextResponse.json(
-        { content, chapterId, tab },
-        {
-          headers: {
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-          },
-        }
-      )
+      // Save to Supabase in background
+      saveCachedContent(cacheKey, content, classNum, chapterId, "iq")
+
+      return NextResponse.json({ content, chapterId, tab, source: "generated" }, { headers: CACHE_HEADERS })
     }
 
     if (tab === "quiz") {
+      // Quiz cache key includes quizMode since full vs chapter are different
+      const cacheKey = buildCacheKey(classNum, chapterId, `quiz_${quizMode}`)
+      const cached = await getCachedContent(cacheKey)
+      if (cached) {
+        const parsed = parseQuizJSON(cached)
+        return NextResponse.json(
+          { content: cached, chapterId, tab, total: parsed.length, source: "cache" },
+          { headers: CACHE_HEADERS }
+        )
+      }
+
       const totalBatches = quizMode === "full"
         ? (group === "6-8" ? 5 : group === "9-10" ? 7 : 10)
         : 2
@@ -322,8 +254,7 @@ export async function GET(request: Request) {
         "assertion-reason, match the following style",
         "miscellaneous important topics",
       ]
-
-      const results = await Promise.all(
+ const results = await Promise.all(
         Array.from({ length: totalBatches }, (_, i) =>
           callGroq(getQuizPrompt(scope, i + 1, topicHints[i % topicHints.length], classNum), 2048)
         )
@@ -337,25 +268,18 @@ export async function GET(request: Request) {
         return true
       })
 
+      const contentStr = JSON.stringify(unique)
+
+      // Save to Supabase in background
+      saveCachedContent(cacheKey, contentStr, classNum, chapterId, `quiz_${quizMode}`)
+
       return NextResponse.json(
-        { content: JSON.stringify(unique), chapterId, tab, total: unique.length },
-        {
-          headers: {
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-          },
-        }
+        { content: contentStr, chapterId, tab, total: unique.length, source: "generated" },
+        { headers: CACHE_HEADERS }
       )
     }
 
-    return NextResponse.json(
-      { error: "Invalid tab" },
-      {
-        status: 400,
-        headers: {
-          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-        },
-      }
-    )
+    return NextResponse.json({ error: "Invalid tab" }, { status: 400, headers: CACHE_HEADERS })
 
   } catch (error: any) {
     return NextResponse.json(
