@@ -233,6 +233,11 @@ function parseQuizJSON(text: string): any[] {
   } catch { return [] }
 }
 
+// ── Small delay helper ─────────────────────────────────────────────────────
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 // ── Main handler ───────────────────────────────────────────────────────────
 export async function GET(request: Request) {
   // Auth check
@@ -252,7 +257,7 @@ export async function GET(request: Request) {
   const allJobs = getAllJobs()
   const totalJobs = allJobs.length
 
-  // Get already cached keys from Supabase
+  // Get already cached keys from Supabase (including error placeholders)
   const { data: cachedRows } = await db
     .from("content_cache")
     .select("cache_key")
@@ -282,17 +287,26 @@ export async function GET(request: Request) {
     if (job.tab === "notes") {
       const maxTok = group === "6-8" ? 3000 : group === "9-10" ? 4000 : 5000
       content = await callGroq(getNotesPrompt(job), SYSTEM_PROMPT, maxTok)
+
     } else if (job.tab === "iq") {
       const maxTok = group === "6-8" ? 3500 : group === "9-10" ? 5000 : 6000
       content = await callGroq(getIQPrompt(job), SYSTEM_PROMPT, maxTok)
+
     } else {
-      // quiz — 2 batches for chapter mode
+      // quiz — sequential calls to avoid Groq rate limit
       const topicHints = ["definitions, basic concepts, key facts", "processes, causes, effects, examples"]
-      const results = await Promise.all(
-        topicHints.map((hint, i) =>
-          callGroq(getQuizPrompt(job) + `\nBatch ${i + 1} — Focus: ${hint}`, SYSTEM_PROMPT, 2048)
+      const results: string[] = []
+
+      for (let i = 0; i < topicHints.length; i++) {
+        if (i > 0) await sleep(1500) // wait between sequential calls
+        const r = await callGroq(
+          getQuizPrompt(job) + `\nBatch ${i + 1} — Focus: ${topicHints[i]}`,
+          SYSTEM_PROMPT,
+          2048
         )
-      )
+        results.push(r)
+      }
+
       const allQ = results.flatMap(parseQuizJSON)
       const seen = new Set<string>()
       const unique = allQ.filter((q: any) => {
@@ -321,13 +335,28 @@ export async function GET(request: Request) {
     })
 
   } catch (error: any) {
+    // CRITICAL FIX: Save error placeholder to Supabase so this job is skipped
+    // on the next call — prevents infinite retry loop on the same key
+    try {
+      await db.from("content_cache").upsert({
+        cache_key: job.cacheKey,
+        content: "__ERROR__",
+        class_num: cls,
+        chapter_id: job.chapterId,
+        tab: job.tab,
+      }, { onConflict: "cache_key" })
+    } catch (_) {
+      // If even the error save fails, we continue — HTML will retry
+    }
+
     return NextResponse.json({
       done: false,
       error: error?.message,
       remaining,
       skipped: job.cacheKey,
-    }, { status: 200 }) // 200 so browser continues retrying
+    }, { status: 200 })
   }
 }
 
 export const maxDuration = 60
+          
