@@ -1,31 +1,94 @@
 import { NextResponse } from "next/server"
+import { createClient } from "@supabase/supabase-js"
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+const GROQ_API_KEY    = process.env.GROQ_API_KEY
+const GEMINI_API_KEY  = process.env.GEMINI_API_KEY
+const GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions"
+const GEMINI_URL      = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-
-// ── Simple in-memory rate limiter ──────────────────────────────────────────
-// Max 15 doubt questions per IP per minute
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT = 15
-const RATE_WINDOW_MS = 60 * 1000
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS })
-    return true
-  }
-  if (entry.count >= RATE_LIMIT) return false
-  entry.count++
-  return true
+// ── Plan limits ────────────────────────────────────────────────────────────
+const PLAN_LIMITS: Record<string, { text: number; image: number; period: "day" | "month" }> = {
+  free:    { text: 5,    image: 0,   period: "day"   },
+  starter: { text: 200,  image: 10,  period: "month" },
+  pro:     { text: 500,  image: 50,  period: "month" },
+  elite:   { text: 1000, image: 100, period: "month" },
 }
-// ──────────────────────────────────────────────────────────────────────────
 
-// ── System Prompt ─────────────────────────────────────────────────────────────
+// ── Supabase admin client ──────────────────────────────────────────────────
+function getAdminDb() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
+
+// ── Get user from JWT ──────────────────────────────────────────────────────
+async function getUserFromToken(token: string) {
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+  const { data, error } = await db.auth.getUser(token)
+  if (error || !data?.user) return null
+  return data.user
+}
+
+// ── Get or create user plan row ────────────────────────────────────────────
+async function getUserPlan(userId: string) {
+  const db = getAdminDb()
+  const today = new Date().toISOString().split("T")[0]
+  const monthStart = today.slice(0, 7) + "-01"
+
+  const { data, error } = await db
+    .from("user_plans")
+    .select("*")
+    .eq("user_id", userId)
+    .single()
+
+  // No row yet — create free plan
+  if (error || !data) {
+    const newRow = {
+      user_id: userId,
+      plan: "free",
+      text_msgs_used: 0,
+      image_msgs_used: 0,
+      reset_date: today,
+    }
+    await db.from("user_plans").insert(newRow)
+    return newRow
+  }
+
+  // Check if reset needed
+  const limits = PLAN_LIMITS[data.plan] || PLAN_LIMITS.free
+  const resetTo = limits.period === "day" ? today : monthStart
+  const shouldReset = data.reset_date < resetTo
+
+  if (shouldReset) {
+    const updated = { text_msgs_used: 0, image_msgs_used: 0, reset_date: resetTo, updated_at: new Date().toISOString() }
+    await db.from("user_plans").update(updated).eq("user_id", userId)
+    return { ...data, ...updated }
+  }
+
+  return data
+}
+
+// ── Increment usage ────────────────────────────────────────────────────────
+async function incrementUsage(userId: string, isImage: boolean) {
+  const db = getAdminDb()
+  const field = isImage ? "image_msgs_used" : "text_msgs_used"
+  const { data } = await db
+    .from("user_plans")
+    .select(field)
+    .eq("user_id", userId)
+    .single()
+
+  const current = (data as any)?.[field] || 0
+  await db.from("user_plans")
+    .update({ [field]: current + 1, updated_at: new Date().toISOString() })
+    .eq("user_id", userId)
+}
+
+// ── System Prompt ──────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `तुम एक NCERT स्कूल शिक्षक AI हो जो Class 6 से 12 के छात्रों की मदद करते हो।
 
 तुम्हारा लक्ष्य है: concepts को clearly, simply और exam-focused तरीके से समझाना।
@@ -104,47 +167,6 @@ RESPONSE DETECTION RULES
    • Personal → supportive + practical advice (2-3 steps only)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STRICT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• लंबे answers मत दो
-• complex words use मत करो
-• NCERT से बाहर मत जाओ
-• unnecessary theory मत जोड़ो
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SMART BEHAVIOR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. ERROR HANDLING
-   • अगर unsure हो → कहो: "इसका सटीक उत्तर सुनिश्चित नहीं है"
-   • कभी गलत answers guess मत करो
-
-2. FOLLOW-UP CHECK
-   • कभी-कभी 1 short question पूछो:
-     "क्या तुम इसका example खुद बना सकते हो?"
-
-3. EXAM FOCUS
-   • Important lines highlight करो:
-     "⭐ यह exam में पूछा जा सकता है"
-
-4. MEMORY BOOST
-   • Simple tricks या patterns use करो
-   • Answers easy to remember रखो
-
-5. CONSISTENCY RULE
-   • Same concept → same style explanation
-   • Random variation नहीं
-
-6. RESPONSE CONTROL
-   • Answer length question के साथ match करो
-   • Short question → short answer
-   • Detail request → structured detail
-
-7. USER EXPERIENCE
-   • Student को guided feel करवाओ, overloaded नहीं
-   • Clarity को completeness से ऊपर रखो
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 IMAGE QUESTIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • Image में सभी visible text, numbers, equations, diagrams ध्यान से पढ़ो
@@ -152,54 +174,31 @@ IMAGE QUESTIONS
 • पूरी तरह solve या explain करो
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-APP FEATURES (NCERT Master)
+STRICT RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• 📚 Books → NCERT PDFs chapter by chapter
-• 📝 Notes & IQ → Smart notes and important points
-• 🧠 Quiz → Chapter-wise MCQ practice
-• जब relevant हो, guide करो: "Quiz में try करो" या "Notes section देखो"
+• लंबे answers मत दो
+• complex words use मत करो
+• NCERT से बाहर मत जाओ
+• unnecessary theory मत जोड़ो`
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GOAL
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Student को जल्दी समझाओ
-• Retention improve करो
-• Exam के लिए effectively prepare करवाओ
-• Learning simple और stress-free रखो`
-
-// ── Groq — text only ──────────────────────────────────────────────────────────
+// ── Groq call ──────────────────────────────────────────────────────────────
 async function callGroq(messages: any[], useVision = false) {
   if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY missing")
-
   const model = useVision ? "llama-3.2-11b-vision-preview" : "llama-3.3-70b-versatile"
-
   const res = await fetch(GROQ_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${GROQ_API_KEY}`,
-    },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${GROQ_API_KEY}` },
     body: JSON.stringify({
-      model,
-      max_tokens: 2048,
-      temperature: 0.5,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        ...messages,
-      ],
+      model, max_tokens: 2048, temperature: 0.5,
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
     }),
   })
-
-  if (!res.ok) {
-    const errText = await res.text()
-    throw new Error(`Groq ${res.status}: ${errText.slice(0, 200)}`)
-  }
-
+  if (!res.ok) throw new Error(`Groq ${res.status}: ${(await res.text()).slice(0, 200)}`)
   const data = await res.json()
   return data?.choices?.[0]?.message?.content || "दोबारा try करो!"
 }
 
-// ── Parse data URL safely ─────────────────────────────────────────────────────
+// ── Parse data URL ─────────────────────────────────────────────────────────
 function parseDataUrl(dataUrl: string): { mimeType: string; base64: string } | null {
   const commaIdx = dataUrl.indexOf(",")
   if (commaIdx === -1) return null
@@ -210,25 +209,19 @@ function parseDataUrl(dataUrl: string): { mimeType: string; base64: string } | n
   return { mimeType: mimeMatch[1], base64 }
 }
 
-// ── Gemini — text + vision ────────────────────────────────────────────────────
+// ── Gemini call ────────────────────────────────────────────────────────────
 async function callGemini(messages: any[]) {
   if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY missing")
-
   const contents: any[] = []
-
   for (const msg of messages) {
     const role = msg.role === "assistant" ? "model" : "user"
-
     if (Array.isArray(msg.content)) {
       const parts: any[] = []
       for (const part of msg.content) {
-        if (part.type === "text" && part.text) {
-          parts.push({ text: part.text })
-        } else if (part.type === "image_url" && part.image_url?.url) {
+        if (part.type === "text" && part.text) parts.push({ text: part.text })
+        else if (part.type === "image_url" && part.image_url?.url) {
           const parsed = parseDataUrl(part.image_url.url)
-          if (parsed) {
-            parts.push({ inlineData: { mimeType: parsed.mimeType, data: parsed.base64 } })
-          }
+          if (parsed) parts.push({ inlineData: { mimeType: parsed.mimeType, data: parsed.base64 } })
         }
       }
       if (parts.length > 0) contents.push({ role, parts })
@@ -236,7 +229,6 @@ async function callGemini(messages: any[]) {
       contents.push({ role, parts: [{ text: msg.content }] })
     }
   }
-
   const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -246,31 +238,16 @@ async function callGemini(messages: any[]) {
       generationConfig: { maxOutputTokens: 2048, temperature: 0.5 },
     }),
   })
-
-  if (!res.ok) {
-    const errText = await res.text()
-    throw new Error(`Gemini ${res.status}: ${errText.slice(0, 200)}`)
-  }
-
+  if (!res.ok) throw new Error(`Gemini ${res.status}: ${(await res.text()).slice(0, 200)}`)
   const data = await res.json()
   const candidate = data?.candidates?.[0]
-  if (!candidate) throw new Error("Gemini: no candidates returned")
-
-  const text = candidate?.content?.parts
-    ?.filter((p: any) => p.text)
-    ?.map((p: any) => p.text)
-    ?.join("\n")
-
-  if (!text) {
-    const reason = candidate?.finishReason
-    if (reason === "SAFETY") throw new Error("Gemini safety filter triggered")
-    throw new Error(`Gemini empty response (reason: ${reason})`)
-  }
-
+  if (!candidate) throw new Error("Gemini: no candidates")
+  const text = candidate?.content?.parts?.filter((p: any) => p.text)?.map((p: any) => p.text)?.join("\n")
+  if (!text) throw new Error(`Gemini empty response (reason: ${candidate?.finishReason})`)
   return text
 }
 
-// ── Main handler ──────────────────────────────────────────────────────────────
+// ── Main handler ───────────────────────────────────────────────────────────
 export async function POST(request: Request) {
   try {
     const { messages, useVision } = await request.json()
@@ -279,90 +256,110 @@ export async function POST(request: Request) {
       return NextResponse.json({ reply: "कोई message नहीं मिला।" }, { status: 400 })
     }
 
-    let reply: string
+    // ── Auth check ───────────────────────────────────────────────────────
+    const authHeader = request.headers.get("authorization") || ""
+    const token = authHeader.replace("Bearer ", "").trim()
 
-    if (useVision) {
-      // Image attached → Try Groq Vision first, fallback to Gemini
-      if (GROQ_API_KEY) {
-        try {
-          reply = await callGroq(messages, true)
-        } catch (groqErr: any) {
-          console.warn("Groq vision failed, trying Gemini:", groqErr?.message)
-          if (GEMINI_API_KEY) {
-            try {
-              reply = await callGemini(messages)
-            } catch (geminiErr: any) {
-              return NextResponse.json({
-                reply: `⚠️ Image analysis अभी उपलब्ध नहीं है। Text में अपना question लिखकर try करो।`,
-              })
-            }
-          } else {
-            return NextResponse.json({
-              reply: "⚠️ Image analysis के लिए GROQ_API_KEY या GEMINI_API_KEY चाहिए।",
-            })
-          }
-        }
-      } else if (GEMINI_API_KEY) {
-        try {
-          reply = await callGemini(messages)
-        } catch (geminiErr: any) {
-          const msg = geminiErr?.message || ""
-          if (msg.includes("429")) {
-            return NextResponse.json({
-              reply: "⚠️ Image analysis का quota खत्म हो गया। थोड़ी देर बाद try करो या text में पूछो।",
-            })
-          }
-          return NextResponse.json({
-            reply: `⚠️ Image analysis error। Text में पूछो।`,
-          })
-        }
-      } else {
-        return NextResponse.json({
-          reply: "⚠️ Image analysis के लिए server पर GROQ_API_KEY set करो।",
-        })
-      }
-    } else {
-      // Text only → Groq fast model
-      if (GROQ_API_KEY) {
-        const textMessages = messages.map((m: any) => {
-          if (Array.isArray(m.content)) {
-            const text = m.content
-              .filter((c: any) => c.type === "text")
-              .map((c: any) => c.text)
-              .join(" ")
-            return { role: m.role, content: text || "Please help me." }
-          }
-          return { role: m.role, content: m.content }
-        })
-        try {
-          reply = await callGroq(textMessages, false)
-        } catch (err: any) {
-          if (GEMINI_API_KEY) {
-            reply = await callGemini(textMessages)
-          } else {
-            throw err
-          }
-        }
-      } else if (GEMINI_API_KEY) {
-        reply = await callGemini(messages)
-      } else {
-        return NextResponse.json(
-          { reply: "API keys missing। Server पर GROQ_API_KEY set करो।" },
-          { status: 500 }
-        )
+    let userId: string | null = null
+    let planData: any = null
+
+    if (token) {
+      const user = await getUserFromToken(token)
+      if (user) {
+        userId = user.id
+        planData = await getUserPlan(userId)
       }
     }
 
-    return NextResponse.json({ reply })
+    // ── Usage limit check ─────────────────────────────────────────────────
+    const plan = planData?.plan || "free"
+    const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.free
+
+    if (userId && planData) {
+      if (useVision) {
+        // Image message check
+        if (limits.image === 0) {
+          return NextResponse.json({
+            reply: "",
+            limitHit: true,
+            limitType: "image",
+            plan,
+            message: "📸 Image analysis paid plan में उपलब्ध है।\nStarter (₹49/mo) से 10 images/month मिलेंगी!",
+          })
+        }
+        if (planData.image_msgs_used >= limits.image) {
+          return NextResponse.json({
+            reply: "",
+            limitHit: true,
+            limitType: "image",
+            plan,
+            message: `📸 Image limit खत्म! (${limits.image}/${limits.image} used)\nPlan upgrade करो या अगले महीने तक wait करो।`,
+          })
+        }
+      } else {
+        // Text message check
+        if (planData.text_msgs_used >= limits.text) {
+          const resetMsg = limits.period === "day"
+            ? "कल फिर 5 free messages मिलेंगे।"
+            : `अगले महीने reset होगा।`
+          return NextResponse.json({
+            reply: "",
+            limitHit: true,
+            limitType: "text",
+            plan,
+            used: planData.text_msgs_used,
+            limit: limits.text,
+            message: `⚡ Daily limit खत्म! (${planData.text_msgs_used}/${limits.text} messages)\n${resetMsg}\n\nStarter Plan (₹49/mo) से 200 messages/month पाओ!`,
+          })
+        }
+      }
+    }
+
+    // ── AI call ───────────────────────────────────────────────────────────
+    let reply: string
+
+    if (useVision) {
+      try {
+        reply = await callGroq(messages, true)
+      } catch {
+        if (GEMINI_API_KEY) reply = await callGemini(messages)
+        else return NextResponse.json({ reply: "⚠️ Image analysis अभी उपलब्ध नहीं है।" })
+      }
+    } else {
+      const textMessages = messages.map((m: any) => {
+        if (Array.isArray(m.content)) {
+          const text = m.content.filter((c: any) => c.type === "text").map((c: any) => c.text).join(" ")
+          return { role: m.role, content: text || "Please help me." }
+        }
+        return { role: m.role, content: m.content }
+      })
+      try {
+        reply = await callGroq(textMessages, false)
+      } catch {
+        if (GEMINI_API_KEY) reply = await callGemini(textMessages)
+        else throw new Error("No AI API available")
+      }
+    }
+
+    // ── Increment usage after successful reply ────────────────────────────
+    if (userId) await incrementUsage(userId, !!useVision)
+
+    // Return reply + remaining usage info
+    const remaining = userId && planData
+      ? useVision
+        ? Math.max(0, limits.image - (planData.image_msgs_used + 1))
+        : Math.max(0, limits.text - (planData.text_msgs_used + 1))
+      : null
+
+    return NextResponse.json({ reply, plan, remaining })
 
   } catch (error: any) {
     console.error("Doubt API error:", error?.message)
     return NextResponse.json({
-      reply: `कुछ गड़बड़ हो गई। Internet check करो और दोबारा try करो।`,
+      reply: "कुछ गड़बड़ हो गई। Internet check करो और दोबारा try करो।",
     }, { status: 200 })
   }
 }
 
 export const maxDuration = 30
-
-     
+  
