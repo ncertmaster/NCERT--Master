@@ -159,7 +159,8 @@ export function AiDoubtSolver() {
   const [planInfo, setPlanInfo]   = useState<PlanInfo>({ plan: "free", remaining: 5, textLimit: 5, imageLimit: 0, imageUsed: 0 })
   const [payingPlan, setPayingPlan] = useState<string | null>(null)
   const [paySuccess, setPaySuccess] = useState(false)
-  const [limitType, setLimitType]   = useState<"text" | "image">("text")
+  const [limitType, setLimitType]       = useState<"text" | "image">("text")
+  const [showLoginBanner, setShowLoginBanner] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
@@ -352,7 +353,7 @@ export function AiDoubtSolver() {
 
   // ── Razorpay payment ─────────────────────────────────────────────────────
   const handlePay = async (planId: string) => {
-    if (!authToken) { alert("Please sign in to subscribe."); return }
+    if (!authToken) { setShowLoginBanner(true); return }
     setPayingPlan(planId)
     try {
       const loaded = await loadRazorpay()
@@ -502,6 +503,25 @@ export function AiDoubtSolver() {
                           : "You've used all free messages for today. Upgrade for more."}
                       </p>
                     </div>
+
+                    {/* Login required banner */}
+                    {showLoginBanner && (
+                      <div className="mx-4 mb-2 rounded-2xl bg-red-500/10 border border-red-500/30 px-4 py-3 flex items-start gap-3">
+                        <span className="text-lg">🔒</span>
+                        <div>
+                          <p className="text-sm font-bold text-red-500">Login Required</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Subscribe karne ke liye pehle app mein sign in karo.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setShowLoginBanner(false)}
+                          className="ml-auto text-muted-foreground hover:text-foreground"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )}
 
                     {/* Plan cards */}
                     <div className="px-4 pb-4 space-y-3">
