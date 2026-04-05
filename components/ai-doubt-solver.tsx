@@ -331,10 +331,8 @@ export function AiDoubtSolver() {
         return
       }
 
-      // Update remaining count
-      if (data.remaining !== undefined && data.remaining !== null) {
-        setPlanInfo(prev => ({ ...prev, plan: data.plan || prev.plan, remaining: data.remaining }))
-      }
+      // DB se fresh count lo — single source of truth
+      await fetchPlanStatus(authToken)
 
       const reply = data?.reply || "Something went wrong. Please try again."
       const assistantMsg: Message = { role: "assistant", content: reply, timestamp: Date.now() }
