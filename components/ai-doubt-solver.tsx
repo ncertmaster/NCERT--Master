@@ -171,22 +171,52 @@ export function AiDoubtSolver() {
   const isLimitHit  = planInfo.remaining <= 0
   const isLow       = planInfo.remaining <= 1 && planInfo.remaining > 0
 
+// ── Fetch plan status from server ─────────────────────────────────────
+  const fetchPlanStatus = useCallback(async (token: string | null) => {
+    try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" }
+      if (token) headers["Authorization"] = `Bearer ${token}`
+      const res = await fetch("/api/doubt/status", { headers })
+      if (!res.ok) return
+      const data = await res.json()
+      if (data.error) return
+      setPlanInfo({
+        plan:        data.plan       || "free",
+        remaining:   data.textRemaining ?? 5,
+        textLimit:   data.textLimit  || 5,
+        imageLimit:  data.imageLimit || 0,
+        imageUsed:   data.imageUsed  || 0,
+      })
+    } catch {}
+  }, [])
+
   // Load chats + auth
   useEffect(() => {
     setChats(loadChats())
     supabase.auth.getSession().then(({ data }) => {
-      setAuthToken(data.session?.access_token || null)
+      const token = data.session?.access_token || null
+      setAuthToken(token)
+      fetchPlanStatus(token)
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      setAuthToken(session?.access_token || null)
+      const token = session?.access_token || null
+      setAuthToken(token)
+      fetchPlanStatus(token)
     })
     return () => subscription.unsubscribe()
-  }, [])
+  }, [fetchPlanStatus])
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
   useEffect(() => { if (view === "chat") setTimeout(() => inputRef.current?.focus(), 300) }, [view])
   useEffect(() => { if (renamingId) setTimeout(() => renameRef.current?.focus(), 100) }, [renamingId])
 
+  // ── Jab bhi AI solver open ho, fresh status fetch karo ────────────────
+  useEffect(() => {
+    if (isOpen) {
+      fetchPlanStatus(authToken)
+    }
+  }, [isOpen, authToken, fetchPlanStatus])
+  
   const activeChat = chats.find(c => c.id === activeChatId)
 
   // ── Chat management ──────────────────────────────────────────────────────
@@ -414,11 +444,21 @@ export function AiDoubtSolver() {
 
       {/* Floating Button */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true)
+          // Agar limit already hit hai to seedha upgrade screen dikhao
+          if (isLimitHit) {
+            setLimitType("text")
+            setView("upgrade")
+          }
+        }}
         className={`fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-2xl shadow-lg transition-all duration-300 ${isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"} bg-gradient-to-br from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 active:scale-95`}
       >
         <span className="absolute inline-flex h-full w-full animate-ping rounded-2xl bg-indigo-400 opacity-20" />
-        <GraduationCap className="h-7 w-7 text-white" />
+        {isLimitHit
+          ? <Zap className="h-6 w-6 text-white" />
+          : <GraduationCap className="h-7 w-7 text-white" />
+        }
       </button>
 
       {isOpen && (
