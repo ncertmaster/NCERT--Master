@@ -8,8 +8,8 @@ const PRECACHE_ASSETS = [
   '/',
   '/offline.html',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/icons/ncert_master_192x192.png',
+  '/icons/ncert_master_512x512.png',
 ];
 
 // ─── Install ───────────────────────────────────────────────────────────────
@@ -39,7 +39,7 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET, chrome-extension, supabase auth calls
+  // Skip non-GET and cross-origin requests
   if (request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
@@ -94,11 +94,10 @@ async function staleWhileRevalidate(request, cacheName) {
 
   // Return cached immediately if available, else wait for network
   if (cached) {
-    // Revalidate in background
-    fetchPromise;
+    fetchPromise; // Revalidate in background
     return cached;
   }
-  return fetchPromise || offlineFallback(request);
+  return fetchPromise || offlineFallback();
 }
 
 async function networkFirstWithCache(request, cacheName) {
@@ -110,7 +109,7 @@ async function networkFirstWithCache(request, cacheName) {
   } catch {
     const cached = await cache.match(request);
     if (cached) return cached;
-    return offlineFallback(request);
+    return offlineFallback();
   }
 }
 
@@ -124,7 +123,7 @@ async function navigationHandler(request) {
   }
 }
 
-function offlineFallback(request) {
+function offlineFallback() {
   return new Response(
     JSON.stringify({ error: 'You are offline. Please reconnect.' }),
     {
@@ -134,14 +133,14 @@ function offlineFallback(request) {
   );
 }
 
-// ─── Push Notifications (existing) ─────────────────────────────────────────
+// ─── Push Notifications ────────────────────────────────────────────────────
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {};
   event.waitUntil(
     self.registration.showNotification(data.title || 'NCERT Master', {
       body: data.body || 'Time to study!',
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-192x192.png',
+      icon: '/icons/ncert_master_192x192.png',
+      badge: '/icons/ncert_master_192x192.png',
     })
   );
 });
