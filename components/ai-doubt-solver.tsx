@@ -4,8 +4,9 @@ import React, { useState, useRef, useEffect, useCallback } from "react"
 import {
   X, Send, Loader2, Sparkles, Pin, PinOff, Edit3, Check,
   Trash2, Plus, ChevronLeft, MessageSquare, GraduationCap,
-  Camera, Paperclip, XCircle,
+  Camera, Paperclip, XCircle, Lock, Zap,
 } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 interface Message {
   role: "user" | "assistant"
@@ -38,7 +39,6 @@ function makeTitle(messages: Message[]) {
   return first.content.slice(0, 40) + (first.content.length > 40 ? "..." : "")
 }
 
-// Quick suggestion chips shown on empty chat
 const SUGGESTIONS = [
   "प्रकाश संश्लेषण समझाओ",
   "Newton के नियम",
@@ -46,16 +46,31 @@ const SUGGESTIONS = [
   "Numerical solve करो",
 ]
 
+// Plan display names
+const PLAN_NAMES: Record<string, string> = {
+  free: "Free",
+  starter: "Starter",
+  pro: "Pro",
+  elite: "Elite",
+}
+
 export function AiDoubtSolver() {
-  const [isOpen, setIsOpen]           = useState(false)
-  const [view, setView]               = useState<"history" | "chat">("history")
-  const [chats, setChats]             = useState<Chat[]>([])
+  const [isOpen, setIsOpen]             = useState(false)
+  const [view, setView]                 = useState<"history" | "chat">("history")
+  const [chats, setChats]               = useState<Chat[]>([])
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
-  const [input, setInput]             = useState("")
-  const [loading, setLoading]         = useState(false)
-  const [renamingId, setRenamingId]   = useState<string | null>(null)
-  const [renameValue, setRenameValue] = useState("")
+  const [input, setInput]               = useState("")
+  const [loading, setLoading]           = useState(false)
+  const [renamingId, setRenamingId]     = useState<string | null>(null)
+  const [renameValue, setRenameValue]   = useState("")
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
+  // Auth + plan state
+  const [authToken, setAuthToken]   = useState<string | null>(null)
+  const [userPlan, setUserPlan]     = useState<string>("free")
+  const [remaining, setRemaining]   = useState<number | null>(null)
+  const [showUpgrade, setShowUpgrade] = useState(false)
+  const [upgradeMsg, setUpgradeMsg]   = useState("")
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef       = useRef<HTMLInputElement>(null)
@@ -63,12 +78,27 @@ export function AiDoubtSolver() {
   const fileInputRef   = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { setChats(loadChats()) }, [])
+  // Load chats and auth token on mount
+  useEffect(() => {
+    setChats(loadChats())
+    // Get current session token
+    supabase.auth.getSession().then(({ data }) => {
+      const token = data.session?.access_token || null
+      setAuthToken(token)
+    })
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthToken(session?.access_token || null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [chats, activeChatId, loading])
   useEffect(() => { if (view === "chat") setTimeout(() => inputRef.current?.focus(), 300) }, [view])
   useEffect(() => { if (renamingId) setTimeout(() => renameRef.current?.focus(), 100) }, [renamingId])
 
   const activeChat = chats.find(c => c.id === activeChatId)
+  const isPaidUser = userPlan !== "free"
 
   const startNewChat = useCallback(() => {
     const chat: Chat = {
@@ -83,7 +113,6 @@ export function AiDoubtSolver() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    // Limit to 4MB
     if (file.size > 4 * 1024 * 1024) {
       alert("Image 4MB से छोटी होनी चाहिए।")
       return
@@ -91,8 +120,18 @@ export function AiDoubtSolver() {
     const reader = new FileReader()
     reader.onload = () => setSelectedImage(reader.result as string)
     reader.readAsDataURL(file)
-    // Reset input so same file can be re-selected
     e.target.value = ""
+  }
+
+  // Show upgrade modal instead of allowing image for free users
+  const handleImageClick = (source: "camera" | "gallery") => {
+    if (!isPaidUser) {
+      setUpgradeMsg("📸 Image से doubt solve करना paid feature है!\n\nStarter Plan (₹49/month) लो और पाओ:\n• 10 images/month\n• 200 text messages/month")
+      setShowUpgrade(true)
+      return
+    }
+    if (source === "camera") cameraInputRef.current?.click()
+    else fileInputRef.current?.click()
   }
 
   const sendMessage = async (text: string) => {
@@ -141,14 +180,35 @@ export function AiDoubtSolver() {
         return { role: m.role, content: m.content }
       })
 
-      const res = await fetch("/api/doubt", {
+      // Build headers — include auth token if available
+      const headers: Record<string, string> = { "Content-Type": "application/json" }
+      if (authToken) headers["Authorization"] = `Bearer ${authToken}`
+
+      const res  = await fetch("/api/doubt", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ messages: apiMessages, useVision: hasVision }),
       })
-      const data  = await res.json()
-      const reply = data?.reply || "कुछ गड़बड़ हो गई। दोबारा try करो!"
+      const data = await res.json()
 
+      // Handle limit hit
+      if (data.limitHit) {
+        setUpgradeMsg(data.message || "Limit खत्म हो गई। Plan upgrade करो!")
+        setShowUpgrade(true)
+        // Remove the user message we just added since it wasn't processed
+        updated = updated.map(c =>
+          c.id !== activeChatId ? c : { ...c, messages: c.messages.slice(0, -1) }
+        )
+        setChats(updated); saveChats(updated)
+        setLoading(false)
+        return
+      }
+
+      // Update plan info from response
+      if (data.plan) setUserPlan(data.plan)
+      if (data.remaining !== null && data.remaining !== undefined) setRemaining(data.remaining)
+
+      const reply = data?.reply || "कुछ गड़बड़ हो गई। दोबारा try करो!"
       const assistantMsg: Message = { role: "assistant", content: reply, timestamp: Date.now() }
       updated = updated.map(c =>
         c.id === activeChatId
@@ -214,38 +274,25 @@ export function AiDoubtSolver() {
     return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" })
   }
 
-  // ── Render formatted AI response ──────────────────────────────────────────
   const formatContent = (text: string) => {
     return text.split("\n").map((line, i) => {
-      // Section dividers
       if (line.startsWith("━━━")) return <hr key={i} className="border-border/40 my-2" />
-      // Headings ##
       if (line.startsWith("## ")) return (
-        <p key={i} className="font-bold text-foreground mt-3 mb-1 text-[13px]">
-          {line.slice(3)}
-        </p>
+        <p key={i} className="font-bold text-foreground mt-3 mb-1 text-[13px]">{line.slice(3)}</p>
       )
-      // Bold-only lines **text**
       if (line.startsWith("**") && line.endsWith("**") && line.length > 4) return (
         <p key={i} className="font-semibold text-foreground text-[13px]">{line.slice(2, -2)}</p>
       )
-      // Exam star highlight ⭐
       if (line.includes("⭐")) return (
-        <p key={i} className="text-amber-600 dark:text-amber-400 font-medium text-[12px] bg-amber-500/10 rounded-lg px-2 py-1 my-1">
-          {line}
-        </p>
+        <p key={i} className="text-amber-600 dark:text-amber-400 font-medium text-[12px] bg-amber-500/10 rounded-lg px-2 py-1 my-1">{line}</p>
       )
-      // Numbered list
       if (line.match(/^\d+\. /)) return (
         <p key={i} className="ml-3 text-[13px] leading-relaxed">{line}</p>
       )
-      // Bullet points
       if (line.startsWith("• ") || line.startsWith("- ") || line.startsWith("(i)") || line.startsWith("(ii)") || line.startsWith("(iii)")) return (
         <p key={i} className="ml-3 text-[13px] leading-relaxed">{line}</p>
       )
-      // Empty line
       if (!line.trim()) return <div key={i} className="h-1" />
-      // Inline bold **word**
       if (line.includes("**")) {
         const parts = line.split(/(\*\*[^*]+\*\*)/)
         return (
@@ -262,25 +309,11 @@ export function AiDoubtSolver() {
     })
   }
 
-  // ── JSX ───────────────────────────────────────────────────────────────────
   return (
     <>
       {/* Hidden file inputs */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={handleImageSelect}
-      />
-      <input
-        ref={cameraInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        className="hidden"
-        onChange={handleImageSelect}
-      />
+      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageSelect} />
+      <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageSelect} />
 
       {/* Floating Button */}
       <button
@@ -294,12 +327,53 @@ export function AiDoubtSolver() {
         <GraduationCap className="h-7 w-7 text-white" />
       </button>
 
+      {/* Upgrade Modal */}
+      {showUpgrade && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowUpgrade(false)} />
+          <div className="relative z-10 w-full max-w-sm rounded-3xl bg-background border border-border p-6 shadow-2xl">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 mx-auto mb-4">
+              <Zap className="h-7 w-7 text-indigo-400" />
+            </div>
+            <h3 className="text-center font-bold text-foreground text-lg mb-2">Plan Upgrade करो</h3>
+            <p className="text-center text-sm text-muted-foreground leading-relaxed whitespace-pre-line mb-5">
+              {upgradeMsg}
+            </p>
+            {/* Plan options */}
+            <div className="space-y-2 mb-4">
+              {[
+                { name: "Starter", price: "₹49/month", text: "200 messages", img: "10 images" },
+                { name: "Pro",     price: "₹99/month", text: "500 messages", img: "50 images" },
+                { name: "Elite",   price: "₹149/month", text: "1000 messages", img: "100 images" },
+              ].map(p => (
+                <div key={p.name} className="flex items-center justify-between rounded-2xl border border-indigo-500/30 bg-indigo-500/5 px-4 py-3">
+                  <div>
+                    <p className="font-bold text-foreground text-sm">{p.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{p.text} + {p.img}</p>
+                  </div>
+                  <span className="font-bold text-indigo-500 text-sm">{p.price}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-xs text-muted-foreground mb-4">
+              💳 Razorpay से secure payment — जल्द आ रहा है!
+            </p>
+            <button
+              onClick={() => setShowUpgrade(false)}
+              className="w-full py-2.5 rounded-2xl border border-border text-muted-foreground text-sm font-medium hover:bg-secondary transition-colors"
+            >
+              बाद में
+            </button>
+          </div>
+        </div>
+      )}
+
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
           <div className="relative z-10 mx-auto flex h-[88vh] w-full max-w-md flex-col rounded-t-3xl bg-background shadow-2xl sm:rounded-3xl sm:h-[82vh] overflow-hidden">
 
-            {/* ── HISTORY ──────────────────────────────────────────────── */}
+            {/* ── HISTORY ──────────────────────────────────────────── */}
             {view === "history" && (
               <>
                 <div className="flex items-center gap-3 border-b border-border px-4 py-3 bg-card/80 backdrop-blur shrink-0">
@@ -308,7 +382,10 @@ export function AiDoubtSolver() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-foreground text-sm">Guru AI 🎓</p>
-                    <p className="text-xs text-emerald-500">● हमेशा उपलब्ध</p>
+                    {/* Plan badge */}
+                    <p className="text-xs text-emerald-500 flex items-center gap-1">
+                      ● {PLAN_NAMES[userPlan] || "Free"} Plan
+                    </p>
                   </div>
                   <button
                     onClick={startNewChat}
@@ -373,7 +450,7 @@ export function AiDoubtSolver() {
                               {chat.messages.length} messages · {formatDate(chat.updatedAt)}
                             </p>
                           </div>
-                          <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
+                           <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
                             {renamingId === chat.id ? (
                               <button onClick={confirmRename} className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-500 hover:bg-emerald-500/25 transition-colors">
                                 <Check className="h-3.5 w-3.5" />
@@ -401,7 +478,7 @@ export function AiDoubtSolver() {
               </>
             )}
 
-            {/* ── CHAT ─────────────────────────────────────────────────── */}
+            {/* ── CHAT ─────────────────────────────────────────────── */}
             {view === "chat" && activeChat && (
               <>
                 {/* Chat Header */}
@@ -419,6 +496,12 @@ export function AiDoubtSolver() {
                     <p className="font-semibold text-foreground text-sm truncate">{activeChat.title}</p>
                     <p className="text-xs text-emerald-500">● Guru AI</p>
                   </div>
+                  {/* Remaining messages badge */}
+                  {remaining !== null && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-500 font-semibold">
+                      {remaining} बचे
+                    </span>
+                  )}
                   <button
                     onClick={() => setIsOpen(false)}
                     className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-secondary text-muted-foreground transition-colors"
@@ -429,7 +512,6 @@ export function AiDoubtSolver() {
 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-                  {/* Empty state with suggestions */}
                   {activeChat.messages.length === 0 && (
                     <div className="flex flex-col items-center gap-4 text-center pt-6">
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
@@ -438,11 +520,23 @@ export function AiDoubtSolver() {
                       <div>
                         <p className="font-bold text-foreground">नमस्ते! मैं Guru हूँ 🎓</p>
                         <p className="text-xs text-muted-foreground mt-1 max-w-[240px] leading-relaxed">
-                          कोई भी NCERT doubt पूछो — text में या photo खींचकर!
+                          कोई भी NCERT doubt पूछो — text में
+                          {isPaidUser ? " या photo खींचकर!" : "!"}
                         </p>
+                        {/* Free plan notice */}
+                        {!isPaidUser && (
+                          <button
+                            onClick={() => {
+                              setUpgradeMsg("⚡ Free Plan में 5 messages/day मिलते हैं।\n\nज़्यादा messages और image support के लिए plan upgrade करो!")
+                              setShowUpgrade(true)
+                            }}
+                            className="mt-2 text-[11px] px-3 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 font-medium"
+                          >
+                            Free: 5 messages/day · Upgrade करो ⚡
+                          </button>
+                        )}
                       </div>
-                      {/* Quick suggestion chips */}
-      <div className="flex flex-wrap gap-2 justify-center max-w-[280px]">
+                      <div className="flex flex-wrap gap-2 justify-center max-w-[280px]">
                         {SUGGESTIONS.map(s => (
                           <button
                             key={s}
@@ -456,7 +550,6 @@ export function AiDoubtSolver() {
                     </div>
                   )}
 
-                  {/* Message bubbles */}
                   {activeChat.messages.map((msg, i) => (
                     <div key={i} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       {msg.role === "assistant" && (
@@ -470,13 +563,8 @@ export function AiDoubtSolver() {
                             ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white rounded-br-sm"
                             : "bg-card border border-border text-foreground rounded-bl-sm space-y-0.5"
                         }`}>
-                          {/* Image in message */}
                           {msg.image && (
-                            <img
-                              src={msg.image}
-                              alt="Attached"
-                              className="rounded-xl mb-2 max-h-48 w-auto object-contain"
-                            />
+                            <img src={msg.image} alt="Attached" className="rounded-xl mb-2 max-h-48 w-auto object-contain" />
                           )}
                           {msg.role === "assistant" ? formatContent(msg.content) : msg.content}
                         </div>
@@ -487,7 +575,6 @@ export function AiDoubtSolver() {
                     </div>
                   ))}
 
-                  {/* Typing indicator */}
                   {loading && (
                     <div className="flex gap-2 justify-start">
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 mt-1">
@@ -507,14 +594,9 @@ export function AiDoubtSolver() {
 
                 {/* Input Area */}
                 <div className="border-t border-border px-3 py-3 bg-card/80 backdrop-blur shrink-0">
-                  {/* Image preview */}
                   {selectedImage && (
                     <div className="mb-2 relative inline-block">
-                      <img
-                        src={selectedImage}
-                        alt="Selected"
-                        className="h-20 w-20 rounded-xl object-cover border border-border"
-                      />
+                      <img src={selectedImage} alt="Selected" className="h-20 w-20 rounded-xl object-cover border border-border" />
                       <button
                         onClick={() => setSelectedImage(null)}
                         className="absolute -top-1.5 -right-1.5 bg-background rounded-full text-muted-foreground hover:text-foreground"
@@ -525,21 +607,29 @@ export function AiDoubtSolver() {
                   )}
 
                   <div className="flex items-center gap-2">
-                    {/* Camera button */}
+                    {/* Camera button — lock icon for free users */}
                     <button
-                      onClick={() => cameraInputRef.current?.click()}
-                      title="Photo लो"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                      onClick={() => handleImageClick("camera")}
+                      title={isPaidUser ? "Photo लो" : "Paid feature — Upgrade करो"}
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all ${
+                        isPaidUser
+                          ? "border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+                          : "border-amber-500/30 bg-amber-500/10 text-amber-500"
+                      }`}
                     >
-                      <Camera className="h-4 w-4" />
+                      {isPaidUser ? <Camera className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
                     </button>
-                    {/* Gallery button */}
+                    {/* Gallery button — lock icon for free users */}
                     <button
-                      onClick={() => fileInputRef.current?.click()}
-                      title="Image attach करो"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-all"
+                      onClick={() => handleImageClick("gallery")}
+                      title={isPaidUser ? "Image attach करो" : "Paid feature — Upgrade करो"}
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all ${
+                        isPaidUser
+                          ? "border-border bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+                          : "border-amber-500/30 bg-amber-500/10 text-amber-500"
+                      }`}
                     >
-                      <Paperclip className="h-4 w-4" />
+                      {isPaidUser ? <Paperclip className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
                     </button>
                     {/* Text input */}
                     <input
@@ -570,4 +660,4 @@ export function AiDoubtSolver() {
       )}
     </>
   )
-                        }
+}
