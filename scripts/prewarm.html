@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCERT Master — Pre-warm Tool</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #818cf8; }
+    .card {
+      background: #1e293b;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.4rem; }
+    input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.8rem;
+      color: #f1f5f9;
+      font-size: 0.9rem;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.75rem;
+    }
+    .btn-start { background: #6366f1; color: white; }
+    .btn-stop { background: #dc2626; color: white; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .progress-bar-bg {
+      background: #0f172a;
+      border-radius: 99px;
+      height: 12px;
+      overflow: hidden;
+      margin: 0.75rem 0 0.5rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    .stat { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .stat span { color: #f1f5f9; font-weight: 600; }
+    .last-item {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+      word-break: break-all;
+    }
+    .log {
+      background: #0f172a;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      color: #64748b;
+      max-height: 180px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+    .log-entry { margin-bottom: 0.25rem; }
+    .log-entry.ok { color: #4ade80; }
+    .log-entry.err { color: #f87171; }
+    .log-entry.done { color: #818cf8; font-weight: 700; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    .badge-running { background: #14532d; color: #4ade80; }
+    .badge-stopped { background: #450a0a; color: #f87171; }
+    .badge-done { background: #1e1b4b; color: #818cf8; }
+  </style>
+</head>
+<body>
+
+<h1>📚 NCERT Master — Content Pre-warm</h1>
+
+<div class="card">
+  <label>Vercel App URL</label>
+  <input type="url" id="appUrl" placeholder="https://your-app.vercel.app" />
+
+  <label style="margin-top:0.8rem">PREWARM_SECRET</label>
+  <input type="password" id="secret" placeholder="Your secret key" />
+
+  <label style="margin-top:0.8rem">Delay between requests (ms)</label>
+  <input type="number" id="delay" value="3000" min="1000" max="10000" />
+
+  <button class="btn btn-start" id="startBtn" onclick="startPrewarm()">▶ Start Pre-warming</button>
+  <button class="btn btn-stop" id="stopBtn" onclick="stopPrewarm()" style="display:none">⏹ Stop</button>
+</div>
+
+<div class="card" id="progressCard" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div style="font-weight:600;font-size:0.9rem">Progress</div>
+    <span class="badge badge-running" id="statusBadge">Running</span>
+  </div>
+
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <div class="stat">Processed: <span id="statProcessed">0</span> / <span id="statTotal">—</span></div>
+  <div class="stat">Remaining: <span id="statRemaining">—</span></div>
+  <div class="stat">Errors: <span id="statErrors">0</span></div>
+  <div class="last-item" id="lastItem">—</div>
+</div>
+
+<div class="card">
+  <div style="font-size:0.8rem;color:#94a3b8;margin-bottom:0.5rem">Log</div>
+  <div class="log" id="log"></div>
+</div>
+
+<script>
+  let running = false
+  let errors = 0
+  let processed = 0
+
+  function log(msg, type = 'ok') {
+    const el = document.getElementById('log')
+    const entry = document.createElement('div')
+    entry.className = `log-entry ${type}`
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`
+    el.prepend(entry)
+  }
+
+  function updateProgress(data) {
+    if (data.total) {
+      const pct = Math.round((data.processed / data.total) * 100)
+      document.getElementById('progressFill').style.width = pct + '%'
+      document.getElementById('statTotal').textContent = data.total
+    }
+    if (data.processed !== undefined) {
+      document.getElementById('statProcessed').textContent = data.processed
+      processed = data.processed
+    }
+    if (data.remaining !== undefined) {
+      document.getElementById('statRemaining').textContent = data.remaining
+    }
+    if (data.last) {
+      document.getElementById('lastItem').textContent = '↳ ' + data.last
+    }
+    document.getElementById('statErrors').textContent = errors
+  }
+
+  async function startPrewarm() {
+    const appUrl = document.getElementById('appUrl').value.trim().replace(/\/$/, '')
+    const secret = document.getElementById('secret').value.trim()
+    const delay = parseInt(document.getElementById('delay').value) || 3000
+
+    if (!appUrl || !secret) {
+      alert('Please fill in App URL and Secret.')
+      return
+    }
+
+    running = true
+    errors = 0
+    document.getElementById('startBtn').style.display = 'none'
+    document.getElementById('stopBtn').style.display = 'block'
+    document.getElementById('progressCard').style.display = 'block'
+    document.getElementById('statusBadge').className = 'badge badge-running'
+    document.getElementById('statusBadge').textContent = 'Running'
+
+    log('Pre-warm started...')
+
+    while (running) {
+      try {
+        const res = await fetch(`${appUrl}/api/prewarm?secret=${encodeURIComponent(secret)}`)
+        const data = await res.json()
+
+        if (data.error && !data.remaining) {
+          log(`Error: ${data.error}`, 'err')
+          errors++
+          break
+        }
+
+        if (data.skipped) {
+          log(`Skipped (error): ${data.skipped}`, 'err')
+          errors++
+        } else if (data.last) {
+          log(`✓ ${data.last}`, 'ok')
+        }
+
+        updateProgress(data)
+
+        if (data.done) {
+          log('🎉 All chapters pre-warmed! Zero Groq calls needed now.', 'done')
+          document.getElementById('statusBadge').className = 'badge badge-done'
+          document.getElementById('statusBadge').textContent = 'Complete'
+          document.getElementById('progressFill').style.width = '100%'
+          running = false
+          break
+        }
+
+        await new Promise(r => setTimeout(r, delay))
+
+      } catch (err) {
+        log(`Network error: ${err.message}`, 'err')
+        errors++
+        document.getElementById('statErrors').textContent = errors
+        await new Promise(r => setTimeout(r, delay * 2))
+      }
+    }
+
+    document.getElementById('startBtn').style.display = 'block'
+    document.getElementById('stopBtn').style.display = 'none'
+
+    if (!running) {
+      document.getElementById('statusBadge').className = 'badge badge-stopped'
+      document.getElementById('statusBadge').textContent = 'Stopped'
+    }
+  }
+
+  function stopPrewarm() {
+    running = false
+    log('Stopped by user.', 'err')
+  }
+</script>
+
+</body>
+    </html>
