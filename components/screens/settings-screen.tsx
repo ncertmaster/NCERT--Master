@@ -5,12 +5,12 @@ import { useApp } from "@/lib/app-context"
 import { ScreenHeader } from "@/components/screen-header"
 import { getText } from "@/lib/translations"
 import {
-  LogOut, Timer, BookMarked, Shield, ChevronRight,
+  Timer, BookMarked, Shield, ChevronRight,
   MessageSquare, Share2, Check, X, Eye, Languages, Trophy
 } from "lucide-react"
 
 export function SettingsScreen() {
-  const { logout, setScreen, language, setLanguage, eyeProtection, setEyeProtection } = useApp()
+  const { setScreen, language, setLanguage, eyeProtection, setEyeProtection } = useApp()
 
   const [showFeedback, setShowFeedback] = useState(false)
   const [feedbackText, setFeedbackText] = useState("")
@@ -20,8 +20,6 @@ export function SettingsScreen() {
   const [showShareToast, setShowShareToast] = useState(false)
 
   const g = (key: string) => getText(key, language)
-
-  const handleLogout = () => { logout(); setScreen("setup") }
 
   const handleSendFeedback = async () => {
     if (!feedbackText.trim()) return
@@ -44,7 +42,7 @@ export function SettingsScreen() {
   const handleShare = async () => {
     const shareData = {
       title: "NCERT Master",
-      text: "📚 NCERT Master - Best App for NCERT Study! Smart notes, AI Doubt Solver, Quiz Mode & more. Try it now!",
+      text: "📚 NCERT Master - Best App for NCERT Study! Smart notes, Quiz Mode & more. Try it now!",
       url: window.location.origin,
     }
     try {
@@ -98,7 +96,7 @@ export function SettingsScreen() {
       <ScreenHeader title={g("settings")} />
       <div className="flex-1 px-4 py-5 space-y-3 max-w-md mx-auto w-full">
 
-        {/* ── APPEARANCE ──────────────────────────────────────────────── */}
+        {/* ── APPEARANCE ────────────────────────────────────────────── */}
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm">
 
           {/* Language */}
@@ -242,15 +240,6 @@ export function SettingsScreen() {
             </div>
           )}
         </div>
-
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 p-4 text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl hover:bg-red-500/20 transition-colors font-semibold"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>{g("logout")}</span>
-        </button>
       </div>
 
       {/* Share Toast */}
@@ -261,6 +250,5 @@ export function SettingsScreen() {
       )}
     </div>
   )
-      }
-
-      
+          }
+                
