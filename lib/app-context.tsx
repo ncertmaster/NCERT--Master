@@ -17,6 +17,7 @@ export interface UserProfile {
   classNumber: ClassNumber
   aim: string
   photo: string | null
+  email?: string
 }
 
 interface AppState {
