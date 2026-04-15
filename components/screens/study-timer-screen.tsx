@@ -215,8 +215,8 @@ export function StudyTimerScreen() {
   useEffect(() => {
     const ready = true
     if (ready) loadTasks()
-  }, [loadTasks, sessionReady])
-
+  
+}, [loadTasks])
   // Timer logic
   useEffect(() => {
     if (timerRunning) {
