@@ -9,7 +9,7 @@ import {
   Calendar, Sun, Sunset, Moon, Zap, Bell, BellOff
 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
-
+import { getUserId } from "@/lib/utils"
 interface Task {
   id: string
   user_email: string
@@ -140,9 +140,8 @@ function firePomoNotification(mode: "work" | "break" | "longBreak", count: numbe
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export function StudyTimerScreen() {
-  const { user, supabaseUser, sessionReady } = useApp() as any
-  const userEmail = (supabaseUser as any)?.email || user?.email || ""
-
+  const { user } = useApp()
+  const userEmail = getUserId()
   const [activeTab, setActiveTab] = useState<TabType>("timer")
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -204,17 +203,17 @@ export function StudyTimerScreen() {
 
   // Load tasks
   const loadTasks = useCallback(async () => {
-    if (!user?.email || !supabase) { setLoading(false); return }
+    if (!supabase) { setLoading(false); return }
     setLoading(true)
     const { data, error } = await supabase
       .from("study_tasks").select("*")
       .eq("user_email", userEmail).order("start_time")
     if (!error && data) setTasks(data as Task[])
     setLoading(false)
-  }, [user?.email, userEmail])
+  }, [userEmail])
 
   useEffect(() => {
-    const ready = typeof sessionReady !== "undefined" ? sessionReady : true
+    const ready = true
     if (ready) loadTasks()
   }, [loadTasks, sessionReady])
 
