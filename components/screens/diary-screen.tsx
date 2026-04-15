@@ -23,8 +23,8 @@ function countWords(text: string) {
 }
 
 export function DiaryScreen() {
-  const { user, supabaseUser, sessionReady } = useApp()
-
+  const { user } = useApp()
+  const userId = getUserId()
   const [entries, setEntries] = useState<DiaryEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [userReady, setUserReady] = useState(false)
@@ -39,26 +39,20 @@ export function DiaryScreen() {
 
   // Wait for user to load from localStorage (async)
   useEffect(() => {
-    if (user?.email) {
-      setUserReady(true)
-    }
-  }, [user])
+  setUserReady(true)
+}, [])
 
   const loadEntries = useCallback(async () => {
-    if (!user?.email || !supabase) {
-      setLoading(false)
-      return
-    }
-    setLoading(true)
-    const { data, error } = await supabase
-      .from("diary_entries")
-      .select("*")
-      .eq("user_email", user?.email)
-      .order("created_at", { ascending: false })
-    if (!error && data) setEntries(data as DiaryEntry[])
-    setLoading(false)
-  }, [user?.email])
-
+  if (!supabase) { setLoading(false); return }
+  setLoading(true)
+  const { data, error } = await supabase
+    .from("diary_entries")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+  if (!error && data) setEntries(data as DiaryEntry[])
+  setLoading(false)
+}, [userId])
   useEffect(() => {
     if (userReady) loadEntries()
   }, [userReady, loadEntries])
@@ -75,20 +69,7 @@ export function DiaryScreen() {
     }
 
     // User email check with retry
-    let email = user?.email
-    if (!email) {
-      // Try to get from localStorage as fallback
-      try {
-        const localUser = JSON.parse(localStorage.getItem("ncert_user") || "{}")
-        email = localUser.email
-      } catch (e) {}
-    }
-
-    if (!email) {
-      setSaveError("User session load ho rahi hai... ek second ruko aur phir Save dabao.")
-      return
-    }
-
+    const uid = getUserId()
     setSaving(true)
     setSaveError(null)
 
