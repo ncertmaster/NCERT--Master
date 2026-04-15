@@ -95,7 +95,7 @@ export function DiaryScreen() {
         const { data, error } = await supabase
           .from("diary_entries")
           .insert({
-            user_email: email,
+            user_id: uid,
             ...payload,
             created_at: new Date().toISOString(),
           })
