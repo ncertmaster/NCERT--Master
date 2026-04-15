@@ -3,7 +3,6 @@
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { AiDoubtSolver } from "@/components/ai-doubt-solver"
 import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Layers, Trophy, TrendingUp, BarChart2 } from "lucide-react"
 import type { AppScreen } from "@/lib/app-context"
 import Image from "next/image"
@@ -132,7 +131,7 @@ export function DashboardScreen() {
           })}
         </div>
 
-        {/* Quiz Stats Card — sirf tab dikhega jab pehli quiz ho jaaye */}
+        {/* Quiz Stats Card */}
         {quizStats && (
           <button
             onClick={() => setScreen("quiz-history")}
@@ -206,7 +205,6 @@ export function DashboardScreen() {
       </div>
 
       <BottomTabs activeTab="dashboard" />
-      <AiDoubtSolver />
     </div>
   )
-}
+            }
