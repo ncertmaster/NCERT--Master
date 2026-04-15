@@ -3,8 +3,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Language } from "@/lib/translations"
 import type { ClassNumber } from "@/lib/data"
-import { supabase } from "@/lib/supabase"
-import type { User } from "@supabase/supabase-js"
 
 export type AppScreen =
   | "splash" | "setup" | "dashboard"
@@ -16,7 +14,6 @@ export type AppScreen =
 
 export interface UserProfile {
   name: string
-  email: string
   classNumber: ClassNumber
   aim: string
   photo: string | null
@@ -25,8 +22,6 @@ export interface UserProfile {
 interface AppState {
   screen: AppScreen
   user: UserProfile | null
-  supabaseUser: User | null
-  sessionReady: boolean
   language: Language
   eyeProtection: boolean
   selectedClass: ClassNumber | null
@@ -55,7 +50,6 @@ interface AppContextType extends AppState {
   setSelectedBookUrl: (url: string | null) => void
   setQuizMode: (m: "chapter" | "full") => void
   setQuizScore: (score: number, total: number) => void
-  logout: () => void
 }
 
 const AppContext = createContext<AppContextType | null>(null)
@@ -64,8 +58,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>({
     screen: "splash",
     user: null,
-    supabaseUser: null,
-    sessionReady: false,
     language: "en",
     eyeProtection: false,
     selectedClass: null,
@@ -80,18 +72,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     screenHistory: [],
   })
 
-  // ── Load session + user profile on mount ──────────────────────────────────
   useEffect(() => {
     async function init() {
-      // Run Supabase session check + minimum splash display time (1.5s) in parallel
-      const [sessionResult] = await Promise.all([
-        supabase.auth.getSession(),
-        new Promise<void>(resolve => setTimeout(resolve, 1500)),
-      ])
+      // Minimum splash display time
+      await new Promise<void>(resolve => setTimeout(resolve, 1500))
 
-      const supabaseUser = sessionResult.data?.session?.user ?? null
-
-      // Load saved profile from localStorage
       let savedProfile: UserProfile | null = null
       try {
         const raw = localStorage.getItem("ncert_user")
@@ -100,52 +85,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
       const savedLanguage = localStorage.getItem("ncert_language") as Language | null
       const savedEyeProtection = localStorage.getItem("ncert_eye_protection") === "true"
-
-      // If Supabase user exists, sync their email
-      if (supabaseUser && savedProfile) {
-        savedProfile.email = supabaseUser.email || savedProfile.email
-        savedProfile.photo = savedProfile.photo || supabaseUser.user_metadata?.avatar_url || null
-        savedProfile.name = savedProfile.name || supabaseUser.user_metadata?.full_name || ""
-      }
-
-      // Determine correct screen — dashboard only if profile is complete
       const screen = savedProfile?.name && savedProfile?.classNumber ? "dashboard" : "setup"
 
       setState(prev => ({
         ...prev,
-        supabaseUser,
-        sessionReady: true,
         user: savedProfile,
         screen,
         language: savedLanguage || "en",
         eyeProtection: savedEyeProtection,
       }))
     }
-
     init()
-
-    // Listen for auth changes (Google login callback etc.)
-    // IMPORTANT: Only change screen AFTER sessionReady (init completed).
-    // This prevents the flash where setup screen shows briefly before dashboard.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      const supabaseUser = session?.user ?? null
-      setState(prev => {
-        // During initial load (sessionReady = false), let init() handle screen.
-        // Only act on auth changes AFTER app is fully initialized.
-        if (!prev.sessionReady) {
-          return { ...prev, supabaseUser }
-        }
-        let screen = prev.screen
-        if (event === "SIGNED_IN" && supabaseUser) {
-          const hasProfile = prev.user?.name && prev.user?.classNumber
-          screen = hasProfile ? "dashboard" : "setup"
-        }
-        if (event === "SIGNED_OUT") screen = "setup"
-        return { ...prev, supabaseUser, sessionReady: true, screen }
-      })
-    })
-
-    return () => subscription.unsubscribe()
   }, [])
 
   const setScreen = useCallback((screen: AppScreen) => {
@@ -197,24 +147,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const setQuizMode = useCallback((quizMode: "chapter" | "full") => setState(prev => ({ ...prev, quizMode })), [])
   const setQuizScore = useCallback((quizScore: number, quizTotal: number) => setState(prev => ({ ...prev, quizScore, quizTotal })), [])
 
-  const logout = useCallback(async () => {
-    await supabase.auth.signOut()
-    try { localStorage.removeItem("ncert_user") } catch {}
-    setState(prev => ({
-      screen: "setup", user: null, supabaseUser: null, sessionReady: true,
-      language: prev.language, eyeProtection: prev.eyeProtection,
-      selectedClass: null, selectedStream: null,
-      selectedSubject: null, selectedBook: null, selectedChapter: null,
-      selectedBookUrl: null, quizMode: null, quizScore: 0, quizTotal: 0, screenHistory: [],
-    }))
-  }, [])
-
   return (
     <AppContext.Provider value={{
       ...state, setScreen, goBack, setUser, setLanguage, setEyeProtection,
       setSelectedClass, setSelectedStream, setSelectedSubject,
       setSelectedBook, setSelectedChapter, setSelectedBookUrl,
-      setQuizMode, setQuizScore, logout,
+      setQuizMode, setQuizScore,
     }}>
       {children}
     </AppContext.Provider>
@@ -226,5 +164,4 @@ export function useApp() {
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
   }
-
-    
+  
