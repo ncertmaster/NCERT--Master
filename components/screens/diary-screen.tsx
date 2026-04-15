@@ -5,7 +5,7 @@ import { ScreenHeader } from "@/components/screen-header"
 import { useApp } from "@/lib/app-context"
 import { BookMarked, Plus, Trash2, Edit3, Save, X, Calendar, Search } from "lucide-react"
 import { supabase } from "@/lib/supabase"
-
+import { getUserId } from "@/lib/utils"
 interface DiaryEntry {
   id: string
   user_email: string
