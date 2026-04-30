@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 const GROQ_API_KEY   = process.env.GROQ_API_KEY
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GROQ_URL       = "https://api.groq.com/openai/v1/chat/completions"
-const GEMINI_URL     = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+const GEMINI_URL     = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
 // ── System prompt ──────────────────────────────────────────────────────────
 function getSystemPrompt(language: string, classNum: string): string {
