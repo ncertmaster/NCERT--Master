@@ -1,866 +1,324 @@
-"use client"
+import { NextResponse } from "next/server"
 
-import { useState, useRef, useEffect, useCallback } from "react"
-import { useApp } from "@/lib/app-context"
-import {
-  Send, Loader2, Sparkles, Menu, X, Plus, Pin, PinOff,
-  Pencil, Trash2, Check, BookOpen, MessageSquare, ChevronRight,
-  Mic, MicOff, Paperclip, Copy, CheckCheck, Image as ImageIcon, FileText,
-} from "lucide-react"
-import Image from "next/image"
+const GROQ_API_KEY   = process.env.GROQ_API_KEY
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+const GROQ_URL       = "https://api.groq.com/openai/v1/chat/completions"
+const GEMINI_URL     = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
 
-// ── Types ──────────────────────────────────────────────────────────────────
-interface AttachedFile {
-  base64: string
-  type: string
-  name: string
-  previewUrl?: string
+// ── System prompt ──────────────────────────────────────────────────────────
+function getSystemPrompt(language: string, classNum: string): string {
+  const appInfo = `
+NCERT Master App ke baare mein:
+- App ka naam: NCERT Master
+- Founder & Developer: Farru (ek passionate Indian independent developer)
+- Features: Smart Notes, Important Questions (IQ), Chapter Quizzes, NCERT Books (PDF), Study Timer, AI Diary, Guru AI Doubt Solver
+- Classes covered: Class 6 se 12 tak
+- Class 11-12 Streams: Science, Commerce, Arts
+- Mission: India ke har student ko free quality NCERT education dena`
+
+  const ncertContent = `
+═══════════════════════════════════════════════════════
+NCERT Master App Content — Detailed Chapter Knowledge
+═══════════════════════════════════════════════════════
+
+CLASS 6:
+Math (Ganit/Ganit Prakash): Ch1-Knowing Our Numbers, Ch2-Whole Numbers, Ch3-Playing With Numbers, Ch4-Basic Geometrical Ideas, Ch5-Understanding Elementary Shapes, Ch6-Integers, Ch7-Fractions, Ch8-Decimals, Ch9-Data Handling, Ch10-Mensuration, Ch11-Algebra, Ch12-Ratio and Proportion, Ch13-Symmetry, Ch14-Practical Geometry
+Science (Jigyasa/Vigyan): Ch1-Food Where Does it Come From, Ch2-Components of Food, Ch3-Fibre to Fabric, Ch4-Sorting Materials into Groups, Ch5-Separation of Substances, Ch6-Changes Around Us, Ch7-Getting to Know Plants, Ch8-Body Movements, Ch9-The Living Organisms and Their Surroundings, Ch10-Motion and Measurement, Ch11-Light Shadows and Reflections, Ch12-Electricity and Circuits, Ch13-Fun with Magnets, Ch14-Water, Ch15-Air Around Us, Ch16-Garbage In Garbage Out
+Social Science — History (Hamare Ateet-I): Ch1-What Where How and When, Ch2-On the Trail of Earliest People, Ch3-From Gathering to Growing Food, Ch4-In the Earliest Cities, Ch5-What Books and Burials Tell Us, Ch6-Kingdoms Kings and an Early Republic, Ch7-New Questions and Ideas, Ch8-Ashoka the Emperor, Ch9-Vital Villages Thriving Towns, Ch10-Traders Kings and Pilgrims, Ch11-New Empires and Kingdoms, Ch12-Buildings Paintings and Books
+Geography (Prithvi Hamara Aawas): Ch1-Earth in Solar System, Ch2-Globe Latitudes and Longitudes, Ch3-Motions of the Earth, Ch4-Maps, Ch5-Major Domains of the Earth, Ch6-Our Country India, Ch7-Our Past
+Civics (Samajik Rajnitik Jeevan-I): Ch1-Understanding Diversity, Ch2-Diversity and Discrimination, Ch3-What is Government, Ch4-Key Elements of Democratic Government, Ch5-Panchayati Raj, Ch6-Rural Administration, Ch7-Urban Administration, Ch8-Rural Livelihoods, Ch9-Urban Livelihoods
+Hindi (Vasant 1/Malhar): Prose and Poetry chapters
+
+CLASS 7:
+Math: Ch1-Integers, Ch2-Fractions and Decimals, Ch3-Data Handling, Ch4-Simple Equations, Ch5-Lines and Angles, Ch6-Triangle and its Properties, Ch7-Congruence of Triangles, Ch8-Comparing Quantities, Ch9-Rational Numbers, Ch10-Practical Geometry, Ch11-Perimeter and Area, Ch12-Algebraic Expressions, Ch13-Exponents and Powers, Ch14-Symmetry, Ch15-Visualising Solid Shapes
+Science: Ch1-Nutrition in Plants, Ch2-Nutrition in Animals, Ch3-Heat, Ch4-Acids Bases and Salts, Ch5-Physical and Chemical Changes, Ch6-Respiration in Organisms, Ch7-Transportation in Animals and Plants, Ch8-Reproduction in Plants, Ch9-Motion and Time, Ch10-Electric Current and its Effects, Ch11-Light, Ch12-Forests Our Lifeline, Ch13-Wastewater Story
+History (Hamare Ateet-II): Ch1-Tracing Changes Through a Thousand Years, Ch2-New Kings and Kingdoms, Ch3-Delhi Sultans, Ch4-The Mughal Empire, Ch5-Rulers and Buildings, Ch6-Towns Traders and Craftspersons, Ch7-Tribes Nomads and Settled Communities, Ch8-Devotional Paths to the Divine, Ch9-The Making of Regional Cultures, Ch10-Eighteenth Century Political Formations
+Geography (Hamara Paryavaran): Ch1-Environment, Ch2-Inside Our Earth, Ch3-Our Changing Earth, Ch4-Air, Ch5-Water, Ch6-Natural Vegetation and Wildlife, Ch7-Human Environment Settlement Transport Communication, Ch8-Human Environment Interactions, Ch9-Life in Temperate Grasslands, Ch10-Life in Deserts
+Civics: Ch1-On Equality, Ch2-Role of Government in Health, Ch3-How the State Government Works, Ch4-Growing Up as Boys and Girls, Ch5-Women Change the World, Ch6-Understanding Media, Ch7-Understanding Advertising, Ch8-Markets Around Us, Ch9-A Shirt in the Market, Ch10-Struggles for Equality
+Hindi (Vasant 2/Durva 2/Malhar)
+
+CLASS 8:
+Math: Ch1-Rational Numbers, Ch2-Linear Equations in One Variable, Ch3-Understanding Quadrilaterals, Ch4-Practical Geometry, Ch5-Data Handling, Ch6-Squares and Square Roots, Ch7-Cubes and Cube Roots, Ch8-Comparing Quantities (Percentages/Profit-Loss/Simple-Compound Interest), Ch9-Algebraic Expressions and Identities, Ch10-Visualising Solid Shapes, Ch11-Mensuration, Ch12-Exponents and Powers, Ch13-Direct and Inverse Proportions, Ch14-Factorisation, Ch15-Introduction to Graphs, Ch16-Playing with Numbers
+Science: Ch1-Crop Production and Management, Ch2-Microorganisms, Ch3-Synthetic Fibres and Plastics, Ch4-Materials Metals and Non-metals, Ch5-Coal and Petroleum, Ch6-Combustion and Flame, Ch7-Conservation of Plants and Animals, Ch8-Cell Structure and Functions, Ch9-Reproduction in Animals, Ch10-Reaching the Age of Adolescence, Ch11-Force and Pressure, Ch12-Friction, Ch13-Sound, Ch14-Chemical Effects of Electric Current, Ch15-Some Natural Phenomena, Ch16-Light, Ch17-Stars and Solar System, Ch18-Pollution of Air and Water
+History (Hamare Ateet-III): Ch1-How When and Where, Ch2-From Trade to Territory, Ch3-Ruling the Countryside, Ch4-Tribals Dikus and the Vision of a Golden Age, Ch5-When People Rebel 1857, Ch6-Colonialism and the City, Ch7-Weavers Iron Smelters and Factory Owners, Ch8-Civilising the Native Educating the Nation, Ch9-Women Caste and Reform, Ch10-The Changing World of Visual Arts, Ch11-Making of National Movement 1870-1947, Ch12-India After Independence
+Geography (Sansadhan Evam Vikas): Ch1-Resources, Ch2-Land Soil Water Natural Vegetation Wildlife, Ch3-Mineral and Power Resources, Ch4-Agriculture, Ch5-Industries, Ch6-Human Resources
+Civics: Ch1-The Indian Constitution, Ch2-Understanding Secularism, Ch3-Why Do We Need a Parliament, Ch4-Understanding Laws, Ch5-Judiciary, Ch6-Understanding Our Criminal Justice System, Ch7-Understanding Marginalisation, Ch8-Confronting Marginalisation, Ch9-Public Facilities, Ch10-Law and Social Justice
+Hindi (Vasant 3/Durva 3/Bharat Ki Khoj)
+
+CLASS 9:
+Math: Ch1-Number Systems, Ch2-Polynomials, Ch3-Coordinate Geometry, Ch4-Linear Equations in Two Variables, Ch5-Introduction to Euclid's Geometry, Ch6-Lines and Angles, Ch7-Triangles, Ch8-Quadrilaterals, Ch9-Circles, Ch10-Heron's Formula, Ch11-Surface Areas and Volumes, Ch12-Statistics
+Science: Ch1-Matter in Our Surroundings, Ch2-Is Matter Around Us Pure, Ch3-Atoms and Molecules, Ch4-Structure of the Atom, Ch5-The Fundamental Unit of Life (Cell), Ch6-Tissues, Ch7-Motion, Ch8-Force and Laws of Motion, Ch9-Gravitation, Ch10-Work and Energy, Ch11-Sound, Ch12-Improvement in Food Resources
+History (Bharat aur Samkaleen Vishwa-1): Ch1-French Revolution, Ch2-Socialism in Europe and Russian Revolution, Ch3-Nazism and Rise of Hitler, Ch4-Forest Society and Colonialism, Ch5-Pastoralists in the Modern World
+Geography (Samkaleen Bharat-1): Ch1-India Size and Location, Ch2-Physical Features of India, Ch3-Drainage, Ch4-Climate, Ch5-Natural Vegetation and Wildlife, Ch6-Population
+Civics (Loktantrik Rajneeti-1): Ch1-What is Democracy Why Democracy, Ch2-Constitutional Design, Ch3-Electoral Politics, Ch4-Working of Institutions, Ch5-Democratic Rights
+Economics (Arthshastra): Ch1-Story of Village Palampur, Ch2-People as Resource, Ch3-Poverty as a Challenge, Ch4-Food Security in India
+Hindi (Kshitiz 1/Sparsh 1/Sanchayan 1/Kritika 1)
+
+CLASS 10:
+Math: Ch1-Real Numbers, Ch2-Polynomials, Ch3-Pair of Linear Equations in Two Variables, Ch4-Quadratic Equations, Ch5-Arithmetic Progressions, Ch6-Triangles, Ch7-Coordinate Geometry, Ch8-Introduction to Trigonometry, Ch9-Some Applications of Trigonometry, Ch10-Circles, Ch11-Areas Related to Circles, Ch12-Surface Areas and Volumes, Ch13-Statistics, Ch14-Probability
+Science: Ch1-Chemical Reactions and Equations, Ch2-Acids Bases and Salts, Ch3-Metals and Non-metals, Ch4-Carbon and its Compounds, Ch5-Life Processes, Ch6-Control and Coordination, Ch7-How do Organisms Reproduce, Ch8-Heredity, Ch9-Light Reflection and Refraction, Ch10-Human Eye and Colourful World, Ch11-Electricity, Ch12-Magnetic Effects of Electric Current, Ch13-Our Environment
+History (India and Contemporary World-II): Ch1-Nationalism in Europe, Ch2-Nationalism in India, Ch3-The Making of a Global World, Ch4-The Age of Industrialisation, Ch5-Print Culture and the Modern World
+Geography (Contemporary India-II): Ch1-Resources and Development, Ch2-Forest and Wildlife, Ch3-Water Resources, Ch4-Agriculture, Ch5-Minerals and Energy Resources, Ch6-Manufacturing Industries, Ch7-Life Lines of National Economy
+Civics (Democratic Politics-II): Ch1-Power Sharing, Ch2-Federalism, Ch3-Democracy and Diversity, Ch4-Gender Religion and Caste, Ch5-Popular Struggles and Movements, Ch6-Political Parties, Ch7-Outcomes of Democracy, Ch8-Challenges to Democracy
+Economics: Ch1-Development, Ch2-Sectors of Indian Economy, Ch3-Money and Credit, Ch4-Globalisation and Indian Economy, Ch5-Consumer Rights
+Hindi (Kshitiz 2/Sparsh 2/Sanchayan 2/Kritika 2)
+
+CLASS 11 — SCIENCE:
+Physics (Part I+II): Ch1-Units and Measurements, Ch2-Motion in Straight Line, Ch3-Motion in Plane (Projectile/Circular), Ch4-Laws of Motion (Newton/Friction), Ch5-Work Energy Power, Ch6-Systems of Particles and Rotational Motion, Ch7-Gravitation, Ch8-Mechanical Properties of Solids (Stress/Strain/Young's Modulus), Ch9-Mechanical Properties of Fluids (Bernoulli/Viscosity/Surface Tension), Ch10-Thermal Properties of Matter, Ch11-Thermodynamics (Zeroth/First/Second Law/Carnot Engine), Ch12-Kinetic Theory of Gases, Ch13-Oscillations (SHM), Ch14-Waves (Doppler Effect/Superposition)
+Chemistry (Part I+II): Ch1-Some Basic Concepts (Mole/Stoichiometry), Ch2-Structure of Atom (Bohr/Quantum Numbers/Orbitals), Ch3-Periodic Table and Periodicity, Ch4-Chemical Bonding (VSEPR/Hybridisation/MO Theory), Ch5-States of Matter (Gas Laws), Ch6-Thermodynamics (Enthalpy/Entropy/Gibbs Energy), Ch7-Equilibrium (Le Chatelier/pH/Buffer), Ch8-Redox Reactions, Ch9-Hydrogen, Ch10-s-Block Elements (Alkali/Alkaline Earth), Ch11-p-Block Elements (Groups 13-14), Ch12-Organic Chemistry Basic Principles (IUPAC/Isomerism), Ch13-Hydrocarbons (Alkane/Alkene/Alkyne/Benzene), Ch14-Environmental Chemistry
+Biology: Ch1-The Living World, Ch2-Biological Classification (5 Kingdoms), Ch3-Plant Kingdom (Algae to Angiosperms), Ch4-Animal Kingdom (Non-chordata to Mammals), Ch5-Morphology of Flowering Plants, Ch6-Anatomy of Flowering Plants, Ch7-Structural Organisation in Animals, Ch8-Cell The Unit of Life, Ch9-Biomolecules (Carbohydrates/Proteins/Lipids/Enzymes), Ch10-Cell Cycle and Division (Mitosis/Meiosis), Ch11-Transport in Plants, Ch12-Mineral Nutrition, Ch13-Photosynthesis in Higher Plants, Ch14-Respiration in Plants, Ch15-Plant Growth and Development, Ch16-Digestion and Absorption, Ch17-Breathing and Exchange of Gases, Ch18-Body Fluids and Circulation, Ch19-Excretory Products and Elimination, Ch20-Locomotion and Movement, Ch21-Neural Control and Coordination, Ch22-Chemical Coordination and Integration
+Math: Ch1-Sets, Ch2-Relations and Functions, Ch3-Trigonometric Functions, Ch4-Complex Numbers and Quadratic Equations, Ch5-Linear Inequalities, Ch6-Permutations and Combinations, Ch7-Binomial Theorem, Ch8-Sequences and Series (AP/GP), Ch9-Straight Lines, Ch10-Conic Sections (Circle/Parabola/Ellipse/Hyperbola), Ch11-Introduction to Three Dimensional Geometry, Ch12-Limits and Derivatives, Ch13-Statistics, Ch14-Probability
+
+CLASS 11 — COMMERCE:
+Accountancy: Ch1-Introduction to Accounting, Ch2-Theory Base of Accounting (Principles/Concepts), Ch3-Recording of Transactions-I (Journal/Ledger), Ch4-Recording of Transactions-II (Special Journals), Ch5-Bank Reconciliation Statement, Ch6-Trial Balance and Rectification of Errors, Ch7-Depreciation Provisions and Reserves, Ch8-Bills of Exchange, Ch9-Financial Statements Non-Manufacturing, Ch10-Financial Statements Manufacturing, Ch11-Accounts from Incomplete Records (Single Entry), Ch12-Applications of Computers in Accounting, Ch13-Computerised Accounting System + Not-for-Profit (Receipts & Payments / Income & Expenditure Accounts)
+Business Studies: Ch1-Business Trade and Commerce, Ch2-Forms of Business Organisation (Sole Proprietorship/Partnership/Company/Cooperative), Ch3-Private Public and Global Enterprises, Ch4-Business Services (Banking/Insurance/Transport/Communication/Warehousing), Ch5-Emerging Modes of Business (E-commerce/Outsourcing), Ch6-Social Responsibility and Business Ethics, Ch7-Formation of a Company, Ch8-Sources of Business Finance (Shares/Debentures/Loans/Retained Earnings), Ch9-Small Business and Entrepreneurship, Ch10-Internal Trade (Wholesale/Retail), Ch11-International Trade
+Economics — Micro (Vyashti): Ch1-Introduction, Ch2-Consumer's Equilibrium (Utility Analysis/Indifference Curve), Ch3-Demand (Law/Elasticity/Determinants), Ch4-Production and Costs (TP/AP/MP/Returns to Factor/Cost Curves), Ch5-Revenue and Forms of Market, Ch6-Non-competitive Markets (Monopoly/Monopolistic/Oligopoly)
+Economics — Statistics: Ch1-Introduction, Ch2-Collection of Data, Ch3-Organisation of Data, Ch4-Presentation of Data (Frequency Distribution/Histogram/Pie Chart), Ch5-Measures of Central Tendency (Mean/Median/Mode), Ch6-Measures of Dispersion (Range/MD/SD/Coefficient of Variation), Ch7-Correlation (Karl Pearson/Spearman), Ch8-Index Numbers, Ch9-Use of Statistical Tools
+
+CLASS 11 — ARTS:
+History: Ch1-Writing and City Life, Ch2-An Empire Across Three Continents (Rome), Ch3-An Early Empire (Mauryas), Ch4-The Central Islamic Lands, Ch5-Nomadic Empires (Mongols), Ch6-The Three Orders (Medieval Europe), Ch7-Changing Cultural Traditions (Renaissance), Ch8-Confrontation of Cultures, Ch9-The Industrial Revolution, Ch10-Displacing Indigenous Peoples, Ch11-Paths to Modernisation (Japan/China)
+Political Science — Indian Constitution: Ch1-Constitution Why and How, Ch2-Rights in the Indian Constitution (FRs/DPSPs), Ch3-Election and Representation, Ch4-Executive (President/PM/Cabinet), Ch5-Legislature (Parliament/State Legislature), Ch6-Judiciary (Supreme Court/High Courts), Ch7-Federalism, Ch8-Local Governments, Ch9-Constitution as Living Document, Ch10-Philosophy of the Constitution
+Political Science — Political Theory: Ch1-Political Theory Introduction, Ch2-Freedom, Ch3-Equality, Ch4-Social Justice, Ch5-Rights, Ch6-Citizenship, Ch7-Nationalism, Ch8-Secularism, Ch9-Peace, Ch10-Development
+Geography — Physical: Ch1-Geography as Discipline, Ch2-Origin and Evolution of the Earth, Ch3-Interior of the Earth (Seismic Waves/Layers), Ch4-Distribution of Oceans and Continents (Continental Drift/Plate Tectonics), Ch5-Minerals and Rocks, Ch6-Geomorphic Processes (Weathering/Mass Wasting/Erosion), Ch7-Landforms and their Evolution, Ch8-Composition and Structure of Atmosphere, Ch9-Solar Radiation Heat Balance and Temperature, Ch10-Atmospheric Circulation and Weather Systems, Ch11-Water in the Atmosphere (Clouds/Precipitation), Ch12-World Climate and Climate Change, Ch13-Water (Oceans), Ch14-Movements of Ocean Water (Waves/Tides/Currents), Ch15-Life on the Earth, Ch16-Biodiversity and Conservation
+Sociology: Ch1-Sociology and Society, Ch2-Terms Concepts and Their Use, Ch3-Understanding Social Institutions, Ch4-Culture and Socialisation, Ch5-Research Methods + Social Change: Ch1-Change and Development, Ch2-Cultural Change, Ch3-Story of Indian Democracy, Ch4-Change in Rural Society, Ch5-Change in Industrial Society, Ch6-Globalisation and Social Change, Ch7-Mass Media and Communications, Ch8-Social Movements
+
+CLASS 12 — SCIENCE:
+Physics: Ch1-Electric Charges and Fields (Coulomb's Law/Gauss Law), Ch2-Electrostatic Potential and Capacitance, Ch3-Current Electricity (Ohm's Law/Kirchhoff/Wheatstone Bridge), Ch4-Moving Charges and Magnetism (Biot-Savart/Ampere's Law/Cyclotron), Ch5-Magnetism and Matter, Ch6-Electromagnetic Induction (Faraday/Lenz's Law/Motional EMF), Ch7-Alternating Current (RMS/LCR Circuit/Resonance/Power Factor), Ch8-Electromagnetic Waves, Ch9-Ray Optics (Reflection/Refraction/Prism/Lens Formula/Optical Instruments), Ch10-Wave Optics (Huygens/Interference/Diffraction/Polarisation), Ch11-Dual Nature of Radiation and Matter (Photoelectric Effect/de Broglie), Ch12-Atoms (Bohr Model/Hydrogen Spectrum), Ch13-Nuclei (Radioactivity/Nuclear Fission/Fusion), Ch14-Semiconductor Electronics (p-n Junction/Transistor/Logic Gates)
+Chemistry: Ch1-The Solid State (Crystal Structure/Defects/Semiconductors), Ch2-Solutions (Vapour Pressure/Colligative Properties/Van't Hoff), Ch3-Electrochemistry (EMF/Nernst Equation/Electrolysis/Kohlrausch's Law), Ch4-Chemical Kinetics (Rate/Order/Arrhenius Equation), Ch5-Surface Chemistry (Adsorption/Catalysis/Colloids), Ch6-General Principles of Isolation of Elements (Metallurgy), Ch7-p-Block Elements (Groups 15-18: N/P/O/S/Halogens/Noble Gases), Ch8-d and f Block Elements (Transition Metals/Lanthanides/Actinides), Ch9-Coordination Compounds (Werner's Theory/CFSE/Naming), Ch10-Haloalkanes and Haloarenes, Ch11-Alcohols Phenols and Ethers, Ch12-Aldehydes Ketones and Carboxylic Acids, Ch13-Amines, Ch14-Biomolecules (Carbohydrates/Proteins/Nucleic Acids/Vitamins), Ch15-Polymers, Ch16-Chemistry in Everyday Life (Drugs/Food/Cleansing Agents)
+Biology: Ch1-Reproduction in Organisms, Ch2-Sexual Reproduction in Flowering Plants (Pollination/Fertilisation/Seed/Fruit), Ch3-Human Reproduction (Male/Female System/Gametogenesis/Fertilisation/Embryonic Development), Ch4-Reproductive Health (MTP/STDs/Contraception), Ch5-Principles of Inheritance and Variation (Mendel's Laws/Extensions), Ch6-Molecular Basis of Inheritance (DNA/RNA/Replication/Transcription/Translation/Lac Operon), Ch7-Evolution (Origin of Life/Darwin/Hardy-Weinberg), Ch8-Human Health and Disease (Immunity/AIDS/Cancer/Drugs), Ch9-Strategies for Enhancement in Food Production, Ch10-Microbes in Human Welfare, Ch11-Biotechnology Principles and Processes (rDNA/PCR/Gel Electrophoresis), Ch12-Biotechnology and its Applications (GMOs/Gene Therapy/Bioethics), Ch13-Organisms and Populations (Ecology), Ch14-Ecosystem (Energy Flow/Food Chain/Biogeochemical Cycles), Ch15-Biodiversity and Conservation, Ch16-Environmental Issues (Pollution/Global Warming/Ozone Depletion)
+Math: Ch1-Relations and Functions, Ch2-Inverse Trigonometric Functions, Ch3-Matrices (Operations/Transpose/Adjoint/Inverse), Ch4-Determinants (Properties/Cramer's Rule/Area of Triangle), Ch5-Continuity and Differentiability (Chain Rule/Implicit/Logarithmic/Parametric Differentiation), Ch6-Application of Derivatives (Rate of Change/Tangent-Normal/Increasing-Decreasing/Maxima-Minima), Ch7-Integrals (Standard Formulas/Substitution/Partial Fractions/Integration by Parts/Definite Integrals), Ch8-Application of Integrals (Area under curves), Ch9-Differential Equations (Order/Degree/Variable Separable/Homogeneous/Linear), Ch10-Vector Algebra (Dot/Cross Product/Projection), Ch11-Three Dimensional Geometry (Direction Cosines/Equation of Line and Plane), Ch12-Linear Programming, Ch13-Probability (Conditional/Bayes Theorem/Binomial Distribution)
+
+CLASS 12 — COMMERCE:
+Accountancy — Part I: Ch1-Accounting for Not-for-Profit Organisations, Ch2-Accounting for Partnership Fundamentals (Profit Sharing/Goodwill/Capital Accounts/Drawings), Ch3-Reconstitution of Partnership — Admission of Partner, Ch4-Reconstitution of Partnership — Retirement/Death of Partner, Ch5-Dissolution of Partnership Firm
+Accountancy — Part II: Ch1-Accounting for Share Capital (Issue/Forfeiture/Reissue), Ch2-Issue and Redemption of Debentures, Ch3-Financial Statements of a Company (P&L/Balance Sheet as per Companies Act), Ch4-Analysis of Financial Statements (Comparative/Common Size), Ch5-Accounting Ratios (Liquidity/Solvency/Activity/Profitability), Ch6-Cash Flow Statement (Operating/Investing/Financing Activities)
+Business Studies: Ch1-Nature and Significance of Management, Ch2-Principles of Management (Taylor/Fayol), Ch3-Business Environment (PESTLE), Ch4-Planning (Features/Process/MBO), Ch5-Organising (Formal/Informal/Delegation/Decentralisation), Ch6-Staffing (Recruitment/Selection/Training/Appraisal), Ch7-Directing (Motivation Theories/Maslow/Herzberg/Leadership/Communication), Ch8-Controlling (Process/Techniques), Ch9-Financial Management (Capital Structure/Leverage/Working Capital), Ch10-Financial Markets (Money/Capital Market/Stock Exchange/SEBI), Ch11-Marketing Management (7Ps/Market Research/Product Life Cycle/Pricing/Promotion), Ch12-Consumer Protection (Consumer Rights/COPRA/Redressal Forums), Ch13-Entrepreneurship Development
+Economics — Macro: Ch1-Introduction to Macroeconomics, Ch2-National Income Accounting (GDP/GNP/NNP/NI at Factor Cost/Value Added Method/Income Method/Expenditure Method), Ch3-Money and Banking (Functions of Money/Credit Creation/RBI/CRR/SLR/Repo Rate), Ch4-Determination of Income and Employment (Keynesian Model/Multiplier/Inflationary and Deflationary Gap), Ch5-Government Budget (Revenue/Capital Budget/Fiscal Deficit/Revenue Deficit), Ch6-Open Economy Macroeconomics (Balance of Payments/Exchange Rate/Foreign Exchange Market)
+Economics — Indian Economic Development: Ch1-Indian Economy on Eve of Independence, Ch2-Indian Economy 1950-1990 (Planning/Green Revolution/PSUs), Ch3-Liberalisation Privatisation Globalisation (1991 Reforms/WTO), Ch4-Poverty (Measures/Causes/Government Schemes), Ch5-Human Capital Formation (Education/Health), Ch6-Rural Development (Land Reforms/Cooperative/Agricultural Credit), Ch7-Employment (Informal Sector/MNREGA/Unemployment Types), Ch8-Infrastructure (Energy/Health/Education), Ch9-Environment and Sustainable Development, Ch10-Comparative Development (India/China/Pakistan)
+
+CLASS 12 — ARTS:
+History (Themes): Th1-Bricks Beads and Bones (Harappa Civilisation), Th2-Kings Farmers and Towns (600BCE-600CE), Th3-Kinship Caste and Class (600BCE-600CE), Th4-Thinkers Beliefs and Buildings (600BCE-600CE), Th5-Through the Eyes of Travellers (10-17th Century), Th6-Bhakti Sufi Traditions (8-18th Century), Th7-An Imperial Capital Vijayanagara, Th8-Peasants Zamindars and the State (16-17th Century), Th9-Kings and Chronicles (Mughal Court), Th10-Colonialism and the Countryside (Bengal/Rajmahal Hills), Th11-Rebels and the Raj 1857, Th12-Colonial Cities (Bombay/Calcutta/Delhi), Th13-Mahatma Gandhi and the Nationalist Movement, Th14-Understanding Partition, Th15-Framing the Constitution
+Political Science — Contemporary World Politics: Ch1-Cold War Era, Ch2-End of Bipolarity (USSR Disintegration), Ch3-US Hegemony in World Politics, Ch4-Alternative Centres of Power (EU/ASEAN/China), Ch5-Contemporary South Asia, Ch6-International Organisations (UN/IMF/World Bank), Ch7-Security in Contemporary World, Ch8-Environment and Natural Resources, Ch9-Globalisation (Debate/Anti-Globalisation)
+Political Science — Politics in India Since Independence: Ch1-Challenges of Nation Building (Partition/Integration), Ch2-Era of One-Party Dominance (Congress System), Ch3-Politics of Planned Development, Ch4-India's External Relations (Non-Alignment/Wars), Ch5-Challenges to and Restoration of Congress, Ch6-Crisis of Democratic Order (Emergency 1975-77), Ch7-Rise of Popular Movements (Chipko/Dalit Movements), Ch8-Regional Aspirations (Punjab/Northeast/Jammu), Ch9-Recent Developments in Indian Politics (Coalition Era/BJP Rise)
+Geography — Human Geography: Ch1-Human Geography Nature and Scope, Ch2-World Population Distribution and Density and Growth, Ch3-Population Composition, Ch4-Human Development (HDI), Ch5-Primary Activities (Agriculture/Mining/Forestry), Ch6-Secondary Activities (Industries/Agro-Based/Mineral Based), Ch7-Tertiary and Quaternary Activities (Trade/Transport/Services), Ch8-Transport and Communication, Ch9-International Trade, Ch10-Human Settlements (Rural/Urban)
+Sociology: Ch1-Introducing Indian Society, Ch2-Demographic Structure of Indian Society, Ch3-Social Institutions Continuity and Change (Caste/Family/Marriage), Ch4-The Market as Social Institution, Ch5-Patterns of Social Inequality and Exclusion, Ch6-Challenges of Cultural Diversity (Communalism/Regionalism/Secularism), Ch7-Project Work + Social Change: Ch1-Structural Change (Colonialism/Industrialisation/Urbanisation), Ch2-Cultural Change, Ch3-Story of Indian Democracy, Ch4-Change in Rural Society, Ch5-Change in Industrial Society, Ch6-Globalisation and Social Change, Ch7-Mass Media and Communications, Ch8-Social Movements`
+
+  if (language === "en") {
+    return `You are Guru AI — the official AI Doubt Solver of NCERT Master app, created by Farru. Your mission: Be India's No. 1 AI tutor for NCERT Class 6 to 12.
+
+${appInfo}
+
+${ncertContent}
+
+HOW TO ANSWER — You are a highly experienced, first-grade quality teacher: patient, warm, thorough, and crystal-clear:
+1. Every answer MUST be step-by-step — never skip steps, never rush
+2. Use simple English with technical terms clearly explained in brackets
+3. For Math/Science/Accounts: Always show complete working with every formula written out explicitly
+4. Use real-life Indian examples students can relate to (roti, train fare, cricket field, bazaar prices, etc.)
+5. Format: **bold** for key terms, numbered steps for solutions, • bullets for lists, 📌 for important notes
+6. If a student sends an image (textbook page/diagram/question photo) — carefully read and answer based on exactly what you see in the image
+7. Always maintain full conversation context — reference what was asked before if relevant
+8. After your complete answer, add 1 warm motivating line for the student
+9. For questions about the app or founder: "NCERT Master was created by Farru — a passionate Indian developer whose dream is to give every Indian student free, quality NCERT education."
+10. For off-topic (non-NCERT) questions: Politely explain it's outside your scope and guide to the relevant NCERT subject
+11. If a student seems confused, re-explain with a completely different analogy or approach
+12. Always mention the relevant Class and Chapter name in your answer`
+  }
+
+  return `Tu Guru AI hai — NCERT Master app ka official AI Doubt Solver, Farru ne banaya hai. Tera lakshya: India ka No. 1 AI tutor banna Class 6 se 12 tak.
+
+${appInfo}
+
+${ncertContent}
+
+JAWAB DENE KA TARIKA — Tu ek bahut experienced aur caring teacher hai — patient, warm, thorough, aur bilkul clear:
+1. Har jawab MUST step-by-step ho — koi step skip mat kar, jaldi mat kar
+2. Simple Hinglish mein samjha (Hindi + English mix) — technical terms ko brackets mein explain karo
+3. Math/Science/Accountancy: Hamesha poora working dikhao, har formula explicitly likho
+4. Indian students se relatable real-life examples de (roti, train fare, cricket field, bazaar ke daam, kheti, etc.)
+5. Format: **bold** key terms ke liye, numbered steps solutions ke liye, • bullets lists ke liye, 📌 important notes ke liye
+6. Agar student image bheje (textbook ka photo/diagram/sawaal ki photo) — dhyan se dekh aur exactly jo image mein hai us hisab se jawab de
+7. Poori conversation ka context hamesha yaad rakho — pehle puchhi gayi cheezein refer karo agar relevant ho
+8. Jawab ke baad student ke liye ek warm motivating line zaroor likho
+9. App ya founder ke baare mein puchhe to: "NCERT Master ko Farru ne banaya hai — ek passionate Indian developer jinka sapna hai ki India ke har student ko free mein quality NCERT education mile."
+10. Off-topic (non-NCERT) sawaalon ke liye: Pyaar se batao scope se bahar hai, aur relevant NCERT subject ki taraf guide karo
+11. Agar student confuse lag raha ho, bilkul naye analogy ya approach se dobara samjhao
+12. Jawab mein related Class aur Chapter ka naam mention karo`
 }
 
-interface Message {
-  role: "user" | "assistant"
-  content: string
-  ts: number
-  imageBase64?: string
-  imageType?: string
-  fileName?: string
-}
+// ── Groq caller ────────────────────────────────────────────────────────────
+async function callGroq(
+  messages: { role: string; content: any }[],
+  systemPrompt: string,
+  hasImage: boolean
+): Promise<string> {
+  if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY not set")
 
-interface Chat {
-  id: string
-  title: string
-  messages: Message[]
-  createdAt: number
-  pinned: boolean
-}
+  const model = hasImage
+    ? "meta-llama/llama-4-scout-17b-16e-instruct"
+    : "llama-3.3-70b-versatile"
 
-// ── Storage helpers ────────────────────────────────────────────────────────
-const STORAGE_KEY = "ncert_guru_chats"
-
-function loadChats(): Chat[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch { return [] }
-}
-
-function saveChats(chats: Chat[]) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(chats)) } catch {}
-}
-
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
-}
-
-function createNewChat(): Chat {
-  return { id: genId(), title: "Naya Sawaal", messages: [], createdAt: Date.now(), pinned: false }
-}
-
-function firstUserTitle(messages: Message[]): string {
-  const first = messages.find(m => m.role === "user")
-  if (!first) return "Naya Sawaal"
-  const txt = first.content.trim()
-  return txt.length > 40 ? txt.slice(0, 37) + "…" : txt
-}
-
-// ── Render markdown-like response ─────────────────────────────────────────
-function renderAnswer(text: string) {
-  const lines = text.split("\n")
-  return lines.map((line, i) => {
-    if (line.startsWith("### ")) return (
-      <h3 key={i} className="mt-3 mb-1 text-sm font-bold text-foreground">{line.slice(4)}</h3>
-    )
-    if (line.startsWith("## ")) return (
-      <h2 key={i} className="mt-3 mb-1 text-[15px] font-bold text-foreground">{line.slice(3)}</h2>
-    )
-    if (line.startsWith("# ")) return (
-      <h2 key={i} className="mt-3 mb-1 text-base font-bold text-foreground">{line.slice(2)}</h2>
-    )
-    if (line.includes("**")) {
-      const parts = line.split(/(\*\*[^*]+\*\*)/)
-      return (
-        <p key={i} className="text-sm text-foreground/90 leading-relaxed mt-0.5">
-          {parts.map((p, j) =>
-            p.startsWith("**") && p.endsWith("**")
-              ? <strong key={j}>{p.slice(2, -2)}</strong>
-              : p
-          )}
-        </p>
-      )
-    }
-    if (line.startsWith("- ") || line.startsWith("• ")) return (
-      <div key={i} className="flex gap-2 mt-1">
-        <span className="text-primary mt-0.5 shrink-0">•</span>
-        <span className="text-sm text-foreground/90 leading-relaxed">{line.slice(2)}</span>
-      </div>
-    )
-    if (line.startsWith("📌")) return (
-      <div key={i} className="flex gap-1.5 mt-1.5 rounded-lg bg-primary/5 px-2.5 py-1.5">
-        <span className="shrink-0">📌</span>
-        <span className="text-sm text-foreground/90 leading-relaxed">{line.slice(2)}</span>
-      </div>
-    )
-    if (/^\d+\.\s/.test(line)) {
-      const [num, ...rest] = line.split(". ")
-      return (
-        <div key={i} className="flex gap-2 mt-1">
-          <span className="text-primary font-semibold text-sm shrink-0">{num}.</span>
-          <span className="text-sm text-foreground/90 leading-relaxed">{rest.join(". ")}</span>
-        </div>
-      )
-    }
-    if (line.trim() === "") return <div key={i} className="h-2" />
-    return <p key={i} className="text-sm text-foreground/90 leading-relaxed mt-0.5">{line}</p>
+  const res = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages,
+      ],
+      temperature: 0.4,
+      max_tokens: 2048,
+    }),
   })
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "")
+    throw new Error(`Groq error ${res.status}: ${errText}`)
+  }
+  const data = await res.json()
+  return data?.choices?.[0]?.message?.content || ""
 }
 
-// ── Copy Button ────────────────────────────────────────────────────────────
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {}
-  }
-  return (
-    <button
-      onClick={handleCopy}
-      title="Copy"
-      className="flex h-6 w-6 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-    >
-      {copied ? <CheckCheck className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
-    </button>
-  )
-}
+// ── Gemini caller (fallback) ───────────────────────────────────────────────
+async function callGemini(
+  messages: { role: string; content: any }[],
+  systemPrompt: string,
+  fileData?: string,
+  fileType?: string
+): Promise<string> {
+  if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not set")
 
-// ── Recent Chats Sidebar ───────────────────────────────────────────────────
-function ChatSidebar({
-  open, onClose, chats, activeChatId,
-  onSelect, onNew, onDelete, onPin, onRename,
-}: {
-  open: boolean
-  onClose: () => void
-  chats: Chat[]
-  activeChatId: string
-  onSelect: (id: string) => void
-  onNew: () => void
-  onDelete: (id: string) => void
-  onPin: (id: string) => void
-  onRename: (id: string, title: string) => void
-}) {
-  const [renamingId, setRenamingId] = useState<string | null>(null)
-  const [renameVal, setRenameVal] = useState("")
-  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
-  const renameInputRef = useRef<HTMLInputElement>(null)
+  const contents = messages.map((m, i) => {
+    const role = m.role === "assistant" ? "model" : "user"
+    const isLastUserMsg = i === messages.length - 1 && m.role === "user"
+    const textContent = typeof m.content === "string"
+      ? m.content
+      : Array.isArray(m.content)
+        ? (m.content.find((c: any) => c.type === "text")?.text || "")
+        : ""
 
-  useEffect(() => {
-    if (renamingId && renameInputRef.current) renameInputRef.current.focus()
-  }, [renamingId])
-
-  const sorted = [
-    ...chats.filter(c => c.pinned).sort((a, b) => b.createdAt - a.createdAt),
-    ...chats.filter(c => !c.pinned).sort((a, b) => b.createdAt - a.createdAt),
-  ]
-
-  const startRename = (c: Chat) => {
-    setRenamingId(c.id)
-    setRenameVal(c.title)
-    setDeleteConfirmId(null)
-  }
-
-  const submitRename = (id: string) => {
-    if (renameVal.trim()) onRename(id, renameVal.trim())
-    setRenamingId(null)
-  }
-
-  const formatTime = (ts: number) => {
-    const d = new Date(ts)
-    const now = new Date()
-    if (d.toDateString() === now.toDateString()) {
-      return d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
-    }
-    return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" })
-  }
-
-  return (
-    <>
-      {open && (
-        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      )}
-      <aside
-        className={`fixed top-0 left-0 z-50 h-full w-72 bg-card border-r border-border shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "-translate-x-full"}`}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-border bg-card">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-              <MessageSquare className="h-4 w-4 text-primary" />
-            </div>
-            <span className="font-semibold text-sm text-foreground">Recent Chats</span>
-          </div>
-          <button
-            onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary transition-colors"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* New Chat Button */}
-        <div className="px-3 py-3 border-b border-border">
-          <button
-            onClick={() => { onNew(); onClose() }}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-semibold transition-all active:scale-95"
-          >
-            <Plus className="h-4 w-4" />
-            Naya Sawaal
-          </button>
-        </div>
-
-        {/* Chat List */}
-        <div className="flex-1 overflow-y-auto py-2">
-          {sorted.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 gap-2 text-center px-4">
-              <BookOpen className="h-8 w-8 text-muted-foreground/40" />
-              <p className="text-xs text-muted-foreground">Koi chat nahi hai abhi.</p>
-              <p className="text-xs text-muted-foreground">Pehla sawaal poocho!</p>
-            </div>
-          ) : (
-            sorted.map((chat) => (
-              <div
-                key={chat.id}
-                className={`group mx-2 mb-1 rounded-xl border transition-colors ${
-                  activeChatId === chat.id
-                    ? "border-primary/30 bg-primary/5"
-                    : "border-transparent hover:bg-secondary"
-                }`}
-              >
-                {renamingId === chat.id ? (
-                  <div className="flex items-center gap-1.5 p-2">
-                    <input
-                      ref={renameInputRef}
-                      value={renameVal}
-                      onChange={e => setRenameVal(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === "Enter") submitRename(chat.id)
-                        if (e.key === "Escape") setRenamingId(null)
-                      }}
-                      className="flex-1 bg-secondary rounded-lg px-2 py-1 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                    />
-                    <button
-                      onClick={() => submitRename(chat.id)}
-                      className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary text-primary-foreground shrink-0"
-                    >
-                      <Check className="h-3 w-3" />
-                    </button>
-                    <button
-                      onClick={() => setRenamingId(null)}
-                      className="flex h-6 w-6 items-center justify-center rounded-lg bg-secondary text-muted-foreground shrink-0"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ) : deleteConfirmId === chat.id ? (
-                  <div className="p-3">
-                    <p className="text-xs text-foreground mb-2">Yeh chat delete karein?</p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => { onDelete(chat.id); setDeleteConfirmId(null) }}
-                        className="flex-1 rounded-lg bg-destructive text-destructive-foreground py-1.5 text-xs font-semibold"
-                      >
-                        Haan, delete
-                      </button>
-                      <button
-                        onClick={() => setDeleteConfirmId(null)}
-                        className="flex-1 rounded-lg bg-secondary text-foreground py-1.5 text-xs font-semibold"
-                      >
-                        Nahi
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => { onSelect(chat.id); onClose() }}
-                    className="w-full text-left p-3"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          {chat.pinned && <Pin className="h-3 w-3 text-primary shrink-0" />}
-                          <p className="text-xs font-medium text-foreground truncate">{chat.title}</p>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">
-                          {chat.messages.length} message{chat.messages.length !== 1 ? "s" : ""} · {formatTime(chat.createdAt)}
-                        </p>
-                      </div>
-                      <div
-                        className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <button
-                          onClick={() => onPin(chat.id)}
-                          title={chat.pinned ? "Unpin" : "Pin"}
-                          className="flex h-6 w-6 items-center justify-center rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {chat.pinned ? <PinOff className="h-3 w-3" /> : <Pin className="h-3 w-3" />}
-                        </button>
-                        <button
-                          onClick={() => startRename(chat)}
-                          title="Rename"
-                          className="flex h-6 w-6 items-center justify-center rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          <Pencil className="h-3 w-3" />
-                        </button>
-                        <button
-                          onClick={() => setDeleteConfirmId(chat.id)}
-                          title="Delete"
-                          className="flex h-6 w-6 items-center justify-center rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </button>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="px-4 py-3 border-t border-border">
-          <p className="text-[10px] text-muted-foreground text-center">
-            Guru AI · NCERT Master by Farru
-          </p>
-        </div>
-      </aside>
-    </>
-  )
-}
-
-// ── Main Component ─────────────────────────────────────────────────────────
-export function AiDoubtSolverScreen() {
-  const { language, selectedClass, goBack } = useApp()
-
-  const [chats, setChats] = useState<Chat[]>([])
-  const [activeChatId, setActiveChatId] = useState<string>("")
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [input, setInput] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [attachedFile, setAttachedFile] = useState<AttachedFile | null>(null)
-  const [isRecording, setIsRecording] = useState(false)
-  const [micError, setMicError] = useState("")
-
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const recognitionRef = useRef<any>(null)
-  const isHindi = language === "hi"
-
-  // Load chats from localStorage on mount
-  useEffect(() => {
-    const stored = loadChats()
-    if (stored.length > 0) {
-      setChats(stored)
-      setActiveChatId(stored.find(c => c.pinned)?.id || stored.sort((a, b) => b.createdAt - a.createdAt)[0]?.id || "")
-    } else {
-      const fresh = createNewChat()
-      setChats([fresh])
-      setActiveChatId(fresh.id)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chats.length > 0) saveChats(chats)
-  }, [chats])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [chats, activeChatId, loading])
-
-  // Cleanup recognition on unmount
-  useEffect(() => {
-    return () => {
-      recognitionRef.current?.stop()
-    }
-  }, [])
-
-  const activeChat = chats.find(c => c.id === activeChatId)
-  const messages = activeChat?.messages || []
-
-  const updateChat = useCallback((id: string, updater: (c: Chat) => Chat) => {
-    setChats(prev => prev.map(c => c.id === id ? updater(c) : c))
-  }, [])
-
-  // ── New Chat ──
-  const handleNewChat = useCallback(() => {
-    const fresh = createNewChat()
-    setChats(prev => [fresh, ...prev])
-    setActiveChatId(fresh.id)
-    setInput("")
-    setError("")
-    setAttachedFile(null)
-  }, [])
-
-  // ── Delete Chat ──
-  const handleDelete = useCallback((id: string) => {
-    setChats(prev => {
-      const next = prev.filter(c => c.id !== id)
-      if (activeChatId === id) {
-        if (next.length > 0) {
-          setActiveChatId(next[0].id)
-        } else {
-          const fresh = createNewChat()
-          setActiveChatId(fresh.id)
-          return [fresh]
-        }
+    if (isLastUserMsg && fileData && fileType) {
+      return {
+        role,
+        parts: [
+          { inline_data: { mime_type: fileType, data: fileData } },
+          { text: textContent },
+        ],
       }
-      return next
+    }
+    return { role, parts: [{ text: textContent }] }
+  })
+
+  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents,
+      generationConfig: { temperature: 0.4, maxOutputTokens: 2048 },
+    }),
+  })
+  if (!res.ok) throw new Error(`Gemini error ${res.status}`)
+  const data = await res.json()
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || ""
+}
+
+// ── Main handler ───────────────────────────────────────────────────────────
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+
+    const {
+      messages: rawMessages,
+      question,
+      language = "hi",
+      classNum = "10",
+      fileData,
+      fileType,
+    } = body as {
+      messages?: { role: string; content: any }[]
+      question?: string
+      language?: string
+      classNum?: string
+      fileData?: string
+      fileType?: string
+    }
+
+    let messages: { role: string; content: any }[] = []
+    if (rawMessages?.length) {
+      messages = rawMessages
+    } else if (question?.trim()) {
+      messages = [{ role: "user", content: question.trim() }]
+    }
+
+    if (!messages.length || !messages[messages.length - 1]?.content) {
+      return NextResponse.json({ error: "Sawaal likhna zaroori hai." }, { status: 400 })
+    }
+
+    if (!GROQ_API_KEY && !GEMINI_API_KEY) {
+      return NextResponse.json({ error: "No AI API key configured" }, { status: 500 })
+    }
+
+    const systemPrompt = getSystemPrompt(language, classNum)
+    const hasImage = !!(fileData && fileType && fileType.startsWith("image/"))
+
+    // Enrich first message with class context
+    const enrichedMessages = messages.map((m, i) => {
+      if (i === 0 && m.role === "user") {
+        const textContent = typeof m.content === "string" ? m.content : ""
+        return { ...m, content: `[Class ${classNum} student]\n\n${textContent}` }
+      }
+      return m
     })
-  }, [activeChatId])
 
-  // ── Pin/Unpin ──
-  const handlePin = useCallback((id: string) => {
-    updateChat(id, c => ({ ...c, pinned: !c.pinned }))
-  }, [updateChat])
-
-  // ── Rename ──
-  const handleRename = useCallback((id: string, title: string) => {
-    updateChat(id, c => ({ ...c, title }))
-  }, [updateChat])
-
-  // ── Mic ──
-  const handleMic = useCallback(() => {
-    setMicError("")
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-    if (!SpeechRecognition) {
-      setMicError(isHindi ? "Mic is browser mein support nahi hai" : "Mic not supported in this browser")
-      return
+    // Build Groq messages (with vision format for image)
+    let groqMessages = [...enrichedMessages]
+    if (hasImage && fileData && fileType) {
+      const lastIdx = groqMessages.length - 1
+      const lastMsg = groqMessages[lastIdx]
+      const textContent = typeof lastMsg.content === "string"
+        ? lastMsg.content
+        : lastMsg.content?.[0]?.text || ""
+      groqMessages[lastIdx] = {
+        ...lastMsg,
+        content: [
+          {
+            type: "image_url",
+            image_url: { url: `data:${fileType};base64,${fileData}` },
+          },
+          { type: "text", text: textContent },
+        ],
+      }
     }
 
-    if (isRecording) {
-      recognitionRef.current?.stop()
-      setIsRecording(false)
-      return
-    }
+    let answer = ""
 
     try {
-      const recognition = new SpeechRecognition()
-      recognition.lang = isHindi ? "hi-IN" : "en-IN"
-      recognition.continuous = false
-      recognition.interimResults = false
-      recognition.maxAlternatives = 1
-
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript
-        setInput(prev => prev ? prev + " " + transcript : transcript)
-        setIsRecording(false)
+      answer = await callGroq(groqMessages, systemPrompt, hasImage)
+    } catch (groqErr) {
+      console.error("[Doubt] Groq failed, trying Gemini:", groqErr)
+      try {
+        answer = await callGemini(enrichedMessages, systemPrompt, fileData, fileType)
+      } catch {
+        throw new Error("Both AI providers failed. Please try again.")
       }
-      recognition.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error)
-        if (event.error !== "no-speech") {
-          setMicError(isHindi ? "Mic error — dobara try karo" : "Mic error — please try again")
-        }
-        setIsRecording(false)
-      }
-      recognition.onend = () => setIsRecording(false)
-
-      recognitionRef.current = recognition
-      recognition.start()
-      setIsRecording(true)
-    } catch (err) {
-      setMicError(isHindi ? "Mic start nahi ho saka" : "Could not start microphone")
-    }
-  }, [isRecording, isHindi])
-
-  // ── File Select ──
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    // Limit to images and PDFs
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "application/pdf"]
-    if (!allowedTypes.some(t => file.type === t || file.type.startsWith("image/"))) {
-      setError(isHindi ? "Sirf image files allowed hain (JPG/PNG/WEBP)" : "Only image files are allowed (JPG/PNG/WEBP)")
-      return
     }
 
-    // Max 5MB
-    if (file.size > 5 * 1024 * 1024) {
-      setError(isHindi ? "File 5MB se chhoti honi chahiye" : "File must be under 5MB")
-      return
+    if (!answer?.trim()) {
+      return NextResponse.json({ error: "AI ne response nahi diya. Dobara try karo." }, { status: 500 })
     }
 
-    const reader = new FileReader()
-    reader.onload = () => {
-      const result = reader.result as string
-      const base64 = result.split(",")[1]
-      setAttachedFile({
-        base64,
-        type: file.type,
-        name: file.name,
-        previewUrl: file.type.startsWith("image/") ? result : undefined,
-      })
-    }
-    reader.readAsDataURL(file)
-    e.target.value = ""
-  }, [isHindi])
+    return NextResponse.json({ answer: answer.trim() })
 
-  // ── Submit ──
-  const handleSubmit = useCallback(async () => {
-    const q = input.trim()
-    if ((!q && !attachedFile) || loading) return
-
-    setLoading(true)
-    setError("")
-    setMicError("")
-
-    const messageText = q || (attachedFile ? `[Image: ${attachedFile.name}]` : "")
-    const userMsg: Message = {
-      role: "user",
-      content: messageText,
-      ts: Date.now(),
-      imageBase64: attachedFile?.base64,
-      imageType: attachedFile?.type,
-      fileName: attachedFile?.name,
-    }
-
-    setInput("")
-    setAttachedFile(null)
-
-    let currentMessages: Message[] = []
-
-    setChats(prev => prev.map(c => {
-      if (c.id !== activeChatId) return c
-      const newMsgs = [...c.messages, userMsg]
-      currentMessages = newMsgs
-      const title = c.messages.length === 0 ? firstUserTitle([userMsg]) : c.title
-      return { ...c, messages: newMsgs, title }
-    }))
-
-    try {
-      const res = await fetch("/api/doubt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: currentMessages.map(m => ({ role: m.role, content: m.content })),
-          language,
-          classNum: String(selectedClass || "10"),
-          fileData: userMsg.imageBase64 || null,
-          fileType: userMsg.imageType || null,
-        }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || data.error) {
-        setError(data.error || "Kuch galat ho gaya. Dobara try karo.")
-      } else {
-        const assistantMsg: Message = {
-          role: "assistant",
-          content: data.answer || "",
-          ts: Date.now(),
-        }
-        setChats(prev => prev.map(c => {
-          if (c.id !== activeChatId) return c
-          return { ...c, messages: [...c.messages, assistantMsg] }
-        }))
-      }
-    } catch {
-      setError(isHindi ? "Internet connection check karo aur dobara try karo." : "Check your internet connection and try again.")
-    } finally {
-      setLoading(false)
-      setTimeout(() => textareaRef.current?.focus(), 100)
-    }
-  }, [input, loading, activeChatId, language, selectedClass, attachedFile, isHindi])
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit()
-    }
+  } catch (error: any) {
+    console.error("[Doubt API] Error:", error)
+    return NextResponse.json(
+      { error: error?.message || "Kuch galat ho gaya. Dobara try karo." },
+      { status: 500 }
+    )
   }
-
-  return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden">
-      {/* ── Custom Header ── */}
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-card px-4 py-3">
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground hover:bg-secondary transition-colors shrink-0"
-          aria-label="Open chats"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10 shrink-0">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-            </div>
-            <span className="text-sm font-bold text-foreground truncate">Guru AI</span>
-            <span className="text-[10px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-semibold shrink-0">
-              NCERT 6-12
-            </span>
-          </div>
-          {activeChat && activeChat.title !== "Naya Sawaal" && (
-            <p className="text-[10px] text-muted-foreground truncate mt-0.5 ml-8">{activeChat.title}</p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={handleNewChat}
-            className="flex h-7 w-7 items-center justify-center rounded-lg bg-secondary text-foreground hover:bg-muted transition-colors"
-            title="New Chat"
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-          <div className="relative h-7 w-7">
-            <Image src="/images/logo.png" alt="NCERT Master" fill className="object-contain" />
-          </div>
-        </div>
-      </header>
-
-      {/* ── Chat Messages ── */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-
-        {/* Empty state */}
-        {messages.length === 0 && !loading && (
-          <div className="flex flex-col items-center justify-center h-full min-h-[50vh] gap-4 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-              <Sparkles className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <p className="text-base font-bold text-foreground">Guru AI</p>
-              <p className="text-sm text-muted-foreground mt-1 max-w-xs leading-relaxed">
-                {isHindi
-                  ? "NCERT Class 6-12 ka koi bhi sawaal poocho. Main har cheez step-by-step samjhaunga! 📚"
-                  : "Ask any NCERT Class 6-12 doubt. I'll explain everything step-by-step! 📚"}
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 max-w-xs">
-              {[
-                isHindi ? "Newton ke laws explain karo" : "Explain Newton's laws",
-                isHindi ? "Photosynthesis kya hai?" : "What is Photosynthesis?",
-                isHindi ? "Quadratic equation solve karo" : "Solve a quadratic equation",
-                isHindi ? "Mughal Empire ki history" : "Mughal Empire history",
-              ].map(q => (
-                <button
-                  key={q}
-                  onClick={() => setInput(q)}
-                  className="flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors active:scale-95"
-                >
-                  <ChevronRight className="h-3 w-3 text-muted-foreground" />
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Messages */}
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            {msg.role === "assistant" && (
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 shrink-0 mr-2 mt-0.5">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-              </div>
-            )}
-            <div className={`max-w-[85%] flex flex-col gap-1 ${msg.role === "user" ? "items-end" : "items-start"}`}>
-              {/* Image attachment in user message */}
-              {msg.imageBase64 && msg.imageType?.startsWith("image/") && (
-                <div className="rounded-xl overflow-hidden border border-border shadow-sm max-w-[220px]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`data:${msg.imageType};base64,${msg.imageBase64}`}
-                    alt={msg.fileName || "Attached image"}
-                    className="w-full h-auto max-h-48 object-cover"
-                  />
-                </div>
-              )}
-              {/* PDF attachment indicator */}
-              {msg.fileName && !msg.imageType?.startsWith("image/") && (
-                <div className="flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2">
-                  <FileText className="h-4 w-4 text-primary" />
-                  <span className="text-xs text-foreground truncate max-w-[150px]">{msg.fileName}</span>
-                </div>
-              )}
-              <div
-                className={`rounded-2xl px-4 py-3 ${
-                  msg.role === "user"
-                    ? "bg-primary text-primary-foreground rounded-br-sm"
-                    : "bg-card border border-border rounded-bl-sm"
-                }`}
-              >
-                {msg.role === "user" ? (
-                  <p className="text-sm leading-relaxed">{msg.content}</p>
-                ) : (
-                  <div className="space-y-0.5">{renderAnswer(msg.content)}</div>
-                )}
-              </div>
-              {/* Copy button for assistant messages */}
-              {msg.role === "assistant" && (
-                <div className="flex items-center gap-1 px-1">
-                  <CopyButton text={msg.content} />
-                  <span className="text-[10px] text-muted-foreground">
-                    {new Date(msg.ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-
-        {/* Loading bubble */}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 shrink-0 mr-2 mt-0.5">
-              <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-            </div>
-            <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-4 py-3">
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />
-                <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:150ms]" />
-                <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Error */}
-        {error && (
-          <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 mx-auto max-w-sm">
-            <p className="text-sm text-destructive">{error}</p>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* ── Input Area ── */}
-      <div className="border-t border-border bg-card px-4 py-3 pb-safe">
-        {/* File preview chip */}
-        {attachedFile && (
-          <div className="flex items-center gap-2 mb-2 px-1">
-            <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary px-3 py-1.5 max-w-[220px]">
-              {attachedFile.previewUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={attachedFile.previewUrl}
-                  alt="preview"
-                  className="h-8 w-8 rounded-lg object-cover shrink-0"
-                />
-              ) : (
-                <FileText className="h-4 w-4 text-primary shrink-0" />
-              )}
-              <span className="text-xs text-foreground truncate flex-1">{attachedFile.name}</span>
-              <button
-                onClick={() => setAttachedFile(null)}
-                className="flex h-4 w-4 items-center justify-center text-muted-foreground hover:text-destructive transition-colors shrink-0"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Mic error */}
-        {micError && (
-          <p className="text-[10px] text-destructive text-center mb-1">{micError}</p>
-        )}
-
-        {/* Main input row */}
-        <div className="flex items-end gap-2 rounded-2xl border border-border bg-background px-2 py-2">
-          {/* File attach button */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={loading}
-            title={isHindi ? "Image attach karo" : "Attach image"}
-            className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors shrink-0 disabled:opacity-40"
-          >
-            <Paperclip className="h-4 w-4" />
-          </button>
-
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-
-          {/* Textarea */}
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={e => {
-              setInput(e.target.value)
-              e.target.style.height = "auto"
-              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"
-            }}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              isRecording
-                ? (isHindi ? "🎤 Sun raha hoon..." : "🎤 Listening...")
-                : attachedFile
-                  ? (isHindi ? "Image ke baare mein kuch poocho..." : "Ask something about the image...")
-                  : (isHindi ? "Apna sawaal likho..." : "Type your doubt...")
-            }
-            rows={1}
-            className="flex-1 resize-none bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none leading-relaxed min-h-[22px] max-h-[120px]"
-          />
-
-          {/* Mic button */}
-          <button
-            onClick={handleMic}
-            disabled={loading}
-            title={isRecording ? (isHindi ? "Rokna" : "Stop") : (isHindi ? "Voice se poocho" : "Ask by voice")}
-            className={`flex h-8 w-8 items-center justify-center rounded-xl transition-colors shrink-0 disabled:opacity-40 ${
-              isRecording
-                ? "bg-destructive text-destructive-foreground animate-pulse"
-                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-            }`}
-          >
-            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-          </button>
-
-          {/* Send button */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading || (!input.trim() && !attachedFile)}
-            className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-40 transition-all active:scale-95 shrink-0"
-          >
-            {loading
-              ? <Loader2 className="h-4 w-4 animate-spin" />
-              : <Send className="h-4 w-4" />
-            }
-          </button>
-        </div>
-        <p className="text-[10px] text-muted-foreground text-center mt-2">
-          Guru AI · NCERT Class 6-12 · Powered by NCERT Master
-        </p>
-      </div>
-
-      {/* ── Sidebar ── */}
-      <ChatSidebar
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        chats={chats}
-        activeChatId={activeChatId}
-        onSelect={id => { setActiveChatId(id); setError("") }}
-        onNew={handleNewChat}
-        onDelete={handleDelete}
-        onPin={handlePin}
-        onRename={handleRename}
-      />
-    </div>
-  )
 }
+
+export const maxDuration = 45
