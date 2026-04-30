@@ -107,7 +107,7 @@ async function fetchWithRetry(
 
 // ─── Main hook ────────────────────────────────────────────────────────────────
 export function useSheetContent(chapterId: string | null, tab: string) {
-  const { selectedClass, selectedStream, selectedSubject, selectedBook } = useApp()
+  const { selectedClass, selectedStream, selectedSubject, selectedBook, language } = useApp()
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -183,6 +183,7 @@ const [fromCache, setFromCache] = useState(false)
       subject: info.subjectName,
       class: info.className,
       tab,
+      language,
     })
 
     fetchWithRetry(`/api/content?${params}`, controller.signal, 2, 2000)
