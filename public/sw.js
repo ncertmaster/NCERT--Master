@@ -1,7 +1,7 @@
 const CACHE_VERSION = 'v3';
-const STATIC_CACHE = `ncert-static-${CACHE_VERSION}`;
-const API_CACHE = `ncert-api-${CACHE_VERSION}`;
-const OFFLINE_URL = '/offline.html';
+const STATIC_CACHE  = `ncert-static-${CACHE_VERSION}`;
+const API_CACHE     = `ncert-api-${CACHE_VERSION}`;
+const OFFLINE_URL   = '/offline.html';
 
 // Static assets to precache
 const PRECACHE_ASSETS = [
@@ -49,16 +49,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // /api/doubt → Network-first, cache fallback
-  if (url.pathname.startsWith('/api/doubt')) {
-    event.respondWith(networkFirstWithCache(request, API_CACHE));
-    return;
-  }
-
   // Static assets → Cache-first
-  if (
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|ico|woff2|webmanifest)$/)
-  ) {
+  if (url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|ico|woff2|webmanifest)$/)) {
     event.respondWith(cacheFirst(request, STATIC_CACHE));
     return;
   }
@@ -73,7 +65,7 @@ self.addEventListener('fetch', (event) => {
 // ─── Strategies ────────────────────────────────────────────────────────────
 
 async function cacheFirst(request, cacheName) {
-  const cache = await caches.open(cacheName);
+  const cache  = await caches.open(cacheName);
   const cached = await cache.match(request);
   if (cached) return cached;
   const response = await fetch(request);
@@ -82,7 +74,7 @@ async function cacheFirst(request, cacheName) {
 }
 
 async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
+  const cache  = await caches.open(cacheName);
   const cached = await cache.match(request);
 
   const fetchPromise = fetch(request)
@@ -92,7 +84,6 @@ async function staleWhileRevalidate(request, cacheName) {
     })
     .catch(() => null);
 
-  // Return cached immediately if available, else wait for network
   if (cached) {
     fetchPromise; // Revalidate in background
     return cached;
@@ -100,23 +91,9 @@ async function staleWhileRevalidate(request, cacheName) {
   return fetchPromise || offlineFallback();
 }
 
-async function networkFirstWithCache(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  try {
-    const response = await fetch(request);
-    if (response.ok) cache.put(request, response.clone());
-    return response;
-  } catch {
-    const cached = await cache.match(request);
-    if (cached) return cached;
-    return offlineFallback();
-  }
-}
-
 async function navigationHandler(request) {
   try {
-    const response = await fetch(request);
-    return response;
+    return await fetch(request);
   } catch {
     const cache = await caches.open(STATIC_CACHE);
     return cache.match(OFFLINE_URL);
@@ -132,15 +109,3 @@ function offlineFallback() {
     }
   );
 }
-
-// ─── Push Notifications ────────────────────────────────────────────────────
-self.addEventListener('push', (event) => {
-  const data = event.data?.json() ?? {};
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'NCERT Master', {
-      body: data.body || 'Time to study!',
-      icon: '/icons/ncert_master_192x192.png',
-      badge: '/icons/ncert_master_192x192.png',
-    })
-  );
-});
