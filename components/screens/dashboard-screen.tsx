@@ -3,10 +3,24 @@
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Layers, Trophy, TrendingUp, BarChart2 } from "lucide-react"
+import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Trophy, TrendingUp, BarChart2 } from "lucide-react"
 import type { AppScreen } from "@/lib/app-context"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+
+// ── Simple analytics helper (works with Vercel Analytics / Plausible) ────────
+function track(event: string, props?: Record<string, string | number>) {
+  try {
+    // Vercel Analytics
+    if (typeof window !== "undefined" && (window as any).va) {
+      (window as any).va("event", event, props)
+    }
+    // Plausible fallback
+    if (typeof window !== "undefined" && (window as any).plausible) {
+      (window as any).plausible(event, { props })
+    }
+  } catch { /* analytics failure is non-fatal */ }
+}
 
 const features: { key: string; icon: typeof BookOpen; screen: AppScreen; gradient: string; iconBg: string }[] = [
   {
@@ -45,11 +59,17 @@ interface QuizStat {
   best: number
 }
 
-function useQuizStats(): QuizStat | null {
+// Class-specific key — matches quiz-play and quiz-history
+function quizHistoryKey(classNumber: number | null | undefined): string {
+  return classNumber ? `ncert_quiz_history_class_${classNumber}` : "ncert_quiz_history"
+}
+
+function useQuizStats(classNumber: number | null | undefined): QuizStat | null {
   const [stats, setStats] = useState<QuizStat | null>(null)
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("ncert_quiz_history")
+      const key = quizHistoryKey(classNumber)
+      const raw = localStorage.getItem(key)
       if (!raw) return
       const history = JSON.parse(raw)
       if (!history.length) return
@@ -57,13 +77,13 @@ function useQuizStats(): QuizStat | null {
       const best = Math.max(...history.map((r: any) => r.percent))
       setStats({ total: history.length, avg, best })
     } catch {}
-  }, [])
+  }, [classNumber])
   return stats
 }
 
 export function DashboardScreen() {
   const { user, language, setScreen } = useApp()
-  const quizStats = useQuizStats()
+  const quizStats = useQuizStats(user?.classNumber ? Number(user.classNumber) : null)
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-20">
@@ -93,10 +113,14 @@ export function DashboardScreen() {
           </div>
           <div className="flex items-center gap-3">
             <div className="relative h-9 w-9">
+              {/* Replace logo.png with logo.webp once asset is converted */}
               <Image src="/images/logo.png" alt="NCERT Master" fill className="object-contain" />
             </div>
             <button
-              onClick={() => setScreen("settings")}
+              onClick={() => {
+                track("settings_opened")
+                setScreen("settings")
+              }}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
               aria-label={getText("settings", language)}
             >
@@ -116,7 +140,10 @@ export function DashboardScreen() {
             return (
               <button
                 key={f.key}
-                onClick={() => setScreen(f.screen)}
+                onClick={() => {
+                  track("feature_clicked", { feature: f.key, class: String(user?.classNumber || "") })
+                  setScreen(f.screen)
+                }}
                 className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm transition-colors hover:border-primary/30 active:opacity-90"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 transition-opacity group-hover:opacity-100`} />
@@ -134,7 +161,10 @@ export function DashboardScreen() {
         {/* Quiz Stats Card */}
         {quizStats && (
           <button
-            onClick={() => setScreen("quiz-history")}
+            onClick={() => {
+              track("quiz_history_opened")
+              setScreen("quiz-history")
+            }}
             className="mt-4 w-full rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-left transition-all active:opacity-80"
           >
             <div className="mb-3 flex items-center justify-between">
@@ -168,7 +198,7 @@ export function DashboardScreen() {
 
         {/* Info Strip */}
         <div className="mt-4 rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
-          <div className="grid grid-cols-3 divide-x divide-border">
+          <div className="grid grid-cols-2 divide-x divide-border">
             <div className="flex flex-col items-center gap-1.5 px-2">
               <Target className="h-4 w-4 text-amber-400" />
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
@@ -184,16 +214,7 @@ export function DashboardScreen() {
                 {getText("language", language)}
               </span>
               <span className="text-xs font-semibold text-card-foreground">
-                {getText("hindi", language)}
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-1.5 px-2">
-              <Layers className="h-4 w-4 text-indigo-400" />
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
-                {getText("mode", language)}
-              </span>
-              <span className="text-xs font-semibold text-card-foreground">
-                Light
+                {language === "en" ? "English" : getText("hindi", language)}
               </span>
             </div>
           </div>
@@ -207,4 +228,4 @@ export function DashboardScreen() {
       <BottomTabs activeTab="dashboard" />
     </div>
   )
-            }
+}
