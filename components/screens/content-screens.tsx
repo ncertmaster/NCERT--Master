@@ -39,11 +39,7 @@ function readCache(key: string): string | null {
     const raw = localStorage.getItem(key)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    if (Date.now() - parsed.ts > 7 * 24 * 60 * 60 * 1000) {
-      localStorage.removeItem(key)
-      return null
-    }
-    return parsed.content as string
+    return (parsed.content as string) || null
   } catch {
     return null
   }
@@ -107,7 +103,7 @@ function DownloadButton({
         const data = await res.json()
         if (!data?.content) throw new Error("Empty content")
         content = data.content
-        try { localStorage.setItem(cacheKey, JSON.stringify({ content, ts: Date.now() })) } catch {}
+        try { localStorage.setItem(cacheKey, JSON.stringify({ content })) } catch {}
       }
       const tabLabel = tab === "notes" ? "Notes" : "IQ"
       const filename = `NCERT_Class${classNum}_${subjectName}_${chapter.name}_${tabLabel}.txt`
