@@ -24,8 +24,7 @@ export function SetupScreen() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  function handleSubmit() {
     setError("")
     if (!name.trim()) { setError("Please enter your name"); return }
     if (!classNumber) { setError("Please select your class"); return }
@@ -54,7 +53,7 @@ export function SetupScreen() {
           <h2 className="mb-2 text-center text-xl font-bold text-foreground">Setup Profile</h2>
           <p className="mb-6 text-center text-sm text-muted-foreground">Tell us about yourself to get started</p>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             {/* Photo */}
             <div className="flex justify-center">
               <button type="button" onClick={() => fileRef.current?.click()}
@@ -103,12 +102,13 @@ export function SetupScreen() {
             {error && <p className="text-center text-xs text-destructive">{error}</p>}
 
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="mt-2 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
             >
               Get Started 🚀
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
