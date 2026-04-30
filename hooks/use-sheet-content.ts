@@ -11,33 +11,35 @@ function getCacheKey(chapterId: string, tab: string, className: string): string 
 }
 
 // ─── LocalStorage cache read ──────────────────────────────────────────────────
+// Permanent cache — no expiry. Once content is generated, it's cached forever
+// on this device. Server-side Supabase cache handles cross-user permanence.
 function readCache(key: string): string | null {
   try {
     const raw = localStorage.getItem(key)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    if (Date.now() - parsed.ts > 7 * 24 * 60 * 60 * 1000) {
-      localStorage.removeItem(key)
-      return null
-    }
-    return parsed.content as string
+    // Support both legacy {content, ts} and new {content} formats
+    return (parsed.content as string) || null
   } catch {
     return null
   }
 }
 
 // ─── LocalStorage cache write ─────────────────────────────────────────────────
+// Stores content permanently. On quota exceeded, evict oldest cache entries.
 function writeCache(key: string, content: string): void {
+  const value = JSON.stringify({ content })
   try {
-    localStorage.setItem(key, JSON.stringify({ content, ts: Date.now() }))
+    localStorage.setItem(key, value)
   } catch {
     try {
+      // Evict oldest ncert_cache__ entries to make room
       Object.keys(localStorage)
         .filter((k) => k.startsWith("ncert_cache__"))
-        .forEach((k) => localStorage.removeItem(k))
-      localStorage.setItem(key, JSON.stringify({ content, ts: Date.now() }))
+        .forEach((k) => { try { localStorage.removeItem(k) } catch {} })
+      localStorage.setItem(key, value)
     } catch {
-      // Silently fail
+      // Silently fail — Supabase server cache is the permanent fallback
     }
   }
 }
