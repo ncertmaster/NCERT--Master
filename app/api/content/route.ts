@@ -68,7 +68,7 @@ async function saveCachedContent(
 //   count    INTEGER NOT NULL DEFAULT 0,
 //   reset_at TIMESTAMPTZ NOT NULL
 // );
-const RATE_LIMIT    = 10
+const RATE_LIMIT    = 50
 const RATE_WINDOW_MS = 60 * 1000
 
 async function checkRateLimit(ip: string): Promise<boolean> {
@@ -508,7 +508,7 @@ export async function GET(request: Request) {
       }
 
       const totalBatches = quizMode === "full"
-        ? (group === "6-8" ? 5 : group === "9-10" ? 7 : 10)
+        ? (group === "6-8" ? 3 : group === "9-10" ? 4 : 5)
         : 2
 
       const scope = quizMode === "full"
