@@ -48,7 +48,7 @@ export function DiaryScreen() {
   const { data, error } = await supabase
     .from("diary_entries")
     .select("*")
-    .eq("user_id", userId)
+    .eq("user_email", userId)
     .order("created_at", { ascending: false })
   if (!error && data) setEntries(data as DiaryEntry[])
   setLoading(false)
@@ -95,7 +95,7 @@ export function DiaryScreen() {
         const { data, error } = await supabase
           .from("diary_entries")
           .insert({
-            user_id: uid,
+            user_email: uid,
             ...payload,
             created_at: new Date().toISOString(),
           })
