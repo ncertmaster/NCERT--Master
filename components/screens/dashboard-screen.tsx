@@ -3,7 +3,7 @@
 import { useApp } from "@/lib/app-context"
 import { getText } from "@/lib/translations"
 import { BottomTabs } from "@/components/bottom-tabs"
-import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Trophy, TrendingUp, BarChart2, MessageCircle } from "lucide-react"
+import { BookOpen, FileText, HelpCircle, Brain, Settings, Target, Globe, Trophy, TrendingUp, BarChart2 } from "lucide-react"
 import type { AppScreen } from "@/lib/app-context"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -44,20 +44,12 @@ const features: { key: string; icon: typeof BookOpen; screen: AppScreen; gradien
     gradient: "from-amber-500/20 to-amber-600/5",
     iconBg: "bg-amber-500/20 text-amber-400",
   },
-
   {
     key: "quiz",
     icon: Brain,
     screen: "quiz-class",
     gradient: "from-emerald-500/20 to-emerald-600/5",
     iconBg: "bg-emerald-500/20 text-emerald-400",
-  },
-  {
-    key: "doubtSolver",
-    icon: MessageCircle,
-    screen: "doubt",
-    gradient: "from-rose-500/20 to-rose-600/5",
-    iconBg: "bg-rose-500/20 text-rose-400",
   },
 ]
 
