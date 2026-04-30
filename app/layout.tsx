@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: "NCERT Master — Class 6 to 12 Study App",
   description:
-    "NCERT Master: AI-powered study app for Class 6–12. Smart Notes, Important Questions, Quiz Mode, AI Doubt Solver, Study Timer & Diary — sab kuch ek jagah.",
+    "NCERT Master: AI-powered study app for Class 6–12. Smart Notes, Important Questions, Quiz Mode, Study Timer & Diary — sab kuch ek jagah.",
   keywords: [
-    "NCERT", "NCERT app", "Class 6 to 12", "study app", "AI doubt solver",
+    "NCERT", "NCERT app", "Class 6 to 12", "study app",
     "NCERT notes", "NCERT quiz", "board exam", "CBSE", "Hindi medium",
     "free study app", "NCERT Master",
   ],
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "NCERT Master — Class 6 to 12 Study App",
     description:
-      "AI-powered NCERT study app. Smart Notes, Quiz, Doubt Solver & more — bilkul free!",
+      "AI-powered NCERT study app. Smart Notes, Quiz & more — bilkul free!",
     siteName: "NCERT Master",
     images: [
       {
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "NCERT Master — Class 6 to 12 Study App",
     description:
-      "AI-powered NCERT study app. Smart Notes, Quiz, Doubt Solver & more — bilkul free!",
+      "AI-powered NCERT study app. Smart Notes, Quiz & more — bilkul free!",
     images: ["/icons/ncert_master_512x512.png"],
   },
   icons: {
@@ -54,23 +53,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head />
       <body>
-        {/*
-          forcedTheme="light" — localStorage, system preference, sab ignore.
-          .dark class kabhi <html> pe add nahi hogi.
-          Dark mode CSS permanently disabled.
-        */}
-        <ThemeProvider
-          attribute="class"
-          forcedTheme="light"
-          enableSystem={false}
-          storageKey="ncert-theme"
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   )
