@@ -13,6 +13,56 @@ type QuizQuestion = {
   explanation?: string
 }
 
+// ── Class-specific key — must match quiz-history-screen.tsx & dashboard ────
+function quizHistoryKey(classNumber: number | string | null | undefined): string {
+  return classNumber ? `ncert_quiz_history_class_${classNumber}` : "ncert_quiz_history"
+}
+
+// ── Build fetch URL ────────────────────────────────────────────────────────
+function buildQuizUrl(
+  selectedChapter: string | null,
+  selectedSubject: string | null,
+  selectedClass: number | null,
+  quizMode: "chapter" | "full" | null,
+  language: string
+): string {
+  const params = new URLSearchParams({
+    chapter_id:     selectedChapter || "full",
+    chapter_name:   selectedChapter || selectedSubject || "",
+    chapter_name_hi: "",
+    subject:        selectedSubject || "",
+    class:          String(selectedClass || 6),
+    tab:            "quiz",
+    quiz_mode:      quizMode || "chapter",
+    language,
+  })
+  return `/api/content?${params}`
+}
+
+// ── Parse quiz JSON safely ─────────────────────────────────────────────────
+function parseQuizContent(content: unknown): QuizQuestion[] {
+  try {
+    if (Array.isArray(content)) return content
+    if (typeof content !== "string" || !content.trim()) return []
+    const clean = content.replace(/```json|```/g, "").trim()
+    const start = clean.indexOf("[")
+    const end   = clean.lastIndexOf("]")
+    if (start === -1 || end === -1) return []
+    return JSON.parse(clean.slice(start, end + 1))
+  } catch { return [] }
+}
+
+function validateQuestions(raw: QuizQuestion[]): QuizQuestion[] {
+  return raw.filter(
+    q =>
+      q &&
+      typeof q.question === "string" &&
+      Array.isArray(q.options) &&
+      q.options.length >= 2 &&
+      typeof q.correctIndex === "number"
+  )
+}
+
 export function QuizPlayScreen() {
   const {
     language,
@@ -24,102 +74,84 @@ export function QuizPlayScreen() {
     setScreen,
   } = useApp()
 
-  const [questions, setQuestions] = useState<QuizQuestion[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [questions, setQuestions]     = useState<QuizQuestion[]>([])
+  const [loading, setLoading]         = useState(true)
+  const [error, setError]             = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
-  const [isAnswered, setIsAnswered] = useState(false)
-  const [score, setScore] = useState(0)
-  const [showResult, setShowResult] = useState(false)
+  const [isAnswered, setIsAnswered]   = useState(false)
+  const [score, setScore]             = useState(0)
+  const [showResult, setShowResult]   = useState(false)
 
-  // ── Save quiz result to localStorage history ───────────────────────────────
+  // ── Save quiz result to class-specific localStorage key ──────────────────
   function saveQuizResult(finalScore: number, total: number) {
     try {
-      const key = "ncert_quiz_history"
+      const key  = quizHistoryKey(selectedClass)
       const prev = JSON.parse(localStorage.getItem(key) || "[]")
       const entry = {
         subject: selectedSubject,
         chapter: selectedChapter,
-        class: selectedClass,
-        score: finalScore,
+        class:   selectedClass,
+        score:   finalScore,
         total,
         percent: Math.round((finalScore / total) * 100),
-        date: new Date().toISOString(),
+        date:    new Date().toISOString(),
       }
-      // Keep last 50 results only
+      // Keep last 50 results per class
       const updated = [entry, ...prev].slice(0, 50)
       localStorage.setItem(key, JSON.stringify(updated))
     } catch { /* silently fail */ }
   }
 
-  useEffect(() => {
+  // ── Fetch questions ───────────────────────────────────────────────────────
+  const fetchQuestions = useCallback(async () => {
     if (!selectedClass || !selectedSubject) {
       setError("Subject select karein pehle.")
       setLoading(false)
       return
     }
 
-    const params = new URLSearchParams({
-      chapter_id: selectedChapter || "full",
-      chapter_name: selectedChapter || selectedSubject,
-      chapter_name_hi: "",
-      subject: selectedSubject,
-      class: String(selectedClass),
-      tab: "quiz",
-      quiz_mode: quizMode || "chapter",
-    })
+    setLoading(true)
+    setError(null)
 
-    fetch(`/api/content?${params}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          setError(data.error)
-          setLoading(false)
-          return
-        }
-        try {
-          let parsed: QuizQuestion[] = []
-          
-          // Agar already array string hai
-          if (typeof data.content === "string" && data.content.trim()) {
-            const clean = data.content.replace(/```json|```/g, "").trim()
-            const start = clean.indexOf("[")
-            const end = clean.lastIndexOf("]")
-            if (start !== -1 && end !== -1) {
-              parsed = JSON.parse(clean.slice(start, end + 1))
-            }
-          } else if (Array.isArray(data.content)) {
-            parsed = data.content
-          }
+    try {
+      const url  = buildQuizUrl(selectedChapter, selectedSubject, selectedClass, quizMode, language)
+      const res  = await fetch(url)
+      const data = await res.json()
 
-          // Validate questions
-          const valid = parsed.filter(
-            (q) =>
-              q &&
-              typeof q.question === "string" &&
-              Array.isArray(q.options) &&
-              q.options.length >= 2 &&
-              typeof q.correctIndex === "number"
-          )
-
-          if (valid.length === 0) {
-            setError("Valid questions नहीं मिले। दोबारा try करें।")
-          } else {
-            setQuestions(valid)
-          }
-        } catch (e) {
-          setError("Questions load नहीं हो सके। दोबारा try करें।")
-        }
+      if (data.error) {
+        setError(data.error)
         setLoading(false)
-      })
-      .catch(() => {
-        setError("Network error। दोबारा try करें।")
-        setLoading(false)
-      })
-  }, [selectedChapter, selectedSubject, selectedClass, quizMode])
+        return
+      }
 
-  // Loading
+      const parsed = validateQuestions(parseQuizContent(data.content))
+      if (parsed.length === 0) {
+        setError("Valid questions नहीं मिले। दोबारा try करें।")
+      } else {
+        setQuestions(parsed)
+      }
+    } catch {
+      setError("Network error। दोबारा try करें।")
+    }
+
+    setLoading(false)
+  }, [selectedChapter, selectedSubject, selectedClass, quizMode, language])
+
+  useEffect(() => { fetchQuestions() }, [fetchQuestions])
+
+  // ── Retry ─────────────────────────────────────────────────────────────────
+  const handleRetry = useCallback(() => {
+    setQuestions([])
+    setCurrentIndex(0)
+    setSelectedOption(null)
+    setIsAnswered(false)
+    setScore(0)
+    setShowResult(false)
+    fetchQuestions()
+  }, [fetchQuestions])
+
+  // ── Loading ───────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
@@ -133,7 +165,7 @@ export function QuizPlayScreen() {
     )
   }
 
-  // Error ya empty
+  // ── Error / empty ─────────────────────────────────────────────────────────
   if (error || questions.length === 0) {
     return (
       <div className="flex min-h-screen flex-col bg-background">
@@ -144,35 +176,7 @@ export function QuizPlayScreen() {
             {error || "प्रश्न उपलब्ध नहीं हैं।"}
           </p>
           <button
-            onClick={() => {
-              setLoading(true)
-              setError(null)
-              setQuestions([])
-              // Retry
-              if (!selectedClass || !selectedSubject) return
-              const params = new URLSearchParams({
-                chapter_id: selectedChapter || "full",
-                chapter_name: selectedChapter || selectedSubject,
-                chapter_name_hi: "",
-                subject: selectedSubject,
-                class: String(selectedClass),
-                tab: "quiz",
-                quiz_mode: quizMode || "chapter",
-              })
-              fetch(`/api/content?${params}`)
-                .then((res) => res.json())
-                .then((data) => {
-                  try {
-                    const clean = data.content.replace(/```json|```/g, "").trim()
-                    const start = clean.indexOf("[")
-                    const end = clean.lastIndexOf("]")
-                    const parsed = JSON.parse(clean.slice(start, end + 1))
-                    setQuestions(parsed.filter((q: any) => q?.question && q?.options?.length >= 2))
-                  } catch { setError("दोबारा try करें।") }
-                  setLoading(false)
-                })
-                .catch(() => { setError("Network error।"); setLoading(false) })
-            }}
+            onClick={handleRetry}
             className="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
           >
             🔄 दोबारा Try करें
@@ -188,7 +192,7 @@ export function QuizPlayScreen() {
     )
   }
 
-  // Result screen
+  // ── Result screen ─────────────────────────────────────────────────────────
   if (showResult) {
     const percentage = Math.round((score / questions.length) * 100)
     return (
@@ -211,7 +215,10 @@ export function QuizPlayScreen() {
             <div className="mt-4 flex flex-col gap-3 w-full items-center">
               <div className="flex gap-3">
                 <button
-                  onClick={() => { setCurrentIndex(0); setSelectedOption(null); setIsAnswered(false); setScore(0); setShowResult(false) }}
+                  onClick={() => {
+                    setCurrentIndex(0); setSelectedOption(null)
+                    setIsAnswered(false); setScore(0); setShowResult(false)
+                  }}
                   className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-medium text-card-foreground transition-all active:scale-[0.97]"
                 >
                   <RotateCcw className="h-4 w-4" />
@@ -237,18 +244,15 @@ export function QuizPlayScreen() {
     )
   }
 
-  // Safety check
+  // ── Safety check ──────────────────────────────────────────────────────────
   const currentQuestion = questions[currentIndex]
-  if (!currentQuestion) {
-    setShowResult(true)
-    return null
-  }
+  if (!currentQuestion) { setShowResult(true); return null }
 
   const handleSelect = (optionIdx: number) => {
     if (isAnswered) return
     setSelectedOption(optionIdx)
     setIsAnswered(true)
-    if (optionIdx === currentQuestion.correctIndex) setScore((s) => s + 1)
+    if (optionIdx === currentQuestion.correctIndex) setScore(s => s + 1)
   }
 
   const handleNext = () => {
@@ -257,7 +261,7 @@ export function QuizPlayScreen() {
       saveQuizResult(score, questions.length)
       setShowResult(true)
     } else {
-      setCurrentIndex((i) => i + 1)
+      setCurrentIndex(i => i + 1)
       setSelectedOption(null)
       setIsAnswered(false)
     }
@@ -278,7 +282,7 @@ export function QuizPlayScreen() {
             let style = "border-border bg-card text-card-foreground"
             if (isAnswered) {
               if (idx === currentQuestion.correctIndex) style = "border-success bg-success/10 text-success"
-              else if (idx === selectedOption) style = "border-destructive bg-destructive/10 text-destructive"
+              else if (idx === selectedOption)          style = "border-destructive bg-destructive/10 text-destructive"
             } else if (idx === selectedOption) style = "border-primary bg-primary/10 text-primary"
             return (
               <button key={idx} onClick={() => handleSelect(idx)} disabled={isAnswered}
@@ -315,4 +319,3 @@ export function QuizPlayScreen() {
     </div>
   )
 }
-  
