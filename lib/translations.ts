@@ -57,7 +57,7 @@ export const t: Translations = {
   back: { en: "Back", hi: "वापस" },
   selectClassFirst: { en: "Select Class", hi: "कक्षा चुनें" },
   tryAgain: { en: "Try Again", hi: "पुनः प्रयास करें" },
-  contentLanguageNote: { en: "Content is available in Hindi only", hi: "सामग्री केवल हिंदी में उपलब्ध है" },
+  contentLanguageNote: { en: "Content available in English & Hindi both", hi: "सामग्री हिंदी और अंग्रेज़ी दोनों में उपलब्ध है" },
   target: { en: "Target", hi: "लक्ष्य" },
   mode: { en: "Mode", hi: "मोड" },
   home: { en: "Home", hi: "होम" },
