@@ -1,11 +1,14 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import {
-  ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps,
-} from 'next-themes'
+import * as React from "react"
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+// Dark mode has been permanently removed from NCERT Master.
+// This file is kept as a stub so any stale imports do not break the build.
+export function ThemeProvider({
+  children,
+}: {
+  children: React.ReactNode
+  [key: string]: unknown
+}) {
+  return <>{children}</>
 }
