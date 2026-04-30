@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { useApp } from "@/lib/app-context"
 import { SplashScreen } from "@/components/screens/splash-screen"
 import { SetupScreen } from "@/components/screens/setup-screen"
@@ -21,6 +21,9 @@ import { SettingsScreen } from "@/components/screens/settings-screen"
 import { StudyTimerScreen } from "@/components/screens/study-timer-screen"
 import { DiaryScreen } from "@/components/screens/diary-screen"
 import { PrivacyPolicyScreen } from "@/components/screens/privacy-policy-screen"
+import { AiDoubtSolverScreen } from "@/components/screens/ai-doubt-solver"
+import { MessageCircle, X } from "lucide-react"
+import { AiDoubtSolverScreen } from "@/components/screens/ai-doubt-solver"
 
 // ── Per-screen Error Boundary ────────────────────────────────────────────────
 // A crash inside one screen will NOT take down the whole app.
@@ -110,9 +113,15 @@ export function AppShell() {
       case "diary":          return <DiaryScreen />
       case "privacy-policy": return <PrivacyPolicyScreen />
       case "quiz-history":   return <QuizHistoryScreen />
+      case "doubt":          return <AiDoubtSolverScreen />
       default:               return <DashboardScreen />
     }
   }
+
+  const [doubtOpen, setDoubtOpen] = useState(false)
+
+  // Hide FAB on splash and setup screens
+  const showFAB = screen !== "splash" && screen !== "setup" && screen !== "doubt"
 
   return (
     <main
@@ -128,6 +137,50 @@ export function AppShell() {
           {renderScreen()}
         </div>
       </ErrorBoundary>
+
+      {/* ── Guru AI Floating Button (Meta AI style) ── */}
+      {showFAB && (
+        <button
+          onClick={() => setDoubtOpen(true)}
+          className="fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all active:scale-95"
+          style={{
+            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)",
+            boxShadow: "0 4px 20px rgba(139, 92, 246, 0.5)",
+          }}
+          aria-label="Guru AI - Doubt Solver"
+        >
+          <MessageCircle className="h-6 w-6 text-white" />
+        </button>
+      )}
+
+      {/* ── Guru AI Fullscreen Overlay ── */}
+      {doubtOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-background animate-fade-in">
+          {/* Header */}
+          <div className="flex items-center gap-3 border-b border-border bg-card px-4 py-3 shadow-sm">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ background: "linear-gradient(135deg, #6366f1, #ec4899)" }}
+            >
+              <MessageCircle className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-foreground">Guru AI</p>
+              <p className="text-[10px] text-muted-foreground">NCERT Doubt Solver</p>
+            </div>
+            <button
+              onClick={() => setDoubtOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          {/* Body */}
+          <div className="flex-1 overflow-hidden">
+            <AiDoubtSolverScreen />
+          </div>
+        </div>
+      )}
     </main>
   )
 }
