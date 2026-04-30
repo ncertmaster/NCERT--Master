@@ -55,6 +55,69 @@ interface AppContextType extends AppState {
 
 const AppContext = createContext<AppContextType | null>(null)
 
+// ── Safe localStorage helpers ──────────────────────────────────────────────
+// Reads a key; returns null on any error (missing key, corrupt JSON, SSR, quota)
+function safeGet(key: string): string | null {
+  try {
+    return localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+// Writes a value; silently ignores quota exceeded and SSR errors
+function safeSet(key: string, value: string): void {
+  try {
+    // Guard: warn if we're approaching 4MB to prevent silent failures
+    if (typeof window !== "undefined") {
+      try {
+        const used = JSON.stringify(localStorage).length
+        if (used > 4 * 1024 * 1024) {
+          console.warn("[Storage] localStorage usage > 4MB — cleaning old quiz history")
+          cleanOldQuizHistory()
+        }
+      } catch { /* estimation failed, proceed anyway */ }
+    }
+    localStorage.setItem(key, value)
+  } catch {
+    // QuotaExceededError — attempt cleanup and retry once
+    try {
+      cleanOldQuizHistory()
+      localStorage.setItem(key, value)
+    } catch {
+      console.error(`[Storage] Failed to save "${key}" even after cleanup`)
+    }
+  }
+}
+
+// Removes quiz history entries older than 30 days to free up space
+function cleanOldQuizHistory(): void {
+  try {
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000
+    const keysToRemove: string[] = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (!k?.startsWith("ncert_quiz_history")) continue
+      try {
+        const raw = localStorage.getItem(k)
+        if (!raw) continue
+        const history: any[] = JSON.parse(raw)
+        // Keep only entries newer than cutoff
+        const trimmed = history.filter((e: any) => {
+          const ts = e.timestamp ?? e.date ?? 0
+          return new Date(ts).getTime() > cutoff
+        })
+        if (trimmed.length < history.length) {
+          if (trimmed.length === 0) keysToRemove.push(k)
+          else localStorage.setItem(k, JSON.stringify(trimmed))
+        }
+      } catch { keysToRemove.push(k!) }
+    }
+    keysToRemove.forEach(k => { try { localStorage.removeItem(k) } catch {} })
+  } catch { /* ignore */ }
+}
+
+// ── Provider ───────────────────────────────────────────────────────────────
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>({
     screen: "splash",
@@ -75,24 +138,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function init() {
-      // Minimum splash display time
       await new Promise<void>(resolve => setTimeout(resolve, 1500))
 
       let savedProfile: UserProfile | null = null
       try {
-        const raw = localStorage.getItem("ncert_user")
+        const raw = safeGet("ncert_user")
         if (raw) savedProfile = JSON.parse(raw)
-      } catch {}
+      } catch { savedProfile = null }
 
-      const savedLanguage = localStorage.getItem("ncert_language") as Language | null
-      const savedEyeProtection = localStorage.getItem("ncert_eye_protection") === "true"
-      const screen = savedProfile?.name && savedProfile?.classNumber ? "dashboard" : "setup"
+      const savedLanguage      = safeGet("ncert_language") as Language | null
+      const savedEyeProtection = safeGet("ncert_eye_protection") === "true"
+      const screen             = savedProfile?.name && savedProfile?.classNumber ? "dashboard" : "setup"
 
       setState(prev => ({
         ...prev,
-        user: savedProfile,
+        user:          savedProfile,
         screen,
-        language: savedLanguage || "en",
+        language:      savedLanguage || "en",
         eyeProtection: savedEyeProtection,
       }))
     }
@@ -101,12 +163,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const setScreen = useCallback((screen: AppScreen) => {
     window.history.pushState(null, "", "")
-    setState(prev => ({ ...prev, screen, screenHistory: [...prev.screenHistory, prev.screen] }))
+    setState(prev => ({
+      ...prev,
+      screen,
+      screenHistory: [...prev.screenHistory, prev.screen],
+    }))
   }, [])
 
   const goBack = useCallback(() => {
     setState(prev => {
-      const history = [...prev.screenHistory]
+      const history       = [...prev.screenHistory]
       const previousScreen = history.pop() || "dashboard"
       return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
     })
@@ -115,7 +181,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handlePopState = () => {
       setState(prev => {
-        const history = [...prev.screenHistory]
+        const history        = [...prev.screenHistory]
         const previousScreen = history.pop() || "dashboard"
         return { ...prev, screen: previousScreen as AppScreen, screenHistory: history }
       })
@@ -125,32 +191,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const setUser = useCallback((user: UserProfile) => {
-    try { localStorage.setItem("ncert_user", JSON.stringify(user)) } catch {}
+    safeSet("ncert_user", JSON.stringify(user))
     setState(prev => ({ ...prev, user }))
   }, [])
 
   const setLanguage = useCallback((language: Language) => {
-    try { localStorage.setItem("ncert_language", language) } catch {}
+    safeSet("ncert_language", language)
     setState(prev => ({ ...prev, language }))
   }, [])
 
   const setEyeProtection = useCallback((eyeProtection: boolean) => {
-    try { localStorage.setItem("ncert_eye_protection", String(eyeProtection)) } catch {}
+    safeSet("ncert_eye_protection", String(eyeProtection))
     setState(prev => ({ ...prev, eyeProtection }))
   }, [])
 
-  const setSelectedClass = useCallback((selectedClass: ClassNumber) => setState(prev => ({ ...prev, selectedClass })), [])
-  const setSelectedStream = useCallback((selectedStream: string | null) => setState(prev => ({ ...prev, selectedStream })), [])
+  const setSelectedClass   = useCallback((selectedClass: ClassNumber) =>   setState(prev => ({ ...prev, selectedClass })), [])
+  const setSelectedStream  = useCallback((selectedStream: string | null) => setState(prev => ({ ...prev, selectedStream })), [])
   const setSelectedSubject = useCallback((selectedSubject: string | null) => setState(prev => ({ ...prev, selectedSubject })), [])
-  const setSelectedBook = useCallback((selectedBook: string | null) => setState(prev => ({ ...prev, selectedBook })), [])
+  const setSelectedBook    = useCallback((selectedBook: string | null) =>   setState(prev => ({ ...prev, selectedBook })), [])
   const setSelectedChapter = useCallback((selectedChapter: string | null) => setState(prev => ({ ...prev, selectedChapter })), [])
   const setSelectedBookUrl = useCallback((selectedBookUrl: string | null) => setState(prev => ({ ...prev, selectedBookUrl })), [])
-  const setQuizMode = useCallback((quizMode: "chapter" | "full") => setState(prev => ({ ...prev, quizMode })), [])
-  const setQuizScore = useCallback((quizScore: number, quizTotal: number) => setState(prev => ({ ...prev, quizScore, quizTotal })), [])
+  const setQuizMode        = useCallback((quizMode: "chapter" | "full") =>  setState(prev => ({ ...prev, quizMode })), [])
+  const setQuizScore       = useCallback((quizScore: number, quizTotal: number) => setState(prev => ({ ...prev, quizScore, quizTotal })), [])
 
   return (
     <AppContext.Provider value={{
-      ...state, setScreen, goBack, setUser, setLanguage, setEyeProtection,
+      ...state,
+      setScreen, goBack, setUser, setLanguage, setEyeProtection,
       setSelectedClass, setSelectedStream, setSelectedSubject,
       setSelectedBook, setSelectedChapter, setSelectedBookUrl,
       setQuizMode, setQuizScore,
@@ -164,5 +231,4 @@ export function useApp() {
   const context = useContext(AppContext)
   if (!context) throw new Error("useApp must be used within AppProvider")
   return context
-  }
-  
+}
