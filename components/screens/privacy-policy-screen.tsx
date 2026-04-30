@@ -2,7 +2,7 @@
 
 import React from "react"
 import { ScreenHeader } from "@/components/screen-header"
-import { Shield, Bot, Database, Eye, Bell, Mail } from "lucide-react"
+import { Shield, Bot, Database, Eye, Mail } from "lucide-react"
 
 const sections = [
   {
@@ -19,10 +19,10 @@ const sections = [
     icon: Bot,
     iconBg: "bg-violet-500/15 text-violet-400",
     title: "AI Usage (Groq / LLaMA)",
-    content: `The app uses Groq API (LLaMA model) for AI features — Notes, Important Questions, Quiz, and Guru AI chat.
+    content: `The app uses Groq API (LLaMA model) for AI features — Notes, Important Questions, and Quiz.
 
 • Your questions are sent to the AI to generate answers
-• AI chat history is stored only on your device
+• No AI chat history is stored on our servers
 • Groq's own privacy terms also apply`,
   },
   {
@@ -35,14 +35,6 @@ const sections = [
 • Study tasks and diary entries (on Supabase)
 • Language preference (on device)
 • No location or payment data`,
-  },
-  {
-    icon: Bell,
-    iconBg: "bg-amber-500/15 text-amber-400",
-    title: "Notifications",
-    content: `The app does not send any push notifications or spam.
-
-Study reminders may be added in the future — but they will be completely optional and enabled only with your permission.`,
   },
   {
     icon: Shield,
@@ -111,4 +103,4 @@ export function PrivacyPolicyScreen() {
       </div>
     </div>
   )
-      }
+              }
