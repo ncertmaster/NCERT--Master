@@ -632,7 +632,7 @@ function ContentActionBar({
 // ===============================
 export function NotesContentScreen() {
   const { language, selectedChapter } = useApp()
-  const { content, loading, error, refetch } = useSheetContent(selectedChapter, "notes")
+  const { content, loading, error, refetch, fromCache } = useSheetContent(selectedChapter, "notes")
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
@@ -667,7 +667,7 @@ export function NotesContentScreen() {
 
 export function IQContentScreen() {
   const { language, selectedChapter } = useApp()
-  const { content, loading, error, refetch } = useSheetContent(selectedChapter, "iq")
+const { content, loading, error, refetch, fromCache } = useSheetContent(selectedChapter, "iq")  
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-6">
