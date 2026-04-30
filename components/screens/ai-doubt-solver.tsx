@@ -155,10 +155,16 @@ function ChatSidebar({
   const [renameVal, setRenameVal] = useState("")
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const renameInputRef = useRef<HTMLInputElement>(null)
+  // Ghost-click guard: ignore backdrop clicks within 350ms of opening
+  const openedAtRef = useRef<number>(0)
 
   useEffect(() => {
     if (renamingId && renameInputRef.current) renameInputRef.current.focus()
   }, [renamingId])
+
+  useEffect(() => {
+    if (open) openedAtRef.current = Date.now()
+  }, [open])
 
   const sorted = [
     ...chats.filter(c => c.pinned).sort((a, b) => b.createdAt - a.createdAt),
@@ -188,7 +194,13 @@ function ChatSidebar({
   return (
     <>
       {open && (
-        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+          onClick={() => {
+            // Guard against ghost click on mobile (< 350ms after open)
+            if (Date.now() - openedAtRef.current > 350) onClose()
+          }}
+        />
       )}
       <aside
         className={`fixed top-0 left-0 z-50 h-full w-72 bg-card border-r border-border shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "-translate-x-full"}`}
@@ -365,6 +377,7 @@ export function AiDoubtSolverScreen() {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<any>(null)
+  const menuOpenedAtRef = useRef<number>(0)
   const isHindi = language === "hi"
 
   // Load chats from localStorage on mount
@@ -629,7 +642,12 @@ export function AiDoubtSolverScreen() {
           {/* 3-dot menu */}
           <div className="relative">
             <button
-              onClick={() => { setChatMenuOpen(o => !o); setMenuDeleteConfirm(false) }}
+              onClick={(e) => {
+                e.stopPropagation()
+                menuOpenedAtRef.current = Date.now()
+                setChatMenuOpen(o => !o)
+                setMenuDeleteConfirm(false)
+              }}
               className="flex h-7 w-7 items-center justify-center rounded-lg bg-secondary text-foreground hover:bg-muted transition-colors"
               title="Chat options"
             >
@@ -640,7 +658,12 @@ export function AiDoubtSolverScreen() {
               <>
                 <div
                   className="fixed inset-0 z-40"
-                  onClick={() => { setChatMenuOpen(false); setMenuDeleteConfirm(false) }}
+                  onClick={() => {
+                    if (Date.now() - menuOpenedAtRef.current > 350) {
+                      setChatMenuOpen(false)
+                      setMenuDeleteConfirm(false)
+                    }
+                  }}
                 />
                 <div className="absolute right-0 top-full mt-1 z-50 w-52 rounded-2xl border border-border bg-card shadow-2xl py-1.5 overflow-hidden">
                   {menuDeleteConfirm ? (
