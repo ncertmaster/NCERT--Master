@@ -6,6 +6,7 @@ import {
   Send, Loader2, Sparkles, Menu, X, Plus, Pin, PinOff,
   Pencil, Trash2, Check, BookOpen, MessageSquare, ChevronRight,
   Mic, MicOff, Paperclip, Copy, CheckCheck, Image as ImageIcon, FileText,
+  MoreVertical,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -354,6 +355,12 @@ export function AiDoubtSolverScreen() {
   const [isRecording, setIsRecording] = useState(false)
   const [micError, setMicError] = useState("")
 
+  // 3-dot menu state
+  const [chatMenuOpen, setChatMenuOpen] = useState(false)
+  const [isRenamingHeader, setIsRenamingHeader] = useState(false)
+  const [headerRenameVal, setHeaderRenameVal] = useState("")
+  const [menuDeleteConfirm, setMenuDeleteConfirm] = useState(false)
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -531,14 +538,13 @@ export function AiDoubtSolverScreen() {
     setInput("")
     setAttachedFile(null)
 
-    let currentMessages: Message[] = []
+    // Compute currentMessages directly (avoids race condition with setState callback)
+    const currentMessages = [...(activeChat?.messages || []), userMsg]
 
     setChats(prev => prev.map(c => {
       if (c.id !== activeChatId) return c
-      const newMsgs = [...c.messages, userMsg]
-      currentMessages = newMsgs
       const title = c.messages.length === 0 ? firstUserTitle([userMsg]) : c.title
-      return { ...c, messages: newMsgs, title }
+      return { ...c, messages: currentMessages, title }
     }))
 
     try {
@@ -619,6 +625,93 @@ export function AiDoubtSolverScreen() {
           >
             <Plus className="h-4 w-4" />
           </button>
+
+          {/* 3-dot menu */}
+          <div className="relative">
+            <button
+              onClick={() => { setChatMenuOpen(o => !o); setMenuDeleteConfirm(false) }}
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-secondary text-foreground hover:bg-muted transition-colors"
+              title="Chat options"
+            >
+              <MoreVertical className="h-4 w-4" />
+            </button>
+
+            {chatMenuOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => { setChatMenuOpen(false); setMenuDeleteConfirm(false) }}
+                />
+                <div className="absolute right-0 top-full mt-1 z-50 w-52 rounded-2xl border border-border bg-card shadow-2xl py-1.5 overflow-hidden">
+                  {menuDeleteConfirm ? (
+                    <div className="px-3 py-2.5">
+                      <p className="text-xs font-medium text-foreground mb-2.5">Yeh chat delete karein?</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            if (activeChat) handleDelete(activeChat.id)
+                            setChatMenuOpen(false)
+                            setMenuDeleteConfirm(false)
+                          }}
+                          className="flex-1 rounded-xl bg-destructive text-destructive-foreground py-2 text-xs font-semibold active:scale-95 transition-all"
+                        >
+                          Haan, delete
+                        </button>
+                        <button
+                          onClick={() => setMenuDeleteConfirm(false)}
+                          className="flex-1 rounded-xl bg-secondary text-foreground py-2 text-xs font-semibold active:scale-95 transition-all"
+                        >
+                          Nahi
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => { handleNewChat(); setChatMenuOpen(false) }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
+                      >
+                        <Plus className="h-4 w-4 text-primary shrink-0" />
+                        <span>Naya Sawaal</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setHeaderRenameVal(activeChat?.title || "")
+                          setIsRenamingHeader(true)
+                          setChatMenuOpen(false)
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
+                      >
+                        <Pencil className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <span>Rename</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (activeChat) handlePin(activeChat.id)
+                          setChatMenuOpen(false)
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
+                      >
+                        {activeChat?.pinned
+                          ? <PinOff className="h-4 w-4 text-muted-foreground shrink-0" />
+                          : <Pin className="h-4 w-4 text-muted-foreground shrink-0" />}
+                        <span>{activeChat?.pinned ? "Unpin Chat" : "Pin Chat"}</span>
+                      </button>
+                      <div className="my-1 border-t border-border" />
+                      <button
+                        onClick={() => setMenuDeleteConfirm(true)}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4 shrink-0" />
+                        <span>Delete Chat</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
           <div className="relative h-7 w-7">
             <Image src="/images/logo.png" alt="NCERT Master" fill className="object-contain" />
           </div>
@@ -848,6 +941,53 @@ export function AiDoubtSolverScreen() {
           Guru AI · NCERT Class 6-12 · Powered by NCERT Master
         </p>
       </div>
+
+      {/* ── Rename Modal ── */}
+      {isRenamingHeader && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsRenamingHeader(false)}
+        >
+          <div
+            className="bg-card rounded-2xl border border-border shadow-2xl p-5 w-80 mx-4"
+            onClick={e => e.stopPropagation()}
+          >
+            <p className="text-sm font-bold text-foreground mb-1">Chat Rename Karo</p>
+            <p className="text-xs text-muted-foreground mb-3">Is chat ka naya naam likhо</p>
+            <input
+              autoFocus
+              value={headerRenameVal}
+              onChange={e => setHeaderRenameVal(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === "Enter" && headerRenameVal.trim()) {
+                  handleRename(activeChatId, headerRenameVal.trim())
+                  setIsRenamingHeader(false)
+                }
+                if (e.key === "Escape") setIsRenamingHeader(false)
+              }}
+              className="w-full bg-secondary rounded-xl px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary mb-4"
+              placeholder="Chat ka naam..."
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  if (headerRenameVal.trim()) handleRename(activeChatId, headerRenameVal.trim())
+                  setIsRenamingHeader(false)
+                }}
+                className="flex-1 rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-semibold active:scale-95 transition-all"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setIsRenamingHeader(false)}
+                className="flex-1 rounded-xl bg-secondary text-foreground py-2.5 text-sm font-semibold active:scale-95 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Sidebar ── */}
       <ChatSidebar
