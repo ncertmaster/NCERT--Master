@@ -6,7 +6,7 @@ import { ScreenHeader } from "@/components/screen-header"
 import { getText } from "@/lib/translations"
 import {
   Timer, BookMarked, Shield, ChevronRight,
-  MessageSquare, Share2, Check, X, Eye, Languages, Trophy
+  MessageSquare, Share2, Check, X, Eye, Languages, Trophy, UserCircle
 } from "lucide-react"
 
 export function SettingsScreen() {
@@ -61,6 +61,13 @@ export function SettingsScreen() {
   }
 
   const menuItems = [
+    {
+      icon: UserCircle,
+      label: "Edit Profile",
+      sublabel: language === "hi" ? "नाम, कक्षा और लक्ष्य बदलें" : "Change name, class & aim",
+      iconBg: "bg-blue-500/15 text-blue-400",
+      onClick: () => setScreen("setup"),
+    },
     {
       icon: Trophy,
       label: "Quiz History",
