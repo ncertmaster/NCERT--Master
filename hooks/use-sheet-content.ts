@@ -111,7 +111,18 @@ export function useSheetContent(chapterId: string | null, tab: string) {
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [fromCache, setFromCache] = useState(false)
+const [fromCache, setFromCache] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
+
+  const refetch = () => {
+    // Clear cache for this key so fresh fetch happens
+    const info = getChapterInfo(chapterId, selectedClass, selectedStream, selectedSubject, selectedBook)
+    if (info && chapterId) {
+      const cacheKey = getCacheKey(chapterId, tab, info.className)
+      try { localStorage.removeItem(cacheKey) } catch { /* ignore */ }
+    }
+    setRetryCount(c => c + 1)
+  }
 
   // Keep a ref to abort any in-flight request when deps change
   const abortRef = useRef<AbortController | null>(null)
@@ -199,8 +210,8 @@ export function useSheetContent(chapterId: string | null, tab: string) {
       controller.abort()
     }
     // ✅ FIX: All context deps included so re-fetch happens correctly on navigation
-  }, [chapterId, tab, selectedClass, selectedStream, selectedSubject, selectedBook])
+  }, [chapterId, tab, selectedClass, selectedStream, selectedSubject, selectedBook, retryCount])
 
-  return { content, loading, error, fromCache }
+  return { content, loading, error, fromCache, refetch }
         }
           
