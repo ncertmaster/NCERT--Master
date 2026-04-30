@@ -11,7 +11,7 @@ export type AppScreen =
   | "iq-class" | "iq-subject" | "iq-chapter" | "iq-content"
   | "quiz-class" | "quiz-subject" | "quiz-mode" | "quiz-chapter" | "quiz-play" | "quiz-result"
   | "settings" | "study-timer" | "diary" | "privacy-policy" | "quiz-history"
-
+  | "doubt"
 export interface UserProfile {
   name: string
   classNumber: ClassNumber
