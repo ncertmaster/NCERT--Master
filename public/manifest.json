@@ -1,13 +1,17 @@
 {
-  "name": "NCERT Master",
+  "name": "NCERT Master — Class 6-12 Study App",
   "short_name": "NCERT Master",
-  "description": "Your complete NCERT study companion for classes 6-12. Books, Notes, Important Questions and Quizzes all in one app.",
+  "description": "Complete NCERT study app for Class 6-12. Smart Notes, Important Questions, Quiz, Study Timer & Diary — sab ek jagah.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#ffffff",
   "theme_color": "#1e3a5f",
   "orientation": "portrait",
-  "scope": "/",
+  "lang": "hi",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/ncert_master_192x192.png",
@@ -34,7 +38,37 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["education", "books"],
-  "lang": "hi",
-  "dir": "ltr"
+  "shortcuts": [
+    {
+      "name": "Notes",
+      "short_name": "Notes",
+      "description": "NCERT Smart Notes padhein",
+      "url": "/?screen=notes-class",
+      "icons": [{ "src": "/icons/ncert_master_192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Quiz",
+      "short_name": "Quiz",
+      "description": "Quiz khelo aur test karo",
+      "url": "/?screen=quiz-class",
+      "icons": [{ "src": "/icons/ncert_master_192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Important Questions",
+      "short_name": "Imp. Q",
+      "description": "Important Questions padhein",
+      "url": "/?screen=iq-class",
+      "icons": [{ "src": "/icons/ncert_master_192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["education", "books", "productivity"],
+  "screenshots": [
+    {
+      "src": "/screenshots/screen-dashboard.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NCERT Master Dashboard"
+    }
+  ]
 }
