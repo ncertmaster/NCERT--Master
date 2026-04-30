@@ -4,15 +4,26 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { useApp } from "@/lib/app-context"
 import {
   Send, Loader2, Sparkles, Menu, X, Plus, Pin, PinOff,
-  Pencil, Trash2, Check, BookOpen, MessageSquare, ChevronRight
+  Pencil, Trash2, Check, BookOpen, MessageSquare, ChevronRight,
+  Mic, MicOff, Paperclip, Copy, CheckCheck, Image as ImageIcon, FileText,
 } from "lucide-react"
 import Image from "next/image"
 
 // ── Types ──────────────────────────────────────────────────────────────────
+interface AttachedFile {
+  base64: string
+  type: string
+  name: string
+  previewUrl?: string
+}
+
 interface Message {
   role: "user" | "assistant"
   content: string
   ts: number
+  imageBase64?: string
+  imageType?: string
+  fileName?: string
 }
 
 interface Chat {
@@ -65,7 +76,6 @@ function renderAnswer(text: string) {
     if (line.startsWith("# ")) return (
       <h2 key={i} className="mt-3 mb-1 text-base font-bold text-foreground">{line.slice(2)}</h2>
     )
-    // **bold** inline
     if (line.includes("**")) {
       const parts = line.split(/(\*\*[^*]+\*\*)/)
       return (
@@ -84,6 +94,12 @@ function renderAnswer(text: string) {
         <span className="text-sm text-foreground/90 leading-relaxed">{line.slice(2)}</span>
       </div>
     )
+    if (line.startsWith("📌")) return (
+      <div key={i} className="flex gap-1.5 mt-1.5 rounded-lg bg-primary/5 px-2.5 py-1.5">
+        <span className="shrink-0">📌</span>
+        <span className="text-sm text-foreground/90 leading-relaxed">{line.slice(2)}</span>
+      </div>
+    )
     if (/^\d+\.\s/.test(line)) {
       const [num, ...rest] = line.split(". ")
       return (
@@ -96,6 +112,27 @@ function renderAnswer(text: string) {
     if (line.trim() === "") return <div key={i} className="h-2" />
     return <p key={i} className="text-sm text-foreground/90 leading-relaxed mt-0.5">{line}</p>
   })
+}
+
+// ── Copy Button ────────────────────────────────────────────────────────────
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {}
+  }
+  return (
+    <button
+      onClick={handleCopy}
+      title="Copy"
+      className="flex h-6 w-6 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+    >
+      {copied ? <CheckCheck className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+    </button>
+  )
 }
 
 // ── Recent Chats Sidebar ───────────────────────────────────────────────────
@@ -149,15 +186,9 @@ function ChatSidebar({
 
   return (
     <>
-      {/* Backdrop */}
       {open && (
-        <div
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={onClose} />
       )}
-
-      {/* Drawer */}
       <aside
         className={`fixed top-0 left-0 z-50 h-full w-72 bg-card border-r border-border shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
@@ -264,7 +295,6 @@ function ChatSidebar({
                           {chat.messages.length} message{chat.messages.length !== 1 ? "s" : ""} · {formatTime(chat.createdAt)}
                         </p>
                       </div>
-                      {/* Action buttons - visible on hover */}
                       <div
                         className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                         onClick={e => e.stopPropagation()}
@@ -320,9 +350,14 @@ export function AiDoubtSolverScreen() {
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [attachedFile, setAttachedFile] = useState<AttachedFile | null>(null)
+  const [isRecording, setIsRecording] = useState(false)
+  const [micError, setMicError] = useState("")
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const recognitionRef = useRef<any>(null)
   const isHindi = language === "hi"
 
   // Load chats from localStorage on mount
@@ -338,15 +373,20 @@ export function AiDoubtSolverScreen() {
     }
   }, [])
 
-  // Save to localStorage whenever chats change
   useEffect(() => {
     if (chats.length > 0) saveChats(chats)
   }, [chats])
 
-  // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [chats, activeChatId, loading])
+
+  // Cleanup recognition on unmount
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop()
+    }
+  }, [])
 
   const activeChat = chats.find(c => c.id === activeChatId)
   const messages = activeChat?.messages || []
@@ -362,6 +402,7 @@ export function AiDoubtSolverScreen() {
     setActiveChatId(fresh.id)
     setInput("")
     setError("")
+    setAttachedFile(null)
   }, [])
 
   // ── Delete Chat ──
@@ -391,17 +432,105 @@ export function AiDoubtSolverScreen() {
     updateChat(id, c => ({ ...c, title }))
   }, [updateChat])
 
-  // ── Submit question ──
+  // ── Mic ──
+  const handleMic = useCallback(() => {
+    setMicError("")
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      setMicError(isHindi ? "Mic is browser mein support nahi hai" : "Mic not supported in this browser")
+      return
+    }
+
+    if (isRecording) {
+      recognitionRef.current?.stop()
+      setIsRecording(false)
+      return
+    }
+
+    try {
+      const recognition = new SpeechRecognition()
+      recognition.lang = isHindi ? "hi-IN" : "en-IN"
+      recognition.continuous = false
+      recognition.interimResults = false
+      recognition.maxAlternatives = 1
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript
+        setInput(prev => prev ? prev + " " + transcript : transcript)
+        setIsRecording(false)
+      }
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error:", event.error)
+        if (event.error !== "no-speech") {
+          setMicError(isHindi ? "Mic error — dobara try karo" : "Mic error — please try again")
+        }
+        setIsRecording(false)
+      }
+      recognition.onend = () => setIsRecording(false)
+
+      recognitionRef.current = recognition
+      recognition.start()
+      setIsRecording(true)
+    } catch (err) {
+      setMicError(isHindi ? "Mic start nahi ho saka" : "Could not start microphone")
+    }
+  }, [isRecording, isHindi])
+
+  // ── File Select ──
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Limit to images and PDFs
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "application/pdf"]
+    if (!allowedTypes.some(t => file.type === t || file.type.startsWith("image/"))) {
+      setError(isHindi ? "Sirf image files allowed hain (JPG/PNG/WEBP)" : "Only image files are allowed (JPG/PNG/WEBP)")
+      return
+    }
+
+    // Max 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      setError(isHindi ? "File 5MB se chhoti honi chahiye" : "File must be under 5MB")
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      const base64 = result.split(",")[1]
+      setAttachedFile({
+        base64,
+        type: file.type,
+        name: file.name,
+        previewUrl: file.type.startsWith("image/") ? result : undefined,
+      })
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ""
+  }, [isHindi])
+
+  // ── Submit ──
   const handleSubmit = useCallback(async () => {
     const q = input.trim()
-    if (!q || loading) return
+    if ((!q && !attachedFile) || loading) return
 
     setLoading(true)
     setError("")
-    setInput("")
+    setMicError("")
 
-    // Add user message
-    const userMsg: Message = { role: "user", content: q, ts: Date.now() }
+    const messageText = q || (attachedFile ? `[Image: ${attachedFile.name}]` : "")
+    const userMsg: Message = {
+      role: "user",
+      content: messageText,
+      ts: Date.now(),
+      imageBase64: attachedFile?.base64,
+      imageType: attachedFile?.type,
+      fileName: attachedFile?.name,
+    }
+
+    setInput("")
+    setAttachedFile(null)
+
     let currentMessages: Message[] = []
 
     setChats(prev => prev.map(c => {
@@ -417,9 +546,11 @@ export function AiDoubtSolverScreen() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...currentMessages].map(m => ({ role: m.role, content: m.content })),
+          messages: currentMessages.map(m => ({ role: m.role, content: m.content })),
           language,
           classNum: String(selectedClass || "10"),
+          fileData: userMsg.imageBase64 || null,
+          fileType: userMsg.imageType || null,
         }),
       })
 
@@ -439,12 +570,12 @@ export function AiDoubtSolverScreen() {
         }))
       }
     } catch {
-      setError("Internet connection check karo aur dobara try karo.")
+      setError(isHindi ? "Internet connection check karo aur dobara try karo." : "Check your internet connection and try again.")
     } finally {
       setLoading(false)
       setTimeout(() => textareaRef.current?.focus(), 100)
     }
-  }, [input, loading, activeChatId, language, selectedClass])
+  }, [input, loading, activeChatId, language, selectedClass, attachedFile, isHindi])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -457,7 +588,6 @@ export function AiDoubtSolverScreen() {
     <div className="flex flex-col h-screen bg-background overflow-hidden">
       {/* ── Custom Header ── */}
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-card px-4 py-3">
-        {/* Hamburger */}
         <button
           onClick={() => setSidebarOpen(true)}
           className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground hover:bg-secondary transition-colors shrink-0"
@@ -466,7 +596,6 @@ export function AiDoubtSolverScreen() {
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Title + Guru AI badge */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10 shrink-0">
@@ -482,7 +611,6 @@ export function AiDoubtSolverScreen() {
           )}
         </div>
 
-        {/* Logo + New Chat */}
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handleNewChat}
@@ -523,7 +651,7 @@ export function AiDoubtSolverScreen() {
               ].map(q => (
                 <button
                   key={q}
-                  onClick={() => { setInput(q) }}
+                  onClick={() => setInput(q)}
                   className="flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors active:scale-95"
                 >
                   <ChevronRight className="h-3 w-3 text-muted-foreground" />
@@ -545,17 +673,46 @@ export function AiDoubtSolverScreen() {
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
               </div>
             )}
-            <div
-              className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                msg.role === "user"
-                  ? "bg-primary text-primary-foreground rounded-br-sm"
-                  : "bg-card border border-border rounded-bl-sm"
-              }`}
-            >
-              {msg.role === "user" ? (
-                <p className="text-sm leading-relaxed">{msg.content}</p>
-              ) : (
-                <div className="space-y-0.5">{renderAnswer(msg.content)}</div>
+            <div className={`max-w-[85%] flex flex-col gap-1 ${msg.role === "user" ? "items-end" : "items-start"}`}>
+              {/* Image attachment in user message */}
+              {msg.imageBase64 && msg.imageType?.startsWith("image/") && (
+                <div className="rounded-xl overflow-hidden border border-border shadow-sm max-w-[220px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`data:${msg.imageType};base64,${msg.imageBase64}`}
+                    alt={msg.fileName || "Attached image"}
+                    className="w-full h-auto max-h-48 object-cover"
+                  />
+                </div>
+              )}
+              {/* PDF attachment indicator */}
+              {msg.fileName && !msg.imageType?.startsWith("image/") && (
+                <div className="flex items-center gap-1.5 rounded-xl border border-border bg-secondary px-3 py-2">
+                  <FileText className="h-4 w-4 text-primary" />
+                  <span className="text-xs text-foreground truncate max-w-[150px]">{msg.fileName}</span>
+                </div>
+              )}
+              <div
+                className={`rounded-2xl px-4 py-3 ${
+                  msg.role === "user"
+                    ? "bg-primary text-primary-foreground rounded-br-sm"
+                    : "bg-card border border-border rounded-bl-sm"
+                }`}
+              >
+                {msg.role === "user" ? (
+                  <p className="text-sm leading-relaxed">{msg.content}</p>
+                ) : (
+                  <div className="space-y-0.5">{renderAnswer(msg.content)}</div>
+                )}
+              </div>
+              {/* Copy button for assistant messages */}
+              {msg.role === "assistant" && (
+                <div className="flex items-center gap-1 px-1">
+                  <CopyButton text={msg.content} />
+                  <span className="text-[10px] text-muted-foreground">
+                    {new Date(msg.ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </div>
               )}
             </div>
           </div>
@@ -589,24 +746,96 @@ export function AiDoubtSolverScreen() {
 
       {/* ── Input Area ── */}
       <div className="border-t border-border bg-card px-4 py-3 pb-safe">
-        <div className="flex items-end gap-2 rounded-2xl border border-border bg-background px-3 py-2">
+        {/* File preview chip */}
+        {attachedFile && (
+          <div className="flex items-center gap-2 mb-2 px-1">
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary px-3 py-1.5 max-w-[220px]">
+              {attachedFile.previewUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={attachedFile.previewUrl}
+                  alt="preview"
+                  className="h-8 w-8 rounded-lg object-cover shrink-0"
+                />
+              ) : (
+                <FileText className="h-4 w-4 text-primary shrink-0" />
+              )}
+              <span className="text-xs text-foreground truncate flex-1">{attachedFile.name}</span>
+              <button
+                onClick={() => setAttachedFile(null)}
+                className="flex h-4 w-4 items-center justify-center text-muted-foreground hover:text-destructive transition-colors shrink-0"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Mic error */}
+        {micError && (
+          <p className="text-[10px] text-destructive text-center mb-1">{micError}</p>
+        )}
+
+        {/* Main input row */}
+        <div className="flex items-end gap-2 rounded-2xl border border-border bg-background px-2 py-2">
+          {/* File attach button */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={loading}
+            title={isHindi ? "Image attach karo" : "Attach image"}
+            className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors shrink-0 disabled:opacity-40"
+          >
+            <Paperclip className="h-4 w-4" />
+          </button>
+
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
+
+          {/* Textarea */}
           <textarea
             ref={textareaRef}
             value={input}
             onChange={e => {
               setInput(e.target.value)
-              // Auto-resize
               e.target.style.height = "auto"
               e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"
             }}
             onKeyDown={handleKeyDown}
-            placeholder={isHindi ? "Apna sawaal likho... (Enter se bhejo)" : "Type your doubt... (Enter to send)"}
+            placeholder={
+              isRecording
+                ? (isHindi ? "🎤 Sun raha hoon..." : "🎤 Listening...")
+                : attachedFile
+                  ? (isHindi ? "Image ke baare mein kuch poocho..." : "Ask something about the image...")
+                  : (isHindi ? "Apna sawaal likho..." : "Type your doubt...")
+            }
             rows={1}
             className="flex-1 resize-none bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none leading-relaxed min-h-[22px] max-h-[120px]"
           />
+
+          {/* Mic button */}
+          <button
+            onClick={handleMic}
+            disabled={loading}
+            title={isRecording ? (isHindi ? "Rokna" : "Stop") : (isHindi ? "Voice se poocho" : "Ask by voice")}
+            className={`flex h-8 w-8 items-center justify-center rounded-xl transition-colors shrink-0 disabled:opacity-40 ${
+              isRecording
+                ? "bg-destructive text-destructive-foreground animate-pulse"
+                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+            }`}
+          >
+            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </button>
+
+          {/* Send button */}
           <button
             onClick={handleSubmit}
-            disabled={loading || !input.trim()}
+            disabled={loading || (!input.trim() && !attachedFile)}
             className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-40 transition-all active:scale-95 shrink-0"
           >
             {loading
