@@ -122,7 +122,7 @@ const math11: Subject = {
   name: "Mathematics",
   nameHi: "गणित",
   icon: "calculator",
-  tabs: ["books", "iq", "quiz"],
+  tabs: ["books", "notes", "iq", "quiz"],
   books: [
     {
       id: "math-11-part1",
@@ -159,7 +159,7 @@ const english11: Subject = {
   name: "English",
   nameHi: "अंग्रेजी",
   icon: "book-open",
-  tabs: ["books", "notes", "iq"],
+  tabs: ["books", "notes", "iq", "quiz"],
   books: [
     {
       id: "english-11-hornbill",
@@ -200,7 +200,7 @@ const hindi11: Subject = {
   name: "Hindi",
   nameHi: "हिंदी",
   icon: "book",
-  tabs: ["books", "notes", "iq"],
+  tabs: ["books", "notes", "iq", "quiz"],
   books: [
     {
       id: "hindi-11-aroh",
