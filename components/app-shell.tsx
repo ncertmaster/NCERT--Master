@@ -21,6 +21,7 @@ import { SettingsScreen } from "@/components/screens/settings-screen"
 import { StudyTimerScreen } from "@/components/screens/study-timer-screen"
 import { DiaryScreen } from "@/components/screens/diary-screen"
 import { PrivacyPolicyScreen } from "@/components/screens/privacy-policy-screen"
+import { AiDoubtSolverScreen } from "@/components/screens/ai-doubt-solver"
 
 // ── Per-screen Error Boundary ────────────────────────────────────────────────
 // A crash inside one screen will NOT take down the whole app.
